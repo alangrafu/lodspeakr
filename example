@@ -1,0 +1,15 @@
+@prefix : <http://shai-hulud/testCMS/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+
+:alvaro foaf:name "Alvaro Graves";
+        foaf:firstName "Alvaro";
+        foaf:lastName "Graves";
+        foaf:knows :ivonne;
+        foaf:mbox <mailto:alvaro@graves.cl> .
+
+:ivonne foaf:name "Ivonne P";
+        foaf:knows :nicolas .
+
+:nicolas foaf:firstName "Nicolas" ;
+         foaf:knows :alvaro .
+
