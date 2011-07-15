@@ -1,0 +1,13 @@
+<html>
+  <head>
+    <title>{{uri}}</title>
+  </head>
+  <body>
+    This document is about <a href='{{uri}}'>{{uri}}</a> which name is
+    {% for row in r %}
+      {{row.name}}
+    {% endfor %}
+  </body>
+</html>
+
+

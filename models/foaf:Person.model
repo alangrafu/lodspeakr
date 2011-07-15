@@ -1,0 +1,10 @@
+PREFIX foaf: <http://xmlns.com/foaf/0.1/> 
+SELECT ?name ?firstName ?lastName WHERE {
+	{
+	%u foaf:name ?name ;
+	   foaf:firstName ?firstName;
+	   foaf:lastName ?lastName .
+	}
+}
+
+
