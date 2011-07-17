@@ -28,28 +28,57 @@ class Queries{
   	return NULL;
   }
   
-  public static function getMetaData($uri, $e){
+  public static function getMetaData($uri, $format, $e){
   	global $conf;
   	$named_graph = $conf['metaendpoint']['config']['named_graph'];
   	$q = <<<QUERY
   	PREFIX foaf: <http://xmlns.com/foaf/0.1/> 
-  	SELECT ?page ?uri WHERE{
+  	PREFIX dcterms: <http://purl.org/dc/terms/>
+  	SELECT ?page ?uri ?format WHERE{
   	GRAPH <$named_graph>{
   	?s ?p ?o . #Stupid dummy triple to make it work with ARC2
-  	OPTIONAL{?page foaf:primaryTopic <$uri>} .
-  	OPTIONAL{<$uri> foaf:primaryTopic ?uri} .
+  	OPTIONAL{
+  	  ?page foaf:primaryTopic <$uri> ;
+  	        dcterms:format "$format" .
+  	  } .
+  	OPTIONAL{
+  	  <$uri> foaf:primaryTopic ?uri;
+  	         dcterms:format ?format
+  	 } .
   	}
   	}LIMIT 1
 QUERY;
-
-$r = $e->query($q);
+$r = $e->query($q, $e);
 if(sizeof($r['results']['bindings'])>0){
   $u = (isset($r['results']['bindings'][0]['uri']))?$r['results']['bindings'][0]['uri']['value']:NULL;
   $p = (isset($r['results']['bindings'][0]['page']))?$r['results']['bindings'][0]['page']['value']:NULL;
-  
-  return array($u, $p);
+  $f = (isset($r['results']['bindings'][0]['format']))?$r['results']['bindings'][0]['format']['value']:NULL;
+  return array($u, $p, $f);
 }
 return NULL;
+  }
+  
+    
+  public static function createPage($uri, $format, $e){
+  		global $conf;
+  	$named_graph = $conf['metaendpoint']['config']['named_graph'];
+  	//TODO: More flexible page creation method
+  	$extension = $conf['http_accept'][$format];
+  	$page = $uri.".".$extension;
+  	$q = <<<QUERY
+  	PREFIX foaf: <http://xmlns.com/foaf/0.1/> 
+  	PREFIX dcterms: <http://purl.org/dc/terms/>
+  	INSERT INTO <$named_graph> {
+  	  <$page> foaf:primaryTopic <$uri>;
+  	          dcterms:format '$format'.
+  	}
+QUERY;
+    $r = $e->queryPost($q);
+
+    if($r == null){
+      return null;
+    }
+    return $page;
   }
 }
   	?>
