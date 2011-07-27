@@ -9,29 +9,27 @@ class Endpoint{
   	$this->params = $params;
   }
   
-  public function query($q, $output){
-    $aux = $this->params['output'];
-    $this->params['output'] = $output;
-    $r = $this->query($q);
-    $this->params['output'] = $aux;
-    return $r;
-  }
-  
-  public function query($q){
+  public function query($q, $output = null){
   	global $conf;
+  	$aux = $this->params['output'];
+  	if($output != null){
+  	  $this->params['output'] = $output;
+    }
   	$context = stream_context_create(array(
   	  'http' => array('header'=>'Connection: close')));
   	$params = $this->params;
   	$params['query'] = $q;
   	$url = $this->sparqlUrl.'?'.http_build_query($params, '', '&');
   	$aux = file_get_contents($url, false,$context);
+  	
+  	$this->params['output'] = $aux;
+  	
   	if(preg_match("/select/i", $q)){
   	  return json_decode($aux, true);
   	}
   	if(preg_match("/describe/i", $q)){
   	  return $aux;
-  	}
-
+  	}  	
   }
   
   public function queryPost($q){
