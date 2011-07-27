@@ -29,7 +29,7 @@ while [ "$everything_ok" != "y" ]
 do
   echo "==Basic Information=="
   echo "slodps needs to gather some basic information first to configure the installation properly"
-  echo -n "Type the base url of your site where slodps' index.php will be located (default '$basedir'): "
+  echo -n "Type the base url of your site (default '$basedir'): "
   read aux_basedir
   echo ""
   if [ "$aux_basedir" != "" ] 
@@ -37,7 +37,7 @@ do
   	basedir=$aux_basedir
   fi
 
-  echo -n "From the base directory, where is slodps located? (default '$slodps'): "
+  echo -n "From the base directory, where slodps located? (default '$slodpsdir'): "
   read aux_slodpsdir
   echo ""
   if [ "$aux_slodpsdir" != "" ] 
