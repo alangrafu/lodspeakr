@@ -9,6 +9,14 @@ class Endpoint{
   	$this->params = $params;
   }
   
+  public function query($q, $output){
+    $aux = $this->params['output'];
+    $this->params['output'] = $output;
+    $r = $this->query($q);
+    $this->params['output'] = $aux;
+    return $r;
+  }
+  
   public function query($q){
   	global $conf;
   	$context = stream_context_create(array(

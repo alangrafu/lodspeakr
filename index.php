@@ -60,10 +60,10 @@ if($res != NULL && $page == NULL){ // Original URI is a page
   }
   $query = file_get_contents($modelFile);
   $query = preg_replace("|".$conf['resource']['url_delimiter']."|", "<".$uri.">", $query);
-  $results = $endpoint->query($query);
   
   header('Content-Type: '.$acceptContentType);
   if(preg_match("/describe/i", $query)){
+  	$results = $endpoint->query($query);
   	require('lib/arc2/ARC2.php');
   	$parser = ARC2::getRDFParser();
   	$parser->parse($conf['basedir'], $results);
@@ -84,7 +84,8 @@ if($res != NULL && $page == NULL){ // Original URI is a page
   	echo $doc;
   	exit(0);
   }
-  if(preg_match("/select/i", $query)){
+  elseif(preg_match("/select/i", $query)){
+  	$results = $endpoint->query($query);
   	if(sizeof($results['results']['bindings']) == 0){
   	  Utils::send404($uri);
   	}
