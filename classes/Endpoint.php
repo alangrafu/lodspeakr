@@ -11,7 +11,7 @@ class Endpoint{
   
   public function query($q, $output = null){
   	global $conf;
-  	$aux = $this->params['output'];
+  	$auxoutput = $this->params['output'];
   	if($output != null){
   	  $this->params['output'] = $output;
     }
@@ -22,7 +22,7 @@ class Endpoint{
   	$url = $this->sparqlUrl.'?'.http_build_query($params, '', '&');
   	$aux = file_get_contents($url, false,$context);
   	
-  	$this->params['output'] = $aux;
+  	$this->params['output'] = $auxoutput;
   	
   	if(preg_match("/select/i", $q)){
   	  return json_decode($aux, true);
