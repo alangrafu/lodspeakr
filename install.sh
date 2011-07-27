@@ -1,18 +1,30 @@
 #!/bin/bash
 
+root_htaccess="root.htaccess"
+parent_htaccess="../.htaccess"
 settings_file="settings.inc.php"
 
-mysql_port="3360"
+mysql_port="3306"
 mysql_host="localhost"
 mysql_dbname="slodps"
 mysql_user="root"
 mysql_pass=""
 sparql_key=$RANDOM
 
-basedir="http://localhost/"
+basedir="http://localhost/slodps/"
 ns=$basedir
 endpoint="http://localhost/sparql?"
 everything_ok="n"
+
+if [ -e "$parent_htaccess" ]
+then
+  echo ".htaccess file found in parent directory."
+  echo "Please remove it or add the content of $root_htaccess in it"
+  exit(0)
+fi
+
+echo "Copying $root_htaccess as .htacess in parent directory"
+cp $root_htaccess $parent_htaccess
 
 while [ "$everything_ok" != "y" ]
 do
