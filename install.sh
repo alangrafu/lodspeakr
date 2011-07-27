@@ -11,7 +11,8 @@ mysql_user="root"
 mysql_pass=""
 sparql_key=$RANDOM
 
-basedir="http://localhost/slodps/"
+basedir="http://localhost/"
+slodpsdir="slodps"
 ns=$basedir
 endpoint="http://localhost/sparql?"
 everything_ok="n"
@@ -19,13 +20,10 @@ everything_ok="n"
 if [ -e "$parent_htaccess" ]
 then
   echo ".htaccess file found in parent directory."
-  echo "Please remove it or add the content of $root_htaccess in it"
+  echo "Please remove it to continue the installation."
   exit
 fi
 
-echo "WARNING: Copying $root_htaccess as .htacess in parent directory"
-echo ""
-cp $root_htaccess $parent_htaccess
 
 while [ "$everything_ok" != "y" ]
 do
@@ -38,6 +36,16 @@ do
   then
   	basedir=$aux_basedir
   fi
+
+  echo -n "From the base directory, where is slodps located? (default '$slodps'): "
+  read aux_slodpsdir
+  echo ""
+  if [ "$aux_slodpsdir" != "" ] 
+  then
+  	slodpsdir=$aux_slodpsdir
+  fi
+
+
   ns=$basedir
   echo -n "Type the local namespace you will use (default '$ns'): "
   read aux_ns
@@ -47,6 +55,7 @@ do
   	ns=$aux_ns
   fi
 
+  
   echo -n "What is the URL of your SPARQL endpoint? (default $endpoint): "
   read aux_endpoint
   echo ""
@@ -108,7 +117,8 @@ do
   fi
   echo "==Configuration=="
   echo "Ok, so I have the following configuration:"
-  echo "slodps is installed at $basedir"
+  echo "Base URL is $basedir"
+  echo "slodps is installed at $basedir$slodpsdir"
   echo "The local namespace is $ns"
   echo "Your SPARQL endpoint is located at $endpoint"
   echo "For slodps internal sparql endpoint the configuration is as follows:"
@@ -154,5 +164,11 @@ done
 ?>" 
 echo "$content" > $settings_file
 chmod 644 $settings_file
-
 echo "New configuration file created"
+echo ""
+echo "WARNING: Copying $root_htaccess as .htacess in parent directory"
+echo ""
+cp $root_htaccess $parent_htaccess
+echo 'RewriteRule ^(.+)$ '$slodpsdir'/index.php?q=$1 [L]' >> $parent_htaccess 
+
+
