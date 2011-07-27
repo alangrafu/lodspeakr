@@ -123,20 +123,20 @@ done
   
   echo "<?\
 \
-$conf['endpoint']['host'] = '$endpoint';\
-$conf['basedir'] = '$basedir';\
+\$conf['endpoint']['host'] = '$endpoint';\
+\$conf['basedir'] = '$basedir';\
 \
-$conf['metaendpoint']['host'] = '$basedir/endpoint.php';\
-$conf['metaendpoint']['config']['key'] = '$sparql_key';\
-$conf['metaendpoint']['config']['named_graph'] = 'http://slodps.org/metadata';\
-$conf['metaendpoint']['config']['host'] = '$mysql_host';\
-$conf['metaendpoint']['config']['port'] = '$mysql_port';\
-$conf['metaendpoint']['config']['dbname'] = '$mysql_dbname';\
-$conf['metaendpoint']['config']['user'] = '$mysql_user';\
-$conf['metaendpoint']['config']['pass'] = '$mysql_port';\
-$conf['metaendpoint']['config']['key'] = '$sparql_key';\
+\$conf['metaendpoint']['host'] = '$basedir/endpoint.php';\
+\$conf['metaendpoint']['config']['key'] = '$sparql_key';\
+\$conf['metaendpoint']['config']['named_graph'] = 'http://slodps.org/metadata';\
+\$conf['metaendpoint']['config']['host'] = '$mysql_host';\
+\$conf['metaendpoint']['config']['port'] = '$mysql_port';\
+\$conf['metaendpoint']['config']['dbname'] = '$mysql_dbname';\
+\$conf['metaendpoint']['config']['user'] = '$mysql_user';\
+\$conf['metaendpoint']['config']['pass'] = '$mysql_port';\
+\$conf['metaendpoint']['config']['key'] = '$sparql_key';\
 \
-$conf['ns']['local']   = '$ns';\
+\$conf['ns']['local']   = '$ns';\
 \
 ?>" > $settings_file
 chmod 644 $settings_file
