@@ -29,7 +29,7 @@ while [ "$everything_ok" != "y" ]
 do
   echo "==Basic Information=="
   echo "slodps needs to gather some basic information first to configure the installation properly"
-  echo -n "Type the base url of your site (default '$basedir'): "
+  echo -n "Type the base url of your site, including a final / (default '$basedir'): "
   read aux_basedir
   echo ""
   if [ "$aux_basedir" != "" ] 
@@ -149,7 +149,7 @@ done
 \$conf['endpoint']['host'] = '$endpoint';
 \$conf['basedir'] = '$basedir';
 
-\$conf['metaendpoint']['host'] = '$basedir/endpoint.php';
+\$conf['metaendpoint']['host'] = '$basedir$slodpsdir/endpoint.php';
 \$conf['metaendpoint']['config']['key'] = '$sparql_key';
 \$conf['metaendpoint']['config']['named_graph'] = 'http://slodps.org/metadata';
 \$conf['metaendpoint']['config']['host'] = '$mysql_host';
