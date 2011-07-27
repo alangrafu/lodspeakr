@@ -2,8 +2,14 @@ slodps - Simple Linked Open Data Publishing System
 author: Alvaro Graves (alvaro@graves.cl)
 version: 20110717
 
-Installation
-------------
+Simple Installation
+-------------------
+
+* Download the source or clone the repository from http://github.com/alangrafu/slodps
+* Inside slodps, run ./install.sh
+
+Manual Installation
+--------------------
 
 * Download the source or clone the repository from http://github.com/alangrafu/slodps
 

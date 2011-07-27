@@ -20,10 +20,11 @@ if [ -e "$parent_htaccess" ]
 then
   echo ".htaccess file found in parent directory."
   echo "Please remove it or add the content of $root_htaccess in it"
-  exit(0)
+  exit
 fi
 
-echo "Copying $root_htaccess as .htacess in parent directory"
+echo "WARNING: Copying $root_htaccess as .htacess in parent directory"
+echo ""
 cp $root_htaccess $parent_htaccess
 
 while [ "$everything_ok" != "y" ]
