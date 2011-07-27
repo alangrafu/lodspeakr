@@ -4,7 +4,7 @@ settings_file="settings.inc.php"
 
 mysql_port="3360"
 mysql_host="localhost"
-mysql_host="slodps"
+mysql_dbname="slodps"
 mysql_user="root"
 mysql_pass=""
 sparql_key=$RANDOM
@@ -63,8 +63,8 @@ do
   fi
   	
   echo -n "What is name of the database (default $mysql_dbname)? "
-  echo ""
   read aux_mysql_dbname
+  echo ""
   if [ "$aux_mysql_dbname" != "" ] 
   then
   	mysql_dbname=$aux_mysql_dbname
@@ -126,18 +126,18 @@ done
 \$conf['endpoint']['host'] = '$endpoint';\
 \$conf['basedir'] = '$basedir';\
 \
-\$conf['metaendpoint']['host'] = '$basedir/endpoint.php';\
-\$conf['metaendpoint']['config']['key'] = '$sparql_key';\
-\$conf['metaendpoint']['config']['named_graph'] = 'http://slodps.org/metadata';\
-\$conf['metaendpoint']['config']['host'] = '$mysql_host';\
-\$conf['metaendpoint']['config']['port'] = '$mysql_port';\
-\$conf['metaendpoint']['config']['dbname'] = '$mysql_dbname';\
-\$conf['metaendpoint']['config']['user'] = '$mysql_user';\
-\$conf['metaendpoint']['config']['pass'] = '$mysql_port';\
-\$conf['metaendpoint']['config']['key'] = '$sparql_key';\
-\
-\$conf['ns']['local']   = '$ns';\
-\
+\$conf['metaendpoint']['host'] = '$basedir/endpoint.php';\n\
+\$conf['metaendpoint']['config']['key'] = '$sparql_key';\n\
+\$conf['metaendpoint']['config']['named_graph'] = 'http://slodps.org/metadata';\n\
+\$conf['metaendpoint']['config']['host'] = '$mysql_host';\n\
+\$conf['metaendpoint']['config']['port'] = '$mysql_port';\n\
+\$conf['metaendpoint']['config']['dbname'] = '$mysql_dbname';\n\
+\$conf['metaendpoint']['config']['user'] = '$mysql_user';\n\
+\$conf['metaendpoint']['config']['pass'] = '$mysql_port';\n\
+\$conf['metaendpoint']['config']['key'] = '$sparql_key';\n\
+\n\
+\$conf['ns']['local']   = '$ns';\n\
+\n\
 ?>" > $settings_file
 chmod 644 $settings_file
 

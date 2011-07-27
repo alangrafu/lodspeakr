@@ -1,5 +1,5 @@
 <?
-include_once('settings.inc.php');
+include_once('common.inc.php');
 
 include_once('classes/Utils.php');
 include_once('classes/Queries.php');
