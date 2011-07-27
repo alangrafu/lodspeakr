@@ -1,14 +1,16 @@
 <?php
 /* ARC2 static class inclusion */ 
 include_once('lib/arc2/ARC2.php');
+include_once('settings.inc.php');
 set_time_limit(0);
+
 /* MySQL and endpoint configuration */ 
 $config = array(
   /* db */
-  'db_host' => 'localhost', /* optional, default is localhost */
-  'db_name' => 'slodp',
-  'db_user' => 'sl', 
-  'db_pwd' =>  'ls',
+  'db_host' => $conf['metaendpoint']['config']['host'],
+  'db_name' => $conf['metaendpoint']['config']['dbname'],
+  'db_user' => $conf['metaendpoint']['config']['user'], 
+  'db_pwd' =>  $conf['metaendpoint']['config']['pass'],
 
   /* store name */
   'store_name' => 'my_endpoint_store',
@@ -20,8 +22,8 @@ $config = array(
     'dump' /* dump is a special command for streaming SPOG export */
   ),
   'endpoint_timeout' => 60, /* not implemented in ARC2 preview */
-  'endpoint_read_key' => '', /* optional */
-  'endpoint_write_key' => '5A9av7zuDA3', /* optional */
+  'endpoint_read_key' => '', 
+  'endpoint_write_key' => $conf['metaendpoint']['config']['key'], 
   'endpoint_max_limit' => 0 
 );
 
