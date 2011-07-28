@@ -1,15 +1,15 @@
 <?
 include_once('settings.inc.php');
 
-$conf['endpoint']['config']['select']['output'] = 'json';
-$conf['endpoint']['config']['describe']['output'] = 'xml';
-$conf['endpoint']['config']['output'] = $conf['endpoint']['config']['select']['output'];
+$conf['endpoint']['select']['output'] = 'json';
+$conf['endpoint']['describe']['output'] = 'xml';
+$conf['endpoint']['config']['output'] = $conf['endpoint']['select']['output'];
 $conf['endpoint']['config']['named_graph'] = '';
 $conf['endpoint']['config']['show_inline'] = 0;
 
-$conf['metaendpoint']['config']['select']['output'] = 'json';
-$conf['metaendpoint']['config']['describe']['output'] = 'xml';
-$conf['metaendpoint']['config']['output'] = $conf['metaendpoint']['config']['select']['output'];
+$conf['metaendpoint']['select']['output'] = 'json';
+$conf['metaendpoint']['describe']['output'] = 'xml';
+$conf['metaendpoint']['config']['output'] = $conf['metaendpoint']['select']['output'];
 $conf['metaendpoint']['config']['show_inline'] = 0;
 $conf['metaendpoint']['config']['named_graph'] = 'http://slodps.org/metadata';
 

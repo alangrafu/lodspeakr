@@ -7,10 +7,10 @@ set_time_limit(0);
 /* MySQL and endpoint configuration */ 
 $config = array(
   /* db */
-  'db_host' => $conf['metaendpoint']['config']['host'],
-  'db_name' => $conf['metaendpoint']['config']['dbname'],
-  'db_user' => $conf['metaendpoint']['config']['user'], 
-  'db_pwd' =>  $conf['metaendpoint']['config']['pass'],
+  'db_host' => $conf['metaendpoint']['db']['host'],
+  'db_name' => $conf['metaendpoint']['db']['dbname'],
+  'db_user' => $conf['metaendpoint']['db']['user'], 
+  'db_pwd' =>  $conf['metaendpoint']['db']['pass'],
 
   /* store name */
   'store_name' => 'my_endpoint_store',

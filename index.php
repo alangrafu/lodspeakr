@@ -63,7 +63,7 @@ if($res != NULL && $page == NULL){ // Original URI is a page
   
   header('Content-Type: '.$acceptContentType);
   if(preg_match("/describe/i", $query)){
-  	$results = $endpoint->query($query, $conf['endpoint']['config']['describe']['output']);
+  	$results = $endpoint->query($query, $conf['endpoint']['describe']['output']);
   	require('lib/arc2/ARC2.php');
   	$parser = ARC2::getRDFParser();
   	$parser->parse($conf['basedir'], $results);
@@ -85,7 +85,7 @@ if($res != NULL && $page == NULL){ // Original URI is a page
   	exit(0);
   }
   elseif(preg_match("/select/i", $query)){
-  	$results = $endpoint->query($query, $conf['endpoint']['config']['select']['output']);
+  	$results = $endpoint->query($query, $conf['endpoint']['select']['output']);
   	if(sizeof($results['results']['bindings']) == 0){
   	  Utils::send404($uri);
   	}
