@@ -1,6 +1,7 @@
 #!/bin/bash
 
 root_htaccess="root.htaccess"
+cssdir="css"
 parent_htaccess="../.htaccess"
 settings_file="settings.inc.php"
 
@@ -17,13 +18,19 @@ ns=$basedir
 endpoint="http://localhost/sparql?"
 everything_ok="n"
 
+if [ -e "$cssdir" ]
+then
+  echo ".css directory found in parent directory."
+  echo "Please remove it to continue the installation."
+  exit
+fi
+
 if [ -e "$parent_htaccess" ]
 then
   echo ".htaccess file found in parent directory."
   echo "Please remove it to continue the installation."
   exit
 fi
-
 
 while [ "$everything_ok" != "y" ]
 do
@@ -171,4 +178,5 @@ echo ""
 cp $root_htaccess $parent_htaccess
 echo 'RewriteRule ^(.+)$ '$slodpsdir'/index.php?q=$1 [L]' >> $parent_htaccess 
 
+cp -rv $cssdir ../
 
