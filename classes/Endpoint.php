@@ -9,7 +9,7 @@ class Endpoint{
   	$this->params = $params;
   }
   
-  public function query($q, $output = null){
+  public function query($q, $output = 'json'){
   	global $conf;
   	$auxoutput = $this->params['output'];
   	if($output != null){

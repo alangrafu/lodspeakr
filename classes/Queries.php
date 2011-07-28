@@ -48,7 +48,7 @@ class Queries{
   	}
   	}LIMIT 1
 QUERY;
-$r = $e->query($q, $e);
+$r = $e->query($q);
 if(sizeof($r['results']['bindings'])>0){
   $u = (isset($r['results']['bindings'][0]['uri']))?$r['results']['bindings'][0]['uri']['value']:NULL;
   $p = (isset($r['results']['bindings'][0]['page']))?$r['results']['bindings'][0]['page']['value']:NULL;
