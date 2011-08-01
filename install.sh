@@ -7,13 +7,13 @@ settings_file="settings.inc.php"
 
 mysql_port="3306"
 mysql_host="localhost"
-mysql_dbname="slodps"
+mysql_dbname="lodspeakr"
 mysql_user="root"
 mysql_pass=""
 sparql_key=$RANDOM
 
 basedir="http://localhost/"
-slodpsdir="slodps"
+lodspeakrdir="lodspeakr"
 ns=$basedir
 endpoint="http://localhost/sparql?"
 everything_ok="n"
@@ -35,7 +35,7 @@ fi
 while [ "$everything_ok" != "y" ]
 do
   echo "==Basic Information=="
-  echo "slodps needs to gather some basic information first to configure the installation properly"
+  echo "lodspeakr needs to gather some basic information first to configure the installation properly"
   echo -n "Type the base url of your site, including a final / (default '$basedir'): "
   read aux_basedir
   echo ""
@@ -44,12 +44,12 @@ do
   	basedir=$aux_basedir
   fi
 
-  echo -n "From the base directory, where slodps located? (default '$slodpsdir'): "
-  read aux_slodpsdir
+  echo -n "From the base directory, where lodspeakr located? (default '$lodspeakrdir'): "
+  read aux_lodspeakrdir
   echo ""
-  if [ "$aux_slodpsdir" != "" ] 
+  if [ "$aux_lodspeakrdir" != "" ] 
   then
-  	slodpsdir=$aux_slodpsdir
+  	lodspeakrdir=$aux_lodspeakrdir
   fi
 
 
@@ -72,9 +72,9 @@ do
   fi
 
   echo "==Internal SPARQL endpoint=="
-  echo "slodps reads from your SPARQL endpoint, however it needs to add metadata to its own SPARQL endpoint"
+  echo "lodspeakr reads from your SPARQL endpoint, however it needs to add metadata to its own SPARQL endpoint"
   echo ""
-  echo "Ok, to create slodps' endpoint I need a MySQL database"
+  echo "Ok, to create lodspeakr' endpoint I need a MySQL database"
   echo -n "What is host where the database server is located (default $mysql_host)? "
   read aux_mysql_host
   echo ""
@@ -115,7 +115,7 @@ do
   	mysql_pass=$aux_mysql_pass
   fi
 
-  echo -n "Create a key for slodps' SPARQL endpoint (default: $sparql_key): "
+  echo -n "Create a key for lodspeakr' SPARQL endpoint (default: $sparql_key): "
   read aux_sparql_key
   echo ""
   if [ "$aux_sparql_key" != "" ] 
@@ -125,10 +125,10 @@ do
   echo "==Configuration=="
   echo "Ok, so I have the following configuration:"
   echo "Base URL is $basedir"
-  echo "slodps is installed at $basedir$slodpsdir"
+  echo "lodspeakr is installed at $basedir$lodspeakrdir"
   echo "The local namespace is $ns"
   echo "Your SPARQL endpoint is located at $endpoint"
-  echo "For slodps internal sparql endpoint the configuration is as follows:"
+  echo "For lodspeakr internal sparql endpoint the configuration is as follows:"
   echo "Host: $mysql_host"
   echo "Database name: $mysql_dbname"
   echo "Port: $mysql_port"
@@ -156,9 +156,9 @@ done
 \$conf['endpoint']['host'] = '$endpoint';
 \$conf['basedir'] = '$basedir';
 
-\$conf['metaendpoint']['host'] = '$basedir$slodpsdir/endpoint.php';
+\$conf['metaendpoint']['host'] = '$basedir$lodspeakrdir/endpoint.php';
 \$conf['metaendpoint']['config']['key'] = '$sparql_key';
-\$conf['metaendpoint']['config']['named_graph'] = 'http://slodps.org/metadata';
+\$conf['metaendpoint']['config']['named_graph'] = 'http://lodspeakr.org/metadata';
 \$conf['metaendpoint']['db']['host'] = '$mysql_host';
 \$conf['metaendpoint']['db']['port'] = '$mysql_port';
 \$conf['metaendpoint']['db']['dbname'] = '$mysql_dbname';
@@ -176,7 +176,7 @@ echo ""
 echo "WARNING: Copying $root_htaccess as .htacess in parent directory"
 echo ""
 cp $root_htaccess $parent_htaccess
-echo 'RewriteRule ^(.+)$ '$slodpsdir'/index.php?q=$1 [L]' >> $parent_htaccess 
+echo 'RewriteRule ^(.+)$ '$lodspeakrdir'/index.php?q=$1 [L]' >> $parent_htaccess 
 
 cp -rv $cssdir ../
 

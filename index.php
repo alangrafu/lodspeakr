@@ -1,6 +1,6 @@
 <?
 if(!file_exists('settings.inc.php')){
-  echo 'Need to configure slodps first. Please run "install.sh" first';
+  echo 'Need to configure lodspeakr first. Please run "install.sh" first';
   exit(0);
 }
 include_once('common.inc.php');

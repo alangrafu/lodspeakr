@@ -1,17 +1,17 @@
-slodps - Simple Linked Open Data Publishing System
+lodspeakr - Simple Publishing Kit for Linked Open Data
 author: Alvaro Graves (alvaro@graves.cl)
 version: 20110717
 
 Simple Installation
 -------------------
 
-* Download the source or clone the repository from http://github.com/alangrafu/slodps
-* Inside slodps, run ./install.sh
+* Download the source or clone the repository from http://github.com/alangrafu/lodspeakr
+* Inside lodspeakr/ run ./install.sh
 
 Manual Installation
 --------------------
 
-* Download the source or clone the repository from http://github.com/alangrafu/slodps
+* Download the source or clone the repository from http://github.com/alangrafu/lodspeakr
 
 * Edit settings.default.inc.php and change the following values:
 ** $conf['endpoint']['host']     Point to the SPARQL endpoint with your data

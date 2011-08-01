@@ -10,7 +10,7 @@ $conf['metaendpoint']['host'] = 'http://mymetadataendpoint/sparql';
 $conf['metaendpoint']['config']['output'] = 'json';
 $conf['metaendpoint']['config']['show_inline'] = 0;
 $conf['metaendpoint']['config']['key'] = 'keyForExecutePostInARC2';
-$conf['metaendpoint']['config']['named_graph'] = 'http://slodps.org/metadata';
+$conf['metaendpoint']['config']['named_graph'] = 'http://lodspeakr.org/metadata';
 
 
 $conf['ns']['rdf']     = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#';
