@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 root_htaccess="root.htaccess"
 cssdir="css"
@@ -37,7 +37,7 @@ do
   echo "==Basic Information=="
   echo "lodspeakr needs to gather some basic information first to configure the installation properly"
   echo -n "Type the base url of your site, including a final / (default '$basedir'): "
-  read aux_basedir
+  read -u 1 aux_basedir
   echo ""
   if [ "$aux_basedir" != "" ] 
   then
@@ -45,7 +45,7 @@ do
   fi
 
   echo -n "From the base directory, where lodspeakr located? (default '$lodspeakrdir'): "
-  read aux_lodspeakrdir
+  read -u 1 aux_lodspeakrdir
   echo ""
   if [ "$aux_lodspeakrdir" != "" ] 
   then
@@ -55,7 +55,7 @@ do
 
   ns=$basedir
   echo -n "Type the local namespace you will use (default '$ns'): "
-  read aux_ns
+  read -u 1 aux_ns
   echo ""
   if [ "$aux_ns" != "" ] 
   then
@@ -64,7 +64,7 @@ do
 
   
   echo -n "What is the URL of your SPARQL endpoint? (default $endpoint): "
-  read aux_endpoint
+  read -u 1 aux_endpoint
   echo ""
   if [ "$aux_endpoint" != "" ] 
   then
@@ -72,11 +72,11 @@ do
   fi
 
   echo "==Internal SPARQL endpoint=="
-  echo "lodspeakr reads from your SPARQL endpoint, however it needs to add metadata to its own SPARQL endpoint"
+  echo "lodspeakr read -u 1s from your SPARQL endpoint, however it needs to add metadata to its own SPARQL endpoint"
   echo ""
   echo "Ok, to create lodspeakr' endpoint I need a MySQL database"
   echo -n "What is host where the database server is located (default $mysql_host)? "
-  read aux_mysql_host
+  read -u 1 aux_mysql_host
   echo ""
   if [ "$aux_mysql_host" != "" ] 
   then
@@ -84,7 +84,7 @@ do
   fi
 
   echo -n "What is port the database is listening to (default $mysql_port)? "
-  read aux_mysql_port  
+  read -u 1 aux_mysql_port  
   echo ""
   if [ "$aux_mysql_port" != "" ] 
   then
@@ -92,7 +92,7 @@ do
   fi
   	
   echo -n "What is name of the database (default $mysql_dbname)? "
-  read aux_mysql_dbname
+  read -u 1 aux_mysql_dbname
   echo ""
   if [ "$aux_mysql_dbname" != "" ] 
   then
@@ -100,7 +100,7 @@ do
   fi
   
   echo -n "What is user for this database (default $mysql_user)? "
-  read mysql_user
+  read -u 1 mysql_user
   echo ""
   if [ "$aux_mysql_user" != "" ] 
   then
@@ -108,7 +108,7 @@ do
   fi
   
   echo -n "What is password for $mysql_user? "
-  read mysql_pass
+  read -u 1 mysql_pass
   echo ""
   if [ "$aux_mysql_pass" != "" ] 
   then
@@ -116,7 +116,7 @@ do
   fi
 
   echo -n "Create a key for lodspeakr' SPARQL endpoint (default: $sparql_key): "
-  read aux_sparql_key
+  read -u 1 aux_sparql_key
   echo ""
   if [ "$aux_sparql_key" != "" ] 
   then
@@ -138,7 +138,7 @@ do
 
   
   echo -n "Is everything ok (y/n)?"
-  read everything_ok
+  read -u 1 everything_ok
   
 done
 
