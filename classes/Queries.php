@@ -60,24 +60,29 @@ return NULL;
   
     
   public static function createPage($uri, $format, $e){
-  		global $conf;
-  	$named_graph = $conf['metaendpoint']['config']['named_graph'];
-  	//TODO: More flexible page creation method
-  	$extension = $conf['http_accept'][$format];
-  	$page = $uri.".".$extension;
-  	$q = <<<QUERY
-  	PREFIX foaf: <http://xmlns.com/foaf/0.1/> 
-  	PREFIX dcterms: <http://purl.org/dc/terms/>
-  	INSERT INTO <$named_graph> {
-  	  <$page> foaf:primaryTopic <$uri>;
-  	          dcterms:format '$format'.
-  	}
+                global $conf;
+        $named_graph = $conf['metaendpoint']['config']['named_graph'];
+        //TODO: More flexible page creation method
+        $inserts = "";
+        foreach($conf['http_accept'] as $f => $extension){
+          $page = $uri.".".$extension;
+          $inserts .= "<$page> foaf:primaryTopic <$uri>;
+                  dcterms:format '$f'.";
+        }
+
+        $q = <<<QUERY
+        PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+        PREFIX dcterms: <http://purl.org/dc/terms/>
+        INSERT INTO <$named_graph> {
+          $inserts
+        }
 QUERY;
     $r = $e->queryPost($q);
 
     if($r == null){
       return null;
     }
+    $page = $uri.".".$conf['http_accept'][$format];
     return $page;
   }
 }

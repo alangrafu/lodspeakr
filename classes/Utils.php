@@ -86,7 +86,7 @@ class Utils{
   	global $conf;
   	$extension = $conf['http_accept'][$accept_string];
     if($extension == NULL){
-      $extension = $conf['http_accept']['default'];
+      $extension = $conf['http_accept']['text/html'];
   	}
   	return $extension;
   }
@@ -102,7 +102,8 @@ class Utils{
      */
      $a = split(",", $accept_string);
      if(! $conf['http_accept'][$a[0]]){
-       $a[0] = array_search($conf['http_accept']['default'],$conf['http_accept']);
+     echo "accept string ".$accept_string;
+       $a[0] = $conf['http_accept']['text/html'];
      }
      return $a[0];
   }

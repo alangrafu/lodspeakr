@@ -44,5 +44,4 @@ $conf['http_accept']['text/plain'] = 'nt';
   'xml' => 'application/xml',
   'n3' => 'text/n3',
   */
-$conf['http_accept']['default'] = 'html';
 ?>
