@@ -11,7 +11,7 @@ mysql_user="root"
 mysql_pass=""
 sparql_key=$RANDOM
 
-basedir="http://localhost/"
+basedir="http://localhost/my/data/"
 lodspeakrdir="lodspeakr"
 ns=$basedir
 endpoint="http://localhost/sparql?"
@@ -29,7 +29,7 @@ while [ "$everything_ok" != "y" ]
 do
   echo "==Basic Information=="
   echo "lodspeakr needs to gather some basic information first to configure the installation properly"
-  echo -n "Type the base url of your site, including a final / (default '$basedir'): "
+  echo -n "Type the base url for your data, including a final / (default '$basedir'): "
   read -u 1 aux_basedir
   echo ""
   if [ "$aux_basedir" != "" ] 
