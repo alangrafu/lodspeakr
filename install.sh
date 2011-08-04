@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
 root_htaccess="root.htaccess"
-cssdir="css"
 parent_htaccess="../.htaccess"
 settings_file="settings.inc.php"
 
@@ -42,14 +41,6 @@ do
   if [ "$aux_basedir" != "" ] 
   then
   	basedir=$aux_basedir
-  fi
-
-  echo -n "From the base directory, where lodspeakr located? (default '$lodspeakrdir'): "
-  read -u 1 aux_lodspeakrdir
-  echo ""
-  if [ "$aux_lodspeakrdir" != "" ] 
-  then
-  	lodspeakrdir=$aux_lodspeakrdir
   fi
 
 
@@ -178,5 +169,4 @@ echo ""
 cp $root_htaccess $parent_htaccess
 echo 'RewriteRule ^(.+)$ '$lodspeakrdir'/index.php?q=$1 [L]' >> $parent_htaccess 
 
-cp -rv $cssdir ../
 
