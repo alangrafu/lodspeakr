@@ -2,13 +2,13 @@
 include_once('settings.inc.php');
 
 $conf['endpoint']['select']['output'] = 'json';
-$conf['endpoint']['describe']['output'] = 'xml';
+$conf['endpoint']['describe']['output'] = 'rdf';
 $conf['endpoint']['config']['output'] = $conf['endpoint']['select']['output'];
 $conf['endpoint']['config']['named_graph'] = '';
 $conf['endpoint']['config']['show_inline'] = 0;
 
 $conf['metaendpoint']['select']['output'] = 'json';
-$conf['metaendpoint']['describe']['output'] = 'xml';
+$conf['metaendpoint']['describe']['output'] = 'rdf';
 $conf['metaendpoint']['config']['output'] = $conf['metaendpoint']['select']['output'];
 $conf['metaendpoint']['config']['show_inline'] = 0;
 $conf['metaendpoint']['config']['named_graph'] = 'http://lodspeakr.org/metadata';

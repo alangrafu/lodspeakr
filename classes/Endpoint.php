@@ -19,6 +19,8 @@ class Endpoint{
 
         if($output == 'xml'){
           $accept = 'application/sparql-results+xml';
+        }elseif($output == 'rdf'){
+          $accept = 'application/rdf+xml';
         }
         $c = curl_init();
         $context = array();
