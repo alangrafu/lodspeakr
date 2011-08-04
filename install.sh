@@ -17,12 +17,6 @@ ns=$basedir
 endpoint="http://localhost/sparql?"
 everything_ok="n"
 
-if [ -e "../$cssdir" ]
-then
-  echo "css directory found in parent directory."
-  echo "Please remove it to continue the installation."
-  exit
-fi
 
 if [ -e "$parent_htaccess" ]
 then
