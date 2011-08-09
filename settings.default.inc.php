@@ -35,13 +35,8 @@ $conf['view']['standard']['baseUrl'] = $conf['basedir'];
 
 $conf['resource']['url_delimiter'] = "%u";
 
-$conf['http_accept']['text/html'] = 'html';  
-$conf['http_accept']['application/rdf+xml'] = 'rdf';
-$conf['http_accept']['text/turtle'] = 'ttl';
-$conf['http_accept']['text/plain'] = 'nt';
-  /* TODO: more generalizable formats
-  'xhtml' => 'application/xhtml+xml',
-  'xml' => 'application/xml',
-  'n3' => 'text/n3',
-  */
+$conf['http_accept']['html'] = array('text/html', 'application/xhtml');  
+$conf['http_accept']['rdf']  = array('application/rdf+xml');
+$conf['http_accept']['ttl']  = array('text/n3', 'application/turtle', 'application/turtle', 'text/turtle');
+$conf['http_accept']['nt']   = array('text/plain');
 ?>

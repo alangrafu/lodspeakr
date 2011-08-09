@@ -59,16 +59,22 @@ return NULL;
   }
   
     
-  public static function createPage($uri, $format, $e){
-                global $conf;
+  public static function createPage($uri, $contentType, $e){
+        global $conf;
+        $ext = 'html';
         $named_graph = $conf['metaendpoint']['config']['named_graph'];
         //TODO: More flexible page creation method
         $inserts = "";
-        foreach($conf['http_accept'] as $f => $extension){
+        foreach($conf['http_accept'] as $extension => $f){
           $page = $uri.".".$extension;
-          $inserts .= "<$page> foaf:primaryTopic <$uri>;
-                  dcterms:format '$f'.";
-        }
+            foreach($f as $v){
+              $inserts .= "<$page> foaf:primaryTopic <$uri>;
+                  dcterms:format '".$v."'.";
+              if($v == $contentType){
+                $ext = $extension;
+              }
+            }
+    	  }
 
         $q = <<<QUERY
         PREFIX foaf: <http://xmlns.com/foaf/0.1/>
@@ -82,7 +88,6 @@ QUERY;
     if($r == null){
       return null;
     }
-    $page = $uri.".".$conf['http_accept'][$format];
     return $page;
   }
 }

@@ -85,8 +85,10 @@ class Utils{
   public static function getExtension($accept_string){
   	global $conf;
   	$extension = "html";
-  	if(isset($conf['http_accept'][$accept_string])){
-  	  $extension = $conf['http_accept'][$accept_string];
+  	foreach($conf['http_accept'] as $ext => $accept_arr){
+  	  if(in_array($accept_string, $accept_arr)){
+  	    $extension = $ext;
+  	  }
   	}
   	return $extension;
   }
@@ -101,11 +103,17 @@ class Utils{
      * assume there is only one CT
      */
      $a = split(",", $accept_string);
-     if(! $conf['http_accept'][$a[0]]){
-       $a[0] = 'text/html';
-     }
-
-     return $a[0];
+     $ct = 'text/html';
+     if(strstr($a[0], ";")){
+       $a = split(";", $a[0]);
+ 	 }
+     foreach($conf['http_accept'] as $ext => $arr){
+       if(in_array($a[0], $arr)){
+         $ct = $a[0];
+       }
+	 }
+     
+     return $ct;
   }
 
 }

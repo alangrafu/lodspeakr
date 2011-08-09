@@ -73,14 +73,14 @@ if($res != NULL && $page == NULL){ // Original URI is a page
   	$parser->parse($conf['basedir'], $results);
   	$triples = $parser->getTriples();
   	$ser;
-  	switch ($acceptContentType){
-  	case 'text/turtle':
+  	switch ($extension){
+  	case 'ttl':
   	  $ser = ARC2::getTurtleSerializer();
   	  break;
-  	case 'text/plain':
+  	case 'nt':
   	  $ser = ARC2::getNTriplesSerializer();
   	  break;
-  	default:
+  	case 'rdf':
   	  $ser = ARC2::getRDFXMLSerializer();
   	  break;
   	}
