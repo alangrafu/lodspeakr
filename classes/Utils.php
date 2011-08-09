@@ -102,7 +102,6 @@ class Utils{
      */
      $a = split(",", $accept_string);
      if(! $conf['http_accept'][$a[0]]){
-     echo "accept string ".$accept_string;
        $a[0] = $conf['http_accept']['text/html'];
      }
      return $a[0];
