@@ -68,6 +68,9 @@ return NULL;
         foreach($conf['http_accept'] as $extension => $f){
           $page = $uri.".".$extension;
             foreach($f as $v){
+              if($contentType == $v){
+                $returnPage = $uri.".".$extension;
+              }
               $inserts .= "<$page> foaf:primaryTopic <$uri>;
                   dcterms:format '".$v."'.";
               if($v == $contentType){
@@ -88,7 +91,7 @@ QUERY;
     if($r == null){
       return null;
     }
-    return $page;
+    return $returnPage;
   }
 }
   	?>
