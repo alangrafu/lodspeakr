@@ -84,9 +84,9 @@ class Utils{
   
   public static function getExtension($accept_string){
   	global $conf;
-  	$extension = $conf['http_accept'][$accept_string];
-    if($extension == NULL){
-      $extension = $conf['http_accept']['text/html'];
+  	$extension = "html";
+  	if(isset($conf['http_accept'][$accept_string])){
+  	  $extension = $conf['http_accept'][$accept_string];
   	}
   	return $extension;
   }
@@ -102,8 +102,9 @@ class Utils{
      */
      $a = split(",", $accept_string);
      if(! $conf['http_accept'][$a[0]]){
-       $a[0] = $conf['http_accept']['text/html'];
+       $a[0] = 'text/html';
      }
+
      return $a[0];
   }
 
