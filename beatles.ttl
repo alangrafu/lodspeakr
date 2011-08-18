@@ -1,0 +1,33 @@
+@prefix : <http://localhost/lodspeakr/lodspeakr/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix mo: <http://musicontology.org/ns#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix rel: <http://relation/> .
+
+:john a foaf:Person;
+      rel:collaboratesAt :the_beatles;
+      foaf:knows :paul, :ringo, :george ;
+      foaf:firstName "John";
+      foaf:lastName  "Lennon".
+
+
+:paul a foaf:Person;
+      rel:collaboratesAt :the_beatles;
+      foaf:knows :john, :ringo, :george ;
+      foaf:firstName "Paul";
+      foaf:lastName "McCartney" .
+
+:ringo a foaf:Person;
+       rel:collaboratesAt :the_beatles;
+       foaf:knows :john, :paul, :george ;
+       foaf:firstName "Ringo";
+       foaf:lastName "Starr" .
+:george a foaf:Person;
+        rel:collaboratesAt :the_beatles;
+        foaf:knows :john, :ringo, :paul ;
+        foaf:firstName "George";
+        foaf:lastName "Harrison" .
+
+:the_beatles a mo:Group ;
+             dcterms:title "The Beatles".
+             

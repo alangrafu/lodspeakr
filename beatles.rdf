@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rdf:RDF
+   xmlns:dcterms="http://purl.org/dc/terms/"
+   xmlns:foaf="http://xmlns.com/foaf/0.1/"
+   xmlns:mo="http://musicontology.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:rel="http://relation/"
+   xmlns="http://localhost/lodspeakr/lodspeakr/">
+  <foaf:Person rdf:about="http://localhost/lodspeakr/lodspeakr/george">
+    <rel:collaboratesAt rdf:resource="http://localhost/lodspeakr/lodspeakr/the_beatles"/>
+    <foaf:firstName>George</foaf:firstName>
+    <foaf:knows rdf:resource="http://localhost/lodspeakr/lodspeakr/john"/>
+    <foaf:knows rdf:resource="http://localhost/lodspeakr/lodspeakr/paul"/>
+    <foaf:knows rdf:resource="http://localhost/lodspeakr/lodspeakr/ringo"/>
+    <foaf:lastName>Harrison</foaf:lastName>
+  </foaf:Person>
+  <foaf:Person rdf:about="http://localhost/lodspeakr/lodspeakr/john">
+    <rel:collaboratesAt rdf:resource="http://localhost/lodspeakr/lodspeakr/the_beatles"/>
+    <foaf:firstName>John</foaf:firstName>
+    <foaf:knows rdf:resource="http://localhost/lodspeakr/lodspeakr/george"/>
+    <foaf:knows rdf:resource="http://localhost/lodspeakr/lodspeakr/paul"/>
+    <foaf:knows rdf:resource="http://localhost/lodspeakr/lodspeakr/ringo"/>
+    <foaf:lastName>Lennon</foaf:lastName>
+  </foaf:Person>
+  <foaf:Person rdf:about="http://localhost/lodspeakr/lodspeakr/paul">
+    <rel:collaboratesAt rdf:resource="http://localhost/lodspeakr/lodspeakr/the_beatles"/>
+    <foaf:firstName>Paul</foaf:firstName>
+    <foaf:knows rdf:resource="http://localhost/lodspeakr/lodspeakr/george"/>
+    <foaf:knows rdf:resource="http://localhost/lodspeakr/lodspeakr/john"/>
+    <foaf:knows rdf:resource="http://localhost/lodspeakr/lodspeakr/ringo"/>
+    <foaf:lastName>McCartney</foaf:lastName>
+  </foaf:Person>
+  <foaf:Person rdf:about="http://localhost/lodspeakr/lodspeakr/ringo">
+    <rel:collaboratesAt rdf:resource="http://localhost/lodspeakr/lodspeakr/the_beatles"/>
+    <foaf:firstName>Ringo</foaf:firstName>
+    <foaf:knows rdf:resource="http://localhost/lodspeakr/lodspeakr/george"/>
+    <foaf:knows rdf:resource="http://localhost/lodspeakr/lodspeakr/john"/>
+    <foaf:knows rdf:resource="http://localhost/lodspeakr/lodspeakr/paul"/>
+    <foaf:lastName>Starr</foaf:lastName>
+  </foaf:Person>
+  <mo:Group rdf:about="http://localhost/lodspeakr/lodspeakr/the_beatles">
+    <dcterms:title>The Beatles</dcterms:title>
+  </mo:Group>
+</rdf:RDF>

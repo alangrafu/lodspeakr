@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML+RDFa 1.0//EN"
     "http://www.w3.org/MarkUp/DTD/xhtml-rdfa-1.dtd">
-    <html {% for i, ns in base.ns %}xmlns:{{i}}="{{ns}}" 
+    <html xmlns="http://www.w3.org/1999/xhtml" {% for i, ns in base.ns %}xmlns:{{i}}="{{ns}}" 
     {%endfor%}version="XHTML+RDFa 1.0" xml:lang="en">
     <head>
     <title>Page about {{base.value.this}}</title>
@@ -9,8 +9,6 @@
   </head>
   <body>
     <h1>Page about <a href='{{base.value.this}}'>{{base.curie.this}}</a></h1>
-  <br/>
-  <br/>
   <div>
     <h2>Information from {{base.curie.this}}</h2>
     <table about="{{base.value.this}}"> 
