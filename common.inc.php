@@ -9,15 +9,7 @@ $conf['endpoint']['config']['show_inline'] = 0;
 
 $conf['metadata']['db']['location'] = 'meta/db.sqlite';
 
-$conf['ns']['rdf']     = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#';
-$conf['ns']['rdfs']    = 'http://www.w3.org/2000/01/rdf-schema#';
-$conf['ns']['dcterms'] = 'http://purl.org/dc/terms/';
-$conf['ns']['foaf']    = 'http://xmlns.com/foaf/0.1/';
-$conf['ns']['skos']    = 'http://www.w3.org/2004/02/skos/core#';
-$conf['ns']['og']      = 'http://opengraphprotocol.org/schema/';
-$conf['ns']['owl']     = 'http://www.w3.org/2002/07/owl#';
-$conf['ns']['ov']      = 'http://open.vocab.org/terms/';   
-$conf['ns']['conv']    = 'http://purl.org/twc/vocab/conversion/';
+include_once('namespaces.php');
 
 $conf['model']['directory'] = 'models/'; #include trailing slash!
 $conf['model']['extension'] = '.model';

@@ -1,7 +1,7 @@
 <?
 
 
-class MetaDb extends SQLite3{
+class MetaDb{
   private $dbLocation;
   
   public function __construct($location){

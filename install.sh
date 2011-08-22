@@ -76,6 +76,7 @@ done
 \$conf['endpoint']['host'] = '$endpoint';
 \$conf['basedir'] = '$basedir';
 
+#If you want to add/overrid a namespace, add it here
 \$conf['ns']['local']   = '$ns';
 
 ?>" 
