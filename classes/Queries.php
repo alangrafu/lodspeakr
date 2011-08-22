@@ -28,70 +28,51 @@ class Queries{
   	return NULL;
   }
   
-  public static function getMetaData($uri, $format, $e){
-  	global $conf;
-  	$named_graph = $conf['metaendpoint']['config']['named_graph'];
-  	$q = <<<QUERY
-  	PREFIX foaf: <http://xmlns.com/foaf/0.1/> 
-  	PREFIX dcterms: <http://purl.org/dc/terms/>
-  	SELECT ?page ?uri ?format WHERE{
-  	GRAPH <$named_graph>{
-  	?s ?p ?o . #Stupid dummy triple to make it work with ARC2
-  	OPTIONAL{
-  	  ?page foaf:primaryTopic <$uri> ;
-  	        dcterms:format "$format" .
-  	  } .
-  	OPTIONAL{
-  	  <$uri> foaf:primaryTopic ?uri;
-  	         dcterms:format ?format
-  	 } .
-  	}
-  	}LIMIT 1
+	public static function getMetadata($uri, $format, $e){
+		global $conf;
+		$q = <<<QUERY
+		SELECT uri, doc, format FROM document WHERE 
+			(uri = "$uri" AND format = "$format") OR doc = "$uri"
+		LIMIT 1
 QUERY;
-$r = $e->query($q);
-if(sizeof($r['results']['bindings'])>0){
-  $u = (isset($r['results']['bindings'][0]['uri']))?$r['results']['bindings'][0]['uri']['value']:NULL;
-  $p = (isset($r['results']['bindings'][0]['page']))?$r['results']['bindings'][0]['page']['value']:NULL;
-  $f = (isset($r['results']['bindings'][0]['format']))?$r['results']['bindings'][0]['format']['value']:NULL;
-  return array($u, $p, $f);
-}
-return NULL;
-  }
+	   $r = $e->query($q);
+		if(sizeof($r) > 0){
+		 $u = $r[0]['uri'];
+		 $p = $r[0]['doc'];
+		 $f = $r[0]['format'];
+		  return array($u, $p, $f);
+		}else{
+		  return NULL;
+		}
+	}
   
-    
-  public static function createPage($uri, $contentType, $e){
-        global $conf;
-        $ext = 'html';
-        $named_graph = $conf['metaendpoint']['config']['named_graph'];
-        //TODO: More flexible page creation method
-        $inserts = "";
-        foreach($conf['http_accept'] as $extension => $f){
-          $page = $uri.".".$extension;
-            foreach($f as $v){
-              if($contentType == $v){
-                $returnPage = $uri.".".$extension;
-              }
-              $inserts .= "<$page> foaf:primaryTopic <$uri>;
-                  dcterms:format '".$v."'.";
-              if($v == $contentType){
-                $ext = $extension;
-              }
-            }
-    	  }
 
-        $q = <<<QUERY
-        PREFIX foaf: <http://xmlns.com/foaf/0.1/>
-        PREFIX dcterms: <http://purl.org/dc/terms/>
-        INSERT INTO <$named_graph> {
-          $inserts
-        }
+	public static function createPage($uri, $contentType, $e){
+	 global $conf;
+		$ext = 'html';
+		$inserts = "";
+		foreach($conf['http_accept'] as $extension => $f){
+		  $page = $uri.".".$extension;
+			foreach($f as $v){
+			  if($contentType == $v){
+				$returnPage = $uri.".".$extension;
+			  }
+			  if($inserts != ""){
+				$inserts .= "UNION ";
+			  }
+			  $inserts .= "SELECT '$uri', '$page', '$v' \n";
+			  if($v == $contentType){
+				$ext = $extension;
+			  }
+			}
+		  }
+		  $q = <<<QUERY
+		  INSERT INTO document (uri, doc, format) $inserts
 QUERY;
-    $r = $e->queryPost($q);
-
-    if($r == null){
-      return null;
-    }
-    return $returnPage;
-  }
+	$r = $e->write($q);
+	
+		return $returnPage;
+	}
 }
-  	?>
+
+?>

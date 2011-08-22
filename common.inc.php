@@ -7,11 +7,7 @@ $conf['endpoint']['config']['output'] = $conf['endpoint']['select']['output'];
 $conf['endpoint']['config']['named_graph'] = '';
 $conf['endpoint']['config']['show_inline'] = 0;
 
-$conf['metaendpoint']['select']['output'] = 'json';
-$conf['metaendpoint']['describe']['output'] = 'rdf';
-$conf['metaendpoint']['config']['output'] = $conf['metaendpoint']['select']['output'];
-$conf['metaendpoint']['config']['show_inline'] = 0;
-$conf['metaendpoint']['config']['named_graph'] = 'http://lodspeakr.org/metadata';
+$conf['metadata']['db']['location'] = 'meta/db.sqlite';
 
 $conf['ns']['rdf']     = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#';
 $conf['ns']['rdfs']    = 'http://www.w3.org/2000/01/rdf-schema#';
