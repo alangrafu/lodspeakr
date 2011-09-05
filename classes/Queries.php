@@ -73,44 +73,6 @@ QUERY;
 	
 		return $returnPage;
 	}
-	
-	  public static function processQuery($modelFile, $uri, $endpoint){
-    global $conf;
-    //Check if files for model and view exist
-	
-	$query = file_get_contents($modelFile);
-	$query = preg_replace("|".$conf['resource']['url_delimiter']."|", "<".$uri.">", $query);
-	header('Content-Type: '.$acceptContentType);
-	if(preg_match("/describe/i", $query)){
-	  $results = $endpoint->query($query, $conf['endpoint']['describe']['output']);
-	  require('lib/arc2/ARC2.php');
-	  $parser = ARC2::getRDFParser();
-	  $parser->parse($conf['basedir'], $results);
-	  $triples = $parser->getTriples();
-	  $ser;
-	  switch ($extension){
-	  case 'ttl':
-	  	$ser = ARC2::getTurtleSerializer();
-	  	break;
-	  case 'nt':
-	  	$ser = ARC2::getNTriplesSerializer();
-	  	break;
-	  case 'rdf':
-	  	$ser = ARC2::getRDFXMLSerializer();
-	  	break;
-	  }
-	  $doc = $ser->getSerializedTriples($triples);
-	  echo $doc;
-	  exit(0);
-	}
-	elseif(preg_match("/select/i", $query)){
-	  $results = $endpoint->query($query, $conf['endpoint']['select']['output']);
-	  if(sizeof($results['results']['bindings']) == 0){
-	  	Utils::send404($uri);
-	  }
-	  return $results;
-	}
-  }
 }
 
 ?>

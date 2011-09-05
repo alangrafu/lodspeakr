@@ -54,10 +54,10 @@ class Utils{
   	foreach($aux as $w){
   	  $row = array();
   	  foreach($w as $k => $v){
-  	  	$row[$k]['value'] = $v['value'];
+  	  	$row['value'][$k] = $v['value'];
   	  	if($v['type'] == 'uri'){
-  	  	  $row[$k]['curie'] = Utils::uri2curie($v['value']);
-  	  	  $row[$k]['uri'] = 1;
+  	  	  $row['curie'][$k] = Utils::uri2curie($v['value']);
+  	  	  $row['uri'][$k] = 1;
   	  	}
   	  }
   	  array_push($obj, $row);
@@ -68,8 +68,8 @@ class Utils{
   public static function showView($uri, $data, $view){
   	global $conf;
   	$base = $conf['view']['standard'];
-  	$base['this']['value'] = $uri;
-  	$base['this']['curie'] = Utils::uri2curie($uri);
+  	$base['value']['this'] = $uri;
+  	$base['curie']['this'] = Utils::uri2curie($uri);
   	$base['ns'] = $conf['ns'];
   	require('lib/Haanga/lib/Haanga.php');
   	Haanga::configure(array(
@@ -78,10 +78,8 @@ class Utils{
   	  ));
   	$r = Utils::sparqlResult2Obj($data);
 	$vars = compact('base', 'r');
-	var_dump($r);
-
 	Haanga::Load($view, $vars);
-	
+  	
   }
   
   public static function getExtension($accept_string){
@@ -97,26 +95,26 @@ class Utils{
   
   public static function getBestContentType($accept_string){
   	global $conf;
-  	/*
-  	* TODO: Choose best content type from
-  	* things like
-  	* "text/html;q=0.2,application/xml;q=0.1"
-  	* and so on. In the meantime,
-  	* assume there is only one CT
-  	*/
-  	$a = split(",", $accept_string);
-  	$ct = 'text/html';
-  	if(strstr($a[0], ";")){
-  	  $a = split(";", $a[0]);
-  	}
-  	foreach($conf['http_accept'] as $ext => $arr){
-  	  if(in_array($a[0], $arr)){
-  	  	$ct = $a[0];
-  	  }
-  	}
-  	
-  	return $ct;
+   /*
+     * TODO: Choose best content type from
+     * things like
+     * "text/html;q=0.2,application/xml;q=0.1"
+     * and so on. In the meantime,
+     * assume there is only one CT
+     */
+     $a = split(",", $accept_string);
+     $ct = 'text/html';
+     if(strstr($a[0], ";")){
+       $a = split(";", $a[0]);
+ 	 }
+     foreach($conf['http_accept'] as $ext => $arr){
+       if(in_array($a[0], $arr)){
+         $ct = $a[0];
+       }
+	 }
+     
+     return $ct;
   }
-  
+
 }
 ?>
