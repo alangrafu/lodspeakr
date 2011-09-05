@@ -15,24 +15,24 @@
     {% for row in r %}
       {% if row.value.s1 != null %}
       <tr>
-        <td><a href='{{row.value.s1}}'>{{row.curie.s1}}</a></td>
+        <td><a href='{{row.s1.value}}'>{{row.curie.s1}}</a></td>
         {% if row.uri.p1 == 1 %}
-        <td><a rel='{{row.curie.s1}}' href='{{row.value.p1}}'>{{row.curie.p1}}</a></td>
+        <td><a rel='{{row.s1.curie}}' href='{{row.p1.value}}'>{{row.p1.curie}}</a></td>
         {% else %}
-        <td><span property='{{row.curie.s1}}'>{{row.value.p1}}</span></td>
+        <td><span property='{{row.s1.curie}}'>{{row.p1.value}}</span></td>
         {% endif %}
         </tr>
       {% endif %}
     {% endfor %}
     </table>
     <br/><br/>
-    <h2>Information pointing to {{base.curie.this}}</h2>
-    <table about="{{base.value.this}}"> 
+    <h2>Information pointing to {{base.this.curie}}</h2>
+    <table about="{{base.this.value}}"> 
     {% for row in r %}
       {% if row.value.s2 != null %}
     <tr>
-        <td><a rev='{{row.curie.p2}}' href='{{row.value.s2}}'>{{row.curie.s2}}</a></td>
-        <td><a href='{{row.value.p2}}'>{{row.curie.p2}}</a></td>
+        <td><a rev='{{row.p2.curie}}' href='{{row.s2.value}}'>{{row.s2.curie}}</a></td>
+        <td><a href='{{row.p2.value}}'>{{row.p2.curie}}</a></td>
     </tr>
     {%endif %}
     {% endfor %}

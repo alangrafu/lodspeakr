@@ -4,20 +4,20 @@
     <html {% for i, ns in base.ns %}xmlns:{{i}}="{{ns}}" 
     {%endfor%}version="XHTML+RDFa 1.0" xml:lang="en">
     <head>
-    <title>Page about {{row.value.name}}</title>
+    <title>Page about {{row.name.value}}</title>
     <link href="{{base.baseUrl}}lodspeakr/css/person.css" rel="stylesheet" type="text/css" media="screen" />
   </head>
   <body>
     {% for row in r %}
-    {% if row.value.name != '' %}
-      <h1>{{row.value.firstName}} {{row.value.lastName}}{% if row.value.img != '' %} <img src="{{row.value.img}}" width="100px"/>{%endif%}</h1>
-      <p>This is a page about {{row.value.name}}. He has a personal homepage located at <a href='{{row.value.homepage}}'>{{row.value.homepage}}</a>.</p> 
+    {% if row.name.value != '' %}
+      <h1>{{row.firstName.value}} {{row.lastName.value}}{% if row.img.value != '' %} <img src="{{row.value.img}}" width="100px"/>{%endif%}</h1>
+      <p>This is a page about {{row.name.value}}. He has a personal homepage located at <a href='{{row.homepage.value}}'>{{row.homepage.value}}</a>.</p> 
     {%endif%}
     {% endfor %}
 
 
     {% for row in r %}
-        {% if row.value.k != '' %}<p>He knows <a href='{{row.value.k}}'>{{row.value.k}}</a></p>{%endif%}
+        {% if row.k.value != '' %}<p>He knows <a href='{{row.k.value}}'>{{row.k.value}}</a></p>{%endif%}
     {% endfor %}
   </body>
 </html>
