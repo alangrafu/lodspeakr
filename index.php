@@ -65,22 +65,24 @@ if(!file_exists($viewFile) ){
 }
 
 $modelFile = $conf['model']['directory'].$curieType.$conf['model']['extension'].".".$extension;
+
 if(!file_exists($modelFile) || $curieType == null){
   $modelFile = $conf['model']['directory'].$conf['model']['default'].$conf['model']['extension'].".".$extension;
 }
+
 if(is_dir($modelFile)){
   $modelDir = $modelFile;
   if ($handle = opendir($modelDir)) {
     while (false !== ($file = readdir($handle))) {
       if($file != "." && $file != ".."){
-      	$results[$file] = Utils::processQuery($file);
+      	$results[$file] = Queries::processQuery($file);
       }
     }    
   }else{
   	Utils::send500($uri);
   }
 }else{
-  $results = Utils::processQUery($modelFile);
+  $results = Queries::processQuery($modelFile, $uri, $endpoint);
 }
 Utils::showView($uri, $results, $viewFile);
 
