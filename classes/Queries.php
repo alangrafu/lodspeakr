@@ -18,8 +18,12 @@ class Queries{
   }
   
   public static function getClass($uri, $e){
-  	$q = "SELECT DISTINCT ?class WHERE{
-  	<$uri> a ?class .
+  	$q = "SELECT DISTINCT ?class ?inst WHERE{
+  	{
+  	  <$uri> a ?class .
+  	}UNION{
+  	  ?inst a <$uri> .
+  	}
   	} LIMIT 1";
   	$r = $e->query($q);
   	if(sizeof($r['results']['bindings'])>0){

@@ -60,7 +60,9 @@ class Utils{
   	  	  $row['uri'][$k] = 1;
   	  	}
   	  }
-  	  array_push($obj, $row);
+  	  if(sizeof($row) >0){
+  	  	array_push($obj, $row);
+  	  }
   	}
   	return $obj;
   }
@@ -68,15 +70,15 @@ class Utils{
   public static function showView($uri, $data, $view){
   	global $conf;
   	$base = $conf['view']['standard'];
-  	$base['value']['this'] = $uri;
-  	$base['curie']['this'] = Utils::uri2curie($uri);
+  	$base['this']['value'] = $uri;
+  	$base['this']['curie'] = Utils::uri2curie($uri);
   	$base['ns'] = $conf['ns'];
   	require('lib/Haanga/lib/Haanga.php');
   	Haanga::configure(array(
   	  'template_dir' => './',
-  	  'cache_dir' => 'compiled/',
+  	  'cache_dir' => 'cache/',
   	  ));
-  	$r = Utils::sparqlResult2Obj($data);
+  	$r = Utils::sparqlResult2Obj($data);  	
 	$vars = compact('base', 'r');
 	Haanga::Load($view, $vars);
   	
