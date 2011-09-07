@@ -36,9 +36,9 @@ class Endpoint{
         $aux = curl_exec($c); // execute the curl command 
         curl_close($c);
         $this->params['output'] = $auxoutput;
-
         if(preg_match("/select/i", $q)){
-          return json_decode($aux, true);
+          $r = json_decode($aux, true);
+          return $r;
         }
         if(preg_match("/describe/i", $q)){
           return $aux;

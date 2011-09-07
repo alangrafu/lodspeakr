@@ -25,14 +25,17 @@ class Queries{
   	  ?inst a <$uri> .
   	}
   	} LIMIT 1";
-  	$r = $e->query($q);
+  	try{
+  	  $r = $e->query($q);
+  	}catch (Exception $ex){
+  	  echo $ex->getMessage();
+  	}
   	if(sizeof($r['results']['bindings'])>0){
   	  return $r['results']['bindings'][0]['class']['value'];
   	}
   	return NULL;
   }
-  
-	public static function getMetadata($uri, $format, $e){
+  public static function getMetadata($uri, $format, $e){
 		global $conf;
 		$q = <<<QUERY
 		SELECT uri, doc, format FROM document WHERE 
@@ -77,6 +80,7 @@ QUERY;
 	
 		return $returnPage;
 	}
+	
 }
 
 ?>
