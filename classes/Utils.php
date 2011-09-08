@@ -52,17 +52,6 @@ class Utils{
   	return $ns[$parts[0]].$parts[1];
   }
   
-   public static function getPrefix($curie){
-  	global $conf;
-  	$ns = $conf['ns'];
-  	$parts = explode(':', $curie);
-  	//Avoid if we have a namespace prefix called 'http'
-  	if(preg_match('|^//|', $parts[1])){
-  	  return $curie;
-  	}  	
-  	return array('ns' => $ns[$parts[0]], 'prefix' => $parts[0]);;
-  }
-  
   public static function getTemplate($uri){
   	$filename = str_replace(":", "_", $uri);
   	if(file_exists ($filename)){

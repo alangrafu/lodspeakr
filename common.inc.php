@@ -26,7 +26,7 @@ $conf['http_accept']['ttl']  = array('text/n3', 'application/x-turtle', 'applica
 $conf['http_accept']['nt']   = array('text/plain');
 
 
-$conf['special']['uri'] = 'special';
+$conf['special']['uri'] = 'special/';
 $conf['special']['class'] = 'classes/BasicSpecialFunction.php';
 
 //Frontpage when user goes to http://example.org/
