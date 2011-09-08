@@ -1,5 +1,4 @@
 <?
-include_once('settings.inc.php');
 
 $conf['endpoint']['select']['output'] = 'json';
 $conf['endpoint']['describe']['output'] = 'rdf';
@@ -18,7 +17,6 @@ $conf['model']['default'] = 'default';
 $conf['view']['directory'] = 'views/'; #include trailing slash!
 $conf['view']['extension'] = '.view';
 $conf['view']['default'] = 'default';
-$conf['view']['standard']['baseUrl'] = $conf['basedir'];
 
 $conf['resource']['url_delimiter'] = "%u";
 
@@ -26,5 +24,15 @@ $conf['http_accept']['html'] = array('text/html');
 $conf['http_accept']['rdf']  = array('application/rdf+xml');
 $conf['http_accept']['ttl']  = array('text/n3', 'application/x-turtle', 'application/turtle', 'text/turtle');
 $conf['http_accept']['nt']   = array('text/plain');
+
+
+$conf['special']['uri'] = 'special/';
+$conf['special']['class'] = 'classes/BasicSpecialFunction.php';
+
+//Frontpage when user goes to http://example.org/
+$conf['root']['url'] = 'special/index/';
+
+include_once('settings.inc.php');
+$conf['view']['standard']['baseUrl'] = $conf['basedir'];
 
 ?>

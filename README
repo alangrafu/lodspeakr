@@ -21,7 +21,7 @@ Manual Installation
 
 * mv settings.default.inc.php settings.inc.php
 
-* chmod 777 compiled
+* chmod 777 cache
 
 That's it. You should be able to serve tour data in RDF/XML, Turtle, Ntriples and RDFa.
 
