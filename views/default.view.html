@@ -4,34 +4,36 @@
     <html xmlns="http://www.w3.org/1999/xhtml" {% for i, ns in base.ns %}xmlns:{{i}}="{{ns}}" 
     {%endfor%}version="XHTML+RDFa 1.0" xml:lang="en">
     <head>
-    <title>Page about {{base.value.this}}</title>
+    <title>Page about {{base.this.value}}</title>
     <link href="{{base.baseUrl}}/lodspeakr/css/basic.css" rel="stylesheet" type="text/css" media="screen" />
   </head>
   <body>
-    <h1>Page about <a href='{{base.value.this}}'>{{base.curie.this}}</a></h1>
+    <h1>Page about <a href='{{base.this.value}}'>{{base.this.curie}}</a></h1>
   <div>
-    <h2>Information from {{base.curie.this}}</h2>
-    <table about="{{base.value.this}}"> 
+    <h2>Information from {{base.this.curie}}</h2>
+    <table about="{{base.this.value}}"> 
     {% for row in r %}
       {% if row.value.s1 != null %}
       <tr>
-        <td><a href='{{row.value.s1}}'>{{row.curie.s1}}</a></td>
+        <td><a href='{{ row.value.s1 }}'>{{row.curie.s1}}</a></td>
+    
         {% if row.uri.p1 == 1 %}
-        <td><a rel='{{row.curie.s1}}' href='{{row.value.p1}}'>{{row.curie.p1}}</a></td>
+        <td><a rel='{{row.s1.curie}}' href='{{row.value.p1}}'>{{row.curie.p1}}</a></td>
         {% else %}
-        <td><span property='{{row.curie.s1}}'>{{row.value.p1}}</span></td>
+        <td><span property='{{row.s1.curie}}'>{{row.value.p1}}</span></td>
         {% endif %}
+     
         </tr>
       {% endif %}
     {% endfor %}
     </table>
     <br/><br/>
-    <h2>Information pointing to {{base.curie.this}}</h2>
-    <table about="{{base.value.this}}"> 
+    <h2>Information pointing to {{base.this.curie}}</h2>
+    <table about="{{base.this.value}}"> 
     {% for row in r %}
-      {% if row.value.s2 != null %}
+      {% if row.value.p2 != null %}
     <tr>
-        <td><a rev='{{row.curie.p2}}' href='{{row.value.s2}}'>{{row.curie.s2}}</a></td>
+        <td><a href='{{row.value.s2 }}'>{{ row.curie.s2 }}</a></td>
         <td><a href='{{row.value.p2}}'>{{row.curie.p2}}</a></td>
     </tr>
     {%endif %}
