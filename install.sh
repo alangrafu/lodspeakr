@@ -87,6 +87,5 @@ echo ""
 echo "WARNING: Copying $root_htaccess as .htacess in parent directory"
 echo ""
 cp $root_htaccess $parent_htaccess
-echo 'RewriteRule ^(.+)$ '$lodspeakrdir'/index.php?q=$1 [L]' >> $parent_htaccess 
 
 
