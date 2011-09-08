@@ -12,7 +12,7 @@
 	<ul>
     {% for row in r %}
       {% if row.value.resource != null %}
-        <li><a href='{{base.baseUrl}}special/instances/{{ row.curie.resource }}'>{{row.curie.resource}}</a></li>
+        <li><a href='{{ row.value.resource }}'>{{row.curie.resource}}</a></li>
       {% endif %}
     {% endfor %}
     </ul>
