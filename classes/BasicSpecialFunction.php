@@ -67,6 +67,7 @@ class SpecialFunction extends AbstractSpecialFunction{
   	  $query = preg_replace("|".$conf['resource']['url_delimiter']."|", "<".$uri.">", $query);
   	}
   	
+  	
   	$viewFile = $conf['view']['directory'].'special.index.view.html';
   	$contentType = $context['contentType'];
   	$e = $context['endpoint'];
