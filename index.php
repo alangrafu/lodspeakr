@@ -59,6 +59,7 @@ if($res == $uri){
 }
 
 $uri = $res;
+$extension = Utils::getExtension($format); 
 
 /*Redefine Content type based on the
 * dcterms:format for this page
