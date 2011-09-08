@@ -69,8 +69,6 @@ class Utils{
   	  	if($v['type'] == 'uri'){
   	  	  $row['curie'][$k] = Utils::uri2curie($v['value']);
   	  	  $row['uri'][$k] = 1;
-  	  	}elseif($v['type'] == 'bnode'){
-  	  	  $row['curie'][$k] = 'blankNode';
   	  	}
   	  }
   	  if(sizeof($row) >0){
