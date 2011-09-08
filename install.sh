@@ -88,4 +88,11 @@ echo "WARNING: Copying $root_htaccess as .htacess in parent directory"
 echo ""
 cp $root_htaccess $parent_htaccess
 
+mkdir cache
+
+echo ""
+echo "***ATTENTION***"
+echo "Remember to give permissions to the server to write in cache/ and meta/ dirs"
+echo "Otherwise LODSPeaKr won't work"
+
 
