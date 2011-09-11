@@ -88,6 +88,15 @@ echo "WARNING: Copying $root_htaccess as .htacess in parent directory"
 echo ""
 cp $root_htaccess $parent_htaccess
 
+#Creating symlinks for turtle and ntriples
+cd views
+ln -s default.view.rdf default.view.nt
+ln -s default.view.rdf default.view.ttl
+cd ../models
+ln -s default.model.rdf default.model.nt
+ln -s default.model.rdf default.model.ttl
+cd ..
+
 mkdir cache
 
 echo ""
