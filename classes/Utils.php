@@ -159,7 +159,7 @@ class Utils{
   }
   
   
-  private static function serializeByQueryType($data){
+  private static function serializeByQueryType($data, $extension){
   	global	$conf;
   	if(preg_match("/describe/i", $data['query'])){  	  
   	  require('lib/arc2/ARC2.php');
@@ -198,10 +198,10 @@ class Utils{
   	header('Content-Type: '.$contentType);
   	if(!isset($data['results'])){
   	  foreach($data as $k => $v){
-  	  	$results[$k] = Utils::serializeByQueryType($v);
+  	  	$results[$k] = Utils::serializeByQueryType($v, $extension);
   	  }
   	}else{
-  	  $results = Utils::serializeByQueryType($data);
+  	  $results = Utils::serializeByQueryType($data, $extension);
   	}	
   	Utils::showView($uri, $results, $viewFile);
   	
