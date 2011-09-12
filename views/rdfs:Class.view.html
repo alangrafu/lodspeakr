@@ -3,6 +3,7 @@
     "http://www.w3.org/MarkUp/DTD/xhtml-rdfa-1.dtd">
     <html xmlns="http://www.w3.org/1999/xhtml" {% for i, ns in base.ns %}xmlns:{{i}}="{{ns}}" 
     {%endfor%}version="XHTML+RDFa 1.0" xml:lang="en">
+    <link href="{{base.baseUrl}}/lodspeakr/css/basic.css" rel="stylesheet" type="text/css" media="screen" />
     <head>
     <title>Page about {{base.this.value}}</title>
   </head>
@@ -11,9 +12,19 @@
   <div>
     <h2>Instances of {{base.this.curie}}</h2>
     <ul>
-    {% for row in r %}
+    {% for row in r.instances %}
       {% if row.value.instances != null %}
         <li><a href='{{ row.value.instances }}'>{{row.curie.instances}}</a></li>
+      {% endif %}
+    {% endfor %}
+    </ul>
+    </div>
+  <div>
+    <h2>Superclass of {{base.this.curie}}</h2>
+    <ul>
+    {% for row in r.superclasses %}
+      {% if row.value.class != null %}
+        <li><a href='{{ row.value.class }}'>{{row.curie.class}}</a></li>
       {% endif %}
     {% endfor %}
     </ul>

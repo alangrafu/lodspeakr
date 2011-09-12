@@ -92,9 +92,13 @@ cp $root_htaccess $parent_htaccess
 cd views
 ln -s default.view.rdf default.view.nt
 ln -s default.view.rdf default.view.ttl
+ln -s owl:Class.view.html rdfs:Class.view.html
+
 cd ../models
 ln -s default.model.rdf default.model.nt
 ln -s default.model.rdf default.model.ttl
+ln -s owl:Class.model.html rdfs:Class.view.html
+
 cd ..
 
 mkdir cache
