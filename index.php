@@ -74,11 +74,26 @@ if(!file_exists($modelFile) || !file_exists($viewFile) || $curieType == null){
   $modelFile = $conf['model']['directory'].$conf['model']['default'].$conf['model']['extension'].".".$extension;
   $viewFile = $conf['view']['directory'].$conf['view']['default'].$conf['view']['extension'].".".$extension;
 }
-$query = file_get_contents($modelFile);
-$query = preg_replace("|".$conf['resource']['url_delimiter']."|", "<".$uri.">", $query);
 
-$data['results'] = $endpoint->query($query, Utils::getResultsType($query));
-$data['query'] = $query;
+if(!is_dir($modelFile)){
+  $query = file_get_contents($modelFile);
+  $query = preg_replace("|".$conf['resource']['url_delimiter']."|", "<".$uri.">", $query);
+  $data['results'] = $endpoint->query($query, Utils::getResultsType($query));
+  $data['query'] = $query;
+}else{
+  $modelDir = $modelFile;
+  $handle = opendir($modelDir);
+  while (false !== ($modelFile = readdir($handle))) {
+  	if($modelFile != "." && $modelFile != ".."){
+  	  $query = file_get_contents($modelDir."/".$modelFile);
+  	  $query = preg_replace("|".$conf['resource']['url_delimiter']."|", "<".$uri.">", $query);
+  	  $data[$modelFile]['results'] = $endpoint->query($query, Utils::getResultsType($query));
+  	  $data[$modelFile]['query'] = $query;
+  	}
+  }
+  closedir($handle);
+}
+
 Utils::processDocument($uri, $acceptContentType, $data, $viewFile);
 //}
 

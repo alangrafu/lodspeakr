@@ -52,7 +52,7 @@ class Utils{
   	return $ns[$parts[0]].$parts[1];
   }
   
-   public static function getPrefix($curie){
+  public static function getPrefix($curie){
   	global $conf;
   	$ns = $conf['ns'];
   	$parts = explode(':', $curie);
@@ -102,8 +102,16 @@ class Utils{
   	  'template_dir' => './',
   	  'cache_dir' => 'cache/',
   	  ));
-  	$r = Utils::sparqlResult2Obj($data);  	
-	$vars = compact('base', 'r');
+  	
+  	$r = array();
+  	if(!isset($data['results'])){
+  	  foreach($data as $k => $v){
+  	  	$r[$k] = Utils::sparqlResult2Obj($v);
+  	  }
+  	}else{
+  	  $r = Utils::sparqlResult2Obj($data);  	
+	}
+  	$vars = compact('base', 'r');
 	if(is_file($view)){
 	  Haanga::Load($view, $vars);
 	}else{
@@ -148,13 +156,9 @@ class Utils{
   }
   
   
-  public static function processDocument($uri, $contentType, $data, $viewFile){
-  	global $conf;
-  	$extension = Utils::getExtension($contentType); 
-  	
-  	header('Content-Type: '.$contentType);
-  	if(preg_match("/describe/i", $data['query'])){
-  	  
+  private static function serializeByQueryType($data){
+  	global	$conf;
+  	if(preg_match("/describe/i", $data['query'])){  	  
   	  require('lib/arc2/ARC2.php');
   	  $parser = ARC2::getRDFParser();
   	  $parser->parse($conf['basedir'], $data['results']);
@@ -181,6 +185,21 @@ class Utils{
   	  	Utils::send404($uri);
   	  }
   	}
+  	return $results;
+  }
+  
+  public static function processDocument($uri, $contentType, $data, $viewFile){
+  	global $conf;
+  	$extension = Utils::getExtension($contentType); 
+  	
+  	header('Content-Type: '.$contentType);
+  	if(!isset($data['results'])){
+  	  foreach($data as $k => $v){
+  	  	$results[$k] = Utils::serializeByQueryType($v);
+  	  }
+  	}else{
+  	  $results = Utils::serializeByQueryType($data);
+  	}	
   	Utils::showView($uri, $results, $viewFile);
   	
   	exit(0);
@@ -195,7 +214,7 @@ class Utils{
   	}elseif(preg_match("/construct/i", $query)){
   	  return $conf['endpoint']['describe']['output'];
   	}else{
-  	  Utils::send500($uri);
+  	  Utils::send500(null);
   	} 
   }
   
