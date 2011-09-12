@@ -87,6 +87,9 @@ class Utils{
   	  if(sizeof($row) >0){
   	  	array_push($obj, $row);
   	  }
+  	  if(sizeof($aux) == 1){
+  	  	return $row;
+  	  }
   	}
   	return $obj;
   }
