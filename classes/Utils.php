@@ -187,7 +187,8 @@ class Utils{
   	elseif(preg_match("/select/i", $data['query'])){
   	  $results = $data['results'];
   	  if(sizeof($results['results']['bindings']) == 0){
-  	  	Utils::send404($uri);
+  	  	//Avoid for now
+  	  	//Utils::send404($uri);
   	  }
   	}
   	return $results;
