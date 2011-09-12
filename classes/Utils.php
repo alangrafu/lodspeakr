@@ -73,22 +73,24 @@ class Utils{
   private static function sparqlResult2Obj($data){
   	$aux = $data['results']['bindings'];
   	$obj = array();
-  	foreach($aux as $w){
-  	  $row = array();
-  	  foreach($w as $k => $v){
-  	  	$row['value'][$k] = $v['value'];
-  	  	if($v['type'] == 'uri'){
-  	  	  $row['curie'][$k] = Utils::uri2curie($v['value']);
-  	  	  $row['uri'][$k] = 1;
-  	  	}elseif($v['type'] == 'bnode'){
-  	  	  $row['curie'][$k] = 'blankNode';
+  	if(sizeof($aux)>0){
+  	  foreach($aux as $w){
+  	  	$row = array();
+  	  	foreach($w as $k => $v){
+  	  	  $row['value'][$k] = $v['value'];
+  	  	  if($v['type'] == 'uri'){
+  	  	  	$row['curie'][$k] = Utils::uri2curie($v['value']);
+  	  	  	$row['uri'][$k] = 1;
+  	  	  }elseif($v['type'] == 'bnode'){
+  	  	  	$row['curie'][$k] = 'blankNode';
+  	  	  }
   	  	}
-  	  }
-  	  if(sizeof($row) >0){
-  	  	array_push($obj, $row);
-  	  }
-  	  if(sizeof($aux) == 1){
-  	  	return $row;
+  	  	if(sizeof($row) >0){
+  	  	  array_push($obj, $row);
+  	  	}
+  	  	if(sizeof($aux) == 1){
+  	  	  return $row;
+  	  	}
   	  }
   	}
   	return $obj;
