@@ -10,6 +10,10 @@
   <body>
     <h1>Instances of {{base.this.curie}}</h1>
 	<ul>
+	{% if r.value.resource != null %}
+	    <!-- Only one class available -->
+        <li><a href='{{base.baseUrl}}special/instances/{{ r.curie.resource }}'>{{r.curie.resource}}</a></li>
+    {% endif %}
     {% for row in r %}
       {% if row.value.resource != null %}
         <li><a href='{{base.baseUrl}}special/instances/{{ row.curie.resource }}'>{{row.curie.resource}}</a></li>

@@ -102,6 +102,9 @@ class Utils{
   	$base['this']['value'] = $uri;
   	$base['this']['curie'] = Utils::uri2curie($uri);
   	$base['ns'] = $conf['ns'];
+  	if(isset($data['params'])){
+  	  $base['this']['params'] = $data['params'];
+  	}
   	require('lib/Haanga/lib/Haanga.php');
   	Haanga::configure(array(
   	  'template_dir' => './',
@@ -206,8 +209,9 @@ class Utils{
   	}else{
   	  $results = Utils::serializeByQueryType($data, $extension);
   	}	
-  	Utils::showView($uri, $results, $viewFile);
-  	
+  	$baseData['uri'] = $uri;
+  	$baseData['params'] = $data['params'];
+  	Utils::showView($baseData, $results, $viewFile);  	
   	exit(0);
   }
   
@@ -226,3 +230,4 @@ class Utils{
   
 }
 ?>
+

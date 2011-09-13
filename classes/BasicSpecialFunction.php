@@ -58,6 +58,7 @@ class SpecialFunction extends AbstractSpecialFunction{
   	  }
   	  $data['query'] =$queryHeader . $query;
   	  $data['results'] = $e->query($data['query'], Utils::getResultsType($query));
+  	  $data['params'] = $params;
   	  Utils::processDocument($uri, $acceptContentType, $data, $viewFile);  	
   	}catch (Exception $ex){
   	  Utils::send500($uri);
@@ -68,3 +69,4 @@ class SpecialFunction extends AbstractSpecialFunction{
 }
 
 ?>
+
