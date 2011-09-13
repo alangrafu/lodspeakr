@@ -96,14 +96,14 @@ class Utils{
   	return $obj;
   }
   
-  public static function showView($uri, $data, $view){
+  public static function showView($baseData, $data, $view){
   	global $conf;
   	$base = $conf['view']['standard'];
-  	$base['this']['value'] = $uri;
-  	$base['this']['curie'] = Utils::uri2curie($uri);
+  	$base['this']['value'] = $baseData['uri'];
+  	$base['this']['curie'] = Utils::uri2curie($baseData['uri']);
   	$base['ns'] = $conf['ns'];
-  	if(isset($data['params'])){
-  	  $base['this']['params'] = $data['params'];
+  	if(isset($baseData['params'])){
+  	  $base['this']['params'] = $baseData['params'];
   	}
   	require('lib/Haanga/lib/Haanga.php');
   	Haanga::configure(array(
