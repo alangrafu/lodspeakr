@@ -18,9 +18,9 @@
         <td><a href='{{ row.value.s1 }}'>{{row.curie.s1}}</a></td>
     
         {% if row.uri.p1 == 1 %}
-        <td><a rel='{{row.s1.curie}}' href='{{row.value.p1}}'>{{row.curie.p1}}</a></td>
+        <td><a rel='{{row.curie.s1}}' href='{{row.value.p1}}'>{{row.curie.p1}}</a></td>
         {% else %}
-        <td><span property='{{row.s1.curie}}'>{{row.value.p1}}</span></td>
+        <td><span property='{{row.curie.s1}}'>{{row.value.p1}}</span></td>
         {% endif %}
      
         </tr>
