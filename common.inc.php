@@ -5,6 +5,9 @@ $conf['endpoint']['describe']['output'] = 'rdf';
 $conf['endpoint']['config']['output'] = $conf['endpoint']['select']['output'];
 $conf['endpoint']['config']['named_graph'] = '';
 $conf['endpoint']['config']['show_inline'] = 0;
+//ALternative endpoints
+$conf['endpoint']['dbpedia'] = 'http://dbpedia.org/sparql';
+$conf['endpoint']['logd'] = 'http://logd.tw.rpi.edu/sparql';
 
 $conf['metadata']['db']['location'] = 'meta/db.sqlite';
 

@@ -73,23 +73,29 @@ class Utils{
   private static function sparqlResult2Obj($data){
   	$aux = $data['results']['bindings'];
   	$obj = array();
-  	if(sizeof($aux)>0){
-  	  foreach($aux as $w){
-  	  	$row = array();
-  	  	foreach($w as $k => $v){
-  	  	  $row['value'][$k] = $v['value'];
-  	  	  if($v['type'] == 'uri'){
-  	  	  	$row['curie'][$k] = Utils::uri2curie($v['value']);
-  	  	  	$row['uri'][$k] = 1;
-  	  	  }elseif($v['type'] == 'bnode'){
-  	  	  	$row['curie'][$k] = 'blankNode';
+  	if(!isset($aux)){
+  	  foreach($data as $k => $v){
+  	  	$obj[$k] = Utils::sparqlResult2Obj($v);
+  	  }
+  	}else{
+  	  if(sizeof($aux)>0){
+  	  	foreach($aux as $w){
+  	  	  $row = array();
+  	  	  foreach($w as $k => $v){
+  	  	  	$row['value'][$k] = $v['value'];
+  	  	  	if($v['type'] == 'uri'){
+  	  	  	  $row['curie'][$k] = Utils::uri2curie($v['value']);
+  	  	  	  $row['uri'][$k] = 1;
+  	  	  	}elseif($v['type'] == 'bnode'){
+  	  	  	  $row['curie'][$k] = 'blankNode';
+  	  	  	}
   	  	  }
-  	  	}
-  	  	if(sizeof($row) >0){
-  	  	  array_push($obj, $row);
-  	  	}
-  	  	if(sizeof($aux) == 1){
-  	  	  return $row;
+  	  	  if(sizeof($row) >0){
+  	  	  	array_push($obj, $row);
+  	  	  }
+  	  	  if(sizeof($aux) == 1){
+  	  	  	$obj = $row;
+  	  	  }
   	  	}
   	  }
   	}
@@ -112,14 +118,8 @@ class Utils{
   	  ));
   	
   	$r = array();
-  	if(!isset($data['results'])){
-  	  foreach($data as $k => $v){
-  	  	$r[$k] = Utils::sparqlResult2Obj($v);
-  	  }
-  	}else{
   	  $r = Utils::sparqlResult2Obj($data);  	
-	}
-  	$vars = compact('base', 'r');
+ 	$vars = compact('base', 'r');
 	if(is_file($view)){
 	  Haanga::Load($view, $vars);
 	}else{
@@ -166,32 +166,38 @@ class Utils{
   
   private static function serializeByQueryType($data, $extension){
   	global	$conf;
-  	if(preg_match("/describe/i", $data['query'])){  	  
-  	  require('lib/arc2/ARC2.php');
-  	  $parser = ARC2::getRDFParser();
-  	  $parser->parse($conf['basedir'], $data['results']);
-  	  $triples = $parser->getTriples();
-  	  $ser;
-  	  switch ($extension){
-  	  case 'ttl':
-  	  	$ser = ARC2::getTurtleSerializer();
-  	  	break;
-  	  case 'nt':
-  	  	$ser = ARC2::getNTriplesSerializer();
-  	  	break;
-  	  case 'rdf':
-  	  	$ser = ARC2::getRDFXMLSerializer();
-  	  	break;
+  	if(!isset($data['results'])){
+  	  foreach($data as $k => $v){
+  	  	$results[$k] = Utils::serializeByQueryType($v, $extension); 	  	
+ 	  }
+  	}else{
+  	  if(preg_match("/describe/i", $data['query'])){  	  
+  	  	require('lib/arc2/ARC2.php');
+  	  	$parser = ARC2::getRDFParser();
+  	  	$parser->parse($conf['basedir'], $data['results']);
+  	  	$triples = $parser->getTriples();
+  	  	$ser;
+  	  	switch ($extension){
+  	  	case 'ttl':
+  	  	  $ser = ARC2::getTurtleSerializer();
+  	  	  break;
+  	  	case 'nt':
+  	  	  $ser = ARC2::getNTriplesSerializer();
+  	  	  break;
+  	  	case 'rdf':
+  	  	  $ser = ARC2::getRDFXMLSerializer();
+  	  	  break;
+  	  	}
+  	  	$doc = $ser->getSerializedTriples($triples);
+  	  	echo $doc;
+  	  	exit(0);
   	  }
-  	  $doc = $ser->getSerializedTriples($triples);
-  	  echo $doc;
-  	  exit(0);
-  	}
-  	elseif(preg_match("/select/i", $data['query'])){
-  	  $results = $data['results'];
-  	  if(sizeof($results['results']['bindings']) == 0){
-  	  	//Avoid for now
-  	  	//Utils::send404($uri);
+  	  elseif(preg_match("/select/i", $data['query'])){
+  	  	$results = $data['results'];
+  	  	if(sizeof($results['results']['bindings']) == 0){
+  	  	  //Avoid for now
+  	  	  //Utils::send404($uri);
+  	  	}
   	  }
   	}
   	return $results;
@@ -202,13 +208,8 @@ class Utils{
   	$extension = Utils::getExtension($contentType); 
   	
   	header('Content-Type: '.$contentType);
-  	if(!isset($data['results'])){
-  	  foreach($data as $k => $v){
-  	  	$results[$k] = Utils::serializeByQueryType($v, $extension);
-  	  }
-  	}else{
-  	  $results = Utils::serializeByQueryType($data, $extension);
-  	}	
+  	$results = Utils::serializeByQueryType($data, $extension);
+  	
   	$baseData['uri'] = $uri;
   	$baseData['params'] = $data['params'];
   	Utils::showView($baseData, $results, $viewFile);  	
@@ -226,6 +227,39 @@ class Utils{
   	}else{
   	  Utils::send500(null);
   	} 
+  }
+  
+  public static function queryDir($modelDir, $e){
+  	global $conf;
+  	global $uri;
+  	$originalDir = getcwd();
+  	chdir($modelDir);
+  	$handle = opendir('.');
+  	$data = array();
+  	while (false !== ($modelFile = readdir($handle))) {
+  	  if($modelFile != "." && $modelFile != ".."){
+  	  	if(is_dir($modelFile)){
+  	  	  $data[$modelFile] = Utils::queryDir($modelFile, $e);
+  	  	}else{
+  	  	  $query = file_get_contents($modelFile);
+  	  	  $query = preg_replace("|".$conf['resource']['url_delimiter']."|", "<".$uri.">", $query);
+ 	  	  if(isset($conf['endpoint'][$modelDir])){
+  	  	  	//Use or create new endpoint
+  	  	  	
+  	  	  	if(!isset($e[$modelDir])){
+  	  	  	  $e[$modelDir] = new Endpoint($conf['endpoint'][$modelDir], $conf['endpoint']['config']);
+  	  	  	}
+  	  	  	$data[$modelFile]['results'] = $e[$modelDir]->query($query, Utils::getResultsType($query));
+ 	  	  }else{
+  	  	  	//User default endpoint
+  	  	  	$data[$modelFile]['results'] = $e['base']->query($query, Utils::getResultsType($query));  
+  	  	  }
+  	  	  $data[$modelFile]['query'] = $query;
+  	  	}
+  	  }
+  	}
+  	chdir($originalDir);
+  	return $data;
   }
   
 }

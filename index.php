@@ -13,8 +13,8 @@ include_once('classes/Queries.php');
 include_once('classes/Endpoint.php');
 include_once('classes/MetaDb.php');
 
-
-$endpoint = new Endpoint($conf['endpoint']['host'], $conf['endpoint']['config']);
+$endpoints = array();
+$endpoints['base'] = new Endpoint($conf['endpoint']['host'], $conf['endpoint']['config']);
 $metaDb = new MetaDb($conf['metadata']['db']['location']);
 
 $acceptContentType = Utils::getBestContentType($_SERVER['HTTP_ACCEPT']);
@@ -32,7 +32,7 @@ if($uri == $conf['basedir']){
   include_once($conf['special']['class']);
   $context = array();
   $context['contentType'] = $acceptContentType;
-  $context['endpoint'] = $endpoint;
+  $context['endpoint'] = $endpoints['base'];
   $sp = new SpecialFunction();
   $sp->execute($uri, $context);
   exit(0);
@@ -41,7 +41,7 @@ if($uri == $conf['basedir']){
 $pair = Queries::getMetadata($uri, $acceptContentType, $metaDb);
 
 if($pair == NULL){ // Original URI is not in metadata
-  if(Queries::uriExist($uri, $endpoint)){
+  if(Queries::uriExist($uri, $endpoints['base'])){
   	$page = Queries::createPage($uri, $acceptContentType, $metaDb);
   	if($page == NULL){
   	  Utils::send500(NULL);
@@ -67,7 +67,7 @@ $extension = Utils::getExtension($format);
 $acceptContentType = $format;
 
 //Check if files for model and view exist
-$curieType = Utils::uri2curie(Queries::getClass($uri, $endpoint));
+$curieType = Utils::uri2curie(Queries::getClass($uri, $endpoints['base']));
 $viewFile = $conf['view']['directory'].$curieType.$conf['view']['extension'].".".$extension;
 $modelFile = $conf['model']['directory'].$curieType.$conf['model']['extension'].".".$extension;
 if(!file_exists($modelFile) || !file_exists($viewFile) || $curieType == null){
@@ -75,23 +75,15 @@ if(!file_exists($modelFile) || !file_exists($viewFile) || $curieType == null){
   $viewFile = $conf['view']['directory'].$conf['view']['default'].$conf['view']['extension'].".".$extension;
 }
 
+$data = array();
 if(!is_dir($modelFile)){
   $query = file_get_contents($modelFile);
   $query = preg_replace("|".$conf['resource']['url_delimiter']."|", "<".$uri.">", $query);
-  $data['results'] = $endpoint->query($query, Utils::getResultsType($query));
+  $data['results'] = $endpoints['base']->query($query, Utils::getResultsType($query));
   $data['query'] = $query;
 }else{
   $modelDir = $modelFile;
-  $handle = opendir($modelDir);
-  while (false !== ($modelFile = readdir($handle))) {
-  	if($modelFile != "." && $modelFile != ".."){
-  	  $query = file_get_contents($modelDir."/".$modelFile);
-  	  $query = preg_replace("|".$conf['resource']['url_delimiter']."|", "<".$uri.">", $query);
-  	  $data[$modelFile]['results'] = $endpoint->query($query, Utils::getResultsType($query));
-  	  $data[$modelFile]['query'] = $query;
-  	}
-  }
-  closedir($handle);
+  $data = Utils::queryDir($modelDir, $endpoints);
 }
 
 Utils::processDocument($uri, $acceptContentType, $data, $viewFile);
