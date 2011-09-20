@@ -22,7 +22,8 @@ while [ "$everything_ok" != "y" ]
 do
   echo "==Basic Information=="
   echo "lodspeakr needs to gather some basic information first to configure the installation properly"
-  echo -n "Type the base url for your data, including a final / (default '$basedir'): "
+  echo    "Type the base url for your data, including a final / "
+  echo -n "(default '$basedir'): "
   read -u 1 aux_basedir
   echo ""
   if [ "$aux_basedir" != "" ] 
@@ -32,7 +33,8 @@ do
 
 
   ns=$basedir
-  echo -n "Type the local namespace you will use (default '$ns'): "
+  echo    "Type the local namespace you will use "
+  echo -n (default '$ns'): "
   read -u 1 aux_ns
   echo ""
   if [ "$aux_ns" != "" ] 
@@ -41,7 +43,8 @@ do
   fi
 
   
-  echo -n "What is the URL of your SPARQL endpoint? (default $endpoint): "
+  echo    "What is the URL of your SPARQL endpoint?"
+  echo -n "(default $endpoint): "
   read -u 1 aux_endpoint
   echo ""
   if [ "$aux_endpoint" != "" ] 
@@ -70,10 +73,12 @@ done
     mv $settings_file $settings_backup
   fi
   
+LODSPEAKR_HOME=`pwd`
   
   content="<?
 
 \$conf['endpoint']['host'] = '$endpoint';
+\$conf['home'] = '$LODSPEAKR_HOME';
 \$conf['basedir'] = '$basedir';
 
 #If you want to add/overrid a namespace, add it here
