@@ -70,11 +70,14 @@ done
     mv $settings_file $settings_backup
   fi
   
-  
+#Getting home  
+LODSPEAKR_HOME=`pwd`
+
   content="<?
 
 \$conf['endpoint']['host'] = '$endpoint';
 \$conf['basedir'] = '$basedir';
+\$conf['home'] = '$LODSPEAKR_HOME/';
 
 #If you want to add/overrid a namespace, add it here
 \$conf['ns']['local']   = '$ns';
