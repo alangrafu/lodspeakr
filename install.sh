@@ -34,7 +34,7 @@ do
 
   ns=$basedir
   echo    "Type the local namespace you will use "
-  echo -n (default '$ns'): "
+  echo -n "(default '$ns'): "
   read -u 1 aux_ns
   echo ""
   if [ "$aux_ns" != "" ] 
