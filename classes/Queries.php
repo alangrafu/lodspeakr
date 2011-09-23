@@ -35,6 +35,8 @@ class Queries{
   	}
   	return NULL;
   }
+  
+  
   public static function getMetadata($uri, $format, $e){
 		global $conf;
 		$q = <<<QUERY

@@ -29,7 +29,6 @@ class Endpoint{
         $params = $this->params;
         $params['query'] = $q;
         $url = $this->sparqlUrl.'?'.http_build_query($params, '', '&');
-
         curl_setopt($c, CURLOPT_URL, $url);
         curl_setopt($c, CURLOPT_HTTPHEADER, $context);
         curl_setopt($c, CURLOPT_RETURNTRANSFER, true);

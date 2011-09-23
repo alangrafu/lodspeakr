@@ -15,7 +15,7 @@
         <li><a href='{{base.baseUrl}}special/instances/{{ r.curie.resource }}'>{{r.curie.resource}}</a></li>
     {% endif %}
     {% for row in r %}
-      {% if row.value.resource != null %}
+      {% if row.value.resource %}
         <li><a href='{{base.baseUrl}}special/instances/{{ row.curie.resource }}'>{{row.curie.resource}}</a></li>
       {% endif %}
     {% endfor %}

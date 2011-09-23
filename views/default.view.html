@@ -7,12 +7,13 @@
     <title>Page about {{base.this.value}}</title>
     <link href="{{base.baseUrl}}/lodspeakr/css/basic.css" rel="stylesheet" type="text/css" media="screen" />
   </head>
-  <body>
+  <body about="{{base.this.value}}"> 
     <h1>Page about <a href='{{base.this.value}}'>{{base.this.curie}}</a></h1>
   <div>
     <h2>Information from {{base.this.curie}}</h2>
-    <table about="{{base.this.value}}"> 
+    <table> 
     {% for row in r %}
+
       {% if row.value.s1 != null %}
       <tr>
         <td><a href='{{ row.value.s1 }}'>{{row.curie.s1}}</a></td>
@@ -29,12 +30,12 @@
     </table>
     <br/><br/>
     <h2>Information pointing to {{base.this.curie}}</h2>
-    <table about="{{base.this.value}}"> 
+    <table> 
     {% for row in r %}
       {% if row.value.p2 != null %}
     <tr>
         <td><a href='{{row.value.s2 }}'>{{ row.curie.s2 }}</a></td>
-        <td><a href='{{row.value.p2}}'>{{row.curie.p2}}</a></td>
+        <td><a rev='{{row.value.s2}}' href='{{row.value.p2}}'>{{row.curie.p2}}</a></td>
     </tr>
     {%endif %}
     {% endfor %}

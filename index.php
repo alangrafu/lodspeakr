@@ -12,9 +12,11 @@ include_once('classes/Utils.php');
 include_once('classes/Queries.php');
 include_once('classes/Endpoint.php');
 include_once('classes/MetaDb.php');
+include_once('classes/Convert.php');
 
+$results = array();
 $endpoints = array();
-$endpoints['base'] = new Endpoint($conf['endpoint']['host'], $conf['endpoint']['config']);
+$endpoints['local'] = new Endpoint($conf['endpoint']['host'], $conf['endpoint']['config']);
 $metaDb = new MetaDb($conf['metadata']['db']['location']);
 
 $acceptContentType = Utils::getBestContentType($_SERVER['HTTP_ACCEPT']);
@@ -32,7 +34,7 @@ if($uri == $conf['basedir']){
   include_once($conf['special']['class']);
   $context = array();
   $context['contentType'] = $acceptContentType;
-  $context['endpoint'] = $endpoints['base'];
+  $context['endpoints'] = $endpoints;
   $sp = new SpecialFunction();
   $sp->execute($uri, $context);
   exit(0);
@@ -41,7 +43,7 @@ if($uri == $conf['basedir']){
 $pair = Queries::getMetadata($uri, $acceptContentType, $metaDb);
 
 if($pair == NULL){ // Original URI is not in metadata
-  if(Queries::uriExist($uri, $endpoints['base'])){
+  if(Queries::uriExist($uri, $endpoints['local'])){
   	$page = Queries::createPage($uri, $acceptContentType, $metaDb);
   	if($page == NULL){
   	  Utils::send500(NULL);
@@ -67,26 +69,41 @@ $extension = Utils::getExtension($format);
 $acceptContentType = $format;
 
 //Check if files for model and view exist
-$curieType = Utils::uri2curie(Queries::getClass($uri, $endpoints['base']));
-$viewFile = $conf['view']['directory'].$curieType.$conf['view']['extension'].".".$extension;
-$modelFile = $conf['model']['directory'].$curieType.$conf['model']['extension'].".".$extension;
-if(!file_exists($modelFile) || !file_exists($viewFile) || $curieType == null){
-  $modelFile = $conf['model']['directory'].$conf['model']['default'].$conf['model']['extension'].".".$extension;
-  $viewFile = $conf['view']['directory'].$conf['view']['default'].$conf['view']['extension'].".".$extension;
-}
-
-$data = array();
-if(!is_dir($modelFile)){
-  $query = file_get_contents($modelFile);
-  $query = preg_replace("|".$conf['resource']['url_delimiter']."|", "<".$uri.">", $query);
-  $data['results'] = $endpoints['base']->query($query, Utils::getResultsType($query));
-  $data['query'] = $query;
+$t=Queries::getClass($uri, $endpoints['local']);
+if($t == NULL){
+  $curieType="";
 }else{
-  $modelDir = $modelFile;
-  $data = Utils::queryDir($modelDir, $endpoints);
+  $curieType = Utils::uri2curie($t);
+}
+$viewFile = $curieType.$conf['view']['extension'].".".$extension;
+$modelFile = $curieType.$conf['model']['extension'].".".$extension;
+if(!file_exists($conf['model']['directory'].$modelFile) || !file_exists($conf['view']['directory'].$viewFile) || $curieType == null){
+  error_log("Can't find $modelFile or $viewFile using $curieType, switching to defaults", 0);
+  $modelFile = $conf['model']['default'].$conf['model']['extension'].".".$extension;
+  $viewFile = $conf['view']['default'].$conf['view']['extension'].".".$extension;
 }
 
-Utils::processDocument($uri, $acceptContentType, $data, $viewFile);
+$base = $conf['view']['standard'];
+$base['type'] = $modelFile;
+$base['this']['value'] = $uri;
+$base['this']['curie'] = Utils::uri2curie($uri);
+$base['this']['contentType'] = $acceptContentType;
+$base['model']['directory'] = $conf['model']['directory'];
+$base['view']['directory'] = $conf['view']['directory'];
+$base['ns'] = $conf['ns'];
+
+
+chdir($conf['model']['directory']);
+
+Utils::queryFile($modelFile, $endpoints['local'], $results);
+
+chdir("..");
+if(is_array($results)){
+  $resultsObj = Convert::array_to_object($results);
+}else{
+  $resultsObj = $results;
+}
+Utils::processDocument($viewFile, $base, &$resultsObj);
 //}
 
 ?>

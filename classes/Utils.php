@@ -71,13 +71,13 @@ class Utils{
   }
   
   private static function sparqlResult2Obj($data){
-  	$aux = $data['results']['bindings'];
   	$obj = array();
-  	if(!isset($aux)){
+  	if(!isset($data['results'])){
   	  foreach($data as $k => $v){
   	  	$obj[$k] = Utils::sparqlResult2Obj($v);
   	  }
   	}else{
+  	  $aux = $data['results']['bindings'];
   	  if(sizeof($aux)>0){
   	  	foreach($aux as $w){
   	  	  $row = array();
@@ -90,44 +90,20 @@ class Utils{
   	  	  	  $row['curie'][$k] = 'blankNode';
   	  	  	}
   	  	  }
+  	  	  /*if(sizeof($aux) == 1){
+  	  	  $obj = $row;
+  	  	  }*/
   	  	  if(sizeof($row) >0){
   	  	  	array_push($obj, $row);
   	  	  }
-  	  	  if(sizeof($aux) == 1){
-  	  	  	$obj = $row;
-  	  	  }
+  	  	  
   	  	}
   	  }
   	}
   	return $obj;
   }
   
-  public static function showView($baseData, $data, $view){
-  	global $conf;
-  	$base = $conf['view']['standard'];
-  	$base['this']['value'] = $baseData['uri'];
-  	$base['this']['curie'] = Utils::uri2curie($baseData['uri']);
-  	$base['ns'] = $conf['ns'];
-  	if(isset($baseData['params'])){
-  	  $base['this']['params'] = $baseData['params'];
-  	}
-  	require('lib/Haanga/lib/Haanga.php');
-  	Haanga::configure(array(
-  	  'template_dir' => './',
-  	  'cache_dir' => 'cache/',
-  	  ));
-  	
-  	$r = array();
-  	  $r = Utils::sparqlResult2Obj($data);  	
- 	$vars = compact('base', 'r');
-	if(is_file($view)){
-	  Haanga::Load($view, $vars);
-	}else{
-	  $fnc = Haanga::compile($view);
-	  $fnc($vars, FALSE);
-	}
-  	
-  }
+  
   
   public static function getExtension($accept_string){
   	global $conf;
@@ -162,58 +138,39 @@ class Utils{
   	
   	return $ct;
   }
-  
-  
-  private static function serializeByQueryType($data, $extension){
+    
+  private static function serializeRdf($data, $extension){
   	global	$conf;
-  	if(!isset($data['results'])){
-  	  foreach($data as $k => $v){
-  	  	$results[$k] = Utils::serializeByQueryType($v, $extension); 	  	
- 	  }
-  	}else{
-  	  if(preg_match("/describe/i", $data['query'])){  	  
-  	  	require('lib/arc2/ARC2.php');
-  	  	$parser = ARC2::getRDFParser();
-  	  	$parser->parse($conf['basedir'], $data['results']);
-  	  	$triples = $parser->getTriples();
-  	  	$ser;
-  	  	switch ($extension){
-  	  	case 'ttl':
-  	  	  $ser = ARC2::getTurtleSerializer();
-  	  	  break;
-  	  	case 'nt':
-  	  	  $ser = ARC2::getNTriplesSerializer();
-  	  	  break;
-  	  	case 'rdf':
-  	  	  $ser = ARC2::getRDFXMLSerializer();
-  	  	  break;
-  	  	}
-  	  	$doc = $ser->getSerializedTriples($triples);
-  	  	echo $doc;
-  	  	exit(0);
+  	  require('lib/arc2/ARC2.php');
+  	  $parser = ARC2::getRDFParser();
+  	  $parser->parse($conf['basedir'], $data);
+  	  $triples = $parser->getTriples();
+  	  $ser;
+  	  switch ($extension){
+  	  case 'ttl':
+  	  	$ser = ARC2::getTurtleSerializer();
+  	  	break;
+  	  case 'nt':
+  	  	$ser = ARC2::getNTriplesSerializer();
+  	  	break;
+  	  case 'rdf':
+  	  	$ser = ARC2::getRDFXMLSerializer();
+  	  	break;
   	  }
-  	  elseif(preg_match("/select/i", $data['query'])){
-  	  	$results = $data['results'];
-  	  	if(sizeof($results['results']['bindings']) == 0){
-  	  	  //Avoid for now
-  	  	  //Utils::send404($uri);
-  	  	}
-  	  }
-  	}
-  	return $results;
+  	  $doc = $ser->getSerializedTriples($triples);
+  	return $doc;
   }
   
-  public static function processDocument($uri, $contentType, $data, $viewFile){
+  public static function processDocument($viewFile, $base, $data){
   	global $conf;
+  	$contentType = $base['this']['contentType'];
   	$extension = Utils::getExtension($contentType); 
-  	
+
   	header('Content-Type: '.$contentType);
-  	$results = Utils::serializeByQueryType($data, $extension);
-  	
-  	$baseData['uri'] = $uri;
-  	$baseData['params'] = $data['params'];
-  	Utils::showView($baseData, $results, $viewFile);  	
-  	exit(0);
+  	if(!is_object($data)){
+  	  $data = Utils::serializeRdf($data, $extension);
+  	}
+  	Utils::showView($base, $data, $viewFile);  	
   }
   
   public static function getResultsType($query){
@@ -229,38 +186,156 @@ class Utils{
   	} 
   }
   
-  public static function queryDir($modelDir, $e){
+  public static function queryDir($modelDir, &$r){
   	global $conf;
   	global $uri;
+  	global $base;
+  	global $endpoints;
+  	global $results;
+  	$base['model']['directory'] = $modelDir;
   	$originalDir = getcwd();
+  	
+  	trigger_error("Entering $modelDir from ".getcwd(), E_USER_NOTICE);
   	chdir($modelDir);
   	$handle = opendir('.');
-  	$data = array();
+  	
   	while (false !== ($modelFile = readdir($handle))) {
   	  if($modelFile != "." && $modelFile != ".."){
   	  	if(is_dir($modelFile)){
-  	  	  $data[$modelFile] = Utils::queryDir($modelFile, $e);
+  	  	  //Save it for later, after all the queries in the current directory has been resolved
+  	  	  $subDirs[]=$modelFile;
   	  	}else{
-  	  	  $query = file_get_contents($modelFile);
-  	  	  $query = preg_replace("|".$conf['resource']['url_delimiter']."|", "<".$uri.">", $query);
- 	  	  if(isset($conf['endpoint'][$modelDir])){
-  	  	  	//Use or create new endpoint
-  	  	  	
-  	  	  	if(!isset($e[$modelDir])){
-  	  	  	  $e[$modelDir] = new Endpoint($conf['endpoint'][$modelDir], $conf['endpoint']['config']);
+  	  	  $e = null;
+  	  	  if(!isset($endpoints[$modelDir])){
+  	  	  	trigger_error("Creating endpoint for $modelDir", E_USER_NOTICE);
+  	  	  	if(!isset($conf['endpoint'][$modelDir])){
+  	  	  	  trigger_error("Couldn't find $modelDir as a list of available endpoints. Will continue using local", E_USER_WARNING);
+  	  	  	  $e = $endpoints['local'];
+  	  	  	}else{  
+  	  	  	  $endpoints[$modelDir] = new Endpoint($conf['endpoint'][$modelDir], $conf['endpoint']['config']);
+  	  	  	  $e = $endpoints[$modelDir];
   	  	  	}
-  	  	  	$data[$modelFile]['results'] = $e[$modelDir]->query($query, Utils::getResultsType($query));
- 	  	  }else{
-  	  	  	//User default endpoint
-  	  	  	$data[$modelFile]['results'] = $e['base']->query($query, Utils::getResultsType($query));  
+  	  	  }else{
+  	  	  	$e = $endpoints[$modelDir];
   	  	  }
-  	  	  $data[$modelFile]['query'] = $query;
-  	  	}
+  	  	  if($modelDir != $base['type']){
+  	  	  	if(!isset($r[$modelDir]) ){
+  	  	  	  $r[$modelDir] = array();
+  	  	  	}
+  	  	  	Utils::queryFile($modelFile, $e, $r[$modelDir]);
+  	  	  }else{
+  	  	  	Utils::queryFile($modelFile, $e, $r);
+  	  	  }
+ 	  	}
   	  }
   	}
-  	chdir($originalDir);
-  	return $data;
+  	closedir($handle);
+  	$originalDir = $base['model']['directory'];
+  	foreach($subDirs as $v){
+  	  if(!isset($r[$modelDir])){
+  	  	$r[$modelDir] = array();
+  	  }
+  	  if($modelDir != $base['type']){
+  	  	Utils::queryDir($v, $r[$modelDir]);
+  	  }else{
+  	  	Utils::queryDir($v, $r);
+  	  }
+  	}  	
+  	chdir("..");
+  	//return $data;
   }
   
+  
+  public static function queryFile($modelFile, $e, &$rPointer){
+  	global $conf;
+  	global $base;
+  	global $results;
+   	
+  	$uri = $base['this']['value'];
+  	$data = array();
+  	
+  	
+ 	if(!is_dir($modelFile)){
+  	  require_once($conf['home'].'lib/Haanga/lib/Haanga.php');
+  	  Haanga::configure(array(
+  	  	'cache_dir' => $conf['home'].'cache/',
+  	  	'autoescape' => FALSE,
+  	  	));
+  	  
+  	  //Haanga supports the dot (.) convention only for objects
+  	  if(is_array($base)){
+  	  	$baseObj = Convert::array_to_object($base);
+  	    $base = $baseObj;
+  	  }
+  	  	$r2 = Convert::array_copy($results);
+  	  $r = Convert::array_to_object($r2);
+ 	  $vars = compact('uri', 'base', 'r');
+ 	  $fnc = Haanga::compile(file_get_contents($modelFile));
+  	  $query = $fnc($vars, TRUE);
+  	  if(is_object($base)){
+  	  	$baseObj = Convert::object_to_array($base);
+  	    $base = $baseObj;
+  	  }
+  	  trigger_error("Running query on endpoint", E_USER_NOTICE);
+  	  $aux = $e->query($query, Utils::getResultsType($query));  	  
+  	  if($modelFile != $base['type']){
+  	  	if(!isset($rPointer[$modelFile])){
+  	  	  $rPointer[$modelFile] = array();
+  	  	}
+  	  	if(Utils::getResultsType($query) == $conf['endpoint']['select']['output']){
+  	  	  $rPointer[$modelFile] = Utils::sparqlResult2Obj($aux);
+  	  	}else{
+  	  	  $rPointer[$modelFile] = $aux;
+  	  	}
+  	  }else{
+  	  	if(Utils::getResultsType($query) == $conf['endpoint']['select']['output']){
+  	  	  $rPointer = Utils::sparqlResult2Obj($aux);
+  	  	}else{
+  	  	  $rPointer = $aux;
+  	  	}  	 
+  	  }
+  	}else{
+  	  trigger_error("$modelFile is a directory, will process it later", E_USER_NOTICE);  	  
+  	  if($modelFile != $base['type']){
+  	  	if(!isset($rPointer[$modelFile])){
+  	  	  $rPointer[$modelFile] = array();
+  	  	}
+  	  	Utils::queryDir($modelFile, $rPointer[$modelFile]);
+  	  }else{
+  	  	Utils::queryDir($modelFile, $rPointer);
+  	  }
+  	}
+  }
+  
+  
+  public static function showView($baseData, $data, $view){
+  	global $conf;
+  	$base = $conf['view']['standard'];
+  	$base = $baseData;
+  	if(isset($baseData['params'])){
+  	  $base['this']['params'] = $baseData['params'];
+  	}
+  	require_once('lib/Haanga/lib/Haanga.php');
+  	Haanga::configure(array(
+  	  'template_dir' => $base['view']['directory'],
+  	  'cache_dir' => $conf['home'].'cache/',
+  	  ));
+  	if(is_object($data)){
+  	  $r = Convert::object_to_array($data);
+  	}else{
+  	  $r = $data;
+  	}
+ 	$vars = compact('base', 'r');
+	if(is_file($base['view']['directory'].$view)){
+	  Haanga::Load($view, $vars);
+	}else{
+	  $fnc = Haanga::compile($view);
+	  $fnc($vars, FALSE);
+	}
+  	
+  }
+  
+  
 }
+
 ?>
