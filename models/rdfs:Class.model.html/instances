@@ -1,3 +1,0 @@
-SELECT ?instances WHERE{
-  ?instances a %u .
-}

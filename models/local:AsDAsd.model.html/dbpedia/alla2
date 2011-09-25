@@ -1,3 +1,0 @@
-SELECT ?s  ?o WHERE{
-?s a ?o .
-}LIMIT 3 
