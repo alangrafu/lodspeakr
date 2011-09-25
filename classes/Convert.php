@@ -1,20 +1,22 @@
 <?
-//Taken from http://www.php.net/manual/en/language.types.object.php#102735
+//Based (but corrected) from http://www.php.net/manual/en/language.types.object.php#102735
 
 final class Convert {
   # Convert a stdClass to an Array.
   static public function object_to_array(stdClass $Class){
   	# Typecast to (array) automatically converts stdClass -> array.
-  	$Class = (array)$Class;
+  	$newClass = array();
   	
   	# Iterate through the former properties looking for any stdClass properties.
   	# Recursively apply (array).
   	foreach($Class as $key => $value){
   	  if(is_object($value)&&get_class($value)==='stdClass'){
-  	  	$Class[$key] = self::object_to_array($value);
+  	  	$newClass[$key] = self::object_to_array($value);
+  	  }else{
+  	  	$newClass[$key] = $value;
   	  }
   	}
-  	return $Class;
+  	return $newClass;
   }
   
   # Convert an Array to stdClass.

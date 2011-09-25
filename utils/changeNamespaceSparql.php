@@ -28,7 +28,7 @@ Since it is very simple, it may be prone to errors, but so far it is usable.
 
 
 
-/*
+*/
 
 //The remote namespace
 $remote = 'http://originalNamespace.com/data/';
@@ -43,6 +43,7 @@ $newget = array();
 foreach($_GET as $k => $v){
   $newget[$k] = preg_replace("|$local|", $remote, $v);
 }
+$url .= '?';
 $r = file_get_contents($url.http_build_query($newget));
 
 

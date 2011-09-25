@@ -138,26 +138,26 @@ class Utils{
   	
   	return $ct;
   }
-    
+  
   private static function serializeRdf($data, $extension){
   	global	$conf;
-  	  require('lib/arc2/ARC2.php');
-  	  $parser = ARC2::getRDFParser();
-  	  $parser->parse($conf['basedir'], $data);
-  	  $triples = $parser->getTriples();
-  	  $ser;
-  	  switch ($extension){
-  	  case 'ttl':
-  	  	$ser = ARC2::getTurtleSerializer();
-  	  	break;
-  	  case 'nt':
-  	  	$ser = ARC2::getNTriplesSerializer();
-  	  	break;
-  	  case 'rdf':
-  	  	$ser = ARC2::getRDFXMLSerializer();
-  	  	break;
-  	  }
-  	  $doc = $ser->getSerializedTriples($triples);
+  	require('lib/arc2/ARC2.php');
+  	$parser = ARC2::getRDFParser();
+  	$parser->parse($conf['basedir'], $data);
+  	$triples = $parser->getTriples();
+  	$ser;
+  	switch ($extension){
+  	case 'ttl':
+  	  $ser = ARC2::getTurtleSerializer();
+  	  break;
+  	case 'nt':
+  	  $ser = ARC2::getNTriplesSerializer();
+  	  break;
+  	case 'rdf':
+  	  $ser = ARC2::getRDFXMLSerializer();
+  	  break;
+  	}
+  	$doc = $ser->getSerializedTriples($triples);
   	return $doc;
   }
   
@@ -165,7 +165,7 @@ class Utils{
   	global $conf;
   	$contentType = $base['this']['contentType'];
   	$extension = Utils::getExtension($contentType); 
-
+  	
   	header('Content-Type: '.$contentType);
   	if(!is_object($data)){
   	  $data = Utils::serializeRdf($data, $extension);
@@ -267,7 +267,7 @@ class Utils{
   	  	$baseObj = Convert::array_to_object($base);
   	    $base = $baseObj;
   	  }
-  	  	$r2 = Convert::array_copy($results);
+  	  $r2 = Convert::array_copy($results);
   	  $r = Convert::array_to_object($r2);
  	  $vars = compact('uri', 'base', 'r');
  	  $fnc = Haanga::compile(file_get_contents($modelFile));
@@ -317,7 +317,7 @@ class Utils{
   	}
   	require_once('lib/Haanga/lib/Haanga.php');
   	Haanga::configure(array(
-  	  'template_dir' => $base['view']['directory'],
+  	  'template_dir' => $conf['home'].$base['view']['directory'],
   	  'cache_dir' => $conf['home'].'cache/',
   	  ));
   	if(is_object($data)){

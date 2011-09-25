@@ -1,6 +1,6 @@
 <?
 
-//error_reporting(E_ERROR);
+error_reporting(E_ERROR);
 
 if(!file_exists('settings.inc.php')){
   echo 'Need to configure lodspeakr first. Please run "install.sh" first';
