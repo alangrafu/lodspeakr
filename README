@@ -2,6 +2,14 @@ lodspeakr - Simple Publishing Kit for Linked Open Data
 author: Alvaro Graves (alvaro@graves.cl)
 version: 20110925
 
+Simplest Installation
+---------------------
+
+Just run
+
+            bash < <(curl http://lodspeakr.org/install)
+
+
 Simple Installation
 -------------------
 
@@ -16,14 +24,27 @@ Manual Installation
 * Edit settings.default.inc.php and change the following values:
 ** $conf['endpoint']['host']     Point to the SPARQL endpoint with your data
 ** $conf['basedir']              The base URL in which slopds will be locations (e.g., http://example.org, http://example.com/data)
-** $conf['metaendpoint']['host'] Similar to the endpoint, but this will store the metadata related to the pages about the resources in your data
-** If you want, you can add more namespaces as  $conf['ns']['myns']    = 'http://namespacesite.com/'
-
+** $conf['ns']['local'] 		 Defines your local namespace
+*** If you want, you can add more namespaces as  $conf['ns']['myns']    = 'http://namespacesite.com/'
+** $conf['home']                 Defines where is LODSPeaKr located (i.e., /var/www/html/mydata/lodspeakr)
 * mv settings.default.inc.php settings.inc.php
 
-* chmod 777 cache
+Give write permissions to your http server on cache/ and meta/ dirs as well as meta/db.sqlite database.
+This can be done in different ways depending on your configuration.
 
-That's it. You should be able to serve tour data in RDF/XML, Turtle, Ntriples and RDFa.
+* If you are in ther same group as the httpd user
+** chmod -R g+w cache meta
+* If you want to assign those dirs to your webserver
+** sudo chown -R www-apache meta cache
+
+NOTE: You must check what is the name of the user for your server. Common names are
+* www
+* www-apache
+* apache2
+* httpd
+
+
+That's it. You should be able to serve your data in RDF/XML, Turtle, Ntriples and RDFa.
 
 
 
