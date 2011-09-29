@@ -88,7 +88,7 @@ $base['ns'] = $conf['ns'];  	  $base['ns'] = $conf['ns'];
   	  $base['view']['directory'] = $conf['home'].$conf['view']['directory'];
   	  $base['model']['directory'] = $conf['home'].$conf['model']['directory'];
   	  chdir($conf['model']['directory']);
-  	  Utils::queryFile($modelFile, $endpoints['local'], &$data);
+  	  Utils::queryFile($modelFile, $endpoints['local'], $data);
   	 
   	  chdir("..");
   	  if(is_array($data)){

@@ -73,7 +73,7 @@ done
     mv $settings_file $settings_backup
   fi
   
-LODSPEAKR_HOME=`pwd`
+LODSPEAKR_HOME=`pwd`/
   
   content="<?
 

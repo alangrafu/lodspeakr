@@ -103,7 +103,7 @@ if(is_array($results)){
 }else{
   $resultsObj = $results;
 }
-Utils::processDocument($viewFile, $base, &$resultsObj);
+Utils::processDocument($viewFile, $base, $resultsObj);
 //}
 
 ?>

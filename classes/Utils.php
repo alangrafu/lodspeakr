@@ -317,7 +317,7 @@ class Utils{
   	}
   	require_once('lib/Haanga/lib/Haanga.php');
   	Haanga::configure(array(
-  	  'template_dir' => $conf['home'].$base['view']['directory'],
+  	  'template_dir' => $base['view']['directory'],
   	  'cache_dir' => $conf['home'].'cache/',
   	  ));
   	if(is_object($data)){
