@@ -82,13 +82,13 @@ class Utils{
   	  	foreach($aux as $w){
   	  	  $row = array();
   	  	  foreach($w as $k => $v){
-  	  	  	$row['value'][$k] = $v['value'];
+  	  	  	$row[$k]['value'] = $v['value'];
   	  	  	if($v['type'] == 'uri'){
-  	  	  	  $row['curie'][$k] = Utils::uri2curie($v['value']);
-  	  	  	  $row['uri'][$k] = 1;
+  	  	  	  $row[$k]['curie'] = Utils::uri2curie($v['value']);
+  	  	  	  $row[$k]['uri'] = 1;
   	  	  	}elseif($v['type'] == 'bnode'){
-  	  	  	  $row['curie'][$k] = 'blankNode';
-  	  	  	}
+  	  	  	  $row[$k]['curie'] = 'blankNode';
+  	  	  	}  	  	  	
   	  	  }
   	  	  /*if(sizeof($aux) == 1){
   	  	  $obj = $row;

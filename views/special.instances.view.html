@@ -11,7 +11,7 @@
     <h1>Instances of {{base.args.arg0}}</h1>
 	<ul>
 	{% for row in r %}
-        <li><a href='{{ row.value.resource }}'>{{row.curie.resource}}</a></li>
+        <li><a href='{{ row.resource.value }}'>{{row.resource.curie}}</a></li>
         {% endfor %}
     </ul>
   </body>
