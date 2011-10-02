@@ -77,9 +77,11 @@ LODSPEAKR_HOME=`pwd`/
   
   content="<?
 
-\$conf['endpoint']['host'] = '$endpoint';
+\$conf['endpoint']['local'] = '$endpoint';
 \$conf['home'] = '$LODSPEAKR_HOME';
 \$conf['basedir'] = '$basedir';
+\$conf['debug'] = false;
+\$conf['use_external_uris'] = fasle;
 
 #If you want to add/overrid a namespace, add it here
 \$conf['ns']['local']   = '$ns';

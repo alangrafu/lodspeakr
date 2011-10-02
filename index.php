@@ -16,7 +16,7 @@ include_once('classes/Convert.php');
 
 $results = array();
 $endpoints = array();
-$endpoints['local'] = new Endpoint($conf['endpoint']['host'], $conf['endpoint']['config']);
+$endpoints['local'] = new Endpoint($conf['endpoint']['local'], $conf['endpoint']['config']);
 $metaDb = new MetaDb($conf['metadata']['db']['location']);
 
 $acceptContentType = Utils::getBestContentType($_SERVER['HTTP_ACCEPT']);
@@ -27,6 +27,7 @@ if($acceptContentType == NULL){
 }
 
 $uri = $conf['basedir'].$_GET['q'];
+$localUri = $uri;
 if($uri == $conf['basedir']){
   header('Location: '.$conf['root']['url']);
   exit(0);
@@ -39,12 +40,16 @@ if($uri == $conf['basedir']){
   $sp->execute($uri, $context);
   exit(0);
 }
+if($conf['use_external_uris']){
+  $uri = $conf['ns']['local'].$_GET['q'];
+  $localUri = $conf['basedir'].$_GET['q'];
+} 
 
-$pair = Queries::getMetadata($uri, $acceptContentType, $metaDb);
+$pair = Queries::getMetadata($localUri, $acceptContentType, $metaDb);
 
 if($pair == NULL){ // Original URI is not in metadata
   if(Queries::uriExist($uri, $endpoints['local'])){
-  	$page = Queries::createPage($uri, $acceptContentType, $metaDb);
+  	$page = Queries::createPage($uri, $localUri, $acceptContentType, $metaDb);
   	if($page == NULL){
   	  Utils::send500(NULL);
   	}
@@ -56,7 +61,7 @@ if($pair == NULL){ // Original URI is not in metadata
 list($res, $page, $format) = $pair;
 
 //If resource is not the page, send a 303 to the document
-if($res == $uri){
+if($res == $localUri){
   Utils::send303($page, $acceptContentType);
 }
 

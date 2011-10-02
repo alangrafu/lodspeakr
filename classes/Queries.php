@@ -56,15 +56,16 @@ QUERY;
 	}
   
 
-	public static function createPage($uri, $contentType, $e){
+	public static function createPage($uri, $localUri, $contentType, $e){
 	 global $conf;
+	 
 		$ext = 'html';
 		$inserts = "";
 		foreach($conf['http_accept'] as $extension => $f){
-		  $page = $uri.".".$extension;
+		  $page = $localUri.".".$extension;
 			foreach($f as $v){
 			  if($contentType == $v){
-				$returnPage = $uri.".".$extension;
+				$returnPage = $localUri.".".$extension;
 			  }
 			  if($inserts != ""){
 				$inserts .= "UNION ";

@@ -71,6 +71,7 @@ class Utils{
   }
   
   private static function sparqlResult2Obj($data){
+  	global $conf;
   	$obj = array();
   	if(!isset($data['results'])){
   	  foreach($data as $k => $v){
@@ -82,6 +83,9 @@ class Utils{
   	  	foreach($aux as $w){
   	  	  $row = array();
   	  	  foreach($w as $k => $v){
+  	  	  	if($conf['use_external_uris'] === true && $v['type'] == 'uri'){
+  	  	  	  $v['value'] = preg_replace("|^".$conf['ns']['local']."|", $conf['basedir'], $v['value']);
+  	  	  	}
   	  	  	$row[$k]['value'] = $v['value'];
   	  	  	if($v['type'] == 'uri'){
   	  	  	  $row[$k]['curie'] = Utils::uri2curie($v['value']);
@@ -125,10 +129,10 @@ class Utils{
   	* and so on. In the meantime,
   	* assume there is only one CT
   	*/
-  	$a = split(",", $accept_string);
+  	$a = explode(",", $accept_string);
   	$ct = 'text/html';
   	if(strstr($a[0], ";")){
-  	  $a = split(";", $a[0]);
+  	  $a = explode(";", $a[0]);
   	}
   	foreach($conf['http_accept'] as $ext => $arr){
   	  if(in_array($a[0], $arr)){
@@ -276,6 +280,9 @@ class Utils{
   	  	$baseObj = Convert::object_to_array($base);
   	    $base = $baseObj;
   	  }
+  	  if($conf['debug']){
+  	  	echo $query;
+  	  }
   	  trigger_error("Running query on endpoint", E_USER_NOTICE);
   	  $aux = $e->query($query, Utils::getResultsType($query));  	  
   	  if($modelFile != $base['type']){
@@ -326,6 +333,9 @@ class Utils{
   	  $r = $data;
   	}
  	$vars = compact('base', 'r');
+ 	if($conf['debug']){
+ 	  var_dump($r); 	
+ 	}
 	if(is_file($base['view']['directory'].$view)){
 	  Haanga::Load($view, $vars);
 	}else{
