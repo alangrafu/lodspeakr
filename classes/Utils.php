@@ -327,12 +327,8 @@ class Utils{
   	  'template_dir' => $base['view']['directory'],
   	  'cache_dir' => $conf['home'].'cache/',
   	  ));
-  	if(is_object($data)){
-  	  $r = Convert::object_to_array($data);
-  	}else{
-  	  $r = $data;
-  	}
- 	$vars = compact('base', 'r');
+  	$r = $data;
+  	$vars = compact('base', 'r');
  	if($conf['debug']){
  	  var_dump($r); 	
  	}

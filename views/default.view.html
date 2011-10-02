@@ -14,9 +14,9 @@
     <table> 
     {% for row in r %}
 
-      {% if row.s1.value != null %}
+      {% if row.s1%}
       <tr>
-        <td><a href='{{ row.s1.value }}'>{{row.s1.curie}}</a></td>
+        <td><a href='{{row.s1.value}}'>{{row.s1.curie}}</a></td>
     
         {% if row.p1.uri == 1 %}
         <td><a rel='{{row.s1.curie}}' href='{{row.p1.value}}'>{{row.p1.curie}}</a></td>
@@ -28,14 +28,15 @@
       {% endif %}
     {% endfor %}
     </table>
+    
     <br/><br/>
     <h2>Information pointing to {{base.this.curie}}</h2>
     <table> 
     {% for row in r %}
-      {% if row.p2.value != null %}
-    <tr>
-        <td><a href='{{row.s2.value}}'>{{ row.s2.curie}}</a></td>
-        <td><a rev='{{row.s2.value}}' href='{{row.p2.value}}'>{{row.p2.curie}}</a></td>
+      {% if row.s2%}
+     <tr>
+        <td><a href='{{row.s2.value}}'>{{row.s2.curie}}</a></td>
+        <td><a rev='[{{row.p2.curie}}]' href='{{row.s2.value}}'>{{row.p2.curie}}</a></td>
     </tr>
     {%endif %}
     {% endfor %}
