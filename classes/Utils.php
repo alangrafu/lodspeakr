@@ -157,6 +157,9 @@ class Utils{
   	case 'nt':
   	  $ser = ARC2::getNTriplesSerializer();
   	  break;
+  	case 'json':
+  	  $ser = ARC2::getRDFJSONSerializer();
+  	  break;
   	case 'rdf':
   	  $ser = ARC2::getRDFXMLSerializer();
   	  break;

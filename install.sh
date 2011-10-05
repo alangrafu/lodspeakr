@@ -81,7 +81,7 @@ LODSPEAKR_HOME=`pwd`/
 \$conf['home'] = '$LODSPEAKR_HOME';
 \$conf['basedir'] = '$basedir';
 \$conf['debug'] = false;
-\$conf['use_external_uris'] = fasle;
+\$conf['use_external_uris'] = false;
 
 #If you want to add/overrid a namespace, add it here
 \$conf['ns']['local']   = '$ns';
@@ -99,11 +99,13 @@ cp $root_htaccess $parent_htaccess
 cd views
 ln -s default.view.rdf default.view.nt
 ln -s default.view.rdf default.view.ttl
+ln -s default.view.rdf default.view.json
 ln -s owl:Class.view.html rdfs:Class.view.html
 
 cd ../models
 ln -s default.model.rdf default.model.nt
 ln -s default.model.rdf default.model.ttl
+ln -s default.model.rdf default.model.json
 ln -s owl:Class.model.html rdfs:Class.view.html
 
 cd ..
