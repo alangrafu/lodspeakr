@@ -294,18 +294,18 @@ class Utils{
   	  	}
   	  	if(Utils::getResultsType($query) == $conf['endpoint']['select']['output']){
   	  	  $rPointer[$modelFile] = Utils::sparqlResult2Obj($aux);
-  	  	  if(sizeof($rPointer)>0){
+  	  	  /*if(sizeof($rPointer)>0){
   	  	  	$rPointer[$modelFile]['first'] = $rPointer[$modelFile][0];
-  	  	  }
+  	  	  }*/
   	  	}else{
   	  	  $rPointer[$modelFile] = $aux;
   	  	}
   	  }else{
   	  	if(Utils::getResultsType($query) == $conf['endpoint']['select']['output']){
   	  	  $rPointer = Utils::sparqlResult2Obj($aux);
-  	  	  if(sizeof($rPointer)>0){
+  	  	  /*if(sizeof($rPointer)>0){
   	  	  	$rPointer['first'] = $rPointer[0];
-  	  	  }
+  	  	  }*/
   	  	}else{
   	  	  $rPointer = $aux;
   	  	}  	 
