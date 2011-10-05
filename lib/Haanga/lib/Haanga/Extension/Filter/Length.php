@@ -18,6 +18,8 @@ class Haanga_Extension_Filter_Length
                 return $count;
             } else if  (is_string($value)) {
                 return $strlen;
+            } else if  (is_object($value)) {
+                return count(array_keys($value));
             } else {
                 return $guess;
             }
