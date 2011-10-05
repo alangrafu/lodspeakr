@@ -85,7 +85,7 @@ class Utils{
   	  	  foreach($w as $k => $v){
   	  	  	if($conf['use_external_uris'] === true && $v['type'] == 'uri'){
   	  	  	  $v['value'] = preg_replace("|^".$conf['ns']['local']."|", $conf['basedir'], $v['value']);
-  	  	  	}
+  	  	  	} 	  	
   	  	  	$row[$k]['value'] = $v['value'];
   	  	  	if($v['type'] == 'uri'){
   	  	  	  $row[$k]['curie'] = Utils::uri2curie($v['value']);
@@ -294,12 +294,18 @@ class Utils{
   	  	}
   	  	if(Utils::getResultsType($query) == $conf['endpoint']['select']['output']){
   	  	  $rPointer[$modelFile] = Utils::sparqlResult2Obj($aux);
+  	  	  if(sizeof($rPointer)>0){
+  	  	  	$rPointer[$modelFile]['first'] = $rPointer[$modelFile][0];
+  	  	  }
   	  	}else{
   	  	  $rPointer[$modelFile] = $aux;
   	  	}
   	  }else{
   	  	if(Utils::getResultsType($query) == $conf['endpoint']['select']['output']){
   	  	  $rPointer = Utils::sparqlResult2Obj($aux);
+  	  	  if(sizeof($rPointer)>0){
+  	  	  	$rPointer['first'] = $rPointer[0];
+  	  	  }
   	  	}else{
   	  	  $rPointer = $aux;
   	  	}  	 
