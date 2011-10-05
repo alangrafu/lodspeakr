@@ -10,7 +10,7 @@
   <body>
     <h1>Classes available</h1>
 	<ul>
-	{% if r.value.resource != null %}
+	{% if r.resource.value != null %}
 	    <!-- Only one class available -->
         <li><a href='{{base.baseUrl}}special/instances/{{ r.resource.curie }}'>{{r.resource.curie}}</a></li>
     {% endif %}
