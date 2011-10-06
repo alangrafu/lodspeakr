@@ -1,12 +1,14 @@
 <?
-
-error_reporting(E_ERROR);
-
+include_once('common.inc.php');
+if($conf['debug']){
+  error_reporting(E_ALL);
+}else{
+  error_reporting(E_ERROR);
+}
 if(!file_exists('settings.inc.php')){
   echo 'Need to configure lodspeakr first. Please run "install.sh" first';
   exit(0);
 }
-include_once('common.inc.php');
 
 include_once('classes/Utils.php');
 include_once('classes/Queries.php');
@@ -75,19 +77,29 @@ $acceptContentType = $format;
 
 //Check if files for model and view exist
 $t=Queries::getClass($uri, $endpoints['local']);
-if($t == NULL){
-  $curieType="";
-}else{
-  $curieType = Utils::uri2curie($t);
-}
-$viewFile = $curieType.$conf['view']['extension'].".".$extension;
-$modelFile = $curieType.$conf['model']['extension'].".".$extension;
-if(!file_exists($conf['model']['directory'].$modelFile) || !file_exists($conf['view']['directory'].$viewFile) || $curieType == null){
-  error_log("Can't find $modelFile or $viewFile using $curieType, switching to defaults", 0);
-  $modelFile = $conf['model']['default'].$conf['model']['extension'].".".$extension;
-  $viewFile = $conf['view']['default'].$conf['view']['extension'].".".$extension;
-}
 
+//Defining default views and models
+$curieType="";
+$modelFile = $conf['model']['default'].$conf['model']['extension'].".".$extension;
+$viewFile = $conf['view']['default'].$conf['view']['extension'].".".$extension;
+
+//Get the first class available
+/* TODO: Allow user to priotize 
+ * which class should be used
+ * Example: URI is foaf:Person and ex:Student
+ *          If both, prefer ex:Student
+ */
+
+foreach($t as $v){
+  $curieType = Utils::uri2curie($v);
+  $auxViewFile  = $conf['view']['directory'].$curieType.$conf['view']['extension'].".".$extension;
+  $auxModelFile = $conf['model']['directory'].$curieType.$conf['model']['extension'].".".$extension;
+  if(file_exists($auxModelFile) && file_exists($auxViewFile) && $curieType != null){
+  	$viewFile = $curieType.$conf['view']['extension'].".".$extension;
+  	$modelFile = $curieType.$conf['model']['extension'].".".$extension;
+  	break;
+  }
+}
 $base = $conf['view']['standard'];
 $base['type'] = $modelFile;
 $base['this']['value'] = $uri;

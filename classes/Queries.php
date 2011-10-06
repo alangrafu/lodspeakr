@@ -24,16 +24,17 @@ class Queries{
   	}UNION{
   	  ?inst a <$uri> .
   	}
-  	} LIMIT 1";
+  	}";
   	try{
   	  $r = $e->query($q);
   	}catch (Exception $ex){
   	  echo $ex->getMessage();
   	}
-  	if(sizeof($r['results']['bindings'])>0){
-  	  return $r['results']['bindings'][0]['class']['value'];
+  	$result = array();
+  	foreach($r['results']['bindings'] as $v){
+  	  $result[]= $v['class']['value'];
   	}
-  	return NULL;
+  	return $result;
   }
   
   
