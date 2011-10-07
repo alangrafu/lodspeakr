@@ -122,24 +122,30 @@ class Utils{
   
   public static function getBestContentType($accept_string){
   	global $conf;
-  	/*
-  	* TODO: Choose best content type from
-  	* things like
-  	* "text/html;q=0.2,application/xml;q=0.1"
-  	* and so on. In the meantime,
-  	* assume there is only one CT
-  	*/
   	$a = explode(",", $accept_string);
-  	$ct = 'text/html';
-  	if(strstr($a[0], ";")){
-  	  $a = explode(";", $a[0]);
-  	}
-  	foreach($conf['http_accept'] as $ext => $arr){
-  	  if(in_array($a[0], $arr)){
-  	  	$ct = $a[0];
+  	$b = array();
+  	foreach($a as $v){
+  	  if(strstr($v, ";")){  	  
+  	  	$aux = explode(";q=", $v);
+  	  	foreach($conf['http_accept'] as $formatTypeArray){
+  	  	  if(in_array($aux[0], $formatTypeArray)){
+  	  	  	$b[$aux[0]] = $aux[1];
+  	  	  }
+  	  	}
+  	  }else{
+  	  	$b[$v] = 1;
   	  }
   	}
-  	
+  	$a = $b;
+  	arsort($a);
+  	$ct = 'text/html';
+  	foreach($a as $k => $v){
+  	  $ct = $k;
+  	  break;
+  	}
+  	if($ct == NULL || $ct == "" || $ct == "*/*"){
+  	  $ct = 'text/html';
+  	}
   	return $ct;
   }
   
