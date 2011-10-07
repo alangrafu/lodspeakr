@@ -122,24 +122,32 @@ class Utils{
   
   public static function getBestContentType($accept_string){
   	global $conf;
-  	/*
-  	* TODO: Choose best content type from
-  	* things like
-  	* "text/html;q=0.2,application/xml;q=0.1"
-  	* and so on. In the meantime,
-  	* assume there is only one CT
-  	*/
   	$a = explode(",", $accept_string);
-  	$ct = 'text/html';
-  	if(strstr($a[0], ";")){
-  	  $a = explode(";", $a[0]);
-  	}
-  	foreach($conf['http_accept'] as $ext => $arr){
-  	  if(in_array($a[0], $arr)){
-  	  	$ct = $a[0];
+  	$b = array();
+  	foreach($a as $v){
+  	  foreach($conf['http_accept'] as $formatTypeArray){
+  	  	if(strstr($v, ";")){
+  	  	  $aux = explode(";q=", $v);
+  	  	  if(in_array($aux[0], $formatTypeArray)){
+  	  	  	$b[$aux[0]] = $aux[1];
+  	  	  }
+  	  	}else{
+  	  	  if(in_array($v, $formatTypeArray)){
+  	  	  	$b[$v] = 1;
+  	  	  }
+  	  	}
   	  }
   	}
-  	
+  	$a = $b;
+  	arsort($a);
+  	$ct = 'text/html';
+  	foreach($a as $k => $v){
+  	  $ct = $k;
+  	  break;
+  	}
+  	if($ct == NULL || $ct == "" || $ct == "*/*"){
+  	  $ct = 'text/html';
+  	}
   	return $ct;
   }
   
@@ -295,7 +303,7 @@ class Utils{
   	  	if(Utils::getResultsType($query) == $conf['endpoint']['select']['output']){
   	  	  $rPointer[$modelFile] = Utils::sparqlResult2Obj($aux);
   	  	  /*if(sizeof($rPointer)>0){
-  	  	  	$rPointer[$modelFile]['first'] = $rPointer[$modelFile][0];
+  	  	  $rPointer[$modelFile]['first'] = $rPointer[$modelFile][0];
   	  	  }*/
   	  	}else{
   	  	  $rPointer[$modelFile] = $aux;
@@ -304,7 +312,7 @@ class Utils{
   	  	if(Utils::getResultsType($query) == $conf['endpoint']['select']['output']){
   	  	  $rPointer = Utils::sparqlResult2Obj($aux);
   	  	  /*if(sizeof($rPointer)>0){
-  	  	  	$rPointer['first'] = $rPointer[0];
+  	  	  $rPointer['first'] = $rPointer[0];
   	  	  }*/
   	  	}else{
   	  	  $rPointer = $aux;
