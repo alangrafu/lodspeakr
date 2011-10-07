@@ -125,15 +125,17 @@ class Utils{
   	$a = explode(",", $accept_string);
   	$b = array();
   	foreach($a as $v){
-  	  if(strstr($v, ";")){  	  
-  	  	$aux = explode(";q=", $v);
-  	  	foreach($conf['http_accept'] as $formatTypeArray){
+  	  foreach($conf['http_accept'] as $formatTypeArray){
+  	  	if(strstr($v, ";")){
+  	  	  $aux = explode(";q=", $v);
   	  	  if(in_array($aux[0], $formatTypeArray)){
   	  	  	$b[$aux[0]] = $aux[1];
   	  	  }
+  	  	}else{
+  	  	  if(in_array($v, $formatTypeArray)){
+  	  	  	$b[$v] = 1;
+  	  	  }
   	  	}
-  	  }else{
-  	  	$b[$v] = 1;
   	  }
   	}
   	$a = $b;
@@ -301,7 +303,7 @@ class Utils{
   	  	if(Utils::getResultsType($query) == $conf['endpoint']['select']['output']){
   	  	  $rPointer[$modelFile] = Utils::sparqlResult2Obj($aux);
   	  	  /*if(sizeof($rPointer)>0){
-  	  	  	$rPointer[$modelFile]['first'] = $rPointer[$modelFile][0];
+  	  	  $rPointer[$modelFile]['first'] = $rPointer[$modelFile][0];
   	  	  }*/
   	  	}else{
   	  	  $rPointer[$modelFile] = $aux;
@@ -310,7 +312,7 @@ class Utils{
   	  	if(Utils::getResultsType($query) == $conf['endpoint']['select']['output']){
   	  	  $rPointer = Utils::sparqlResult2Obj($aux);
   	  	  /*if(sizeof($rPointer)>0){
-  	  	  	$rPointer['first'] = $rPointer[0];
+  	  	  $rPointer['first'] = $rPointer[0];
   	  	  }*/
   	  	}else{
   	  	  $rPointer = $aux;

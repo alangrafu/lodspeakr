@@ -23,7 +23,7 @@ $conf['view']['default'] = 'default';
 
 $conf['resource']['url_delimiter'] = "%u";
 
-$conf['http_accept']['html'] = array('text/html', 'application/xhtml+xml');  
+$conf['http_accept']['html'] = array('text/html');  
 $conf['http_accept']['rdf']  = array('application/rdf+xml');
 $conf['http_accept']['ttl']  = array('text/n3', 'application/x-turtle', 'application/turtle', 'text/turtle');
 $conf['http_accept']['json'] = array('application/json', 'application/x-javascript', 'text/javascript', 'text/x-javascript', 'text/x-json');
