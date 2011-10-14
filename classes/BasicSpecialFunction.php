@@ -92,6 +92,8 @@ $base['ns'] = $conf['ns'];  	  $base['ns'] = $conf['ns'];
   	  chdir("..");
   	  if(is_array($data)){
   	  	$results = Convert::array_to_object($data);
+  	  }else{
+  	  	$results = $data;
   	  }
   	  $rRoot = &$resulst;
   	  Utils::processDocument($viewFile, $base, $results);  	
