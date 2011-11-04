@@ -107,7 +107,7 @@ echo $altUri."\n";
   	  $rRoot = &$resulst;
   	  Utils::processDocument($viewFile, $base, $results);  	
   	}catch (Exception $ex){
-  	  echo $ex0>getMessage();
+  	  echo $ex->getMessage();
   	  trigger_error($ex->getMessage(), E_ERROR);
   	  Utils::send500($uri);
   	}
