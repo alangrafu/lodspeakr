@@ -42,7 +42,6 @@ class SpecialFunction extends AbstractSpecialFunction{
   	  $modelFile = $conf['special']['uri'].".".$f.$conf['model']['extension'].".".$extension;
   	  if(!is_file($conf['model']['directory'].$modelFile) || !is_file($conf['view']['directory'].$viewFile)){
   	  	throw new Exception('Method does not exist!');
-  	  	Utils::send404($uri);
   	  }
   	  $endpoints = $context['endpoints'];
   	  array_pop($params);
@@ -62,8 +61,18 @@ class SpecialFunction extends AbstractSpecialFunction{
   	  }
   	  $data['query'] =$queryHeader . $query;*/
   	  //$e->query($data['query'], Utils::getResultsType($query));
+  	  
   	  $prefixHeader = array();
   	  for($i=0;$i<sizeof($params);$i++){
+  	  	if($conf['use_external_uris']){
+  	  	  $altUri = Utils::curie2uri($params[$i]);
+  	  	  $altUri = preg_replace("|^".$conf['basedir']."|", $conf['ns']['local'], $altUri);
+echo $altUri."\n";
+  	  	  $params[$i] = Utils::uri2curie($altUri);
+  	  	}
+  	  }
+  	  
+  	  for($i=0;$i<sizeof($params);$i++){  	  	
   	  	$auxPrefix = Utils::getPrefix($params[$i]);
   	  	if($auxPrefix['ns'] != NULL){
   	  	  $prefixHeader[] = $auxPrefix;
@@ -71,14 +80,14 @@ class SpecialFunction extends AbstractSpecialFunction{
   	  	$args["arg".$i]=$params[$i];
   	  }
  	  $data['params'] = $params;
-$base = $conf['view']['standard'];
-$base['type'] = $modelFile;
-$base['this']['value'] = $uri;
-$base['this']['curie'] = Utils::uri2curie($uri);
-$base['this']['contentType'] = $acceptContentType;
-$base['model']['directory'] = $conf['model']['directory'];
-$base['view']['directory'] = $conf['view']['directory'];
-$base['ns'] = $conf['ns'];  	  $base['ns'] = $conf['ns'];
+ 	  $base = $conf['view']['standard'];
+ 	  $base['type'] = $modelFile;
+ 	  $base['this']['value'] = $uri;
+ 	  $base['this']['curie'] = Utils::uri2curie($uri);
+ 	  $base['this']['contentType'] = $acceptContentType;
+ 	  $base['model']['directory'] = $conf['model']['directory'];
+ 	  $base['view']['directory'] = $conf['view']['directory'];
+ 	  $base['ns'] = $conf['ns'];  	  $base['ns'] = $conf['ns'];
   	  $base['type'] = $modelFile;
   	  $base['header'] = $prefixHeader;
   	  $base['args'] = $args;
@@ -98,6 +107,7 @@ $base['ns'] = $conf['ns'];  	  $base['ns'] = $conf['ns'];
   	  $rRoot = &$resulst;
   	  Utils::processDocument($viewFile, $base, $results);  	
   	}catch (Exception $ex){
+  	  echo $ex->getMessage()." ".$ex->getLine();
   	  trigger_error($ex->getMessage(), E_ERROR);
   	  Utils::send500($uri);
   	}

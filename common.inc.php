@@ -1,10 +1,9 @@
 <?
 
-$conf['endpoint']['select']['output'] = 'json';
-$conf['endpoint']['describe']['output'] = 'rdf';
-$conf['endpoint']['config']['output'] = $conf['endpoint']['select']['output'];
-$conf['endpoint']['config']['named_graph'] = '';
-$conf['endpoint']['config']['show_inline'] = 0;
+$conf['output']['select'] = 'json';
+$conf['output']['describe'] = 'rdf';
+$conf['endpointParams']['config']['show_inline'] = 0;
+$conf['endpointParams']['config']['named_graph'] = '';
 //ALternative endpoints
 $conf['endpoint']['dbpedia'] = 'http://dbpedia.org/sparql';
 $conf['endpoint']['logd'] = 'http://logd.tw.rpi.edu/sparql';
@@ -25,7 +24,8 @@ $conf['resource']['url_delimiter'] = "%u";
 
 $conf['http_accept']['html'] = array('text/html');  
 $conf['http_accept']['rdf']  = array('application/rdf+xml');
-$conf['http_accept']['ttl']  = array('text/n3', 'application/x-turtle', 'application/turtle', 'text/turtle');
+$conf['http_accept']['ttl']  = array(
+  'text/n3', 'application/x-turtle', 'application/turtle', 'text/turtle');
 $conf['http_accept']['json'] = array('application/json', 'application/x-javascript', 'text/javascript', 'text/x-javascript', 'text/x-json');
 $conf['http_accept']['nt']   = array('text/plain');
 

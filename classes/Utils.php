@@ -191,11 +191,11 @@ class Utils{
   public static function getResultsType($query){
   	global $conf;
   	if(preg_match("/select/i", $query)){
-  	  return $conf['endpoint']['select']['output'];
+  	  return $conf['output']['select'];
   	}elseif(preg_match("/describe/i", $query)){
-  	  return $conf['endpoint']['describe']['output'];
+  	  return $conf['output']['describe'];
   	}elseif(preg_match("/construct/i", $query)){
-  	  return $conf['endpoint']['describe']['output'];
+  	  return $conf['output']['describe'];
   	}else{
   	  Utils::send500(null);
   	} 
@@ -300,7 +300,7 @@ class Utils{
   	  	if(!isset($rPointer[$modelFile])){
   	  	  $rPointer[$modelFile] = array();
   	  	}
-  	  	if(Utils::getResultsType($query) == $conf['endpoint']['select']['output']){
+  	  	if(Utils::getResultsType($query) == $conf['output']['select']){
   	  	  $rPointer[$modelFile] = Utils::sparqlResult2Obj($aux);
   	  	  /*if(sizeof($rPointer)>0){
   	  	  $rPointer[$modelFile]['first'] = $rPointer[$modelFile][0];
@@ -309,7 +309,7 @@ class Utils{
   	  	  $rPointer[$modelFile] = $aux;
   	  	}
   	  }else{
-  	  	if(Utils::getResultsType($query) == $conf['endpoint']['select']['output']){
+  	  	if(Utils::getResultsType($query) == $conf['output']['select']){
   	  	  $rPointer = Utils::sparqlResult2Obj($aux);
   	  	  /*if(sizeof($rPointer)>0){
   	  	  $rPointer['first'] = $rPointer[0];

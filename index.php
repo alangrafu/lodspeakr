@@ -18,7 +18,7 @@ include_once('classes/Convert.php');
 
 $results = array();
 $endpoints = array();
-$endpoints['local'] = new Endpoint($conf['endpoint']['local'], $conf['endpoint']['config']);
+$endpoints['local'] = new Endpoint($conf['endpoint']['local'], $conf['endpointParams']['config']);
 $metaDb = new MetaDb($conf['metadata']['db']['location']);
 
 $acceptContentType = Utils::getBestContentType($_SERVER['HTTP_ACCEPT']);
@@ -27,6 +27,15 @@ $extension = Utils::getExtension($acceptContentType);
 if($acceptContentType == NULL){
   Utils::send406($uri);
 }
+
+if($_GET['q'] == 'benegesserit'){
+  include_once('settings.inc.php');
+  include_once('classes/Exporter.php');
+  $exp = new Exporter();
+  $exp->run();
+  exit(0);
+}
+
 
 $uri = $conf['basedir'].$_GET['q'];
 $localUri = $uri;
