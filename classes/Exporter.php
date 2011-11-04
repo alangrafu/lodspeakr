@@ -31,6 +31,45 @@ class Exporter{
   	array_push($triples, $t);
   	$t['o']      = LS.'Application';	
   	array_push($triples, $t);
+  	
+  	
+  	$t['p']      = LS.'usedParameter';
+  	$t['o']      = uniqid("_:b");
+  	$t['o_type'] = 'bnode';  	   	  
+  	array_push($triples, $t);
+  	
+  	$t2 = array();
+  	$t2['s']      = $t['o'];
+  	$t2['s_type'] = 'uri';
+  	$t2['p']      = RDF.'type';
+  	$t2['o']      = LS."Parameter";
+  	$t2['o_type'] = 'uri';  	 	 
+  	array_push($triples, $t2);
+  	$t2['p']      = RDFS.'label';
+  	$t2['o']      = 'root';
+  	$t2['o_type'] = 'literal';  	 	 
+  	array_push($triples, $t2);
+  	$t2['p']      = DC.'hasFormat';
+  	$t2['o']      = uniqid("_:b");
+  	$t2['o_type'] = 'bnode';  	 	 
+  	array_push($triples, $t2);
+  	
+  	$t2['s']      = $t2['o'];
+  	$t2['s_type'] = 'bnode';
+  	$t2['p']      = RDF.'type';
+  	$t2['o']      = CNT."ContentAsText";
+  	$t2['o_type'] = 'uri';  	 	 
+  	array_push($triples, $t2);
+  	$t2['p']      = CNT.'chars';
+  	$t2['o']      = ($conf['root']);
+  	$t2['o_type'] = 'literal';  	 	 
+  	array_push($triples, $t2);
+  	$t2['p']      = DC.'format';
+  	$t2['o']      = 'text/plain;charset=utf-8';
+  	$t2['o_type'] = 'literal';  	 	 
+  	array_push($triples, $t2);
+  	
+  	
   	$t['s']      = $conf['basedir'].'endpointManagerComponent';
   	$t['s_type'] = 'uri';
   	$t['p']      = SKOS.'broader';

@@ -40,7 +40,7 @@ if($_GET['q'] == 'benegesserit'){
 $uri = $conf['basedir'].$_GET['q'];
 $localUri = $uri;
 if($uri == $conf['basedir']){
-  header('Location: '.$conf['root']['url']);
+  header('Location: '.$conf['root']);
   exit(0);
 }elseif(preg_match("|^".$conf['basedir'].$conf['special']['uri']."|", $uri)){
   include_once($conf['special']['class']);

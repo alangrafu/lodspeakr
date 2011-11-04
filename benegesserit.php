@@ -51,6 +51,24 @@ class Importer{
 	$pwd = getcwd();
 	$content .= "\$conf['home'] = \"$pwd/\";\n";
 
+	//App params
+
+	$q = $this->search($triples, $app, LS.'usedParameter', null);
+	$appParams =  array();
+	foreach($q as $p){
+	  $param = $p['o'];
+	  $labelArr = $this->search($triples, $param, RDFS.'label', null);
+	  $label = $labelArr[0]['o'];
+	  $format = $this->search($triples, $param, DC.'hasFormat', null);
+	  $cntArr = $this->search($triples, $format[0]['o'], CNT.'chars', null);
+	  $cnt = $cntArr[0]['o'];
+	  $appParams[$label] = $cnt;  
+	}
+	foreach($appParams  as $k => $v){
+	  $content .= "\$conf['$k'] = \"$v/\";\n";
+	}
+	
+	//Components
   	foreach($compArr as $v){
   	  $component = $v['s'];
   	  $componentTypeArr = $this->search($triples, $component, RDF.'type', null);

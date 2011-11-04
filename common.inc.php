@@ -34,7 +34,7 @@ $conf['special']['uri'] = 'special';
 $conf['special']['class'] = 'classes/BasicSpecialFunction.php';
 
 //Frontpage when user goes to http://example.org/
-$conf['root']['url'] = 'special/index';
+$conf['root'] = 'special/index';
 
 //Debug
 $conf['debug'] = false;

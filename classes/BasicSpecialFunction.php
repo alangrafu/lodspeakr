@@ -40,7 +40,7 @@ class SpecialFunction extends AbstractSpecialFunction{
   	try{
   	  $viewFile = $conf['special']['uri'].".".$f.$conf['view']['extension'].".".$extension;
   	  $modelFile = $conf['special']['uri'].".".$f.$conf['model']['extension'].".".$extension;
-  	  if(!is_file($conf['model']['directory'].$modelFile) || !is_file($conf['view']['directory'].$viewFile)){
+  	  if(!(is_dir($conf['model']['directory'].$modelFile) || is_file($conf['model']['directory'].$modelFile)) || !is_file($conf['view']['directory'].$viewFile)){
   	  	throw new Exception('Method does not exist!');
   	  }
   	  $endpoints = $context['endpoints'];
@@ -107,7 +107,7 @@ echo $altUri."\n";
   	  $rRoot = &$resulst;
   	  Utils::processDocument($viewFile, $base, $results);  	
   	}catch (Exception $ex){
-  	  echo $ex->getMessage()." ".$ex->getLine();
+  	  echo $ex0>getMessage();
   	  trigger_error($ex->getMessage(), E_ERROR);
   	  Utils::send500($uri);
   	}
