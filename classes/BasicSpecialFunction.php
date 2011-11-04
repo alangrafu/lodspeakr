@@ -67,7 +67,6 @@ class SpecialFunction extends AbstractSpecialFunction{
   	  	if($conf['use_external_uris']){
   	  	  $altUri = Utils::curie2uri($params[$i]);
   	  	  $altUri = preg_replace("|^".$conf['basedir']."|", $conf['ns']['local'], $altUri);
-echo $altUri."\n";
   	  	  $params[$i] = Utils::uri2curie($altUri);
   	  	}
   	  }
