@@ -28,10 +28,11 @@ if($acceptContentType == NULL){
   Utils::send406($uri);
 }
 
-if($_GET['q'] == 'benegesserit'){
+if($_GET['q'] == 'export'){
   include_once('settings.inc.php');
   include_once('classes/Exporter.php');
   $exp = new Exporter();
+  header('Content-Type: text/turtle');
   $exp->run();
   exit(0);
 }
