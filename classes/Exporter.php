@@ -85,7 +85,7 @@ class Exporter{
   	$t2['s']      = $t['o'];
   	$t2['s_type'] = 'uri';
   	$t2['p']      = RDFS.'subClassOf';
-  	$t2['o']      = LDA."DataComponent";
+  	$t2['o']      = LDA."SparqlEndpointRetriever";
   	$t2['o_type'] = 'uri';  	 	 
   	array_push($triples, $t2);
   	
