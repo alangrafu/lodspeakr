@@ -382,6 +382,103 @@ class Exporter{
   	  //break;
   	}
   	
+  	//Static files  	
+    	
+  	  	$staticComponent = $conf['basedir'].'staticComponent';//uniqid("_:b");
+  	$statics = $this->getComponents($conf['home'].$conf['static']['directory'], '');
+  	
+  	  //Define Process
+  	  $t = array();
+  	  $t['s']      = uniqid("_:b");
+  	  $t['s_type'] = 'bnode';
+  	  $t['p']      = RDF.'type';
+  	  $t['o']      = OPMV.'Process';
+  	  $t['o_type'] = 'uri';  	 	 
+  	  array_push($triples, $t);    	
+  	foreach($statics as $k=>$m){
+  	  
+	 
+  	  
+  	  //Controlled by
+  	  $t['p']      = OPMV.'wasControlledBy';
+  	  $t['o']      = $staticComponent;
+  	  $t['o_type'] = 'bnode';  	   	  
+  	  array_push($triples, $t);
+  	  
+  	  //Associated Agent to this installation
+  	  $aux = $t['o'];
+  	  $t['s'] = $t['o'];
+  	  $t['p']      = SKOS.'broader';
+  	  $t['o']      = $conf['basedir'];
+  	  $t['o_type'] = 'uri';  	 	 
+  	  array_push($triples, $t);
+  	  
+  	  //Return object for later triple
+  	  $t['o'] = $staticComponent;
+  	  
+  	  // Type of query
+  	  $t2 = array();
+  	  $t2['s']      = $t['o'];
+  	  $t2['s_type'] = 'bnode';
+  	  $t2['p']      = RDF.'type';
+  	  $t2['o']      = LS.'LodspeakrStaticElementsComponent';
+  	  $t2['o_type'] = 'uri';  	 	 
+  	  array_push($triples, $t2);
+  	  
+  	  $t3 = array();
+  	  $t3['s']      = $t2['o'];
+  	  $t3['s_type'] = 'uri';
+  	  $t3['p']      = RDFS.'subClassOf';
+  	  $t3['o']      = LDA."ProcessComponent";
+  	  $t3['o_type'] = 'uri';  	 	 
+  	  array_push($triples, $t3);
+  	
+  	  array_push($triples, $t2);
+  	  $t2['p']      = RDFS.'label';
+  	  $t2['o']      = 'Component of LODSPeaKr in charge of static content';
+  	  $t2['o_type'] = 'literal';  	 	 
+  	  array_push($triples, $t2);
+  	  
+  	  $t['p']      = LS.'usedInput';
+  	  $t['o']      = $conf['basedir'].$conf['static']['directory'].$k;
+  	  $t['o_type'] = 'uri';  	   	  
+  	  array_push($triples, $t);
+  	  
+  	  $t2 = array();
+  	  $t2['s']      = $t['o'];
+  	  $t2['s_type'] = 'uri';
+  	  $t2['p']      = RDF.'type';
+  	  $t2['o']      = LS."Input";
+  	  $t2['o_type'] = 'uri';  	 	 
+  	  array_push($triples, $t2);
+  	  $t2['p']      = RDFS.'label';
+  	  $t2['o']      = $conf['static']['directory'].$k;
+  	  $t2['o_type'] = 'literal';  	 	 
+  	  array_push($triples, $t2);
+  	  
+  	  $t2['p']      = DC.'hasFormat';
+  	  $t2['o']      = uniqid("_:b");
+  	  $t2['o_type'] = 'bnode';  	 	 
+  	  array_push($triples, $t2);
+  	  
+  	  $t2['s']      = $t2['o'];
+  	  $t2['s_type'] = 'bnode';
+  	  $t2['p']      = RDF.'type';
+  	  $t2['o']      = CNT."ContentAsText";
+  	  $t2['o_type'] = 'uri';  	 	 
+  	  array_push($triples, $t2);
+  	  $t2['p']      = CNT.'chars';
+  	  $t2['o']      = ($m);
+  	  $t2['o_type'] = 'literal';  	 	 
+  	  array_push($triples, $t2);
+  	  $t2['p']      = DC.'format';
+  	  $t2['o']      = 'text/plain;charset=utf-8';
+  	  $t2['o_type'] = 'literal';  	 	 
+  	  array_push($triples, $t2);
+  	  //break;
+  	}
+
+  	
   	echo "#You can copy and paste the following data into a new\n";
   	echo "#LODSPeaKr instance at http://exampleofinstance.org/import\n";
   	echo "#As a side note: this is a turtle document but is served as text/plain to make it easier to copy&paste\n\n\n";

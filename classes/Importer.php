@@ -25,13 +25,13 @@ class Importer{
   	  exit(0);
   	}	  
   	
-  	$this->external_basedir = str_replace('benegesserit', '', $_GET['import']);
   	echo $this->external_basedir;
   	include_once('lib/arc2/ARC2.php');
   	$parser = ARC2::getTurtleParser();
   	
   	if(isset($_GET['import'])){
   	  $parser->parse($_GET['import']);
+  	  $this->external_basedir = str_replace('export', '', $_GET['import']);
   	}elseif(isset($_POST['importtext'])){
   	  $parser->parse(RDF, $_POST['importtext']);
   	}else{
@@ -47,13 +47,14 @@ class Importer{
   	}
   	
   	$app = $appArr[0]['s'];
-  	
+  	$this->external_basedir = $app;
   	$compArr = $this->search($triples, null, SKOS.'broader', $app);
   	$content = "<?\n\$conf['debug'] = false;\n\$conf['use_external_uris'] = true;\n\n";
   	
-	$this->basedir =  (!empty($_SERVER['HTTPS'])) ? "https://".$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'] : "http://".$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'];
-	$arr = explode("lodspeakr/benegesserit", $this->basedir);
-	$this->basedir = $arr[0];
+	$this->basedir =  preg_replace('/import$/', '', (!empty($_SERVER['HTTPS'])) ? "https://".$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'] : "http://".$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']);
+	
+	//$arr = explode("lodspeakr/benegesserit", $this->basedir);
+	//$this->basedir = $arr[0];
 	$content .= "\$conf['basedir'] = \"$this->basedir\";\n";
 	
 	$pwd = getcwd();
@@ -113,6 +114,8 @@ class Importer{
  	 	$content .= $this->createNamespaces($params); 	  
  	  }elseif($compType == LS."LodspeakrSparqlEndpointRetriever"){
  	  	$this->createModels($inputs);
+ 	  }elseif($compType == LS."LodspeakrStaticElementsComponent"){
+ 	  	$this->createStatics($inputs);
  	  }elseif($compType == LS."LodspeakrVisualComponent"){
  	  	$this->createViews($inputs);
  	  }else{
@@ -128,6 +131,7 @@ class Importer{
   	  echo 'Caught exception while writing settings: ',  $e->getMessage(), "\n";
   	  exit(1);
   	}
+  	$this->showFinishing();
   }
   
   private function createEndpoints($ep){
@@ -228,6 +232,36 @@ class Importer{
   }
   
   
+    private function createStatics($statics){
+  	try{
+  	  foreach($statics as $k => $v){
+  	  	$path = explode("/", $k);
+  	  	for($i=0; $i<sizeof($path)-1; $i++){
+  	  	  if(file_exists($path[$i])){
+  	  	  	if(!is_dir($path[$i])){
+  	  	  	  unlink($path[$i]);
+  	  	  	  mkdir($path[$i]);
+  	  	  	}
+  	  	  }else{
+  	  	  	mkdir($path[$i]);
+  	  	  }
+  	  	  chdir($path[$i]);
+  	  	}
+  	  	
+  	  	$fh = fopen(end($path), 'w');
+  	  	fwrite($fh, $v);
+  	  	fclose($fh);
+  	  	for($i=0; $i<sizeof($path)-1; $i++){
+  	  	  chdir('..');
+  	  	}
+  	  }
+  	} catch (Exception $e) {
+  	  echo 'Caught exception while importing statics: ',  $e->getMessage(), "\n";
+  	  exit(1);
+  	}	  
+  }
+  
+  
   private function search($graph, $s = null, $p = null, $o = null){
   	$results =  array();
   	foreach($graph as $v){
@@ -266,6 +300,7 @@ class Importer{
   	  
   	}
   	return $results;
+  	//$this->showFinishing();
   }
   
   private function showInterface(){
@@ -278,7 +313,7 @@ class Importer{
   	You can paste the data obtained from another LODSPeaKr instance here in the box.
   	You can also automatize this import by adding a parameter '?import=URL' to this page.
   	Usually, the URL will be of the for <tt>http://example.org/foo/export</tt>
-  	<form action='benegesserit.php' method='post'>
+  	<form action='import' method='post'>
   	<textarea cols='100' rows='25' name='importtext'></textarea>
   	<input type='submit' value='Import'/>
   	</form>
@@ -286,6 +321,20 @@ class Importer{
   	</html>";
   	echo $doc;  	  	
   }
+  
+  private function showFinishing(){
+  	$doc = "<html>
+  	<head>
+  	<title>Finishing import</title>
+  	</head>
+  	<body>
+  	<h2>Import finished</h2>
+  	Your new application is ready. Please go to the <a href='".$this->basedir."'>home page</a>.
+  	</body>
+  	</html>";
+  	echo $doc;  	  	
+  }
+  
 }
 
 ?>
