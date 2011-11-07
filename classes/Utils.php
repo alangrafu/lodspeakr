@@ -87,9 +87,7 @@ class Utils{
   	  	foreach($aux as $w){
   	  	  $row = array();
   	  	  foreach($w as $k => $v){
-  	  	  	if($conf['use_external_uris'] === true && $v['type'] == 'uri'){
-  	  	  	  $v['value'] = preg_replace("|^".$conf['ns']['local']."|", $conf['basedir'], $v['value']);
-  	  	  	} 	  	
+  	  	  		
   	  	  	$row[$k]['value'] = $v['value'];
   	  	  	if($v['type'] == 'uri'){
   	  	  	  $row[$k]['curie'] = Utils::uri2curie($v['value']);
@@ -269,7 +267,10 @@ class Utils{
   	global $conf;
   	global $base;
   	global $results;
-   	
+   	$internalize = false;
+  	if(sizeof($rPointer) == 0 && $conf['use_external_uris']){
+  	  $internalize = true;
+  	}
   	$uri = $base['this']['value'];
   	$data = array();
   	
@@ -332,6 +333,23 @@ class Utils{
   	  }else{
   	  	Utils::queryDir($modelFile, $rPointer);
   	  }
+  	}
+  	
+  	if($internalize){
+  	  Utils::internalize($rPointer); 
+  	}
+  }
+  
+  private static function internalize($arr){
+  	foreach($array as $key => $value){
+  	  if(!isset($value['value'])){
+  	  	$array[$key] = Utils::internalize($value);
+  	  }else{
+  	  	if($value['uri'] == 1){
+  	  	  $value['value'] = preg_replace("|^".$conf['ns']['local']."|", $conf['basedir'], $value);
+  	  	  $value['curie'] = Utils::uri2curie($value['value']);
+  	  	}
+  	  } 
   	}
   }
   
