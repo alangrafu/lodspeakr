@@ -49,7 +49,11 @@ class Utils{
   	if(preg_match('|^//|', $parts[1])){
   	  return $curie;
   	}  	
-  	return $ns[$parts[0]].$parts[1];
+  	if(sizeof($parts)>1 && isset($ns[$parts[0]])){
+  	  return $ns[$parts[0]].$parts[1];
+  	}else{
+  	  return $curie;
+  	}
   }
   
   public static function getPrefix($curie){

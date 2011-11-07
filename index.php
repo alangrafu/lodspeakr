@@ -1,4 +1,12 @@
 <?
+
+if($_GET['q'] == 'import'){
+  include_once('classes/Importer.php');
+  $imp = new Importer();
+  $imp->run();
+  exit(0);
+}
+
 include_once('common.inc.php');
 if($conf['debug']){
   error_reporting(E_ALL);
@@ -9,6 +17,7 @@ if(!file_exists('settings.inc.php')){
   echo 'Need to configure lodspeakr first. Please run "install.sh" first';
   exit(0);
 }
+
 
 include_once('classes/Utils.php');
 include_once('classes/Queries.php');
@@ -32,7 +41,7 @@ if($_GET['q'] == 'export'){
   include_once('settings.inc.php');
   include_once('classes/Exporter.php');
   $exp = new Exporter();
-  header('Content-Type: text/turtle');
+  header('Content-Type: text/plain');
   $exp->run();
   exit(0);
 }
