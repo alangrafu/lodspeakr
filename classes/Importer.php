@@ -12,6 +12,8 @@ class Importer{
   private $basedir;
   private $external_basedir;
   public function run(){
+  	set_time_limit(0);
+  	error_reporting(E_ERROR);
   	if(is_file(FILE)){
   	  echo "There is an existing ".FILE." file on this installation. Please remove it before importing a new one";
   	  exit(0);
