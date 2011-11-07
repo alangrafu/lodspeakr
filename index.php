@@ -36,7 +36,7 @@ $extension = Utils::getExtension($acceptContentType);
 if($acceptContentType == NULL){
   Utils::send406($uri);
 }
-if(file_exists($conf['static']['directory'].$_GET['q'])){
+if(file_exists($conf['static']['directory'].$_GET['q']) && sizeof($_GET['q'])>0){
   echo file_get_contents($conf['static']['directory'].$_GET['q']);
   exit(0);
 }
