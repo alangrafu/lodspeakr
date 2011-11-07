@@ -20,6 +20,8 @@ $conf['view']['directory'] = 'views/'; #include trailing slash!
 $conf['view']['extension'] = '.view';
 $conf['view']['default'] = 'default';
 
+$conf['static']['directory'] = 'static/';
+
 $conf['resource']['url_delimiter'] = "%u";
 
 $conf['http_accept']['html'] = array('text/html');  

@@ -6,7 +6,7 @@ define("DC", "http://purl.org/dc/terms/");
 define("CNT", "http://www.w3.org/2011/content#");
 define("RDFS", "http://www.w3.org/2000/01/rdf-schema#");
 define("FILE", "settings.inc.php");
-  	
+
 class Importer{
   
   private $basedir;
@@ -16,8 +16,8 @@ class Importer{
   	  echo "There is an existing ".FILE." file on this installation. Please remove it before importing a new one";
   	  exit(0);
   	}
-  	if(!isset($_GET['import'])){
-  	  echo 'Please include a "?import=http://example.org/lodspeakr/benegesserit" at the end of the URL';
+  	if(!isset($_GET['import']) && !isset($_POST['importtext'])){
+  	  $this->showInterface();
   	  exit(0);
   	}
   	if(!is_writable('.')){
@@ -29,7 +29,15 @@ class Importer{
   	echo $this->external_basedir;
   	include_once('lib/arc2/ARC2.php');
   	$parser = ARC2::getTurtleParser();
-  	$parser->parse($_GET['import']);
+  	
+  	if(isset($_GET['import'])){
+  	  $parser->parse($_GET['import']);
+  	}elseif(isset($_POST['importtext'])){
+  	  $parser->parse(RDF, $_POST['importtext']);
+  	}else{
+  	  Utils::send500();
+  	  exit(0);
+  	}
   	$triples = $parser->getTriples();
   	
   	$appArr = $this->search($triples, null, RDF.'type', LS.'Application');
@@ -42,17 +50,17 @@ class Importer{
   	
   	$compArr = $this->search($triples, null, SKOS.'broader', $app);
   	$content = "<?\n\$conf['debug'] = false;\n\$conf['use_external_uris'] = true;\n\n";
-
+  	
 	$this->basedir =  (!empty($_SERVER['HTTPS'])) ? "https://".$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'] : "http://".$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'];
 	$arr = explode("lodspeakr/benegesserit", $this->basedir);
 	$this->basedir = $arr[0];
 	$content .= "\$conf['basedir'] = \"$this->basedir\";\n";
-
+	
 	$pwd = getcwd();
 	$content .= "\$conf['home'] = \"$pwd/\";\n";
-
+	
 	//App params
-
+	
 	$q = $this->search($triples, $app, LS.'usedParameter', null);
 	$appParams =  array();
 	foreach($q as $p){
@@ -138,7 +146,7 @@ class Importer{
   	}	  
   	return $endpoints;
   }
-
+  
   private function createNamespaces($ns){
   	require('namespaces.php');
   	$namespaces = "";
@@ -159,7 +167,7 @@ class Importer{
   	}
   	return $namespaces;
   }
-
+  
   private function createModels($models){
   	try{
   	  foreach($models as $k => $v){
@@ -218,7 +226,7 @@ class Importer{
   	  exit(1);
   	}	  
   }
-
+  
   
   private function search($graph, $s = null, $p = null, $o = null){
   	$results =  array();
@@ -259,8 +267,25 @@ class Importer{
   	}
   	return $results;
   }
+  
+  private function showInterface(){
+  	$doc = "<html>
+  	<head>
+  	<title>Importing options</title>
+  	</head>
+  	<body>
+  	<h2>Paste application described in LDA</h2>
+  	You can paste the data obtained from another LODSPeaKr instance here in the box.
+  	You can also automatize this import by adding a parameter '?import=URL' to this page.
+  	Usually, the URL will be of the for <tt>http://example.org/foo/export</tt>
+  	<form action='benegesserit.php' method='post'>
+  	<textarea cols='100' rows='25' name='importtext'></textarea>
+  	<input type='submit' value='Import'/>
+  	</form>
+  	</body>
+  	</html>";
+  	echo $doc;  	  	
+  }
 }
 
-$imp = new Importer();
-$imp->run();
 ?>

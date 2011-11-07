@@ -36,7 +36,10 @@ $extension = Utils::getExtension($acceptContentType);
 if($acceptContentType == NULL){
   Utils::send406($uri);
 }
-
+if(file_exists($conf['static']['directory'].$_GET['q'])){
+  echo file_get_contents($conf['static']['directory'].$_GET['q']);
+  exit(0);
+}
 if($_GET['q'] == 'export'){
   include_once('settings.inc.php');
   include_once('classes/Exporter.php');
