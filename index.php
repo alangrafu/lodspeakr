@@ -1,5 +1,5 @@
 <?
-
+//Import
 if($_GET['q'] == 'import'){
   include_once('classes/Importer.php');
   $imp = new Importer();
@@ -7,16 +7,21 @@ if($_GET['q'] == 'import'){
   exit(0);
 }
 
+//Test if LODSPeaKr is configured
+if(!file_exists('settings.inc.php')){
+  echo 'Need to configure lodspeakr first. Please run "install.sh" first';
+  exit(0);
+}
+
 include_once('common.inc.php');
+
+//Debug output
 if($conf['debug']){
   error_reporting(E_ALL);
 }else{
   error_reporting(E_ERROR);
 }
-if(!file_exists('settings.inc.php')){
-  echo 'Need to configure lodspeakr first. Please run "install.sh" first';
-  exit(0);
-}
+
 
 
 include_once('classes/Utils.php');
