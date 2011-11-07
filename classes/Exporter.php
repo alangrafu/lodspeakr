@@ -383,8 +383,8 @@ class Exporter{
   	}
   	
   	echo "#You can copy and paste the following data into a new\n";
-  	echo "#LODSPeaKr instance at http://exampleofinstance.org/benegesserit.php\n\n\n";
-  	echo "#As a side note: this is a turtle document but is served as text/plain to make it easier to copy&paste";
+  	echo "#LODSPeaKr instance at http://exampleofinstance.org/import\n";
+  	echo "#As a side note: this is a turtle document but is served as text/plain to make it easier to copy&paste\n\n\n";
   	echo $ser->getSerializedTriples($triples);
   }
   
