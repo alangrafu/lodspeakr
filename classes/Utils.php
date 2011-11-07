@@ -267,10 +267,6 @@ class Utils{
   	global $conf;
   	global $base;
   	global $results;
-   	$internalize = false;
-  	if(sizeof($rPointer) == 0 && $conf['use_external_uris']){
-  	  $internalize = true;
-  	}
   	$uri = $base['this']['value'];
   	$data = array();
   	
@@ -334,23 +330,22 @@ class Utils{
   	  	Utils::queryDir($modelFile, $rPointer);
   	  }
   	}
-  	
-  	if($internalize){
-  	  Utils::internalize($rPointer); 
-  	}
   }
   
-  private static function internalize($arr){
+  public static function internalize($array){
+  	global $conf;
   	foreach($array as $key => $value){
   	  if(!isset($value['value'])){
   	  	$array[$key] = Utils::internalize($value);
   	  }else{
   	  	if($value['uri'] == 1){
-  	  	  $value['value'] = preg_replace("|^".$conf['ns']['local']."|", $conf['basedir'], $value);
+  	  	  $value['value'] = preg_replace("|^".$conf['ns']['local']."|", $conf['basedir'], $value['value']);
   	  	  $value['curie'] = Utils::uri2curie($value['value']);
+  	  	  $array[$key] = $value;
   	  	}
   	  } 
   	}
+  	return $array;
   }
   
   

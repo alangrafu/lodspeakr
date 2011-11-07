@@ -29,8 +29,8 @@ include_once('classes/Queries.php');
 include_once('classes/Endpoint.php');
 include_once('classes/MetaDb.php');
 include_once('classes/Convert.php');
-
 $results = array();
+
 $endpoints = array();
 $endpoints['local'] = new Endpoint($conf['endpoint']['local'], $conf['endpointParams']['config']);
 $metaDb = new MetaDb($conf['metadata']['db']['location']);
@@ -95,6 +95,9 @@ if($res == $localUri){
 }
 
 $uri = $res;
+if($conf['use_external_uris']){
+  $localUri = preg_replace("|^".$conf['basedir']."|", $conf['ns']['local'], $uri);
+}
 $extension = Utils::getExtension($format); 
 
 /*Redefine Content type based on the
@@ -131,6 +134,9 @@ $base = $conf['view']['standard'];
 $base['type'] = $modelFile;
 $base['this']['value'] = $uri;
 $base['this']['curie'] = Utils::uri2curie($uri);
+$base['thislocal']['value'] = $localUri;
+$base['thislocal']['curie'] = Utils::uri2curie($localUri);
+
 $base['this']['contentType'] = $acceptContentType;
 $base['model']['directory'] = $conf['model']['directory'];
 $base['view']['directory'] = $conf['view']['directory'];
@@ -140,7 +146,7 @@ $base['ns'] = $conf['ns'];
 chdir($conf['model']['directory']);
 
 Utils::queryFile($modelFile, $endpoints['local'], $results);
-
+$results = Utils::internalize($results); 
 chdir("..");
 if(is_array($results)){
   $resultsObj = Convert::array_to_object($results);

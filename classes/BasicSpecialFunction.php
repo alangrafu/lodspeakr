@@ -98,12 +98,13 @@ class SpecialFunction extends AbstractSpecialFunction{
   	  chdir($conf['model']['directory']);
   	  Utils::queryFile($modelFile, $endpoints['local'], $data);
   	  chdir("..");
+  	  $data = Utils::internalize($data);
+
   	  if(is_array($data)){
   	  	$results = Convert::array_to_object($data);
   	  }else{
   	  	$results = $data;
   	  }
-  	  $rRoot = &$resulst;
   	  Utils::processDocument($viewFile, $base, $results);  	
   	}catch (Exception $ex){
   	  echo $ex->getMessage();

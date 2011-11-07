@@ -74,7 +74,7 @@ class Importer{
 	  $appParams[$label] = $cnt;  
 	}
 	foreach($appParams  as $k => $v){
-	  $content .= "\$conf['$k'] = \"$v/\";\n";
+	  $content .= "\$conf['$k'] = \"$v\";\n";
 	}
 	
 	//Components
@@ -164,6 +164,7 @@ class Importer{
   	  	  $namespaces .= "\$conf[\"ns\"][\"$k\"] = \"$v\";\n";
   	  	}
   	  }
+  	  $namespaces .= "\$conf[\"ns\"][\"basedir\"] = \"$this->basedir\";\n";
   	  $namespaces .= "\n\n";
   	} catch (Exception $e) {
   	  echo 'Caught exception while importing namespaces: ',  $e->getMessage(), "\n";
