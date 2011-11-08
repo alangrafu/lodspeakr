@@ -45,7 +45,7 @@ if(file_exists($conf['static']['directory'].$_GET['q']) && sizeof($_GET['q'])>0)
   echo file_get_contents($conf['static']['directory'].$_GET['q']);
   exit(0);
 }
-if($_GET['q'] == 'export'){
+if($conf['export'] && $_GET['q'] == 'export'){
   include_once('settings.inc.php');
   include_once('classes/Exporter.php');
   $exp = new Exporter();
