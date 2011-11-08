@@ -42,7 +42,6 @@ class SpecialFunction extends AbstractSpecialFunction{
   	  $modelFile = $conf['special']['uri'].".".$f.$conf['model']['extension'].".".$extension;
   	  if(!(is_dir($conf['model']['directory'].$modelFile) || is_file($conf['model']['directory'].$modelFile)) || !is_file($conf['view']['directory'].$viewFile)){
   	  	throw new Exception('Method does not exist!');
-  	  	Utils::send404($uri);
   	  }
   	  $endpoints = $context['endpoints'];
   	  array_pop($params);
@@ -62,8 +61,17 @@ class SpecialFunction extends AbstractSpecialFunction{
   	  }
   	  $data['query'] =$queryHeader . $query;*/
   	  //$e->query($data['query'], Utils::getResultsType($query));
+  	  
   	  $prefixHeader = array();
   	  for($i=0;$i<sizeof($params);$i++){
+  	  	if($conf['use_external_uris']){
+  	  	  $altUri = Utils::curie2uri($params[$i]);
+  	  	  $altUri = preg_replace("|^".$conf['basedir']."|", $conf['ns']['local'], $altUri);
+  	  	  $params[$i] = Utils::uri2curie($altUri);
+  	  	}
+  	  }
+  	  
+  	  for($i=0;$i<sizeof($params);$i++){  	  	
   	  	$auxPrefix = Utils::getPrefix($params[$i]);
   	  	if($auxPrefix['ns'] != NULL){
   	  	  $prefixHeader[] = $auxPrefix;
@@ -90,12 +98,13 @@ class SpecialFunction extends AbstractSpecialFunction{
   	  chdir($conf['model']['directory']);
   	  Utils::queryFile($modelFile, $endpoints['local'], $data);
   	  chdir("..");
+  	  $data = Utils::internalize($data);
+
   	  if(is_array($data)){
   	  	$results = Convert::array_to_object($data);
   	  }else{
   	  	$results = $data;
   	  }
-  	  $rRoot = &$resulst;
   	  Utils::processDocument($viewFile, $base, $results);  	
   	}catch (Exception $ex){
   	  echo $ex->getMessage();
