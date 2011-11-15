@@ -1,17 +1,8 @@
 <?
 
 $conf['endpoint']['host'] = 'http://myendpoint/sparql/';
-$conf['endpoint']['config']['output'] = 'json';
-$conf['endpoint']['config']['named_graph'] = '';
 $conf['endpoint']['config']['show_inline'] = 0;
 $conf['basedir'] = 'http://mybaseurl/';
-
-$conf['metaendpoint']['host'] = 'http://mymetadataendpoint/sparql';
-$conf['metaendpoint']['config']['output'] = 'json';
-$conf['metaendpoint']['config']['show_inline'] = 0;
-$conf['metaendpoint']['config']['key'] = 'keyForExecutePostInARC2';
-$conf['metaendpoint']['config']['named_graph'] = 'http://lodspeakr.org/metadata';
-
 
 $conf['ns']['rdf']     = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#';
 $conf['ns']['rdfs']    = 'http://www.w3.org/2000/01/rdf-schema#';

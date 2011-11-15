@@ -49,7 +49,11 @@ class Utils{
   	if(preg_match('|^//|', $parts[1])){
   	  return $curie;
   	}  	
-  	return $ns[$parts[0]].$parts[1];
+  	if(sizeof($parts)>1 && isset($ns[$parts[0]])){
+  	  return $ns[$parts[0]].$parts[1];
+  	}else{
+  	  return $curie;
+  	}
   }
   
   public static function getPrefix($curie){
@@ -83,9 +87,7 @@ class Utils{
   	  	foreach($aux as $w){
   	  	  $row = array();
   	  	  foreach($w as $k => $v){
-  	  	  	if($conf['use_external_uris'] === true && $v['type'] == 'uri'){
-  	  	  	  $v['value'] = preg_replace("|^".$conf['ns']['local']."|", $conf['basedir'], $v['value']);
-  	  	  	} 	  	
+  	  	  		
   	  	  	$row[$k]['value'] = $v['value'];
   	  	  	if($v['type'] == 'uri'){
   	  	  	  $row[$k]['curie'] = Utils::uri2curie($v['value']);
@@ -191,11 +193,11 @@ class Utils{
   public static function getResultsType($query){
   	global $conf;
   	if(preg_match("/select/i", $query)){
-  	  return $conf['endpoint']['select']['output'];
+  	  return $conf['output']['select'];
   	}elseif(preg_match("/describe/i", $query)){
-  	  return $conf['endpoint']['describe']['output'];
+  	  return $conf['output']['describe'];
   	}elseif(preg_match("/construct/i", $query)){
-  	  return $conf['endpoint']['describe']['output'];
+  	  return $conf['output']['describe'];
   	}else{
   	  Utils::send500(null);
   	} 
@@ -265,7 +267,6 @@ class Utils{
   	global $conf;
   	global $base;
   	global $results;
-   	
   	$uri = $base['this']['value'];
   	$data = array();
   	
@@ -300,7 +301,7 @@ class Utils{
   	  	if(!isset($rPointer[$modelFile])){
   	  	  $rPointer[$modelFile] = array();
   	  	}
-  	  	if(Utils::getResultsType($query) == $conf['endpoint']['select']['output']){
+  	  	if(Utils::getResultsType($query) == $conf['output']['select']){
   	  	  $rPointer[$modelFile] = Utils::sparqlResult2Obj($aux);
   	  	  /*if(sizeof($rPointer)>0){
   	  	  $rPointer[$modelFile]['first'] = $rPointer[$modelFile][0];
@@ -309,7 +310,7 @@ class Utils{
   	  	  $rPointer[$modelFile] = $aux;
   	  	}
   	  }else{
-  	  	if(Utils::getResultsType($query) == $conf['endpoint']['select']['output']){
+  	  	if(Utils::getResultsType($query) == $conf['output']['select']){
   	  	  $rPointer = Utils::sparqlResult2Obj($aux);
   	  	  /*if(sizeof($rPointer)>0){
   	  	  $rPointer['first'] = $rPointer[0];
@@ -329,6 +330,22 @@ class Utils{
   	  	Utils::queryDir($modelFile, $rPointer);
   	  }
   	}
+  }
+  
+  public static function internalize($array){
+  	global $conf;
+  	foreach($array as $key => $value){
+  	  if(!isset($value['value'])){
+  	  	$array[$key] = Utils::internalize($value);
+  	  }else{
+  	  	if($value['uri'] == 1){
+  	  	  $value['value'] = preg_replace("|^".$conf['ns']['local']."|", $conf['basedir'], $value['value']);
+  	  	  $value['curie'] = Utils::uri2curie($value['value']);
+  	  	  $array[$key] = $value;
+  	  	}
+  	  } 
+  	}
+  	return $array;
   }
   
   
