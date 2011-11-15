@@ -66,7 +66,7 @@ QUERY;
 		  $page = $localUri.".".$extension;
 			foreach($f as $v){
 			  if($contentType == $v){
-				$returnPage = $localUri.".".$extension;
+				$returnPage = $localUri.$conf['extension_connector'].$extension;
 			  }
 			  if($inserts != ""){
 				$inserts .= "UNION ";

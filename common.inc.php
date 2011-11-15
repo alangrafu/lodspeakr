@@ -43,5 +43,5 @@ $conf['debug'] = false;
 
 include_once('settings.inc.php');
 $conf['view']['standard']['baseUrl'] = $conf['basedir'];
-
+$conf['extension_connector'] = '.';
 ?>
