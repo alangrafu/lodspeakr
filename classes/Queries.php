@@ -63,10 +63,10 @@ QUERY;
 		$ext = 'html';
 		$inserts = "";
 		foreach($conf['http_accept'] as $extension => $f){
-		  $page = $localUri.".".$extension;
+		  $page = $localUri.$conf['extension_connector'].$extension;
 			foreach($f as $v){
 			  if($contentType == $v){
-				$returnPage = $localUri.".".$extension;
+				$returnPage = $localUri.$conf['extension_connector'].$extension;
 			  }
 			  if($inserts != ""){
 				$inserts .= "UNION ";

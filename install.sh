@@ -83,6 +83,13 @@ LODSPEAKR_HOME=`pwd`/
 \$conf['debug'] = false;
 \$conf['use_external_uris'] = false;
 
+/*ATTENTION: By default this application is available to
+ * be exported and copied (its configuration)
+ * by others. If you do not want that, 
+ * turn the next option as false
+ */ 
+\$conf['export'] = true;
+
 #If you want to add/overrid a namespace, add it here
 \$conf['ns']['local']   = '$ns';
 

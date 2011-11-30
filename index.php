@@ -1,24 +1,38 @@
 <?
+//Import
+if($_GET['q'] == 'import'){
+  include_once('classes/Importer.php');
+  $imp = new Importer();
+  $imp->run();
+  exit(0);
+}
+
+//Test if LODSPeaKr is configured
+if(!file_exists('settings.inc.php')){
+  echo 'Need to configure lodspeakr first. Please run "install.sh" first. Alternatively, you can <a href="import">import an existing application</a>';
+  exit(0);
+}
+
 include_once('common.inc.php');
+
+//Debug output
 if($conf['debug']){
   error_reporting(E_ALL);
 }else{
   error_reporting(E_ERROR);
 }
-if(!file_exists('settings.inc.php')){
-  echo 'Need to configure lodspeakr first. Please run "install.sh" first';
-  exit(0);
-}
+
+
 
 include_once('classes/Utils.php');
 include_once('classes/Queries.php');
 include_once('classes/Endpoint.php');
 include_once('classes/MetaDb.php');
 include_once('classes/Convert.php');
-
 $results = array();
+
 $endpoints = array();
-$endpoints['local'] = new Endpoint($conf['endpoint']['local'], $conf['endpoint']['config']);
+$endpoints['local'] = new Endpoint($conf['endpoint']['local'], $conf['endpointParams']['config']);
 $metaDb = new MetaDb($conf['metadata']['db']['location']);
 
 $acceptContentType = Utils::getBestContentType($_SERVER['HTTP_ACCEPT']);
@@ -27,11 +41,24 @@ $extension = Utils::getExtension($acceptContentType);
 if($acceptContentType == NULL){
   Utils::send406($uri);
 }
+if(file_exists($conf['static']['directory'].$_GET['q']) && sizeof($_GET['q'])>0){
+  echo file_get_contents($conf['static']['directory'].$_GET['q']);
+  exit(0);
+}
+if($conf['export'] && $_GET['q'] == 'export'){
+  include_once('settings.inc.php');
+  include_once('classes/Exporter.php');
+  $exp = new Exporter();
+  header('Content-Type: text/plain');
+  $exp->run();
+  exit(0);
+}
+
 
 $uri = $conf['basedir'].$_GET['q'];
 $localUri = $uri;
 if($uri == $conf['basedir']){
-  header('Location: '.$conf['root']['url']);
+  header('Location: '.$conf['root']);
   exit(0);
 }elseif(preg_match("|^".$conf['basedir'].$conf['special']['uri']."|", $uri)){
   include_once($conf['special']['class']);
@@ -68,6 +95,9 @@ if($res == $localUri){
 }
 
 $uri = $res;
+if($conf['use_external_uris']){
+  $localUri = preg_replace("|^".$conf['basedir']."|", $conf['ns']['local'], $uri);
+}
 $extension = Utils::getExtension($format); 
 
 /*Redefine Content type based on the
@@ -104,6 +134,9 @@ $base = $conf['view']['standard'];
 $base['type'] = $modelFile;
 $base['this']['value'] = $uri;
 $base['this']['curie'] = Utils::uri2curie($uri);
+$base['thislocal']['value'] = $localUri;
+$base['thislocal']['curie'] = Utils::uri2curie($localUri);
+
 $base['this']['contentType'] = $acceptContentType;
 $base['model']['directory'] = $conf['model']['directory'];
 $base['view']['directory'] = $conf['view']['directory'];
@@ -113,7 +146,7 @@ $base['ns'] = $conf['ns'];
 chdir($conf['model']['directory']);
 
 Utils::queryFile($modelFile, $endpoints['local'], $results);
-
+$results = Utils::internalize($results); 
 chdir("..");
 if(is_array($results)){
   $resultsObj = Convert::array_to_object($results);
