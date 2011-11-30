@@ -38,7 +38,7 @@ class Haanga_Extension_Filter_D3ForceGraph{
   	var url = "http://alvaro.graves.cl";
   	var data = '.$json.';
   	</script>';
-  	$post = '<div style="float: left;border-width: 1px; border-style: solid;width:100%" id="chart"></div>
+  	$post = '<div style="float: left;border-width: 1px; border-style: solid;" id="chart"></div>
   	<script type="text/javascript" src="http://lodspeakr.org/extensions/haanga/filters/d3/js/force.js">
   	</script>';
   	return $pre.$post;
