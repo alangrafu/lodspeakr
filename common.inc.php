@@ -41,7 +41,9 @@ $conf['root'] = 'special/index';
 //Debug
 $conf['debug'] = false;
 
+$conf['extension_connector'] = '.';
+
+
 include_once('settings.inc.php');
 $conf['view']['standard']['baseUrl'] = $conf['basedir'];
-$conf['extension_connector'] = '.';
 ?>

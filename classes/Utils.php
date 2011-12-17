@@ -217,7 +217,7 @@ class Utils{
   	$handle = opendir('.');
   	
   	while (false !== ($modelFile = readdir($handle))) {
-  	  if($modelFile != "." && $modelFile != ".."){
+  	  if($modelFile != "." && $modelFile != ".." && strpos($modelFile, ".") !== 0){
   	  	if(is_dir($modelFile)){
   	  	  //Save it for later, after all the queries in the current directory has been resolved
   	  	  $subDirs[]=$modelFile;
