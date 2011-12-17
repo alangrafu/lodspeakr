@@ -58,7 +58,7 @@ class Importer{
 	//$arr = explode("lodspeakr/benegesserit", $this->basedir);
 	//$this->basedir = $arr[0];
 	$content .= "\$conf['basedir'] = \"$this->basedir\";\n";
-	
+	$content .= "\$conf['parentApp'] = \"$app\";\n";
 	$pwd = getcwd();
 	$content .= "\$conf['home'] = \"$pwd/\";\n";
 	
