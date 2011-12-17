@@ -58,7 +58,7 @@ class Importer{
 	//$arr = explode("lodspeakr/benegesserit", $this->basedir);
 	//$this->basedir = $arr[0];
 	$content .= "\$conf['basedir'] = \"$this->basedir\";\n";
-	
+	$content .= "\$conf['parentApp'] = \"$app\";\n";
 	$pwd = getcwd();
 	$content .= "\$conf['home'] = \"$pwd/\";\n";
 	
@@ -78,7 +78,12 @@ class Importer{
 	foreach($appParams  as $k => $v){
 	  $content .= "\$conf['$k'] = \"$v\";\n";
 	}
-	
+	$content .= "/*ATTENTION: By default this application is available to
+ * be exported and copied (its configuration)
+ * by others. If you do not want that, 
+ * turn the next option as false
+ */ 
+\$conf['export'] = true;\n\n";
 	//Components
   	foreach($compArr as $v){
   	  $component = $v['s'];
