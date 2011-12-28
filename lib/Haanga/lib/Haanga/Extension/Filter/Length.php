@@ -7,6 +7,7 @@ class Haanga_Extension_Filter_Length
     {
         $count  = hexec('count', $args[0]);
         $strlen = hexec('strlen', $args[0]);
+        $props  = hexec('count', hexec('array_keys', hexec('get_object_vars', $args[0])));
         $guess  = hexpr_cond(hexec('is_array', $args[0]), hexec('count', $args[0]),
                             hexec('strlen', $args[0]));
 
@@ -19,7 +20,7 @@ class Haanga_Extension_Filter_Length
             } else if  (is_string($value)) {
                 return $strlen;
             } else if  (is_object($value)) {
-                return count(array_keys($value));
+                return $props;
             } else {
                 return $guess;
             }
