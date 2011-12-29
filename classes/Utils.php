@@ -334,15 +334,20 @@ class Utils{
   
   public static function internalize($array){
   	global $conf;
+  	$firstKeyAppearance = true;
   	foreach($array as $key => $value){
   	  if(!isset($value['value'])){
   	  	$array[$key] = Utils::internalize($value);
+  	  	if($firstKeyAppearance){
+  	  	  $firstKeyAppearance = false;
+  	  	  $array['_first']=$array[$key];
+  	  	}
   	  }else{
   	  	if($value['uri'] == 1){
   	  	  $value['value'] = preg_replace("|^".$conf['ns']['local']."|", $conf['basedir'], $value['value']);
   	  	  $value['curie'] = Utils::uri2curie($value['value']);
   	  	  $array[$key] = $value;
-  	  	}
+  	  	}  	  	  	  	
   	  } 
   	}
   	return $array;
