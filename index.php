@@ -30,7 +30,7 @@ include_once('classes/Endpoint.php');
 include_once('classes/MetaDb.php');
 include_once('classes/Convert.php');
 $results = array();
-
+$first = array();
 $endpoints = array();
 $endpoints['local'] = new Endpoint($conf['endpoint']['local'], $conf['endpointParams']['config']);
 $metaDb = new MetaDb($conf['metadata']['db']['location']);
@@ -145,7 +145,7 @@ $base['ns'] = $conf['ns'];
 
 chdir($conf['model']['directory']);
 
-Utils::queryFile($modelFile, $endpoints['local'], $results);
+Utils::queryFile($modelFile, $endpoints['local'], $results, $first);
 $results = Utils::internalize($results); 
 $base['first'] = Utils::getFirsts($results);
 chdir("..");
