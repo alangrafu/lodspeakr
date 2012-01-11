@@ -338,15 +338,41 @@ class Utils{
   	foreach($array as $key => $value){
   	  if(!isset($value['value'])){
   	  	$array[$key] = Utils::internalize($value);
-  	  	if($firstKeyAppearance){
+  	  	/*if($firstKeyAppearance){
   	  	  $firstKeyAppearance = false;
   	  	  $array['_first']=$array[$key];
-  	  	}
+  	  	}*/
   	  }else{
   	  	if($value['uri'] == 1){
   	  	  $value['value'] = preg_replace("|^".$conf['ns']['local']."|", $conf['basedir'], $value['value']);
   	  	  $value['curie'] = Utils::uri2curie($value['value']);
   	  	  $array[$key] = $value;
+  	  	}  	  	  	  	
+  	  } 
+  	}
+  	return $array;
+  }
+  
+    public static function getFirsts($array){
+  	global $conf;
+  	$firstKeyAppearance = true;
+  	foreach($array as $key => $value){
+  	  if(!isset($value['value'])){
+  	  	$aux = Utils::internalize($value);
+  	  	if(isset($aux['0'])){
+  	  	$array[$key] = $aux['0'];
+  	  	}else{
+  	  	$array[$key] = $aux;
+  	  	}
+  	  	/*if($firstKeyAppearance){
+  	  	  $firstKeyAppearance = false;
+  	  	  $array['_first']=$array[$key];
+  	  	}*/
+  	  }else{
+  	  	if($value['uri'] == 1){
+  	  	  $value['value'] = preg_replace("|^".$conf['ns']['local']."|", $conf['basedir'], $value['value']);
+  	  	  $value['curie'] = Utils::uri2curie($value['value']);
+  	  	  $array = $value;
   	  	}  	  	  	  	
   	  } 
   	}
@@ -367,9 +393,11 @@ class Utils{
   	  'cache_dir' => $conf['home'].'cache/',
   	  ));
   	$r = $data;
-  	$vars = compact('base', 'r');
+  	$first = $base['first'];
+  	unset($base['first']);
+  	$vars = compact('base', 'r', 'first');
  	if($conf['debug']){
- 	  var_dump($r); 	
+ 	  var_dump($first); 	
  	}
 	if(is_file($base['view']['directory'].$view)){
 	  Haanga::Load($view, $vars);

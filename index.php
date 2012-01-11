@@ -147,6 +147,7 @@ chdir($conf['model']['directory']);
 
 Utils::queryFile($modelFile, $endpoints['local'], $results);
 $results = Utils::internalize($results); 
+$base['first'] = Utils::getFirsts($results);
 chdir("..");
 if(is_array($results)){
   $resultsObj = Convert::array_to_object($results);
