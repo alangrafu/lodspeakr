@@ -203,7 +203,7 @@ class Utils{
   	} 
   }
   
-  public static function queryDir($modelDir, &$r){
+  public static function queryDir($modelDir, &$r, &$f){
   	global $conf;
   	global $uri;
   	global $base;
@@ -238,10 +238,11 @@ class Utils{
   	  	  if($modelDir != $base['type']){
   	  	  	if(!isset($r[$modelDir]) ){
   	  	  	  $r[$modelDir] = array();
+  	  	  	  $f[$modelDir] = array();
   	  	  	}
-  	  	  	Utils::queryFile($modelFile, $e, $r[$modelDir]);
+  	  	  	Utils::queryFile($modelFile, $e, $r[$modelDir], $f[$modelDir]);
   	  	  }else{
-  	  	  	Utils::queryFile($modelFile, $e, $r);
+  	  	  	Utils::queryFile($modelFile, $e, $r, $f);
   	  	  }
  	  	}
   	  }
@@ -263,10 +264,11 @@ class Utils{
   }
   
   
-  public static function queryFile($modelFile, $e, &$rPointer){
+  public static function queryFile($modelFile, $e, &$rPointer, &$fPointer){
   	global $conf;
   	global $base;
   	global $results;
+  	global $first;
   	$uri = $base['this']['value'];
   	$data = array();
   	
@@ -285,7 +287,9 @@ class Utils{
   	  }
   	  $r2 = Convert::array_copy($results);
   	  $r = Convert::array_to_object($r2);
- 	  $vars = compact('uri', 'base', 'r');
+  	  $f = Convert::array_to_object($first);
+ 	  $vars = compact('uri', 'base', 'r', 'f');
+ 	  
  	  $fnc = Haanga::compile(file_get_contents($modelFile));
   	  $query = $fnc($vars, TRUE);
   	  if(is_object($base)){
@@ -300,9 +304,11 @@ class Utils{
   	  if($modelFile != $base['type']){
   	  	if(!isset($rPointer[$modelFile])){
   	  	  $rPointer[$modelFile] = array();
+  	  	  $first[$modelFile] = array();
   	  	}
   	  	if(Utils::getResultsType($query) == $conf['output']['select']){
   	  	  $rPointer[$modelFile] = Utils::sparqlResult2Obj($aux);
+  	  	  $fPointer[$modelFile] = $rPointer[$modelFile][0];
   	  	  /*if(sizeof($rPointer)>0){
   	  	  $rPointer[$modelFile]['first'] = $rPointer[$modelFile][0];
   	  	  }*/
@@ -312,6 +318,7 @@ class Utils{
   	  }else{
   	  	if(Utils::getResultsType($query) == $conf['output']['select']){
   	  	  $rPointer = Utils::sparqlResult2Obj($aux);
+  	  	  $fPointer[$modelFile] = $rPointer[0];
   	  	  /*if(sizeof($rPointer)>0){
   	  	  $rPointer['first'] = $rPointer[0];
   	  	  }*/
@@ -325,9 +332,9 @@ class Utils{
   	  	if(!isset($rPointer[$modelFile])){
   	  	  $rPointer[$modelFile] = array();
   	  	}
-  	  	Utils::queryDir($modelFile, $rPointer[$modelFile]);
+  	  	Utils::queryDir($modelFile, $rPointer[$modelFile], $fPointer[$modelFile]);
   	  }else{
-  	  	Utils::queryDir($modelFile, $rPointer);
+  	  	Utils::queryDir($modelFile, $rPointer, $fPointer);
   	  }
   	}
   }
@@ -353,27 +360,17 @@ class Utils{
   	return $array;
   }
   
-    public static function getFirsts($array){
+  public static function getFirsts($array){
   	global $conf;
   	$firstKeyAppearance = true;
   	foreach($array as $key => $value){
   	  if(!isset($value['value'])){
-  	  	$aux = Utils::internalize($value);
+  	  	$aux = Utils::getFirsts($value);
   	  	if(isset($aux['0'])){
-  	  	$array[$key] = $aux['0'];
+  	  	  $array[$key] = $aux['0'];
   	  	}else{
-  	  	$array[$key] = $aux;
+  	  	  $array[$key] = $aux;
   	  	}
-  	  	/*if($firstKeyAppearance){
-  	  	  $firstKeyAppearance = false;
-  	  	  $array['_first']=$array[$key];
-  	  	}*/
-  	  }else{
-  	  	if($value['uri'] == 1){
-  	  	  $value['value'] = preg_replace("|^".$conf['ns']['local']."|", $conf['basedir'], $value['value']);
-  	  	  $value['curie'] = Utils::uri2curie($value['value']);
-  	  	  $array = $value;
-  	  	}  	  	  	  	
   	  } 
   	}
   	return $array;
@@ -393,11 +390,11 @@ class Utils{
   	  'cache_dir' => $conf['home'].'cache/',
   	  ));
   	$r = $data;
-  	$first = $base['first'];
+  	$f = $base['first'];
   	unset($base['first']);
-  	$vars = compact('base', 'r', 'first');
+  	$vars = compact('base', 'r', 'f');
  	if($conf['debug']){
- 	  var_dump($first); 	
+ 	  var_dump($vars); 	
  	}
 	if(is_file($base['view']['directory'].$view)){
 	  Haanga::Load($view, $vars);
