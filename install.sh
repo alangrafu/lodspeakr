@@ -103,7 +103,7 @@ LODSPEAKR_HOME=`pwd`/
 
 #If you want to add/overrid a namespace, add it here
 \$conf['ns']['local']   = '$ns';
-
+$extra
 ?>" 
 echo "$content" > $settings_file
 chmod 644 $settings_file
