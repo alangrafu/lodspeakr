@@ -22,7 +22,8 @@ while [ "$everything_ok" != "y" ]
 do
   echo "==Basic Information=="
   echo "lodspeakr needs to gather some basic information first to configure the installation properly"
-  echo    "Type the base url for your data, including a final / "
+  echo ""
+  echo    "Type the base url where LDOSPeaKr will be located, including a final / "
   echo -n "(default '$basedir'): "
   read -u 1 aux_basedir
   echo ""
@@ -42,6 +43,16 @@ do
   	ns=$aux_ns
   fi
 
+  external=""
+  extra=""
+  if [[ "$basedir" =~ ^"$ns" ]]; then
+  	external="false"
+  else
+  	external="true"
+  	extra="\$conf['ns']['base']   = '$basedir';"
+  fi
+
+  
   
   echo    "What is the URL of your SPARQL endpoint?"
   echo -n "(default $endpoint): "
@@ -81,7 +92,7 @@ LODSPEAKR_HOME=`pwd`/
 \$conf['home'] = '$LODSPEAKR_HOME';
 \$conf['basedir'] = '$basedir';
 \$conf['debug'] = false;
-\$conf['mirror_external_uris'] = false;
+\$conf['mirror_external_uris'] = $external;
 
 /*ATTENTION: By default this application is available to
  * be exported and copied (its configuration)

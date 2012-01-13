@@ -163,10 +163,10 @@ class Utils{
   	  global $uri;
   	  global $localUri;
   	  $t = array();
-  	  $t['s']      = $uri;
+  	  $t['s']      = $localUri;
   	  $t['s_type'] = 'uri';
   	  $t['p']      = "http://www.w3.org/2002/07/owl#sameAs";
-  	  $t['o']      = $localUri;
+  	  $t['o']      = $uri;
   	  $t['o_type'] = 'uri';  	 
   	  array_push($triples, $t);
   	  $t['p']      = "http://www.w3.org/2000/10/swap/pim/contact#preferredURI";

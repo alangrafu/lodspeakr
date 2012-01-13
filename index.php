@@ -96,7 +96,7 @@ if($res == $localUri){
 
 $uri = $res;
 if($conf['mirror_external_uris']){
-  $localUri = preg_replace("|^".$conf['basedir']."|", $conf['ns']['local'], $uri);
+  $localUri = preg_replace("|^".$conf['ns']['local']."|", $conf['basedir'], $res);
 }
 $extension = Utils::getExtension($format); 
 
