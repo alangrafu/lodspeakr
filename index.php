@@ -108,28 +108,8 @@ $acceptContentType = $format;
 //Check if files for model and view exist
 $t=Queries::getClass($uri, $endpoints['local']);
 
-//Defining default views and models
-$curieType="";
-$modelFile = $conf['model']['default'].$conf['model']['extension'].".".$extension;
-$viewFile = $conf['view']['default'].$conf['view']['extension'].".".$extension;
+list($modelFile, $viewFile) = Utils::getModelandView($t, $extension);
 
-//Get the first class available
-/* TODO: Allow user to priotize 
- * which class should be used
- * Example: URI is foaf:Person and ex:Student
- *          If both, prefer ex:Student
- */
-
-foreach($t as $v){
-  $curieType = Utils::uri2curie($v);
-  $auxViewFile  = $conf['view']['directory'].$curieType.$conf['view']['extension'].".".$extension;
-  $auxModelFile = $conf['model']['directory'].$curieType.$conf['model']['extension'].".".$extension;
-  if(file_exists($auxModelFile) && file_exists($auxViewFile) && $curieType != null){
-  	$viewFile = $curieType.$conf['view']['extension'].".".$extension;
-  	$modelFile = $curieType.$conf['model']['extension'].".".$extension;
-  	break;
-  }
-}
 $base = $conf['view']['standard'];
 $base['type'] = $modelFile;
 $base['this']['value'] = $uri;
