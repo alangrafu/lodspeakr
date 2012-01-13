@@ -302,7 +302,6 @@ class Utils{
   	  $r = Convert::array_to_object($r2);
   	  $f = Convert::array_to_object($first);
  	  $vars = compact('uri', 'base', 'r', 'f');
- 	  
  	  $fnc = Haanga::compile(file_get_contents($modelFile));
   	  $query = $fnc($vars, TRUE);
   	  if(is_object($base)){
