@@ -51,7 +51,7 @@ class Importer{
   	$app = $appArr[0]['s'];
   	$this->external_basedir = $app;
   	$compArr = $this->search($triples, null, SKOS.'broader', $app);
-  	$content = "<?\n\$conf['debug'] = false;\n\$conf['use_external_uris'] = true;\n\n";
+  	$content = "<?\n\$conf['debug'] = false;\n\$conf['mirror_external_uris'] = true;\n\n";
   	
 	$this->basedir =  preg_replace('/import$/', '', (!empty($_SERVER['HTTPS'])) ? "https://".$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'] : "http://".$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']);
 	

@@ -22,7 +22,8 @@ while [ "$everything_ok" != "y" ]
 do
   echo "==Basic Information=="
   echo "lodspeakr needs to gather some basic information first to configure the installation properly"
-  echo    "Type the base url for your data, including a final / "
+  echo ""
+  echo    "Type the base url where LDOSPeaKr will be located, including a final / "
   echo -n "(default '$basedir'): "
   read -u 1 aux_basedir
   echo ""
@@ -42,6 +43,16 @@ do
   	ns=$aux_ns
   fi
 
+  external=""
+  extra=""
+  if [[ "$basedir" =~ ^"$ns" ]]; then
+  	external="false"
+  else
+  	external="true"
+  	extra="\$conf['ns']['base']   = '$basedir';"
+  fi
+
+  
   
   echo    "What is the URL of your SPARQL endpoint?"
   echo -n "(default $endpoint): "
@@ -81,7 +92,7 @@ LODSPEAKR_HOME=`pwd`/
 \$conf['home'] = '$LODSPEAKR_HOME';
 \$conf['basedir'] = '$basedir';
 \$conf['debug'] = false;
-\$conf['use_external_uris'] = false;
+\$conf['mirror_external_uris'] = $external;
 
 /*ATTENTION: By default this application is available to
  * be exported and copied (its configuration)
@@ -92,7 +103,7 @@ LODSPEAKR_HOME=`pwd`/
 
 #If you want to add/overrid a namespace, add it here
 \$conf['ns']['local']   = '$ns';
-
+$extra
 ?>" 
 echo "$content" > $settings_file
 chmod 644 $settings_file
@@ -104,16 +115,14 @@ cp $root_htaccess $parent_htaccess
 
 #Creating symlinks for turtle and ntriples
 cd views
-ln -s default.view.rdf default.view.nt
-ln -s default.view.rdf default.view.ttl
-ln -s default.view.rdf default.view.json
-ln -s owl:Class.view.html rdfs:Class.view.html
+ln -s rdfs:Resource.view.rdf rdfs:Resource.view.nt
+ln -s rdfs:Resource.view.rdf rdfs:Resource.view.ttl
+ln -s rdfs:Resource.view.rdf rdfs:Resource.view.json
 
 cd ../models
-ln -s default.model.rdf default.model.nt
-ln -s default.model.rdf default.model.ttl
-ln -s default.model.rdf default.model.json
-ln -s owl:Class.model.html rdfs:Class.view.html
+ln -s rdfs:Resource.model.rdf rdfs:Resource.model.nt
+ln -s rdfs:Resource.model.rdf rdfs:Resource.model.ttl
+ln -s rdfs:Resource.model.rdf rdfs:Resource.model.json
 
 cd ..
 

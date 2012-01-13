@@ -87,7 +87,7 @@ class Utils{
   	  	foreach($aux as $w){
   	  	  $row = array();
   	  	  foreach($w as $k => $v){
-  	  	  		
+  	  	  	
   	  	  	$row[$k]['value'] = $v['value'];
   	  	  	if($v['type'] == 'uri'){
   	  	  	  $row[$k]['curie'] = Utils::uri2curie($v['value']);
@@ -159,6 +159,19 @@ class Utils{
   	$parser = ARC2::getRDFParser();
   	$parser->parse($conf['basedir'], $data);
   	$triples = $parser->getTriples();
+  	if($conf['mirror_external_uris']){
+  	  global $uri;
+  	  global $localUri;
+  	  $t = array();
+  	  $t['s']      = $localUri;
+  	  $t['s_type'] = 'uri';
+  	  $t['p']      = "http://www.w3.org/2002/07/owl#sameAs";
+  	  $t['o']      = $uri;
+  	  $t['o_type'] = 'uri';  	 
+  	  array_push($triples, $t);
+  	  $t['p']      = "http://www.w3.org/2000/10/swap/pim/contact#preferredURI";
+  	  array_push($triples, $t);
+  	}
   	$ser;
   	switch ($extension){
   	case 'ttl':
@@ -289,7 +302,6 @@ class Utils{
   	  $r = Convert::array_to_object($r2);
   	  $f = Convert::array_to_object($first);
  	  $vars = compact('uri', 'base', 'r', 'f');
- 	  
  	  $fnc = Haanga::compile(file_get_contents($modelFile));
   	  $query = $fnc($vars, TRUE);
   	  if(is_object($base)){
@@ -346,11 +358,11 @@ class Utils{
   	  if(!isset($value['value'])){
   	  	$array[$key] = Utils::internalize($value);
   	  	/*if($firstKeyAppearance){
-  	  	  $firstKeyAppearance = false;
-  	  	  $array['_first']=$array[$key];
+  	  	$firstKeyAppearance = false;
+  	  	$array['_first']=$array[$key];
   	  	}*/
   	  }else{
-  	  	if($value['uri'] == 1){
+  	  	if(isset($value['uri']) && $value['uri'] == 1){
   	  	  $value['value'] = preg_replace("|^".$conf['ns']['local']."|", $conf['basedir'], $value['value']);
   	  	  $value['curie'] = Utils::uri2curie($value['value']);
   	  	  $array[$key] = $value;
@@ -390,9 +402,9 @@ class Utils{
   	  'cache_dir' => $conf['home'].'cache/',
   	  ));
   	$r = $data;
-  	$f = $base['first'];
+  	$first = $base['first'];
   	unset($base['first']);
-  	$vars = compact('base', 'r', 'f');
+  	$vars = compact('base', 'r', 'first');
  	if($conf['debug']){
  	  var_dump($vars); 	
  	}
@@ -405,6 +417,39 @@ class Utils{
   	
   }
   
+  public static function getModelandView($t, $extension){  	
+  	global $conf;
+  	//Defining default views and models
+  	$curieType="";
+  	$modelFile = $conf['model']['default'].$conf['model']['extension'].".".$extension;
+  	$viewFile = $conf['view']['default'].$conf['view']['extension'].".".$extension;
+  	
+  	//Get the first class available
+  	/* TODO: Allow user to priotize 
+  	* which class should be used
+  	* Example: URI is foaf:Person and ex:Student
+  	*          If both, prefer ex:Student
+  	*/
+  	$typesAndValues = array();
+  	foreach($t as $v){
+  	  $curie = Utils::uri2curie($v);
+  	  $typesAndValues[$curie] = 0;
+  	  if(isset($conf['types']['priorities'][$curie]) && $conf['types']['priorities'][$curie] >= 0){
+  	  	$typesAndValues[$curie] = $conf['types']['priorities'][$curie];
+  	  }
+  	}
+  	arsort($typesAndValues);
+  	foreach($typesAndValues as $v => $w){
+  	  $auxViewFile  = $conf['view']['directory'].$v.$conf['view']['extension'].".".$extension;
+  	  $auxModelFile = $conf['model']['directory'].$v.$conf['model']['extension'].".".$extension;
+  	  if(file_exists($auxModelFile) && file_exists($auxViewFile) && $v != null){
+  	  	$viewFile = $v.$conf['view']['extension'].".".$extension;
+  	  	$modelFile = $v.$conf['model']['extension'].".".$extension;
+  	  	break;
+  	  }
+  	}
+  	return array($modelFile, $viewFile);
+  }
   
 }
 
