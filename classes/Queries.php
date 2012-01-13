@@ -31,6 +31,9 @@ class Queries{
   	  echo $ex->getMessage();
   	}
   	$result = array();
+  	if(sizeof($r['results']['bindings']) == 0){
+  	  return 'http://www.w3.org/2000/01/rdf-schema#Resource'; //default value if no type is present
+  	}
   	foreach($r['results']['bindings'] as $v){
   	  $result[]= $v['class']['value'];
   	}

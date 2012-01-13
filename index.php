@@ -69,7 +69,7 @@ if($uri == $conf['basedir']){
   $sp->execute($uri, $context);
   exit(0);
 }
-if($conf['use_external_uris']){
+if($conf['mirror_external_uris']){
   $uri = $conf['ns']['local'].$_GET['q'];
   $localUri = $conf['basedir'].$_GET['q'];
 } 
@@ -95,7 +95,7 @@ if($res == $localUri){
 }
 
 $uri = $res;
-if($conf['use_external_uris']){
+if($conf['mirror_external_uris']){
   $localUri = preg_replace("|^".$conf['basedir']."|", $conf['ns']['local'], $uri);
 }
 $extension = Utils::getExtension($format); 

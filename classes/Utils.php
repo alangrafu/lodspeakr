@@ -159,6 +159,19 @@ class Utils{
   	$parser = ARC2::getRDFParser();
   	$parser->parse($conf['basedir'], $data);
   	$triples = $parser->getTriples();
+  	if($conf['mirror_external_uris']){
+  	  global $uri;
+  	  global $localUri;
+  	  $t = array();
+  	  $t['s']      = $uri;
+  	  $t['s_type'] = 'uri';
+  	  $t['p']      = "http://www.w3.org/2002/07/owl#sameAs";
+  	  $t['o']      = $localUri;
+  	  $t['o_type'] = 'uri';  	 
+  	  array_push($triples, $t);
+  	  $t['p']      = "http://www.w3.org/2000/10/swap/pim/contact#preferredURI";
+  	  array_push($triples, $t);
+  	}
   	$ser;
   	switch ($extension){
   	case 'ttl':
@@ -390,9 +403,9 @@ class Utils{
   	  'cache_dir' => $conf['home'].'cache/',
   	  ));
   	$r = $data;
-  	$f = $base['first'];
+  	$first = $base['first'];
   	unset($base['first']);
-  	$vars = compact('base', 'r', 'f');
+  	$vars = compact('base', 'r', 'first');
  	if($conf['debug']){
  	  var_dump($vars); 	
  	}

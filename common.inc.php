@@ -14,11 +14,11 @@ include_once('namespaces.php');
 
 $conf['model']['directory'] = 'models/'; #include trailing slash!
 $conf['model']['extension'] = '.model';
-$conf['model']['default'] = 'default';
+$conf['model']['default'] = 'rdfs:Resource';
 
 $conf['view']['directory'] = 'views/'; #include trailing slash!
 $conf['view']['extension'] = '.view';
-$conf['view']['default'] = 'default';
+$conf['view']['default'] = 'rdfs:Resource';
 
 $conf['static']['directory'] = 'static/'; #include trailing slash!
 
