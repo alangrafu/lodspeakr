@@ -11,24 +11,21 @@ endpoint="http://localhost/sparql?"
 everything_ok="n"
 
 
-if [ -e "$parent_htaccess" ]
-then
+if [ -e "$parent_htaccess" ]; then
   echo ".htaccess file found in parent directory."
   echo "Please remove it to continue the installation."
   exit
 fi
 
-while [ "$everything_ok" != "y" ]
-do
-  echo "==Basic Information=="
+while [ "$everything_ok" != "y" ]; do
+  echo "== Basic Information =="
   echo "lodspeakr needs to gather some basic information first to configure the installation properly"
-  echo ""
+  echo 
   echo    "Type the base url where LDOSPeaKr will be located, including a final / "
   echo -n "(default '$basedir'): "
   read -u 1 aux_basedir
-  echo ""
-  if [ "$aux_basedir" != "" ] 
-  then
+  echo 
+  if [ "$aux_basedir" != "" ]; then
   	basedir=$aux_basedir
   fi
 
@@ -63,7 +60,8 @@ do
   	endpoint=$aux_endpoint
   fi
 
-  echo "==Configuration=="
+  echo "== Configuration =="
+   echo
   echo "Ok, so I have the following configuration:"
   echo "Base URL is $basedir"
   echo "lodspeakr is installed at $basedir$lodspeakrdir"
@@ -76,8 +74,7 @@ do
   
 done
 
- if [ -e "$settings_file" ]
-  then
+ if [ -e "$settings_file" ]; then
   	ts=`date +%s`
   	settings_backup="$settings_file.$ts"
   	echo "Making a backup of existing settings at $settings_backup"
@@ -128,9 +125,9 @@ cd ..
 
 mkdir cache
 
-echo ""
-echo "***ATTENTION***"
-echo "Remember to give permissions to the server to write in cache/ and meta/ dirs"
+echo
+echo "*** ATTENTION ***"
+echo
+echo "LODSPeaKr needs the web server to have write permissions for lodspeakr/cache/ and lodspeakr/meta/."
+echo "Please give the server write permissions (e.g. chmod 777 lodspeakr/cache/ lodspeakr/meta/)"
 echo "Otherwise LODSPeaKr won't work"
-
-
