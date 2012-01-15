@@ -65,12 +65,13 @@ while [ "$everything_ok" != "y" ]; do
   echo "== Configuration =="
   echo
   echo "Ok, so I have the following configuration:"
+  echo
   echo "Base URL is                        $basedir"
   echo "lodspeakr is installed at          $basedir$home"
   echo "The local namespace is             $ns"
   echo "Your SPARQL endpoint is located at $endpoint"
 
-  echo -n "Is everything ok (y/n)?"
+  echo -n "Complete installation? (y/n)?"
   read -u 1 everything_ok
 done
 
@@ -131,4 +132,3 @@ echo
 echo "LODSPeaKr needs the web server to have write permissions for lodspeakr/cache/ and lodspeakr/meta/."
 echo "Please give the server write permissions (e.g. chmod 777 lodspeakr/cache/ lodspeakr/meta/)"
 echo "Otherwise LODSPeaKr won't work"
-
