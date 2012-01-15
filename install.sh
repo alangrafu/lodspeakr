@@ -128,8 +128,6 @@ cd ..
 mkdir cache
 
 echo
-echo "*** ATTENTION ***"
-echo
+echo "                                      *** ATTENTION ***"
 echo "LODSPeaKr needs the web server to have write permissions for lodspeakr/cache/ and lodspeakr/meta/."
-echo "Please give the server write permissions (e.g. chmod 777 lodspeakr/cache/ lodspeakr/meta/)"
-echo "Otherwise LODSPeaKr won't work"
+echo "Please give the server write permissions (e.g. chmod 777 lodspeakr/cache/ lodspeakr/meta/) Otherwise, LODSPeaKr will not work."
