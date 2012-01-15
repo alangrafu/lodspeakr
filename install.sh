@@ -67,14 +67,13 @@ while [ "$everything_ok" != "y" ]; do
   fi
 
   echo "== Configuration =="
-   echo
+  echo
   echo "Ok, so I have the following configuration:"
-  echo "Base URL is $basedir"
-  echo "lodspeakr is installed at $basedir$lodspeakrdir"
-  echo "The local namespace is $ns"
+  echo "Base URL is                        $basedir"
+  echo "lodspeakr is installed at          $basedir$lodspeakrdir"
+  echo "The local namespace is             $ns"
   echo "Your SPARQL endpoint is located at $endpoint"
 
-  
   echo -n "Is everything ok (y/n)?"
   read -u 1 everything_ok
   
