@@ -37,7 +37,7 @@ while [ "$everything_ok" != "y" ]; do
 
 
   ns=$basedir
-  echo    "(2/3) Type the local namespace you will use "
+  echo    "(2/3) What local namespace you will use?"
   echo -n "(default '$ns'): "
   read -u 1 aux_ns
   echo ""
