@@ -19,13 +19,14 @@ if [ -e "$parent_htaccess" ]; then
   exit
 fi
 
+back_one=`cd .. 2>/dev/null && pwd`
 while [ "$everything_ok" != "y" ]; do
   echo
   echo "== Basic Information =="
   echo
   echo "LODSPeaKr needs to know three (3) URIs to minimally configure itself:"
   echo 
-  echo    "(1/3) At what URL will `pwd` be available? Include a file '/' (e.g. http://localhost/`basename \`pwd\``/)"
+  echo    "(1/3) At what URL will `pwd` be available? Include a file '/' (e.g. http://localhost/`basename $back_one`/`basename \`pwd\``/)"
   echo -n "(default '$basedir'): "
   read -u 1 aux_basedir
   echo 
