@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+#
+#
 
 root_htaccess="root.htaccess"
 parent_htaccess="../.htaccess"
@@ -10,9 +12,9 @@ ns=$basedir
 endpoint="http://localhost/sparql?"
 everything_ok="n"
 
-
 if [ -e "$parent_htaccess" ]; then
-  echo ".htaccess file found in parent directory."
+  echo
+  echo "`dirname \`pwd\``/.htaccess already exists."
   echo "Please remove it to continue the installation."
   exit
 fi
