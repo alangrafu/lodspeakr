@@ -7,8 +7,7 @@ Simplest Installation
 
 Just run
 
-            bash < <(curl http://lodspeakr.org/install)
-
+            bash < <(curl -s http://lodspeakr.org/install)
 
 Simple Installation
 -------------------
