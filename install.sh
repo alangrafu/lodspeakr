@@ -72,7 +72,7 @@ while [ "$everything_ok" != "y" ]; do
   echo "Your SPARQL endpoint is located at $endpoint"
 
   echo
-  echo -n "Complete installation? (y/n)?"
+  echo -n "Complete installation? (y/n)? "
   read -u 1 everything_ok
 done
 
