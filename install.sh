@@ -20,10 +20,12 @@ if [ -e "$parent_htaccess" ]; then
 fi
 
 while [ "$everything_ok" != "y" ]; do
+  echo
   echo "== Basic Information =="
-  echo "lodspeakr needs to gather some basic information first to configure the installation properly"
+  echo
+  echo "LODSPeaKr needs to know three (3) URIs to minimally configure itself:"
   echo 
-  echo    "Type the base url where LDOSPeaKr will be located, including a final / "
+  echo    "(1/3) What URL is `pwd` available at (e.g. http://localhost/`basename \`pwd\``)? Include a final / "
   echo -n "(default '$basedir'): "
   read -u 1 aux_basedir
   echo 
@@ -33,7 +35,7 @@ while [ "$everything_ok" != "y" ]; do
 
 
   ns=$basedir
-  echo    "Type the local namespace you will use "
+  echo    "(2/3) Type the local namespace you will use "
   echo -n "(default '$ns'): "
   read -u 1 aux_ns
   echo ""
@@ -53,7 +55,7 @@ while [ "$everything_ok" != "y" ]; do
 
   
   
-  echo    "What is the URL of your SPARQL endpoint?"
+  echo    "(3/3) What is the URL of your SPARQL endpoint?"
   echo -n "(default $endpoint): "
   read -u 1 aux_endpoint
   echo ""
