@@ -7,7 +7,7 @@ parent_htaccess="../.htaccess"
 settings_file="settings.inc.php"
 
 basedir="http://localhost/my/data/"
-lodspeakrdir="lodspeakr"
+home=`basename \`pwd\`` # 'lodspeakr', the directory from git clone
 ns=$basedir
 endpoint="http://localhost/sparql?"
 everything_ok="n"
@@ -20,19 +20,20 @@ if [ -e "$parent_htaccess" ]; then
 fi
 
 back_one=`cd .. 2>/dev/null && pwd`
+parent=`basename $back_one`
 while [ "$everything_ok" != "y" ]; do
   echo
   echo "== Basic Information =="
   echo
   echo "LODSPeaKr needs to know three (3) URIs to minimally configure itself:"
   echo 
-  echo    "(1/3) At what URL will `pwd` be available? (e.g. http://localhost/`basename $back_one`/`basename \`pwd\``/)"
+  echo    "(1/3) At what URL will `pwd` be available? (e.g. http://localhost/$parent/$home/)"
   echo -n "(default '$basedir'): "
   read -u 1 aux_basedir
   echo 
   aux_basedir="`echo $aux_basedir | sed 's/\/$//'`/" # remove any ending slash and append one.
   if [ "$aux_basedir" != "/" ]; then
-    basedir=$aux_basedir
+    basedir=`dirname $aux_basedir`
   fi
 
 
@@ -70,7 +71,7 @@ while [ "$everything_ok" != "y" ]; do
   echo
   echo "Ok, so I have the following configuration:"
   echo "Base URL is                        $basedir"
-  echo "lodspeakr is installed at          $basedir$lodspeakrdir"
+  echo "lodspeakr is installed at          $basedir$home"
   echo "The local namespace is             $ns"
   echo "Your SPARQL endpoint is located at $endpoint"
 
