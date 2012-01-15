@@ -25,7 +25,7 @@ while [ "$everything_ok" != "y" ]; do
   echo
   echo "LODSPeaKr needs to know three (3) URIs to minimally configure itself:"
   echo 
-  echo    "(1/3) What URL is `pwd` available at (e.g. http://localhost/`basename \`pwd\``)? Include a final / "
+  echo    "(1/3) At what URL will `pwd` be available? Include a file '/' (e.g. http://localhost/`basename \`pwd\``/)"
   echo -n "(default '$basedir'): "
   read -u 1 aux_basedir
   echo 
