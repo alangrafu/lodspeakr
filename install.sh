@@ -71,8 +71,8 @@ while [ "$everything_ok" != "y" ]; do
   echo "The local namespace is             $ns"
   echo "Your SPARQL endpoint is located at $endpoint"
 
-  echo -n "Complete installation? (y/n)?"
   echo
+  echo -n "Complete installation? (y/n)?"
   read -u 1 everything_ok
 done
 
