@@ -131,4 +131,13 @@ echo
 echo "                                      *** ATTENTION ***"
 echo
 echo "LODSPeaKr needs the web server to have write permissions for lodspeakr/cache/ and lodspeakr/meta/."
-echo "Please give the server write permissions (e.g. chmod 777 lodspeakr/cache/ lodspeakr/meta/) Otherwise, LODSPeaKr will not work."
+echo
+echo
+echo "Common ways of doing this:"
+echo " chown -R www-apache lodspeakr/cache lodspeakr/meta (find the name of the apache user in your system)"
+echo " chmod -R g+w lodspeakr/cache lodspeakr/meta (if you have a group in common with the apache user)"
+echo " chmod -R 777 lodspeakr/cache lodspeakr/meta (highly discouraged but useful to test when everything fails. It shouldn't be used in production sites)"
+echo
+echo "Please give the server write permissions. Otherwise, LODSPeaKr will not work."
+echo
+echo "You can now visit $basedir to navigate through your data."
