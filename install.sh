@@ -33,38 +33,33 @@ while [ "$everything_ok" != "y" ]; do
   echo 
   aux_basedir="`echo $aux_basedir | sed 's/\/$//'`/" # remove any ending slash and append one.
   if [ "$aux_basedir" != "/" ]; then
-    basedir=`dirname $aux_basedir`
+    basedir=`dirname $aux_basedir | sed 's/\/$//'`/
   fi
-
 
   ns=$basedir
   echo    "(2/3) What local namespace you will use?"
   echo -n "(default '$ns'): "
   read -u 1 aux_ns
   echo ""
-  if [ "$aux_ns" != "" ] 
-  then
-   ns=$aux_ns
+  if [ "$aux_ns" != "" ]; then
+    ns=$aux_ns
   fi
 
   external=""
   extra=""
   if [[ "$basedir" =~ ^"$ns" ]]; then
-   external="false"
+    external="false"
   else
-   external="true"
-   extra="\$conf['ns']['base']   = '$basedir';"
+    external="true"
+    extra="\$conf['ns']['base']   = '$basedir';"
   fi
-
-  
   
   echo    "(3/3) What is the URL of your SPARQL endpoint?"
   echo -n "(default $endpoint): "
   read -u 1 aux_endpoint
   echo ""
-  if [ "$aux_endpoint" != "" ] 
-  then
-   endpoint=$aux_endpoint
+  if [ "$aux_endpoint" != "" ]; then
+    endpoint=$aux_endpoint
   fi
 
   echo "== Configuration =="
@@ -77,15 +72,14 @@ while [ "$everything_ok" != "y" ]; do
 
   echo -n "Is everything ok (y/n)?"
   read -u 1 everything_ok
-  
 done
 
- if [ -e "$settings_file" ]; then
-   ts=`date +%s`
-   settings_backup="$settings_file.$ts"
-   echo "Making a backup of existing settings at $settings_backup"
-    mv $settings_file $settings_backup
-  fi
+if [ -e "$settings_file" ]; then
+  ts=`date +%s`
+  settings_backup="$settings_file.$ts"
+  echo "Making a backup of existing settings at $settings_backup"
+  mv $settings_file $settings_backup
+fi
   
 LODSPEAKR_HOME=`pwd`/
   
