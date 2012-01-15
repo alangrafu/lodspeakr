@@ -106,9 +106,9 @@ $extra
 ?>" 
 echo "$content" > $settings_file
 chmod 644 $settings_file
-echo "New configuration file created"
+echo "Created new configuration file: $settings_file"
 echo ""
-echo "WARNING: Copying $root_htaccess as .htacess in parent directory"
+echo "WARNING: Copying $root_htaccess as .htaccess in parent directory"
 echo ""
 cp $root_htaccess $parent_htaccess
 
