@@ -14,11 +14,11 @@ include_once('namespaces.php');
 
 $conf['model']['directory'] = 'models/'; #include trailing slash!
 $conf['model']['extension'] = '.model';
-$conf['model']['default'] = 'default';
+$conf['model']['default'] = 'rdfs:Resource';
 
 $conf['view']['directory'] = 'views/'; #include trailing slash!
 $conf['view']['extension'] = '.view';
-$conf['view']['default'] = 'default';
+$conf['view']['default'] = 'rdfs:Resource';
 
 $conf['static']['directory'] = 'static/'; #include trailing slash!
 
@@ -37,11 +37,13 @@ $conf['special']['class'] = 'classes/BasicSpecialFunction.php';
 
 //Frontpage when user goes to http://example.org/
 $conf['root'] = 'special/index';
+$conf['extension_connector'] = '.';
+
+//Priority for rdfs:Resource (default). Priorities should be >=0
+$conf['types']['priorities']['rdfs:Resource'] = -1;
 
 //Debug
 $conf['debug'] = false;
-
-$conf['extension_connector'] = '.';
 
 
 include_once('settings.inc.php');

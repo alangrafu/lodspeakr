@@ -31,7 +31,11 @@ class Exporter{
   	array_push($triples, $t);
   	$t['o']      = LS.'Application';	
   	array_push($triples, $t);
-  	
+  	if($conf['parentApp'] != NULL){
+  	 	$t['p'] = OPMV.'wasDerivedFrom';
+  	 	$t['o'] = $conf['parentApp'];
+  	 	array_push($triples, $t);
+  	}
   	
   	$t['p']      = LS.'usedParameter';
   	$t['o']      = uniqid("_:b");
