@@ -27,14 +27,13 @@ while [ "$everything_ok" != "y" ]; do
   echo
   echo "LODSPeaKr needs to know three (3) URIs to minimally configure itself:"
   echo 
-  echo    "(1/3) At what URL will `pwd` be available? (e.g. http://localhost/$parent/$home/)"
+  echo    "(1/3) At what URL will `pwd` be available? (e.g. http://localhost/$parent/)"
+  echo    "**Note** DO NOT include 'lodspeakr/' in the URL"
   echo -n "(default '$basedir'): "
   read -u 1 aux_basedir
   echo 
   aux_basedir="`echo $aux_basedir | sed 's/\/$//'`/" # remove any ending slash and append one.
-  if [ "$aux_basedir" != "/" ]; then
-    basedir=`dirname $aux_basedir | sed 's/\/$//'`/
-  fi
+  basedir=$aux_basedir
 
   ns=$basedir
   echo    "(2/3) What local namespace you will use?"
