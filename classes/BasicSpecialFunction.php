@@ -46,21 +46,6 @@ class SpecialFunction extends AbstractSpecialFunction{
   	  $endpoints = $context['endpoints'];
   	  array_pop($params);
   	  array_shift($params);
-  	  //$query = file_get_contents($conf['model']['directory'].$modelFile);
-  	  /*$queryHeader = "";
-  	  $prefixHeader = array();
-  	  for($i=0;$i<sizeof($params);$i++){
-  	  $auxPrefix = Utils::getPrefix($params[$i]);
-  	  if($auxPrefix['ns'] != NULL){
-  	  $prefixHeader[$auxPrefix['ns']] = $auxPrefix['prefix'];
-  	  }
-  	  $query = preg_replace("|%".$i."|", $params[$i], $query);
-  	  }
-  	  foreach($prefixHeader as $n => $p){
-  	  $queryHeader .= "PREFIX $p: <$n> \n";
-  	  }
-  	  $data['query'] =$queryHeader . $query;*/
-  	  //$e->query($data['query'], Utils::getResultsType($query));
   	  
   	  $prefixHeader = array();
   	  for($i=0;$i<sizeof($params);$i++){
@@ -97,7 +82,7 @@ class SpecialFunction extends AbstractSpecialFunction{
   	  $base['model']['directory'] = $conf['home'].$conf['model']['directory'];
   	  chdir($conf['model']['directory']);
   	  Utils::queryFile($modelFile, $endpoints['local'], $data);
-  	  chdir("..");
+  	  chdir($conf['home']);
   	  $data = Utils::internalize($data);
 
   	  if(is_array($data)){

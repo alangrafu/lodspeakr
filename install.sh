@@ -27,7 +27,7 @@ while [ "$everything_ok" != "y" ]; do
   echo
   echo "LODSPeaKr needs to know three (3) URIs to minimally configure itself:"
   echo 
-  echo    "(1/3) At what URL will `pwd` be available? (e.g. http://localhost/$parent/)"
+  echo    "(1/3) At what URL will `pwd |sed -e 's/lodspeakr$//'` be available? (e.g. http://localhost/$parent/)"
   echo    "**Note** DO NOT include 'lodspeakr/' in the URL"
   echo -n "(default '$basedir'): "
   read -u 1 aux_basedir

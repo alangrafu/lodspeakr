@@ -12,7 +12,7 @@ class Utils{
   
   public static function send404($uri){
   	header("HTTP/1.0 404 Not Found");
-  	echo "I could not find ".$uri." or information about it.\n\n";
+  	echo "LODSPeaKr could not find ".$uri." or information about it.\n\n";
   	exit(0);
   }
   
@@ -272,7 +272,7 @@ class Utils{
   	  	Utils::queryDir($v, $r);
   	  }
   	}  	
-  	chdir("..");
+  	chdir($conf['home']);
   	//return $data;
   }
   
