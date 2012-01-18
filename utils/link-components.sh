@@ -22,8 +22,10 @@
 #  WARNING: not linking models because it exists.
 #  WARNING: not linking views because it exists.
 
+essentials='settings.inc.php .htaccess models views'
 if [ $# -lt 1 ]; then
    echo "usage: `basename $0` other-lodspeakr-directory"
+   echo "  soft links the following from other-lodspeakr-director to current directory: $essentials"
    exit 1 
 fi
 
@@ -33,7 +35,7 @@ if [[ ! -d $otherDir && "$otherDir" != "/" ]]; then
    exit 1
 fi
 
-for essential in settings.inc.php .htaccess models views; do
+for essential in $essentials; do
    if [[ ! -e $essential && -e $otherDir/$essential ]]; then
       echo ln -s $otherDir/$essential $essential
       ln -s $otherDir/$essential
