@@ -3,17 +3,17 @@
     "http://www.w3.org/MarkUp/DTD/xhtml-rdfa-1.dtd">
     <html xmlns="http://www.w3.org/1999/xhtml" {% for i, ns in base.ns %}xmlns:{{i}}="{{ns}}" 
     {%endfor%}version="XHTML+RDFa 1.0" xml:lang="en">
-    <head>
-   <title>Instance of {{base.args.arg0}}</title>
+  <head>
+    <title>Graphs available in the triple store</title>
     <link href="{{base.baseUrl}}/lodspeakr/css/basic.css" rel="stylesheet" type="text/css" media="screen" />
   </head>
   <body>
-    <h1>Instances of {{base.args.arg0}}</h1>
+    <h1>Graphs available in the triple store</h1>
 {%include "header.inc"%}
 	<ul>
-	{% for row in r %}
-        <li><a href='{{ row.resource.value }}'>{{row.resource.curie}}</a></li>
-        {% endfor %}
+    {% for row in r %}
+        <li>{{row.g.curie}}</li>
+    {% endfor %}
     </ul>
   </body>
 </html>

@@ -36,7 +36,7 @@ $conf['special']['uri'] = 'special';
 $conf['special']['class'] = 'classes/BasicSpecialFunction.php';
 
 //Frontpage when user goes to http://example.org/
-$conf['root'] = 'special/index';
+$conf['root'] = 'index.html';
 $conf['extension_connector'] = '.';
 
 //Priority for rdfs:Resource (default). Priorities should be >=0

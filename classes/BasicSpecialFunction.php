@@ -41,7 +41,7 @@ class SpecialFunction extends AbstractSpecialFunction{
   	  $viewFile = $conf['special']['uri'].".".$f.$conf['view']['extension'].".".$extension;
   	  $modelFile = $conf['special']['uri'].".".$f.$conf['model']['extension'].".".$extension;
   	  if(!(is_dir($conf['model']['directory'].$modelFile) || is_file($conf['model']['directory'].$modelFile)) || !is_file($conf['view']['directory'].$viewFile)){
-  	  	throw new Exception('Method does not exist!');
+  	  	throw new Exception('<h1>Method does not exist!</h1><br/>This means that <tt>'.$conf['model']['directory'].$modelFile.'</tt> or <tt>'.$conf['view']['directory'].$viewFile."</tt> (or both) don't exist.<br/>Please refer to this tutorial to create one.<br/>");
   	  }
   	  $endpoints = $context['endpoints'];
   	  array_pop($params);
@@ -66,6 +66,8 @@ class SpecialFunction extends AbstractSpecialFunction{
  	  $data['params'] = $params;
  	  $base = $conf['view']['standard'];
  	  $base['type'] = $modelFile;
+ 	  $base['root'] = $conf['root'];
+ 	  $base['home'] = $conf['basedir'];
  	  $base['this']['value'] = $uri;
  	  $base['this']['curie'] = Utils::uri2curie($uri);
  	  $base['this']['contentType'] = $acceptContentType;
