@@ -9,6 +9,7 @@
   </head>
   <body>
     <h1>Instances of {{base.args.arg0}}</h1>
+{%include "header.inc"%}
 	<ul>
 	{% for row in r %}
         <li><a href='{{ row.resource.value }}'>{{row.resource.curie}}</a></li>

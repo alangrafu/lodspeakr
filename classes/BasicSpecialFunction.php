@@ -66,6 +66,8 @@ class SpecialFunction extends AbstractSpecialFunction{
  	  $data['params'] = $params;
  	  $base = $conf['view']['standard'];
  	  $base['type'] = $modelFile;
+ 	  $base['root'] = $conf['root'];
+ 	  $base['home'] = $conf['basedir'];
  	  $base['this']['value'] = $uri;
  	  $base['this']['curie'] = Utils::uri2curie($uri);
  	  $base['this']['contentType'] = $acceptContentType;

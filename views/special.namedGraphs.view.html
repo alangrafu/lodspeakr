@@ -9,9 +9,10 @@
   </head>
   <body>
     <h1>Graphs available in the triple store</h1>
+{%include "header.inc"%}
 	<ul>
     {% for row in r %}
-        <li><a href='{{base.baseUrl}}special/index/{{ row.g.curie|urlencode }}'>{{row.g.curie}}</a></li>
+        <li>{{row.g.curie}}</li>
     {% endfor %}
     </ul>
   </body>
