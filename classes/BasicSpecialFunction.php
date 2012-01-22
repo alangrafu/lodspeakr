@@ -74,7 +74,7 @@ class SpecialFunction extends AbstractSpecialFunction{
  	  $base['model']['directory'] = $conf['model']['directory'];
  	  $base['view']['directory'] = $conf['view']['directory'];
  	  $base['ns'] = $conf['ns'];
- 	  $base['sparqlendpoint'] = $conf['endpoint'];
+ 	  $base['endpoint'] = $conf['endpoint'];
   	  $base['type'] = $modelFile;
   	  $base['header'] = $prefixHeader;
   	  $base['args'] = $args;
