@@ -40,8 +40,13 @@ class SpecialFunction extends AbstractSpecialFunction{
   	try{
   	  $viewFile = $conf['special']['uri'].".".$f.$conf['view']['extension'].".".$extension;
   	  $modelFile = $conf['special']['uri'].".".$f.$conf['model']['extension'].".".$extension;
-  	  if(!(is_dir($conf['model']['directory'].$modelFile) || is_file($conf['model']['directory'].$modelFile)) || !is_file($conf['view']['directory'].$viewFile)){
-  	  	throw new Exception('<h1>Method does not exist!</h1><br/>This means that <tt>'.$conf['model']['directory'].$modelFile.'</tt> or <tt>'.$conf['view']['directory'].$viewFile."</tt> (or both) don't exist.<br/>Please refer to this tutorial to create one.<br/>");
+  	  if(!(is_dir($conf['model']['directory'].$modelFile) || is_file($conf['model']['directory'].$modelFile))){
+  	  	$msg = '<h1>Method does not exist!</h1><br/>This means that <tt>'.$conf['model']['directory'].$modelFile."</tt> doesn't exist.<br/>Please refer to this tutorial to create one.<br/>";
+  	  	throw new Exception($msg);
+  	  }
+  	  if(!is_file($conf['view']['directory'].$viewFile)){
+  	  	  $msg='<h1>Method does not exist!</h1><br/>This means that <tt>'.$conf['view']['directory'].$viewFile."</tt> doesn't exist.<br/>Please refer to this tutorial to create one.<br/>";
+  	  	  throw new Exception($msg);
   	  }
   	  $endpoints = $context['endpoints'];
   	  array_pop($params);
@@ -74,7 +79,7 @@ class SpecialFunction extends AbstractSpecialFunction{
  	  $base['model']['directory'] = $conf['model']['directory'];
  	  $base['view']['directory'] = $conf['view']['directory'];
  	  $base['ns'] = $conf['ns'];
- 	  $base['sparqlendpoint'] = $conf['endpoint'];
+ 	  $base['endpoint'] = $conf['endpoint'];
   	  $base['type'] = $modelFile;
   	  $base['header'] = $prefixHeader;
   	  $base['args'] = $args;
