@@ -11,14 +11,8 @@
     <h1>Classes available</h1>
 {%include "header.inc"%}
 	<ul>
-	{% if r.resource.value != null %}
-	    <!-- Only one class available -->
-        <li><a href='{{base.baseUrl}}special/instances/{{ r.resource.curie }}'>{{r.resource.curie}}</a></li>
-    {% endif %}
     {% for row in r %}
-      {% if row.resource.value %}
         <li><a href='{{base.baseUrl}}special/instances/{{ row.resource.curie }}'>{{row.resource.curie}}</a></li>
-      {% endif %}
     {% endfor %}
     </ul>
   </body>

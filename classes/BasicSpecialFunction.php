@@ -73,7 +73,8 @@ class SpecialFunction extends AbstractSpecialFunction{
  	  $base['this']['contentType'] = $acceptContentType;
  	  $base['model']['directory'] = $conf['model']['directory'];
  	  $base['view']['directory'] = $conf['view']['directory'];
- 	  $base['ns'] = $conf['ns'];  	  $base['ns'] = $conf['ns'];
+ 	  $base['ns'] = $conf['ns'];
+ 	  $base['sparqlendpoint'] = $conf['endpoint'];
   	  $base['type'] = $modelFile;
   	  $base['header'] = $prefixHeader;
   	  $base['args'] = $args;
@@ -83,7 +84,8 @@ class SpecialFunction extends AbstractSpecialFunction{
   	  $base['view']['directory'] = $conf['home'].$conf['view']['directory'];
   	  $base['model']['directory'] = $conf['home'].$conf['model']['directory'];
   	  chdir($conf['model']['directory']);
-  	  Utils::queryFile($modelFile, $endpoints['local'], $data);
+  	  $first = array();
+  	  Utils::queryFile($modelFile, $endpoints['local'], $data, $first);
   	  chdir($conf['home']);
   	  $data = Utils::internalize($data);
 

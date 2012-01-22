@@ -22,9 +22,12 @@ class Utils{
   	exit(0);
   }
   
-  public static function send500($uri){
+  public static function send500($msg = null){
   	header("HTTP/1.0 500 Internal Server Error");
   	echo "An internal error ocurred. Please try later\n\n";
+  	if($msg != null){
+  	  echo $msg;
+  	}
   	exit(0);
   }
   
