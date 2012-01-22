@@ -30,13 +30,13 @@ class MetaDb{
         global $conf;
         try{
 	    	$db = new PDO('sqlite:'.$this->dbLocation);
-	    	$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
-
-	        $results = $db->exec($q);
+	    	$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+	    	$results = $db->exec($q);
 			$db = NULL;
-		}catch(PDOException $e){
-				print 'Exception exec: '.$e->getMessage()."\n\n";
-				exit(10);
+		}catch(Exception $e){
+				echo "Can't write in SQLite database. Please check you have granted write permissions to <tt>meta/</tt> and <tt>meta/db.sqlite</tt>.";
+		  		trigger_error('Exception exec: '.$e->getMessage(), E_USER_ERROR);
+				exit(1);
 		}
         return $results;
   }
