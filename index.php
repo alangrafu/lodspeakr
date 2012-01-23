@@ -60,7 +60,11 @@ $localUri = $uri;
 if($uri == $conf['basedir']){
   header('Location: '.$conf['root']);
   exit(0);
-}elseif(preg_match("|^".$conf['basedir'].$conf['special']['uri']."|", $uri)){
+}
+
+
+//Service module
+if(preg_match("|^".$conf['basedir'].$conf['special']['uri']."|", $uri)){
   include_once($conf['special']['class']);
   $context = array();
   $context['contentType'] = $acceptContentType;
@@ -69,6 +73,9 @@ if($uri == $conf['basedir']){
   $sp->execute($uri, $context);
   exit(0);
 }
+//End of Service module
+
+//Class module
 if($conf['mirror_external_uris']){
   $uri = $conf['ns']['local'].$_GET['q'];
   $localUri = $conf['basedir'].$_GET['q'];
@@ -135,6 +142,6 @@ if(is_array($results)){
   $resultsObj = $results;
 }
 Utils::processDocument($viewFile, $base, $resultsObj);
-//}
 
+//end of Class module
 ?>
