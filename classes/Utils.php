@@ -12,7 +12,7 @@ class Utils{
   
   public static function send404($uri){
   	header("HTTP/1.0 404 Not Found");
-  	echo "I could not find ".$uri." or information about it.\n\n";
+  	echo "LODSPeaKr could not find ".$uri." or information about it.\n\n";
   	exit(0);
   }
   
@@ -22,9 +22,12 @@ class Utils{
   	exit(0);
   }
   
-  public static function send500($uri){
+  public static function send500($msg = null){
   	header("HTTP/1.0 500 Internal Server Error");
   	echo "An internal error ocurred. Please try later\n\n";
+  	if($msg != null){
+  	  echo $msg;
+  	}
   	exit(0);
   }
   
@@ -272,7 +275,7 @@ class Utils{
   	  	Utils::queryDir($v, $r);
   	  }
   	}  	
-  	chdir("..");
+  	chdir($conf['home']);
   	//return $data;
   }
   

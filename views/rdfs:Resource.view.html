@@ -6,6 +6,10 @@
     <head>
     <title>Page about {{base.this.value}}</title>
     <link href="{{base.baseUrl}}/lodspeakr/css/basic.css" rel="stylesheet" type="text/css" media="screen" />
+    <link rel="alternate" type="application/rdf+xml" title="RDF/XML Version" href="{{base.this.value}}.rdf" />
+    <link rel="alternate" type="text/turtle" title="Turtle Version" href="{{base.this.value}}.ttl" />
+    <link rel="alternate" type="text/plain" title="N-Triples Version" href="{{base.this.value}}.nt" />
+    <link rel="alternate" type="application/json" title="RDFJSON Version" href="{{base.this.value}}.json" />
   </head>
   <body about="{{base.this.value}}"> 
     <h1>Page about <a href='{{base.this.value}}'>{{base.this.curie}}</a></h1>
