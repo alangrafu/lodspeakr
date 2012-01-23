@@ -68,7 +68,7 @@ class SpecialFunction extends AbstractSpecialFunction{
   	  	}
   	  	$args["arg".$i]=$params[$i];
   	  }
- 	  $data['params'] = $params;
+ 	  $results['params'] = $params;
  	  $base = $conf['view']['standard'];
  	  $base['type'] = $modelFile;
  	  $base['root'] = $conf['root'];
@@ -90,14 +90,13 @@ class SpecialFunction extends AbstractSpecialFunction{
   	  $base['model']['directory'] = $conf['home'].$conf['model']['directory'];
   	  chdir($conf['model']['directory']);
   	  $first = array();
-  	  Utils::queryFile($modelFile, $endpoints['local'], $data, $first);
+  	  $results = array();
+  	  Utils::queryFile($modelFile, $endpoints['local'], $results, $first);
   	  chdir($conf['home']);
-  	  $data = Utils::internalize($data);
+  	  $results = Utils::internalize($results);
 
-  	  if(is_array($data)){
-  	  	$results = Convert::array_to_object($data);
-  	  }else{
-  	  	$results = $data;
+  	  if(is_array($results)){
+  	  	$results = Convert::array_to_object($results);
   	  }
   	  Utils::processDocument($viewFile, $base, $results);  	
   	}catch (Exception $ex){
