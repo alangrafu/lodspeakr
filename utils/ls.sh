@@ -30,8 +30,13 @@ if [[ ${formats[@]} =~ $4 ]]
 then
   currentFormat=$4 
 else
-  echo "Format \"$4\" not valid"
-  exit 1
+  if [ -z "$4" ]
+  then
+    currentFormat="all"
+  else
+    echo "Format \"$4\" not valid"
+    exit 1
+  fi
 fi
 
 

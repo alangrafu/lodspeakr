@@ -22,14 +22,13 @@ viewHtml=$(cat  <<VIEW
     <html xmlns="http://www.w3.org/1999/xhtml" {% for i, ns in base.ns %}xmlns:{{i}}="{{ns}}" 
     {%endfor%}version="XHTML+RDFa 1.0" xml:lang="en">
   <head>
-    <title>Classes available</title>
+    <title>My new Service</title>
     <link href="{{base.baseUrl}}/lodspeakr/css/basic.css" rel="stylesheet" type="text/css" media="screen" />
   </head>
   <body>
     <h1>Classes available</h1>
-{%include "header.inc"%}
 	<ul>
-    {% for row in r %}
+    {% for row in r.main %}
         <li><a href="{{base.baseUrl}}special/instances/{{ row.resource.curie }}">{{row.resource.curie}}</a></li>
     {% endfor %}
     </ul>
