@@ -22,8 +22,6 @@ if($conf['debug']){
   error_reporting(E_ERROR);
 }
 
-
-
 include_once('classes/Utils.php');
 include_once('classes/Queries.php');
 include_once('classes/Endpoint.php');
@@ -36,13 +34,13 @@ $endpoints['local'] = new Endpoint($conf['endpoint']['local'], $conf['endpointPa
 $acceptContentType = Utils::getBestContentType($_SERVER['HTTP_ACCEPT']);
 $extension = Utils::getExtension($acceptContentType); 
 
+
+//Check content type is supported by LODSPeaKr
 if($acceptContentType == NULL){
   Utils::send406($uri);
 }
-if(sizeof($_GET['q'])>0 && file_exists($conf['static']['directory'].$_GET['q'])){
-  echo file_get_contents($conf['static']['directory'].$_GET['q']);
-  exit(0);
-}
+
+//Export
 if($conf['export'] && $_GET['q'] == 'export'){
   include_once('settings.inc.php');
   include_once('classes/Exporter.php');
@@ -52,7 +50,7 @@ if($conf['export'] && $_GET['q'] == 'export'){
   exit(0);
 }
 
-
+//Redirect to root URL if necessary
 $uri = $conf['basedir'].$_GET['q'];
 $localUri = $uri;
 if($uri == $conf['basedir']){
@@ -60,11 +58,14 @@ if($uri == $conf['basedir']){
   exit(0);
 }
 
+//Configure external URIs if necessary
 if($conf['mirror_external_uris']){
   $uri = $conf['ns']['local'].$_GET['q'];
   $localUri = $conf['basedir'].$_GET['q'];
 }
 
+
+//Modules
 foreach($conf['modules']['available'] as $i){
   $className = $i.'Module';
   $currentModule = $conf['modules']['directory'].$className.'.php';
@@ -81,22 +82,5 @@ foreach($conf['modules']['available'] as $i){
   }
 }
 
-//Service module
-if(preg_match("|^".$conf['basedir'].$conf['special']['uri']."|", $uri)){
-  include_once($conf['special']['class']);
-  $context = array();
-  $context['contentType'] = $acceptContentType;
-  $context['endpoints'] = $endpoints;
-  $sp = new SpecialFunction();
-  $sp->execute($uri, $context);
-  exit(0);
-}
-//End of Service module
-
-
-
-
-
 Utils::send404($uri);
-//end of Class module
 ?>

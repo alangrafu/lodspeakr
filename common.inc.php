@@ -49,7 +49,7 @@ $conf['debug'] = false;
 //using the modules in the following order
 $conf['modules'] = array();
 $conf['modules']['directory'] = 'modules/';
-$conf['modules']['available'] = array('class', 'service');
+$conf['modules']['available'] = array('static','class', 'service');
 
 include_once('settings.inc.php');
 $conf['view']['standard']['baseUrl'] = $conf['basedir'];
