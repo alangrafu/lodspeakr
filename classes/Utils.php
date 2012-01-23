@@ -420,40 +420,7 @@ class Utils{
   	
   }
   
-  public static function getModelandView($t, $extension){  	
-  	global $conf;
-  	//Defining default views and models
-  	$curieType="";
-  	$modelFile = $conf['model']['default'].$conf['model']['extension'].".".$extension;
-  	$viewFile = $conf['view']['default'].$conf['view']['extension'].".".$extension;
-  	
-  	//Get the first class available
-  	/* TODO: Allow user to priotize 
-  	* which class should be used
-  	* Example: URI is foaf:Person and ex:Student
-  	*          If both, prefer ex:Student
-  	*/
-  	$typesAndValues = array();
-  	foreach($t as $v){
-  	  $curie = Utils::uri2curie($v);
-  	  $typesAndValues[$curie] = 0;
-  	  if(isset($conf['types']['priorities'][$curie]) && $conf['types']['priorities'][$curie] >= 0){
-  	  	$typesAndValues[$curie] = $conf['types']['priorities'][$curie];
-  	  }
-  	}
-  	arsort($typesAndValues);
-  	foreach($typesAndValues as $v => $w){
-  	  $auxViewFile  = $conf['view']['directory'].$v.$conf['view']['extension'].".".$extension;
-  	  $auxModelFile = $conf['model']['directory'].$v.$conf['model']['extension'].".".$extension;
-  	  if(file_exists($auxModelFile) && file_exists($auxViewFile) && $v != null){
-  	  	$viewFile = $v.$conf['view']['extension'].".".$extension;
-  	  	$modelFile = $v.$conf['model']['extension'].".".$extension;
-  	  	break;
-  	  }
-  	}
-  	return array($modelFile, $viewFile);
-  }
-  
+    
 }
 
 ?>

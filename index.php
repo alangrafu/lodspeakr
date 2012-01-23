@@ -27,13 +27,11 @@ if($conf['debug']){
 include_once('classes/Utils.php');
 include_once('classes/Queries.php');
 include_once('classes/Endpoint.php');
-include_once('classes/MetaDb.php');
 include_once('classes/Convert.php');
 $results = array();
 $first = array();
 $endpoints = array();
 $endpoints['local'] = new Endpoint($conf['endpoint']['local'], $conf['endpointParams']['config']);
-$metaDb = new MetaDb($conf['metadata']['db']['location']);
 
 $acceptContentType = Utils::getBestContentType($_SERVER['HTTP_ACCEPT']);
 $extension = Utils::getExtension($acceptContentType); 
@@ -62,6 +60,26 @@ if($uri == $conf['basedir']){
   exit(0);
 }
 
+if($conf['mirror_external_uris']){
+  $uri = $conf['ns']['local'].$_GET['q'];
+  $localUri = $conf['basedir'].$_GET['q'];
+}
+
+foreach($conf['modules']['available'] as $i){
+  $className = $i.'Module';
+  $currentModule = $conf['modules']['directory'].$className.'.php';
+  if(!is_file($currentModule)){
+  	Utils::send500("<br/>Can't load or error in module <tt>".$currentModule."</tt>" );
+  	exit(1);
+  }
+  require_once($currentModule);
+  $module = new $className();
+  $matching = $module->match($uri) ;
+  if($matching != FALSE){
+  	$module->execute($matching);
+  	exit(0);
+  }
+}
 
 //Service module
 if(preg_match("|^".$conf['basedir'].$conf['special']['uri']."|", $uri)){
@@ -75,73 +93,10 @@ if(preg_match("|^".$conf['basedir'].$conf['special']['uri']."|", $uri)){
 }
 //End of Service module
 
-//Class module
-if($conf['mirror_external_uris']){
-  $uri = $conf['ns']['local'].$_GET['q'];
-  $localUri = $conf['basedir'].$_GET['q'];
-} 
-
-$pair = Queries::getMetadata($localUri, $acceptContentType, $metaDb);
-
-if($pair == NULL){ // Original URI is not in metadata
-  if(Queries::uriExist($uri, $endpoints['local'])){
-  	$page = Queries::createPage($uri, $localUri, $acceptContentType, $metaDb);
-  	if($page == NULL){
-  	  Utils::send500(NULL);
-  	}
-  	Utils::send303($page, $acceptContentType);
-  }else{
-  	Utils::send404($uri);
-  }
-}
-list($res, $page, $format) = $pair;
-
-//If resource is not the page, send a 303 to the document
-if($res == $localUri){
-  Utils::send303($page, $acceptContentType);
-}
-
-$uri = $res;
-if($conf['mirror_external_uris']){
-  $localUri = preg_replace("|^".$conf['ns']['local']."|", $conf['basedir'], $res);
-}
-$extension = Utils::getExtension($format); 
-
-/*Redefine Content type based on the
-* dcterms:format for this page
-*/
-$acceptContentType = $format;
-
-//Check if files for model and view exist
-$t=Queries::getClass($uri, $endpoints['local']);
-
-list($modelFile, $viewFile) = Utils::getModelandView($t, $extension);
-
-$base = $conf['view']['standard'];
-$base['type'] = $modelFile;
-$base['this']['value'] = $uri;
-$base['this']['curie'] = Utils::uri2curie($uri);
-$base['thislocal']['value'] = $localUri;
-$base['thislocal']['curie'] = Utils::uri2curie($localUri);
-
-$base['this']['contentType'] = $acceptContentType;
-$base['model']['directory'] = $conf['model']['directory'];
-$base['view']['directory'] = $conf['view']['directory'];
-$base['ns'] = $conf['ns'];
 
 
-chdir($conf['model']['directory']);
 
-Utils::queryFile($modelFile, $endpoints['local'], $results, $first);
-$results = Utils::internalize($results); 
-$base['first'] = Utils::getFirsts($results);
-chdir($conf['home']);
-if(is_array($results)){
-  $resultsObj = Convert::array_to_object($results);
-}else{
-  $resultsObj = $results;
-}
-Utils::processDocument($viewFile, $base, $resultsObj);
 
+Utils::send404($uri);
 //end of Class module
 ?>

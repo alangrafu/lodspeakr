@@ -45,6 +45,11 @@ $conf['types']['priorities']['rdfs:Resource'] = -1;
 //Debug
 $conf['debug'] = false;
 
+//Modules: LODSPeaKr will try to match the requested URI
+//using the modules in the following order
+$conf['modules'] = array();
+$conf['modules']['directory'] = 'modules/';
+$conf['modules']['available'] = array('class', 'service');
 
 include_once('settings.inc.php');
 $conf['view']['standard']['baseUrl'] = $conf['basedir'];
