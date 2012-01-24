@@ -6,7 +6,7 @@ class SpecialFunction extends AbstractSpecialFunction{
   protected function getFunction($uri){
   	global $conf;
   	$count = 1;
-  	$prefixUri = $conf['basedir'].$conf['special']['uri']."/";
+  	$prefixUri = $conf['basedir'];
   	$aux = str_replace($prefixUri, '', $uri, $count);
   	$functionAndParams = explode('/', $aux);
   	return $functionAndParams[0];
@@ -15,7 +15,7 @@ class SpecialFunction extends AbstractSpecialFunction{
   protected function getParams($uri){
   	global $conf;
   	$count = 1;
-  	$prefixUri = $conf['basedir'].$conf['special']['uri'];
+  	$prefixUri = $conf['basedir'];
   	$functionAndParams = explode('/', str_replace($prefixUri, '', $uri, $count));
   	if(sizeof($functionAndParams) > 1){
   	  array_shift($functionAndParams);
@@ -38,10 +38,10 @@ class SpecialFunction extends AbstractSpecialFunction{
   	$extension = Utils::getExtension($acceptContentType); 
   	$args = array();
   	try{
-  	  $viewFile = $conf['special']['uri'].".".$f.$conf['view']['extension'].".".$extension;
-  	  $modelFile = $conf['special']['uri'].".".$f.$conf['model']['extension'].".".$extension;
+  	  $viewFile = $conf['service']['prefix'].$f."/".$extension.".template";
+  	  $modelFile = $conf['service']['prefix'].$f."/".$extension.".queries";
   	  if(!(is_dir($conf['model']['directory'].$modelFile) || is_file($conf['model']['directory'].$modelFile))){
-  	  	$msg = '<h1>Method does not exist!</h1><br/>This means that <tt>'.$conf['model']['directory'].$modelFile."</tt> doesn't exist.<br/>Please refer to this tutorial to create one.<br/>";
+  	  	$msg = '<h1>Method does not exist!</h1><br/>This means that <tt>'.$modelFile."</tt> doesn't exist.<br/>Please refer to this tutorial to create one.<br/>";
   	  	throw new Exception($msg);
   	  }
   	  if(!is_file($conf['view']['directory'].$viewFile)){

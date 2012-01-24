@@ -32,8 +32,8 @@ $conf['http_accept']['json'] = array('application/json', 'application/x-javascri
 $conf['http_accept']['nt']   = array('text/plain');
 
 
-$conf['special']['uri'] = 'special';
-$conf['special']['class'] = 'classes/BasicSpecialFunction.php';
+$conf['service']['prefix'] = 'service.';
+$conf['service']['class'] = 'classes/BasicSpecialFunction.php';
 
 //Frontpage when user goes to http://example.org/
 $conf['root'] = 'index.html';

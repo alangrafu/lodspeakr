@@ -18,7 +18,7 @@ class Utils{
   
   public static function send406($uri){
   	header("HTTP/1.0 406 Not Acceptable");
-  	echo "I can't find a representation suitable for the content type you accept\n\n";
+  	echo "LODSPeaKr can't find a representation suitable for the content type you accept\n\n";
   	exit(0);
   }
   
@@ -287,7 +287,8 @@ class Utils{
   	global $first;
   	$uri = $base['this']['value'];
   	$data = array();
-  	
+  	$strippedModelFile = str_replace('.query', '',$modelFile); 	  
+
   	
  	if(!is_dir($modelFile)){
   	  require_once($conf['home'].'lib/Haanga/lib/Haanga.php');
@@ -315,25 +316,25 @@ class Utils{
   	  	echo $query;
   	  }
   	  trigger_error("Running query on endpoint", E_USER_NOTICE);
-  	  $aux = $e->query($query, Utils::getResultsType($query));  	  
+  	  $aux = $e->query($query, Utils::getResultsType($query)); 
   	  if($modelFile != $base['type']){
-  	  	if(!isset($rPointer[$modelFile])){
-  	  	  $rPointer[$modelFile] = array();
-  	  	  $first[$modelFile] = array();
+  	  	if(!isset($rPointer[$strippedModelFile])){
+  	  	  $rPointer[$strippedModelFile] = array();
+  	  	  $first[$strippedModelFile] = array();
   	  	}
   	  	if(Utils::getResultsType($query) == $conf['output']['select']){
-  	  	  $rPointer[$modelFile] = Utils::sparqlResult2Obj($aux);
-  	  	  $fPointer[$modelFile] = $rPointer[$modelFile][0];
+  	  	  $rPointer[$strippedModelFile] = Utils::sparqlResult2Obj($aux);
+  	  	  $fPointer[$strippedModelFile] = $rPointer[$strippedModelFile][0];
   	  	  /*if(sizeof($rPointer)>0){
   	  	  $rPointer[$modelFile]['first'] = $rPointer[$modelFile][0];
   	  	  }*/
   	  	}else{
-  	  	  $rPointer[$modelFile] = $aux;
+  	  	  $rPointer[$strippedModelFile] = $aux;
   	  	}
   	  }else{
   	  	if(Utils::getResultsType($query) == $conf['output']['select']){
   	  	  $rPointer = Utils::sparqlResult2Obj($aux);
-  	  	  $fPointer[$modelFile] = $rPointer[0];
+  	  	  $fPointer[$strippedModelFile] = $rPointer[0];
   	  	  /*if(sizeof($rPointer)>0){
   	  	  $rPointer['first'] = $rPointer[0];
   	  	  }*/
@@ -342,12 +343,12 @@ class Utils{
   	  	}  	 
   	  }
   	}else{
-  	  trigger_error("$modelFile is a directory, will process it later", E_USER_NOTICE);  	  
+  	  trigger_error("$modelFile is a directory, will process it later", E_USER_NOTICE);
   	  if($modelFile != $base['type']){
-  	  	if(!isset($rPointer[$modelFile])){
-  	  	  $rPointer[$modelFile] = array();
+  	  	if(!isset($rPointer[$strippedModelFile])){
+  	  	  $rPointer[$strippedModelFile] = array();
   	  	}
-  	  	Utils::queryDir($modelFile, $rPointer[$modelFile], $fPointer[$modelFile]);
+  	  	Utils::queryDir($modelFile, $rPointer[$strippedModelFile], $fPointer[$strippedModelFile]);
   	  }else{
   	  	Utils::queryDir($modelFile, $rPointer, $fPointer);
   	  }
@@ -409,7 +410,7 @@ class Utils{
   	unset($base['first']);
   	$vars = compact('base', 'r', 'first');
  	if($conf['debug']){
- 	  var_dump($vars); 	
+ 	  var_dump($r); 	
  	}
 	if(is_file($base['view']['directory'].$view)){
 	  Haanga::Load($view, $vars);

@@ -38,6 +38,8 @@ class ClassModule extends abstractModule{
   	global $acceptContentType;
   	global $endpoints;
   	global $base;
+  	global $results;
+  	global $first;
   	list($res, $page, $format) = $pair;
   	//If resource is not the page, send a 303 to the document
   	if($res == $localUri){
@@ -75,7 +77,7 @@ class ClassModule extends abstractModule{
   	
   	
   	chdir($conf['home'].$conf['model']['directory']);
-//  	echo $conf['home'].$conf['model']['directory'].$modelFile;exit(0);
+  	
   	Utils::queryFile($modelFile, $endpoints['local'], $results, $first);
   	$results = Utils::internalize($results); 
 
@@ -92,17 +94,14 @@ class ClassModule extends abstractModule{
   
   private static function getModelandView($t, $extension){  	
   	global $conf;
+  	global $results;
+  	global $rPointer;
   	//Defining default views and models
   	$curieType="";
-  	$modelFile = $conf['model']['default'].$conf['model']['extension'].".".$extension;
-  	$viewFile = $conf['view']['default'].$conf['view']['extension'].".".$extension;
+  	$modelFile = 'class.rdfs:Resource/'.$extension.'.queries';
+  	$viewFile = 'class.rdfs:Resource/'.$extension.'.template';
   	
   	//Get the first class available
-  	/* TODO: Allow user to priotize 
-  	* which class should be used
-  	* Example: URI is foaf:Person and ex:Student
-  	*          If both, prefer ex:Student
-  	*/
   	$typesAndValues = array();
   	foreach($t as $v){
   	  $curie = Utils::uri2curie($v);
