@@ -36,6 +36,7 @@ $conf['service']['prefix'] = 'service.';
 $conf['service']['class'] = 'classes/BasicSpecialFunction.php';
 
 $conf['class']['prefix'] = 'class.';
+$conf['uri']['prefix'] = 'uri.';
 
 //Frontpage when user goes to http://example.org/
 $conf['root'] = 'index.html';
@@ -51,7 +52,7 @@ $conf['debug'] = false;
 //using the modules in the following order
 $conf['modules'] = array();
 $conf['modules']['directory'] = 'modules/';
-$conf['modules']['available'] = array('static','class', 'service');
+$conf['modules']['available'] = array('static','uri', 'class', 'service');
 
 include_once('settings.inc.php');
 $conf['view']['standard']['baseUrl'] = $conf['basedir'];
