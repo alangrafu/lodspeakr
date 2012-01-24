@@ -18,7 +18,7 @@ class Utils{
   
   public static function send406($uri){
   	header("HTTP/1.0 406 Not Acceptable");
-  	echo "I can't find a representation suitable for the content type you accept\n\n";
+  	echo "LODSPeaKr can't find a representation suitable for the content type you accept\n\n";
   	exit(0);
   }
   
@@ -287,7 +287,8 @@ class Utils{
   	global $first;
   	$uri = $base['this']['value'];
   	$data = array();
-  	
+  	$strippedModelFile = str_replace('.query', '',$modelFile); 	  
+
   	
  	if(!is_dir($modelFile)){
   	  require_once($conf['home'].'lib/Haanga/lib/Haanga.php');
@@ -315,25 +316,25 @@ class Utils{
   	  	echo $query;
   	  }
   	  trigger_error("Running query on endpoint", E_USER_NOTICE);
-  	  $aux = $e->query($query, Utils::getResultsType($query));  	  
+  	  $aux = $e->query($query, Utils::getResultsType($query)); 
   	  if($modelFile != $base['type']){
-  	  	if(!isset($rPointer[$modelFile])){
-  	  	  $rPointer[$modelFile] = array();
-  	  	  $first[$modelFile] = array();
+  	  	if(!isset($rPointer[$strippedModelFile])){
+  	  	  $rPointer[$strippedModelFile] = array();
+  	  	  $first[$strippedModelFile] = array();
   	  	}
   	  	if(Utils::getResultsType($query) == $conf['output']['select']){
-  	  	  $rPointer[$modelFile] = Utils::sparqlResult2Obj($aux);
-  	  	  $fPointer[$modelFile] = $rPointer[$modelFile][0];
+  	  	  $rPointer[$strippedModelFile] = Utils::sparqlResult2Obj($aux);
+  	  	  $fPointer[$strippedModelFile] = $rPointer[$strippedModelFile][0];
   	  	  /*if(sizeof($rPointer)>0){
   	  	  $rPointer[$modelFile]['first'] = $rPointer[$modelFile][0];
   	  	  }*/
   	  	}else{
-  	  	  $rPointer[$modelFile] = $aux;
+  	  	  $rPointer[$strippedModelFile] = $aux;
   	  	}
   	  }else{
   	  	if(Utils::getResultsType($query) == $conf['output']['select']){
   	  	  $rPointer = Utils::sparqlResult2Obj($aux);
-  	  	  $fPointer[$modelFile] = $rPointer[0];
+  	  	  $fPointer[$strippedModelFile] = $rPointer[0];
   	  	  /*if(sizeof($rPointer)>0){
   	  	  $rPointer['first'] = $rPointer[0];
   	  	  }*/
@@ -342,12 +343,12 @@ class Utils{
   	  	}  	 
   	  }
   	}else{
-  	  trigger_error("$modelFile is a directory, will process it later", E_USER_NOTICE);  	  
+  	  trigger_error("$modelFile is a directory, will process it later", E_USER_NOTICE);
   	  if($modelFile != $base['type']){
-  	  	if(!isset($rPointer[$modelFile])){
-  	  	  $rPointer[$modelFile] = array();
+  	  	if(!isset($rPointer[$strippedModelFile])){
+  	  	  $rPointer[$strippedModelFile] = array();
   	  	}
-  	  	Utils::queryDir($modelFile, $rPointer[$modelFile], $fPointer[$modelFile]);
+  	  	Utils::queryDir($modelFile, $rPointer[$strippedModelFile], $fPointer[$strippedModelFile]);
   	  }else{
   	  	Utils::queryDir($modelFile, $rPointer, $fPointer);
   	  }
@@ -420,40 +421,7 @@ class Utils{
   	
   }
   
-  public static function getModelandView($t, $extension){  	
-  	global $conf;
-  	//Defining default views and models
-  	$curieType="";
-  	$modelFile = $conf['model']['default'].$conf['model']['extension'].".".$extension;
-  	$viewFile = $conf['view']['default'].$conf['view']['extension'].".".$extension;
-  	
-  	//Get the first class available
-  	/* TODO: Allow user to priotize 
-  	* which class should be used
-  	* Example: URI is foaf:Person and ex:Student
-  	*          If both, prefer ex:Student
-  	*/
-  	$typesAndValues = array();
-  	foreach($t as $v){
-  	  $curie = Utils::uri2curie($v);
-  	  $typesAndValues[$curie] = 0;
-  	  if(isset($conf['types']['priorities'][$curie]) && $conf['types']['priorities'][$curie] >= 0){
-  	  	$typesAndValues[$curie] = $conf['types']['priorities'][$curie];
-  	  }
-  	}
-  	arsort($typesAndValues);
-  	foreach($typesAndValues as $v => $w){
-  	  $auxViewFile  = $conf['view']['directory'].$v.$conf['view']['extension'].".".$extension;
-  	  $auxModelFile = $conf['model']['directory'].$v.$conf['model']['extension'].".".$extension;
-  	  if(file_exists($auxModelFile) && file_exists($auxViewFile) && $v != null){
-  	  	$viewFile = $v.$conf['view']['extension'].".".$extension;
-  	  	$modelFile = $v.$conf['model']['extension'].".".$extension;
-  	  	break;
-  	  }
-  	}
-  	return array($modelFile, $viewFile);
-  }
-  
+    
 }
 
 ?>
