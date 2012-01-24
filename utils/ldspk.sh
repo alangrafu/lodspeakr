@@ -4,13 +4,13 @@
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 USAGE="Usage: $0 create|delete uri|class|service foo [html|rdf|ttl|nt|json]"
-formats=( html rdf ttl nt json all )
 operations=( create delete )
 modules=( class service uri )
+formats=( html rdf ttl nt json all )
 
 currentOperation=
-currentFormat=
 currentModule=
+currentFormat=
 
 if [[ ${operations[@]} =~ $1 ]]; then
   currentOperation=$1
@@ -28,6 +28,8 @@ else
   exit 1
 fi
 
+currentUnit=$3
+
 if [[ ${formats[@]} =~ $4 ]]; then
   currentFormat=$4 
 else
@@ -39,8 +41,6 @@ else
     exit 1
   fi
 fi
-
-currentUnit=$3
 
 if [[ $currentOperation == "create" ]]; then
       $DIR/modules/create-$currentModule.sh "$currentUnit" "$currentFormat"
