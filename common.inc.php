@@ -35,6 +35,8 @@ $conf['http_accept']['nt']   = array('text/plain');
 $conf['service']['prefix'] = 'service.';
 $conf['service']['class'] = 'classes/BasicSpecialFunction.php';
 
+$conf['class']['prefix'] = 'class.';
+
 //Frontpage when user goes to http://example.org/
 $conf['root'] = 'index.html';
 $conf['extension_connector'] = '.';

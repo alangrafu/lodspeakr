@@ -62,7 +62,6 @@ class ClassModule extends abstractModule{
   	$t=Queries::getClass($uri, $endpoints['local']);
   	
   	list($modelFile, $viewFile) = $this::getModelandView($t, $extension);
-  	
   	$base = $conf['view']['standard'];
   	$base['type'] = $modelFile;
   	$base['this']['value'] = $uri;
@@ -112,11 +111,11 @@ class ClassModule extends abstractModule{
   	}
   	arsort($typesAndValues);
   	foreach($typesAndValues as $v => $w){
-  	  $auxViewFile  = $conf['view']['directory'].$v.$conf['view']['extension'].".".$extension;
-  	  $auxModelFile = $conf['model']['directory'].$v.$conf['model']['extension'].".".$extension;
+  	  $auxViewFile  = $conf['view']['directory'].$conf['class']['prefix'].$v.'/'.$extension.'.template';
+  	  $auxModelFile = $conf['model']['directory'].$conf['class']['prefix'].$v.'/'.$extension.'.queries';
   	  if(file_exists($auxModelFile) && file_exists($auxViewFile) && $v != null){
-  	  	$viewFile = $v.$conf['view']['extension'].".".$extension;
-  	  	$modelFile = $v.$conf['model']['extension'].".".$extension;
+  	  	$viewFile = $conf['class']['prefix'].$v.'/'.$extension.'.template';
+  	  	$modelFile = $conf['class']['prefix'].$v.'/'.$extension.'.queries';
   	  	break;
   	  }
   	}
