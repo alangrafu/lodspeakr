@@ -6,7 +6,7 @@ class ServiceModule extends abstractModule{
   public function match($uri){
   	global $conf; 
   	global $acceptContentType;
- 	
+
   	$q = preg_replace('|^'.$conf['basedir'].'|', '', $uri);
   	$qArr = explode('/', $q);
   	if(sizeof($qArr)==0){

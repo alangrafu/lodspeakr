@@ -69,6 +69,7 @@ class SpecialFunction extends AbstractSpecialFunction{
   	  	}
   	  	$args["arg".$i]=$params[$i];
   	  }
+  	  
  	  $results['params'] = $params;
  	  $base = $conf['view']['standard'];
  	  $base['type'] = $modelFile;
@@ -87,7 +88,7 @@ class SpecialFunction extends AbstractSpecialFunction{
   	  $base['baseUrl'] = $conf['basedir'];
   	  $base['this']['value'] = $uri;
   	  $base['this']['contentType'] = $acceptContentType;
-  	  $base['view']['directory'] = $conf['home'].$conf['view']['directory'];
+  	  $base['view']['directory'] = $conf['home'].$conf['view']['directory'].$conf['service']['prefix'].$f.'/';
   	  $base['model']['directory'] = $conf['home'].$conf['model']['directory'];
   	  chdir($conf['model']['directory']);
   	  $first = array();
@@ -98,7 +99,11 @@ class SpecialFunction extends AbstractSpecialFunction{
   	  if(is_array($results)){
   	  	$results = Convert::array_to_object($results);
   	  }
-  	  Utils::processDocument($viewFile, $base, $results);  	
+  	  
+  	  //Need to redefine viewFile as 'local' i.e., inside service.foo/ so I can load files with the relative path correctly
+  	  $viewFile = $extension.".template";
+  	  Utils::processDocument($viewFile, $base, $results);  
+  	  
   	}catch (Exception $ex){
   	  echo $ex->getMessage();
   	  trigger_error($ex->getMessage(), E_ERROR);
