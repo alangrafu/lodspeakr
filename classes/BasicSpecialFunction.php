@@ -33,7 +33,7 @@ class SpecialFunction extends AbstractSpecialFunction{
   	$f = $this->getFunction($uri);
   	$params = array();
   	$params = $this->getParams($uri);
-  	$params[] = $context;
+  	//$params[] = $context;
   	$acceptContentType = Utils::getBestContentType($_SERVER['HTTP_ACCEPT']);
   	$extension = Utils::getExtension($acceptContentType); 
   	$args = array();
@@ -49,10 +49,11 @@ class SpecialFunction extends AbstractSpecialFunction{
   	  	  throw new Exception($msg);
   	  }
   	  $endpoints = $context['endpoints'];
-  	  array_pop($params);
-  	  array_shift($params);
+  	  //array_pop($params);
+  	  //array_shift($params);
   	  
   	  $prefixHeader = array();
+
   	  for($i=0;$i<sizeof($params);$i++){
   	  	if($conf['mirror_external_uris']){
   	  	  $altUri = Utils::curie2uri($params[$i]);
@@ -60,8 +61,8 @@ class SpecialFunction extends AbstractSpecialFunction{
   	  	  $params[$i] = Utils::uri2curie($altUri);
   	  	}
   	  }
-  	  
-  	  for($i=0;$i<sizeof($params);$i++){  	  	
+
+  	  for($i=0;$i<sizeof($params);$i++){  
   	  	$auxPrefix = Utils::getPrefix($params[$i]);
   	  	if($auxPrefix['ns'] != NULL){
   	  	  $prefixHeader[] = $auxPrefix;
@@ -90,7 +91,6 @@ class SpecialFunction extends AbstractSpecialFunction{
   	  $base['model']['directory'] = $conf['home'].$conf['model']['directory'];
   	  chdir($conf['model']['directory']);
   	  $first = array();
-  	  $results = array();
   	  Utils::queryFile($modelFile, $endpoints['local'], $results, $first);
   	  chdir($conf['home']);
   	  $results = Utils::internalize($results);

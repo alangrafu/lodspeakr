@@ -410,7 +410,7 @@ class Utils{
   	unset($base['first']);
   	$vars = compact('base', 'r', 'first');
  	if($conf['debug']){
- 	  var_dump($r); 	
+ 	  var_dump($vars); 	
  	}
 	if(is_file($base['view']['directory'].$view)){
 	  Haanga::Load($view, $vars);
