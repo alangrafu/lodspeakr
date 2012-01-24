@@ -1,7 +1,7 @@
 #!/bin/bash
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-
+USAGE="Usage: $0 create|delete uri|class|service foo [html|rdf|ttl|nt|json]"
 formats=( html rdf ttl nt json all )
 operations=( create delete )
 modules=( class service uri )
@@ -15,6 +15,7 @@ then
   currentOperation=$1
 else
   echo "Operation \"$1\" not valid"
+  echo $USAGE
   exit 1
 fi
 
@@ -23,6 +24,7 @@ then
   currentModule=$2
 else
   echo "Module \"$2\" not valid"
+  echo $USAGE
   exit 1
 fi
 
@@ -35,6 +37,7 @@ else
     currentFormat="all"
   else
     echo "Format \"$4\" not valid"
+  echo $USAGE
     exit 1
   fi
 fi
