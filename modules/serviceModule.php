@@ -7,7 +7,7 @@ class ServiceModule extends abstractModule{
   	global $conf; 
   	global $acceptContentType;
 
-  	$q = preg_replace('|^'.$conf['basedir'].'|', '', $uri);
+  	$q = preg_replace('|^'.$conf['basedir'].'|', '', $localUri);
  	$qArr = explode('/', $q);
   	if(sizeof($qArr)==0){
   	  return FALSE;
