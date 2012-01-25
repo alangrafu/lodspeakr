@@ -8,7 +8,7 @@ class ServiceModule extends abstractModule{
   	global $acceptContentType;
 
   	$q = preg_replace('|^'.$conf['basedir'].'|', '', $uri);
-  	$qArr = explode('/', $q);
+ 	$qArr = explode('/', $q);
   	if(sizeof($qArr)==0){
   	  return FALSE;
   	}
@@ -42,7 +42,7 @@ class ServiceModule extends abstractModule{
   	$context['contentType'] = $acceptContentType;
   	$context['endpoints'] = $endpoints;
   	$sp = new SpecialFunction();
-  	$sp->execute($uri, $context);
+  	$sp->execute($localUri, $context);
   	exit(0);	
   }
   
