@@ -2,8 +2,13 @@
 #
 # https://github.com/alangrafu/lodspeakr/blob/master/utils/ldspk.sh
 
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 USAGE="Usage: $0 create|delete uri|class|service foo [html|rdf|ttl|nt|json]"
+if [[ $# -eq 0 || "$1" == "--help" ]]; then
+   echo $USAGE
+   exit 1
+fi
+
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 operations=( create delete )
 modules=( class service uri )
 formats=( html rdf ttl nt json all )
