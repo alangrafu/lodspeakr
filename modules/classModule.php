@@ -132,7 +132,7 @@ class ClassModule extends abstractModule{
   	  	}
   	}
   	
-  	if($viewFile = null && $extension = 'html'){
+  	if($viewFile == null && $extension == 'html'){
   	  $viewFile = 'class.rdfs:Resource/html.template';
   	}
   	return array($modelFile, $viewFile);
