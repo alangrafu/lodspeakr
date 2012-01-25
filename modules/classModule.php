@@ -63,12 +63,16 @@ class ClassModule extends abstractModule{
   	
   	list($modelFile, $viewFile) = $this::getModelandView($t, $extension);
   	$base = $conf['view']['standard'];
+  	if($viewFile == null){
+  	  	  $base['transform_select_query'] = true;
+  	}
   	$base['type'] = $modelFile;
   	$base['this']['value'] = $uri;
   	$base['this']['curie'] = Utils::uri2curie($uri);
   	$base['thislocal']['value'] = $localUri;
   	$base['thislocal']['curie'] = Utils::uri2curie($localUri);
   	
+  	$base['this']['extension'] = $extension;
   	$base['this']['contentType'] = $acceptContentType;
   	$base['model']['directory'] = $conf['model']['directory'];
   	$base['view']['directory'] = $conf['view']['directory'];
@@ -95,6 +99,7 @@ class ClassModule extends abstractModule{
   	global $conf;
   	global $results;
   	global $rPointer;
+  	global $base;
   	//Defining default views and models
   	$curieType="";
   	$modelFile = 'class.rdfs:Resource/'.$extension.'.queries';
@@ -117,6 +122,13 @@ class ClassModule extends abstractModule{
   	  	$viewFile = $conf['class']['prefix'].$v.'/'.$extension.'.template';
   	  	$modelFile = $conf['class']['prefix'].$v.'/'.$extension.'.queries';
   	  	break;
+  	  }elseif($extension != 'html' &&
+  	  	file_exists($conf['view']['directory'].$conf['class']['prefix'].$v.'/html.template') &&
+  	  	file_exists($conf['model']['directory'].$conf['class']['prefix'].$v.'/html.queries') && $v != null){
+  	  $modelFile = $conf['class']['prefix'].$v.'/html.queries';
+  	  $viewFile = null;//$conf['class']['prefix'].$v.'/html.queries';
+  	  trigger_error("LODSPeaKr can't find the proper query. Using HTML query instead.", E_USER_NOTICE);
+  	  break;
   	  }
   	}
   	return array($modelFile, $viewFile);

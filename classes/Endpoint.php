@@ -42,6 +42,9 @@ class Endpoint{
         if(preg_match("/describe/i", $q)){
           return $aux;
         }
+        if(preg_match("/construct/i", $q)){
+          return $aux;
+        }
   }
   
   public function queryPost($q){

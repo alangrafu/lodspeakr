@@ -76,7 +76,7 @@ DESCRIBE ?resource WHERE {
 QUERY)
 
 viewRdf=$(cat <<VIEW
-{{r|safe}}
+{{r.main|safe}}
 VIEW)
 
 modelTtl=$modelRdf
