@@ -5,8 +5,8 @@ class ServiceModule extends abstractModule{
   
   public function match($uri){
   	global $conf; 
-  	global $acceptContentType;
-
+  	global $acceptContentType; 
+    global $localUri;
   	$q = preg_replace('|^'.$conf['basedir'].'|', '', $localUri);
  	$qArr = explode('/', $q);
   	if(sizeof($qArr)==0){
@@ -24,7 +24,7 @@ class ServiceModule extends abstractModule{
   	  Utils::send406($uri);// $qArr[0];
   	}
   	if(is_dir($auxModelFile) && is_file($auxViewFile)){
-  	  return $uri;// $qArr[0];
+  	  return $localUri;// $qArr[0];
   	}
 
   	return FALSE;
