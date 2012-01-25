@@ -102,9 +102,9 @@ class ClassModule extends abstractModule{
   	global $base;
   	//Defining default views and models
   	$curieType="";
-  	$modelFile = 'class.rdfs:Resource/'.$extension.'.queries';
-  	$viewFile = 'class.rdfs:Resource/'.$extension.'.template';
-  	
+  	$modelFile = 'class.rdfs:Resource/html.queries';
+  	$viewFile = null;//'class.rdfs:Resource/html.template';
+
   	//Get the first class available
   	$typesAndValues = array();
   	foreach($t as $v){
