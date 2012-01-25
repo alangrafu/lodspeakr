@@ -11,7 +11,7 @@
     <h1>Named graphs available</h1>
 {%include "../header.inc"%}
 	<ul>
-    {% for row in r.main %}
+    {% for row in models.main %}
         <li>{{row.g.value}}</li>
     {% endfor %}
     </ul>

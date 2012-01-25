@@ -329,9 +329,9 @@ class Utils{
   	    $base = $baseObj;
   	  }
   	  $r2 = Convert::array_copy($results);
-  	  $r = Convert::array_to_object($r2);
+  	  $models = Convert::array_to_object($r2);
   	  $f = Convert::array_to_object($first);
- 	  $vars = compact('uri', 'base', 'r', 'f');
+ 	  $vars = compact('uri', 'base', 'models', 'f');
  	  
  	  $fnc = Haanga::compile(file_get_contents($modelFile));
   	  $query = $fnc($vars, TRUE);
@@ -495,10 +495,10 @@ class Utils{
   	  'template_dir' => $base['view']['directory'],
   	  'cache_dir' => $conf['home'].'cache/',
   	  ));
-  	$r = $data;
+  	$models = $data;
   	$first = $base['first'];
   	unset($base['first']);
-  	$vars = compact('uri','base', 'r', 'first');
+  	$vars = compact('uri','base', 'models', 'first');
  	if($conf['debug']){
  	  var_dump($vars); 	
  	}

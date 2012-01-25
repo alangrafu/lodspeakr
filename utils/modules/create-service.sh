@@ -28,7 +28,7 @@ viewHtml=$(cat  <<VIEW
   <body>
     <h1>Classes available</h1>
 	<ul>
-    {% for row in r.main %}
+    {% for row in models.main %}
         <li><a href="{{base.baseUrl}}special/instances/{{ row.resource.curie }}">{{row.resource.curie}}</a></li>
     {% endfor %}
     </ul>

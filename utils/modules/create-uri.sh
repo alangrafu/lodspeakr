@@ -35,7 +35,7 @@ viewHtml=$(cat <<VIEW
   <div>
     <h2>Information from {{base.this.curie}}</h2>
     <table>
-    {% for row in r.main %}
+    {% for row in models.main %}
 
       {% if row.s1%}
       <tr>
@@ -55,7 +55,7 @@ viewHtml=$(cat <<VIEW
     <br/><br/>
     <h2>Information pointing to {{base.this.curie}}</h2>
     <table>
-    {% for row in r.main %}
+    {% for row in models.main %}
       {% if row.s2%}
      <tr>
         <td><a href='{{row.s2.value}}'>{{row.s2.curie}}</a></td>
