@@ -50,7 +50,7 @@ class ClassModule extends abstractModule{
   	if($conf['mirror_external_uris']){
   	  $localUri = preg_replace("|^".$conf['ns']['local']."|", $conf['basedir'], $res);
   	}
-
+  	
   	$extension = Utils::getExtension($format); 
   	
   	/*Redefine Content type based on the
@@ -64,7 +64,7 @@ class ClassModule extends abstractModule{
   	list($modelFile, $viewFile) = $this::getModelandView($t, $extension);
   	$base = $conf['view']['standard'];
   	if($viewFile == null){
-  	  	  $base['transform_select_query'] = true;
+  	  $base['transform_select_query'] = true;
   	}
   	$base['type'] = $modelFile;
   	$base['this']['value'] = $uri;
@@ -83,7 +83,7 @@ class ClassModule extends abstractModule{
   	
   	Utils::queryFile($modelFile, $endpoints['local'], $results, $first);
   	$results = Utils::internalize($results); 
-
+  	
   	$base['first'] = Utils::getFirsts($results);
   	chdir($conf['home']);
   	if(is_array($results)){
@@ -103,8 +103,8 @@ class ClassModule extends abstractModule{
   	//Defining default views and models
   	$curieType="";
   	$modelFile = 'class.rdfs:Resource/html.queries';
-  	$viewFile = 'class.rdfs:Resource/html.template';
-
+  	$viewFile = null;//'class.rdfs:Resource/html.template';
+  	
   	//Get the first class available
   	$typesAndValues = array();
   	foreach($t as $v){
@@ -129,10 +129,14 @@ class ClassModule extends abstractModule{
   	  $viewFile = null;//$conf['class']['prefix'].$v.'/html.queries';
   	  trigger_error("LODSPeaKr can't find the proper query. Using HTML query instead.", E_USER_NOTICE);
   	  break;
-  	  }
+  	  	}
+  	}
+  	
+  	if($viewFile = null && $extension = 'html'){
+  	  $viewFile = 'class.rdfs:Resource/html.template';
   	}
   	return array($modelFile, $viewFile);
   }
-
+  
 }
 ?>
