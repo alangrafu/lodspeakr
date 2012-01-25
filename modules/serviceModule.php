@@ -5,10 +5,10 @@ class ServiceModule extends abstractModule{
   
   public function match($uri){
   	global $conf; 
-  	global $acceptContentType;
-
-  	$q = preg_replace('|^'.$conf['basedir'].'|', '', $uri);
-  	$qArr = explode('/', $q);
+  	global $acceptContentType; 
+    global $localUri;
+  	$q = preg_replace('|^'.$conf['basedir'].'|', '', $localUri);
+ 	$qArr = explode('/', $q);
   	if(sizeof($qArr)==0){
   	  return FALSE;
   	}
@@ -24,7 +24,7 @@ class ServiceModule extends abstractModule{
   	  Utils::send406($uri);// $qArr[0];
   	}
   	if(is_dir($auxModelFile) && is_file($auxViewFile)){
-  	  return $uri;// $qArr[0];
+  	  return $localUri;// $qArr[0];
   	}
 
   	return FALSE;
@@ -42,7 +42,7 @@ class ServiceModule extends abstractModule{
   	$context['contentType'] = $acceptContentType;
   	$context['endpoints'] = $endpoints;
   	$sp = new SpecialFunction();
-  	$sp->execute($uri, $context);
+  	$sp->execute($localUri, $context);
   	exit(0);	
   }
   

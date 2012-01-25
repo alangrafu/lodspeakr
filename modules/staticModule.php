@@ -10,7 +10,7 @@ class StaticModule extends abstractModule{
   	global $acceptContentType;
   	global $endpoints;
   	global $base;
-  	$q = preg_replace('|^'.$conf['basedir'].'|', '', $uri);
+  	$q = preg_replace('|^'.$conf['basedir'].'|', '', $localUri);
   	if(sizeof($q)>0 && file_exists($conf['home'].$conf['static']['directory'].$q)){
   	  return $q;
   	}
