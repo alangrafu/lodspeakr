@@ -27,7 +27,7 @@ class SpecialFunction extends AbstractSpecialFunction{
   
   public function execute($uri, $context){
   	global $conf;
-  	global $base;
+  	global $lodspk;
   	global $results;
   	global $rRoot;
   	$f = $this->getFunction($uri);
@@ -71,25 +71,25 @@ class SpecialFunction extends AbstractSpecialFunction{
   	  }
   	  
  	  $results['params'] = $params;
- 	  $base = $conf['view']['standard'];
- 	  $base['type'] = $modelFile;
- 	  $base['root'] = $conf['root'];
- 	  $base['home'] = $conf['basedir'];
- 	  $base['this']['value'] = $uri;
- 	  $base['this']['curie'] = Utils::uri2curie($uri);
- 	  $base['this']['contentType'] = $acceptContentType;
- 	  $base['model']['directory'] = $conf['model']['directory'];
- 	  $base['view']['directory'] = $conf['view']['directory'];
- 	  $base['ns'] = $conf['ns'];
- 	  $base['endpoint'] = $conf['endpoint'];
-  	  $base['type'] = $modelFile;
-  	  $base['header'] = $prefixHeader;
-  	  $base['args'] = $args;
-  	  $base['baseUrl'] = $conf['basedir'];
-  	  $base['this']['value'] = $uri;
-  	  $base['this']['contentType'] = $acceptContentType;
-  	  $base['view']['directory'] = $conf['home'].$conf['view']['directory'].$conf['service']['prefix'].$f.'/';
-  	  $base['model']['directory'] = $conf['home'].$conf['model']['directory'];
+ 	  $lodspk = $conf['view']['standard'];
+ 	  $lodspk['type'] = $modelFile;
+ 	  $lodspk['root'] = $conf['root'];
+ 	  $lodspk['home'] = $conf['basedir'];
+ 	  $lodspk['this']['value'] = $uri;
+ 	  $lodspk['this']['curie'] = Utils::uri2curie($uri);
+ 	  $lodspk['this']['contentType'] = $acceptContentType;
+ 	  $lodspk['model']['directory'] = $conf['model']['directory'];
+ 	  $lodspk['view']['directory'] = $conf['view']['directory'];
+ 	  $lodspk['ns'] = $conf['ns'];
+ 	  $lodspk['endpoint'] = $conf['endpoint'];
+  	  $lodspk['type'] = $modelFile;
+  	  $lodspk['header'] = $prefixHeader;
+  	  $lodspk['args'] = $args;
+  	  $lodspk['baseUrl'] = $conf['basedir'];
+  	  $lodspk['this']['value'] = $uri;
+  	  $lodspk['this']['contentType'] = $acceptContentType;
+  	  $lodspk['view']['directory'] = $conf['home'].$conf['view']['directory'].$conf['service']['prefix'].$f.'/';
+  	  $lodspk['model']['directory'] = $conf['home'].$conf['model']['directory'];
   	  chdir($conf['model']['directory']);
   	  $first = array();
   	  Utils::queryFile($modelFile, $endpoints['local'], $results, $first);
@@ -102,7 +102,7 @@ class SpecialFunction extends AbstractSpecialFunction{
   	  
   	  //Need to redefine viewFile as 'local' i.e., inside service.foo/ so I can load files with the relative path correctly
   	  $viewFile = $extension.".template";
-  	  Utils::processDocument($viewFile, $base, $results);  
+  	  Utils::processDocument($viewFile, $lodspk, $results);  
   	  
   	}catch (Exception $ex){
   	  echo $ex->getMessage();

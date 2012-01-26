@@ -9,7 +9,7 @@ modelHtml=$(cat  <<QUERY
 PREFIX {{h.prefix}}: <{{h.ns}}>
 {%endfor%}
 SELECT DISTINCT ?resource WHERE {
-  {%if base.args.arg0 %}GRAPH <{{base.args.arg0}}>{ {%endif%}
+  {%if base.args.arg0 %}GRAPH <{{lodspk.args.arg0}}>{ {%endif%}
   	[] a ?resource .
   {%if base.args.arg0 %} } {%endif%}
 }
@@ -23,13 +23,13 @@ viewHtml=$(cat  <<VIEW
     {%endfor%}version="XHTML+RDFa 1.0" xml:lang="en">
   <head>
     <title>My new Service</title>
-    <link href="{{base.baseUrl}}/lodspeakr/css/basic.css" rel="stylesheet" type="text/css" media="screen" />
+    <link href="{{lodspk.baseUrl}}/lodspeakr/css/basic.css" rel="stylesheet" type="text/css" media="screen" />
   </head>
   <body>
     <h1>Classes available</h1>
 	<ul>
     {% for row in models.main %}
-        <li><a href="{{base.baseUrl}}special/instances/{{ row.resource.curie }}">{{row.resource.curie}}</a></li>
+        <li><a href="{{lodspk.baseUrl}}special/instances/{{ row.resource.curie }}">{{row.resource.curie}}</a></li>
     {% endfor %}
     </ul>
   </body>

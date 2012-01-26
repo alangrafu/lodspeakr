@@ -36,7 +36,7 @@ class ServiceModule extends abstractModule{
   	global $uri;
   	global $acceptContentType;
   	global $endpoints;
-  	global $base;
+  	global $lodspk;
   	require_once($conf['home'].$conf['service']['class']);
   	$context = array();
   	$context['contentType'] = $acceptContentType;

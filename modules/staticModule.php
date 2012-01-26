@@ -9,7 +9,7 @@ class StaticModule extends abstractModule{
   	global $uri;
   	global $acceptContentType;
   	global $endpoints;
-  	global $base;
+  	global $lodspk;
   	$q = preg_replace('|^'.$conf['basedir'].'|', '', $localUri);
   	if(sizeof($q)>0 && file_exists($conf['home'].$conf['static']['directory'].$q)){
   	  return $q;
@@ -23,7 +23,7 @@ class StaticModule extends abstractModule{
   	global $uri;
   	global $acceptContentType;
   	global $endpoints;
-  	global $base;
+  	global $lodspk;
   	header("Content-type: ");
   	echo file_get_contents($conf['static']['directory'].$file);
   }
