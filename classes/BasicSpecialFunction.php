@@ -69,8 +69,7 @@ class SpecialFunction extends AbstractSpecialFunction{
   	  	}
   	  	$args["arg".$i]=$params[$i];
   	  }
-  	  $args = array_merge($args, $_GET);
- 	  $results['params'] = $params;
+  	  $results['params'] = $params;
  	  $lodspk = $conf['view']['standard'];
  	  $lodspk['type'] = $modelFile;
  	  $lodspk['root'] = $conf['root'];
