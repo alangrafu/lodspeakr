@@ -253,7 +253,7 @@ class Utils{
   	global $results;
   	$lodspk['model']['directory'] = $modelDir;
   	$originalDir = getcwd();
-  	
+  	$subDirs= array();
   	trigger_error("Entering $modelDir from ".getcwd(), E_USER_NOTICE);
   	chdir($modelDir);
   	$handle = opendir('.');
@@ -261,7 +261,7 @@ class Utils{
   	while (false !== ($modelFile = readdir($handle))) {
   	  if($modelFile != "." && $modelFile != ".." && strpos($modelFile, ".") !== 0){
   	  	if(is_dir($modelFile)){
-  	  	  //Save it for later, after all the queries in the current directory has been resolved
+  	  	  trigger_error("Save $modelFile for later, after all the queries in the current directory has been resolved", E_USER_NOTICE);
   	  	  $subDirs[]=$modelFile;
   	  	}else{
   	  	  $e = null;
@@ -291,7 +291,7 @@ class Utils{
   	}
   	closedir($handle);
   	$originalDir = $lodspk['model']['directory'];
-  	if(isset($subDIrs)){
+  	if(isset($subDirs)){
   	  foreach($subDirs as $v){
   	  	if(!isset($r[$modelDir])){
   	  	  $r[$modelDir] = array();
