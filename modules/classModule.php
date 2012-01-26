@@ -66,6 +66,8 @@ class ClassModule extends abstractModule{
   	if($viewFile == null){
   	  $lodspk['transform_select_query'] = true;
   	}
+  	$lodspk['module'] = 'class';
+  	$lodspk['add_mirrored_uris'] = true;
   	$lodspk['type'] = $modelFile;
   	$lodspk['this']['value'] = $uri;
   	$lodspk['this']['curie'] = Utils::uri2curie($uri);
