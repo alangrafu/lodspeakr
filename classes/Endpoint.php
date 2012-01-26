@@ -60,6 +60,10 @@ class Endpoint{
   	return $result;
   }
   
+  public function getSparqlURL(){
+  	return $this->sparqlUrl;
+  }
+  
 }
 
 ?>

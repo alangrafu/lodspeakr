@@ -400,9 +400,10 @@ class Utils{
 	  }
 	  
   	  if($conf['debug']){
+  	  	echo "$modelFile\n------------------\n";
   	  	echo $query;
   	  }
-  	  trigger_error("Running query on endpoint", E_USER_NOTICE);
+  	  trigger_error("Running query from ".$modelFile." on endpoint ".$e->getSparqlURL(), E_USER_NOTICE);
   	  $aux = $e->query($query, Utils::getResultsType($query)); 
   	  if($modelFile != $lodspk['type']){
   	  	if(!isset($rPointer[$strippedModelFile])){
