@@ -24,6 +24,7 @@ class StaticModule extends abstractModule{
   	global $acceptContentType;
   	global $endpoints;
   	global $base;
+  	header("Content-type: ");
   	echo file_get_contents($conf['static']['directory'].$file);
   }
   

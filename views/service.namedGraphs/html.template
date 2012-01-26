@@ -5,7 +5,7 @@
     {%endfor%}version="XHTML+RDFa 1.0" xml:lang="en">
   <head>
     <title>Named Graphs</title>
-    <link href="{{base.baseUrl}}/lodspeakr/css/basic.css" rel="stylesheet" type="text/css" media="screen" />
+    <link href="css/basic.css" rel="stylesheet" type="text/css" media="screen" />
   </head>
   <body>
     <h1>Named graphs available</h1>
