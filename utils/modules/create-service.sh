@@ -23,7 +23,7 @@ viewHtml=$(cat  <<VIEW
     {%endfor%}version="XHTML+RDFa 1.0" xml:lang="en">
   <head>
     <title>My new Service</title>
-    <link href="{{lodspk.baseUrl}}/lodspeakr/css/basic.css" rel="stylesheet" type="text/css" media="screen" />
+    <link href="{{lodspk.baseUrl}}css/basic.css" rel="stylesheet" type="text/css" media="screen" />
   </head>
   <body>
     <h1>Classes available</h1>
