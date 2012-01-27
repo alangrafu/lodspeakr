@@ -28,11 +28,21 @@ class Queries{
   
   public static function getClass($uri, $e){
   	$q = "SELECT DISTINCT ?class ?inst WHERE{
-  	{
-  	  <$uri> a ?class .
+  	 {
+  	  GRAPH ?g{
+  	  {
+  	    <$uri> a ?class .
+  	  }UNION{
+  	    ?inst a <$uri> .
+  	  }
+  	 }
   	}UNION{
-  	  ?inst a <$uri> .
-  	}
+  	  {
+  	    <$uri> a ?class .
+  	  }UNION{
+  	    ?inst a <$uri> .
+  	  }
+  	 }
   	}";
   	try{
   	  $r = $e->query($q);
