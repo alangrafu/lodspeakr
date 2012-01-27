@@ -2,15 +2,25 @@
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-initToken='class'
+initToken='type'
 
 modelHtml=$(cat <<QUERY
 SELECT ?s2 ?p2 ?s1 ?p1  WHERE {
+  {
+    GRAPH ?g{
+              {
+                <{{uri}}> ?s1 ?p1 .
+        }UNION{
+                ?s2 ?p2 <{{uri}}> .
+        }
+    }
+  }UNION{
         {
                 <{{uri}}> ?s1 ?p1 .
         }UNION{
                 ?s2 ?p2 <{{uri}}> .
         }
+  }
 }
 QUERY
 )
@@ -32,6 +42,8 @@ viewHtml=$(cat <<VIEW
   </head>
   <body about="{{lodspk.this.value}}">
     <h1>Page about <a href='{{lodspk.this.value}}'>{{lodspk.this.curie}}</a></h1>
+    <br/>
+    <h2>Class $1</h2>
   <div>
     <h2>Information from {{lodspk.this.curie}}</h2>
     <table>

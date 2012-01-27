@@ -1,6 +1,6 @@
 <?
 require_once('abstractModule.php');
-class ClassModule extends abstractModule{
+class TypeModule extends abstractModule{
   //Class module
   
   public function match($uri){
@@ -11,7 +11,7 @@ class ClassModule extends abstractModule{
   	global $endpoints;
   	global $lodspk;
   	
-  	require_once('classes/MetaDb.php');
+  	require_once($conf['home'].'classes/MetaDb.php');
   	$metaDb = new MetaDb($conf['metadata']['db']['location']);
   	
   	$pair = Queries::getMetadata($localUri, $acceptContentType, $metaDb);
@@ -66,7 +66,7 @@ class ClassModule extends abstractModule{
   	if($viewFile == null){
   	  $lodspk['transform_select_query'] = true;
   	}
-  	$lodspk['module'] = 'class';
+  	$lodspk['module'] = 'type';
   	$lodspk['add_mirrored_uris'] = true;
   	$lodspk['type'] = $modelFile;
   	$lodspk['this']['value'] = $uri;
@@ -104,10 +104,10 @@ class ClassModule extends abstractModule{
   	global $lodspk;
   	//Defining default views and models
   	$curieType="";
-  	$modelFile = 'class.rdfs:Resource/html.queries';
-  	$viewFile = null;//'class.rdfs:Resource/html.template';
+  	$modelFile = 'type.rdfs:Resource/html.queries';
+  	$viewFile = null;//'type.rdfs:Resource/html.template';
   	
-  	//Get the first class available
+  	//Get the first type available
   	$typesAndValues = array();
   	foreach($t as $v){
   	  $curie = Utils::uri2curie($v);
@@ -118,22 +118,22 @@ class ClassModule extends abstractModule{
   	}
   	arsort($typesAndValues);
   	foreach($typesAndValues as $v => $w){
-  	  $auxViewFile  = $conf['view']['directory'].$conf['class']['prefix'].$v.'/'.$extension.'.template';
-  	  $auxModelFile = $conf['model']['directory'].$conf['class']['prefix'].$v.'/'.$extension.'.queries';
+  	  $auxViewFile  = $conf['view']['directory'].$conf['type']['prefix'].$v.'/'.$extension.'.template';
+  	  $auxModelFile = $conf['model']['directory'].$conf['type']['prefix'].$v.'/'.$extension.'.queries';
   	  if(file_exists($auxModelFile) && file_exists($auxViewFile) && $v != null){
-  	  	$viewFile = $conf['class']['prefix'].$v.'/'.$extension.'.template';
-  	  	$modelFile = $conf['class']['prefix'].$v.'/'.$extension.'.queries';
+  	  	$viewFile = $conf['type']['prefix'].$v.'/'.$extension.'.template';
+  	  	$modelFile = $conf['type']['prefix'].$v.'/'.$extension.'.queries';
   	  	break;
   	  }elseif($extension != 'html' &&
-  	  	file_exists($conf['model']['directory'].$conf['class']['prefix'].$v.'/html.queries')){
-  	  $modelFile = $conf['class']['prefix'].$v.'/html.queries';
-  	  $viewFile = null;//$conf['class']['prefix'].$v.'/html.queries';
+  	  	file_exists($conf['model']['directory'].$conf['type']['prefix'].$v.'/html.queries')){
+  	  $modelFile = $conf['type']['prefix'].$v.'/html.queries';
+  	  $viewFile = null;
   	  trigger_error("LODSPeaKr can't find the proper query. Using HTML query instead.", E_USER_NOTICE);
   	  break;
   	  	}
   	}
   	if($viewFile == null && $extension == 'html'){
-  	  $viewFile = 'class.rdfs:Resource/html.template';
+  	  $viewFile = 'type.rdfs:Resource/html.template';
   	}
   	return array($modelFile, $viewFile);
   }

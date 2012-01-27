@@ -35,7 +35,7 @@ $conf['http_accept']['nt']   = array('text/plain');
 $conf['service']['prefix'] = 'service.';
 $conf['service']['class'] = 'classes/BasicSpecialFunction.php';
 
-$conf['class']['prefix'] = 'class.';
+$conf['type']['prefix'] = 'type.';
 $conf['uri']['prefix'] = 'uri.';
 
 //Frontpage when user goes to http://example.org/
@@ -51,8 +51,8 @@ $conf['debug'] = false;
 //Modules: LODSPeaKr will try to match the requested URI
 //using the modules in the following order
 $conf['modules'] = array();
-$conf['modules']['directory'] = 'modules/';
-$conf['modules']['available'] = array('static','uri', 'class', 'service');
+$conf['modules']['directory'] = 'classes/modules/';
+$conf['modules']['available'] = array('static','uri', 'type', 'service');
 
 include_once('settings.inc.php');
 $conf['view']['standard']['baseUrl'] = $conf['basedir'];
