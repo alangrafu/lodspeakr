@@ -20,15 +20,15 @@ viewHtml=$(cat <<VIEW
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML+RDFa 1.0//EN"
     "http://www.w3.org/MarkUp/DTD/xhtml-rdfa-1.dtd">
-    <html xmlns="http://www.w3.org/1999/xhtml" {% for i, ns in base.ns %}xmlns:{{i}}="{{ns}}" 
+<html xmlns="http://www.w3.org/1999/xhtml" {% for i, ns in base.ns %}xmlns:{{i}}="{{ns}}" 
     {%endfor%}version="XHTML+RDFa 1.0" xml:lang="en">
-    <head>
+  <head>
     <title>Page about {{lodspk.this.value}}</title>
     <link href="{{lodspk.baseUrl}}css/basic.css" rel="stylesheet" type="text/css" media="screen" />
-    <link rel="alternate" type="application/rdf+xml" title="RDF/XML Version" href="{{lodspk.this.value}}.rdf" />
-    <link rel="alternate" type="text/turtle" title="Turtle Version" href="{{lodspk.this.value}}.ttl" />
-    <link rel="alternate" type="text/plain" title="N-Triples Version" href="{{lodspk.this.value}}.nt" />
-    <link rel="alternate" type="application/json" title="RDFJSON Version" href="{{lodspk.this.value}}.json" />
+    <link rel="alternate" type="application/rdf+xml" title="RDF/XML Version"   href="{{lodspk.this.value}}.rdf" />
+    <link rel="alternate" type="text/turtle"         title="Turtle Version"    href="{{lodspk.this.value}}.ttl" />
+    <link rel="alternate" type="text/plain"          title="N-Triples Version" href="{{lodspk.this.value}}.nt" />
+    <link rel="alternate" type="application/json"    title="RDFJSON Version"   href="{{lodspk.this.value}}.json" />
   </head>
   <body about="{{lodspk.this.value}}">
     <h1>Page about <a href='{{lodspk.this.value}}'>{{lodspk.this.curie}}</a></h1>
