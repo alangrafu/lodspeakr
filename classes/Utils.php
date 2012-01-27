@@ -455,11 +455,11 @@ class Utils{
   	  	}*/
   	  }else{
   	  	if(isset($value['uri']) && $value['uri'] == 1){
-  	  	  $value['value'] = preg_replace("|^".$conf['ns']['local']."|", $conf['basedir'], $value['value']);
-  	  	  $value['curie'] = Utils::uri2curie($value['value']);
   	  	  if($conf['mirror_external_uris']){
   	  	  	$value['mirroredUri'] = $value['value'];
   	  	  }
+  	  	  $value['value'] = preg_replace("|^".$conf['ns']['local']."|", $conf['basedir'], $value['value']);
+  	  	  $value['curie'] = Utils::uri2curie($value['value']);
   	  	  $array[$key] = $value;
   	  	}  	  	  	  	
   	  } 
