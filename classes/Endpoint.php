@@ -45,6 +45,10 @@ class Endpoint{
         if(preg_match("/construct/i", $q)){
           return $aux;
         }
+        if(preg_match("/ask/i", $q)){
+          $r = json_decode($aux, true);
+          return $r;
+        }
   }
   
   public function queryPost($q){

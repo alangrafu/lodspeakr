@@ -12,7 +12,7 @@ class Utils{
   
   public static function send404($uri){
   	header("HTTP/1.0 404 Not Found");
-  	echo "LODSPeaKr could not find ".$uri." or information about it.\n\n";
+  	echo "LODSPeaKr could not find ".$uri." or information about it.\nNo URIs in the triple store, or services configured with that URI\n";
   	exit(0);
   }
   
