@@ -341,7 +341,6 @@ class Utils{
   	    $lodspk = $lodspkObj;
   	  }
   	  
-  	  
   	  if($lodspk['transform_select_query']==true){
   	  	include_once($conf['home'].'lib/arc2/ARC2.php');
   	  	$parser = ARC2::getSPARQLParser();
@@ -401,13 +400,12 @@ class Utils{
 	  	  	  Utils::send500();
 	  	  	}
 	  	  }else{
-	  	  	$query = preg_replace('/select.*where/i', 'CONSTRUCT {'.$construct.'} WHERE', $query);
+	  	  	$query = preg_replace('/select\n?.*\n?where/i', 'CONSTRUCT {'.$construct.'} WHERE', $query);
 	  	  }
 	  	}else {
 	  	  Utils::send500("invalid query: " . $parser->getErrors());
 	  	}
 	  }
-	  
   	  if($conf['debug']){
   	  	echo "$modelFile (against ".$e->getSparqlUrl().")\n-------------------------------------------------\n";
   	  	echo $query;
