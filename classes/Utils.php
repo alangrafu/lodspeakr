@@ -355,7 +355,7 @@ class Utils{
   	  	  	  $resultVars[$v['value']] = 1;
   	  	  	}
   	  	  };
-  	  	  $x = Utils::extractTriples($q_infos['query']['pattern']);
+  	  	  $x = Utils::extractObj($q_infos['query']['pattern']);
   	  	  foreach($x as $v){
   	  	  	if(($resultVars[$v['s']] && $v['s_type'] == 'var')
   	  	  	  || ($resultVars[$v['p']] && $v['p_type'] == 'var')
@@ -393,7 +393,16 @@ class Utils{
 	  	  	
 	  	  	$construct .= ".\n";
 	  	  }
-	  	  $query = preg_replace('/select.*where/i', 'CONSTRUCT {'.$construct.'} WHERE', $query);
+	  	  if($construct == ""){
+	  	  	if(sizeof($q_infos['query']['result_vars'])>0){
+	  	  	  //For now, assuming variables are in the GRAPH ?g
+	  	  	  $query = "CONSTRUCT {?g ?x ?y} WHERE{GRAPH ?g{?g ?x ?y}}";
+	  	  	}else{
+	  	  	  Utils::send500();
+	  	  	}
+	  	  }else{
+	  	  	$query = preg_replace('/select.*where/i', 'CONSTRUCT {'.$construct.'} WHERE', $query);
+	  	  }
 	  	}else {
 	  	  Utils::send500("invalid query: " . $parser->getErrors());
 	  	}
@@ -519,12 +528,12 @@ class Utils{
   	
   }
   
-  private static function extractTriples($obj){
+  private static function extractObj($obj, $term = 'triple'){
   	$triples = array();
   	if(is_array($obj)){
   	  foreach($obj as $k => $v){
   	  	if($v['type'] != 'triple'){
-  	  	  $aux = Utils::extractTriples($v);
+  	  	  $aux = Utils::extractObj($v);
   	  	  if($aux['type'] != 'triple'){
   	  	  	$triples = array_merge($triples,$aux);
   	  	  }else{
