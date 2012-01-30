@@ -44,9 +44,9 @@ public function execute($service){
   $context['endpoints'] = $endpoints;
   //$sp = new SpecialFunction();
   //$sp->execute($localUri, $context);
-  $f = $this->getFunction($uri);
+  $f = $this->getFunction($localUri);
   $params = array();
-  $params = $this->getParams($uri);
+  $params = $this->getParams($localUri);
   //$params[] = $context;
   $acceptContentType = Utils::getBestContentType($_SERVER['HTTP_ACCEPT']);
   $extension = Utils::getExtension($acceptContentType); 
