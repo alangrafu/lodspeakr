@@ -61,7 +61,7 @@ class TypeModule extends abstractModule{
   	//Check if files for model and view exist
   	$t=Queries::getClass($uri, $endpoints['local']);
   	
-  	list($modelFile, $viewFile) = $this::getModelandView($t, $extension);
+  	list($modelFile, $viewFile) = $this->getModelandView($t, $extension);
   	$lodspk = $conf['view']['standard'];
   	if($viewFile == null){
   	  $lodspk['transform_select_query'] = true;

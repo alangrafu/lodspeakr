@@ -30,7 +30,7 @@ class UriModule extends abstractModule{
   	}
   	$extension = Utils::getExtension($pair[2]); 
   	$curie = Utils::uri2curie($pair[0]);
-  	list($modelFile, $viewFile) = $this::getModelandView($curie, $extension);
+  	list($modelFile, $viewFile) = $this->getModelandView($curie, $extension);
   	
   	if($modelFile == NULL){
   	  return FALSE;
@@ -69,7 +69,7 @@ class UriModule extends abstractModule{
   	$acceptContentType = $format;
 
   	$curie = Utils::uri2curie($uri);
-  	list($modelFile, $viewFile) = $this::getModelandView($curie, $extension);
+  	list($modelFile, $viewFile) = $this->getModelandView($curie, $extension);
   	if($modelFile == NULL){
   	  return;
   	}

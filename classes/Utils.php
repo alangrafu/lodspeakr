@@ -224,7 +224,7 @@ class Utils{
   	global $conf;
   	$contentType = $lodspk['this']['contentType'];
   	$extension = Utils::getExtension($contentType); 
-  	
+
   	header('Content-Type: '.$contentType);
   	if($extension != 'html'){
   	  $data = Utils::serializeRdf($data, $extension);
@@ -495,7 +495,7 @@ class Utils{
   	global $conf;
   	global $uri;
   	global $extension;
-  	$lodspk = $conf['view']['standard'];
+  	//$lodspk = $conf['view']['standard'];
   	$lodspk = $lodspkData;
   	
   	if(isset($lodspkData['params'])){
