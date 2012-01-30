@@ -35,6 +35,7 @@ public function execute($service){
   global $acceptContentType;
   global $endpoints;
   global $lodspk;
+  global $first;
   $context = array();
   $context['contentType'] = $acceptContentType;
   $context['endpoints'] = $endpoints;
@@ -93,12 +94,13 @@ public function execute($service){
   	  $lodspk['transform_select_query'] = true;
   	}
   	
-  	chdir($conf['model']['directory']);
-  	$first = array();
+  	chdir($conf['home'].$conf['model']['directory']);
+  	
   	Utils::queryFile($modelFile, $endpoints['local'], $results, $first);
-  	chdir($conf['home']);
   	$results = Utils::internalize($results);
   	
+  	$lodspk['first'] = Utils::getFirsts($results);
+  	chdir($conf['home']);
   	if(is_array($results)){
   	  $results = Convert::array_to_object($results);
   	}
