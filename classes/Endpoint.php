@@ -42,6 +42,13 @@ class Endpoint{
         if(preg_match("/describe/i", $q)){
           return $aux;
         }
+        if(preg_match("/construct/i", $q)){
+          return $aux;
+        }
+        if(preg_match("/ask/i", $q)){
+          $r = json_decode($aux, true);
+          return $r;
+        }
   }
   
   public function queryPost($q){
@@ -55,6 +62,10 @@ class Endpoint{
   	//execute post
   	$result = curl_exec($ch);
   	return $result;
+  }
+  
+  public function getSparqlURL(){
+  	return $this->sparqlUrl;
   }
   
 }
