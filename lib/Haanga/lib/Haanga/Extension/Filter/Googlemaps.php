@@ -1,6 +1,6 @@
 <?php
 
-class Haanga_Extension_Filter_GoogleMaps{
+class Haanga_Extension_Filter_Googlemaps{
   public $is_safe = TRUE;
   static function main($obj, $varname){
   	$data = "";
@@ -43,7 +43,7 @@ class Haanga_Extension_Filter_GoogleMaps{
   	  	$east = $k->$names[1]->value;
   	  }  	  
   	  
-  	  $nameArr .= $k->$names[2]->value;
+  	  $nameArr .= '"'.$k->$names[2]->value.'"';
   	  $firstColumn = false;
   	}
   	
@@ -72,21 +72,18 @@ class Haanga_Extension_Filter_GoogleMaps{
 	  var latArray = [".$latArr."];
 	  var lonArray = [".$longArr."];
 	  var labelArray = [".$nameArr."];
-	  
-	  for (var i = 0; i < latArray.length; i++) {
-	  var position = new google.maps.LatLng(latArray[i], lonArray[i]);
-	  var marker = new google.maps.Marker({
-	  position: position,
-	  map: map
-	  });
-	  
-	  marker.setTitle(labelArray[i]);
-	  var infowindow = new google.maps.InfoWindow({
-	  content: labelArray[i]
-	  });     
-	  google.maps.event.addListener(marker, 'click', function() {
-	  infowindow.open(marker.get('map'), marker);
-	  });
+	  var marker = new Array();
+	  for (var i = 0; i < labelArray.length; i++) {
+	    var position = new google.maps.LatLng(latArray[i], lonArray[i]);
+	    marker = new google.maps.Marker({position: position,map: map});
+  	    marker.setTitle(labelArray[i]);
+	    var infowindow = new google.maps.InfoWindow({content: i+labelArray[i]});
+	    google.maps.event.addListener(marker, 'click', (function(marker, i) {
+        return function() {
+          infowindow.setContent(labelArray[i]);
+          infowindow.open(map, marker);
+        }
+      })(marker, i));
 	  }
     }
         
