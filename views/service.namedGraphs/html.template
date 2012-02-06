@@ -4,17 +4,16 @@
     <html xmlns="http://www.w3.org/1999/xhtml" {% for i, ns in base.ns %}xmlns:{{i}}="{{ns}}" 
     {%endfor%}version="XHTML+RDFa 1.0" xml:lang="en">
   <head>
-    <title>Graphs available in the triple store</title>
-    <link href="{{base.baseUrl}}/lodspeakr/css/basic.css" rel="stylesheet" type="text/css" media="screen" />
+    <title>Named Graphs</title>
+    <link href="css/basic.css" rel="stylesheet" type="text/css" media="screen" />
   </head>
   <body>
-    <h1>Graphs available</h1>
-{%include "header.inc"%}
+    <h1>Named graphs available</h1>
+{%include "../header.inc"%}
 	<ul>
-    {% for row in r %}
-        <li>{{row.g.curie}}</li>
+    {% for row in models.main %}
+        <li>{{row.g.value}}</li>
     {% endfor %}
     </ul>
   </body>
 </html>
-

@@ -2,16 +2,25 @@
 
 class Queries{
   public static function uriExist($uri, $e){
-  	$q = "SELECT * WHERE{
-  	{<$uri> ?p1 ?o1}
-  	UNION
-  	{?s1 <$uri> ?o2}
-  	UNION
-  	{?s2 ?p2 <$uri>}
-  	}LIMIT 1";
-  	
-  	$r = $e->query($q);
-  	if(sizeof($r['results']['bindings'])>0){
+  	$q = "ASK WHERE{
+  	{
+  	GRAPH ?g{
+    	{<$uri> ?p1 []}
+    	UNION
+    	{[] <$uri> []}
+    	UNION
+    	{[] ?p2 <$uri>}
+    	}
+    	}UNION{
+    	    	{<$uri> ?p1 []}
+    	UNION
+    	{[] <$uri> []}
+    	UNION
+    	{[] ?p2 <$uri>}
+    	}
+    }";
+  	$r = $e->query($q); 
+  	if($r['boolean'] && strtolower($r['boolean']) !== false){
   	  return true;
   	}
   	return false;
@@ -19,11 +28,21 @@ class Queries{
   
   public static function getClass($uri, $e){
   	$q = "SELECT DISTINCT ?class ?inst WHERE{
-  	{
-  	  <$uri> a ?class .
+  	 {
+  	  GRAPH ?g{
+  	  {
+  	    <$uri> a ?class .
+  	  }UNION{
+  	    ?inst a <$uri> .
+  	  }
+  	 }
   	}UNION{
-  	  ?inst a <$uri> .
-  	}
+  	  {
+  	    <$uri> a ?class .
+  	  }UNION{
+  	    ?inst a <$uri> .
+  	  }
+  	 }
   	}";
   	try{
   	  $r = $e->query($q);

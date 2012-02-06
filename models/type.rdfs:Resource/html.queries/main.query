@@ -1,0 +1,18 @@
+SELECT ?s2 ?p2 ?s1 ?p1  WHERE {
+{
+GRAPH ?g{
+        {
+                <{{uri}}> ?s1 ?p1 .
+        }UNION{
+                ?s2 ?p2 <{{uri}}> .
+
+        }
+}
+}UNION{        {
+                <{{uri}}> ?s1 ?p1 .
+        }UNION{
+                ?s2 ?p2 <{{uri}}> .
+
+        }
+}
+}

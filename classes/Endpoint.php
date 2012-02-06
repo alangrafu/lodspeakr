@@ -33,14 +33,34 @@ class Endpoint{
         curl_setopt($c, CURLOPT_HTTPHEADER, $context);
         curl_setopt($c, CURLOPT_RETURNTRANSFER, true);
         $aux = curl_exec($c); // execute the curl command 
+        if($conf['debug']){
+          if($aux == false){
+          	trigger_error("Error executing SPARQL query: ".curl_error($c), E_USER_ERROR);
+          	echo("Error executing SPARQL query: ".curl_error($c));
+          }
+        }
         curl_close($c);
         $this->params['output'] = $auxoutput;
         if(preg_match("/select/i", $q)){
           $r = json_decode($aux, true);
+          if($conf['debug']){
+          	if($r == false){
+          	  trigger_error("Warning: Results from a SELECT sparql query couldn't get parsed", E_USER_WARNING);
+          	  echo("Warning: Results from a SELECT sparql query couldn't get parsed");
+          	}
+          }
+        }
           return $r;
         }
         if(preg_match("/describe/i", $q)){
           return $aux;
+        }
+        if(preg_match("/construct/i", $q)){
+          return $aux;
+        }
+        if(preg_match("/ask/i", $q)){
+          $r = json_decode($aux, true);
+          return $r;
         }
   }
   
@@ -55,6 +75,10 @@ class Endpoint{
   	//execute post
   	$result = curl_exec($ch);
   	return $result;
+  }
+  
+  public function getSparqlURL(){
+  	return $this->sparqlUrl;
   }
   
 }
