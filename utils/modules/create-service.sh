@@ -4,18 +4,18 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 initToken='service'
 
-modelHtml=$(cat  <<QUERY
+modelHtml=`cat  <<QUERY
 {%for h in base.header %}
 PREFIX {{h.prefix}}: <{{h.ns}}>
 {%endfor%}
 SELECT DISTINCT ?resource WHERE {
-  {%if base.args.arg0 %}GRAPH <{{lodspk.args.arg0}}>{ {%endif%}
+  {%if base.args.arg0 %}GRAPH <{{lodspk.args.arg0}}>{ {%else%} GRAPH?g { {%endif%}
   	[] a ?resource .
   {%if base.args.arg0 %} } {%endif%}
 }
-QUERY)
+QUERY`
 
-viewHtml=$(cat  <<VIEW
+viewHtml=`cat  <<VIEW
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML+RDFa 1.0//EN"
     "http://www.w3.org/MarkUp/DTD/xhtml-rdfa-1.dtd">
@@ -34,17 +34,17 @@ viewHtml=$(cat  <<VIEW
     </ul>
   </body>
 </html>
-VIEW)
+VIEW`
 
-modelRdf=$(cat  <<QUERY
+modelRdf=`cat  <<QUERY
 DESCRIBE ?resource WHERE {
   	[] a ?resource .
 }
-QUERY)
+QUERY`
 
-viewRdf=$(cat  <<QUERY
+viewRdf=`cat  <<QUERY
 {{r|safe}}
-QUERY)
+QUERY`
 
 modelTtl=$modelRdf
 viewTtl=$viewRdf

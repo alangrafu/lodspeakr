@@ -7,6 +7,7 @@ initToken='type'
 
 #Check models
 mainModelDir=$DIR/../../models/$initToken.$1
+mainViewDir=$DIR/../../views/$initToken.$1
 
 if [ ! -e "$mainModelDir" ]
 then
@@ -17,7 +18,10 @@ fi
 obj=( )
 if [ "$2" == "all" ]
 then
-  obj=( html rdf ttl nt json )
+  rm -rf $mainModelDir
+  rm -rf $mainViewDir
+  echo $initToken.$1 deleted >&2
+  exit
 else
   obj=( $2 )
 fi
@@ -32,7 +36,6 @@ done
 
 
 #Check views
-mainViewDir=$DIR/../../views/$initToken.$1
 
 if [ ! -e "$mainViewDir" ]
 then

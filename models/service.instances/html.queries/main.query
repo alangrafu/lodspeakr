@@ -2,5 +2,7 @@
 PREFIX {{h.prefix}}: <{{h.ns}}>
 {%endfor%}
 SELECT DISTINCT ?resource WHERE {
-  ?resource a {{lodspk.args.arg0}}
+  GRAPH ?g{
+    ?resource a {{lodspk.args.arg0}}
+  }
 }

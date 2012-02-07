@@ -57,32 +57,31 @@ class TypeModule extends abstractModule{
   	* dcterms:format for this page
   	*/
   	$acceptContentType = $format;
-  	
   	//Check if files for model and view exist
   	$t=Queries::getClass($uri, $endpoints['local']);
   	
-  	list($modelFile, $viewFile) = $this->getModelandView($t, $extension);
-  	$lodspk = $conf['view']['standard'];
+  	$obj = $this->getModelandView($t, $extension);
+  	$modelFile = $obj['modelFile'];
+  	$lodspk['model'] = $obj['modelDir'];  	
+  	$viewFile = $obj['viewFile'];
+  	$lodspk['view'] = $obj['viewDir'];
   	if($viewFile == null){
   	  $lodspk['transform_select_query'] = true;
   	}
+  	$lodspk['home'] = $conf['basedir'];
+  	$lodspk['baseUrl'] = $conf['basedir'];
   	$lodspk['module'] = 'type';
+  	$lodspk['root'] = $conf['root'];
+  	$lodspk['contentType'] = $acceptContentType;
+  	$lodspk['ns'] = $conf['ns'];
+  	$lodspk['endpoint'] = $conf['endpoint'];
+
   	$lodspk['add_mirrored_uris'] = true;
-  	$lodspk['type'] = $modelFile;
   	$lodspk['this']['value'] = $uri;
   	$lodspk['this']['curie'] = Utils::uri2curie($uri);
-  	$lodspk['thislocal']['value'] = $localUri;
-  	$lodspk['thislocal']['curie'] = Utils::uri2curie($localUri);
-  	
-  	$lodspk['this']['extension'] = $extension;
-  	$lodspk['this']['contentType'] = $acceptContentType;
-  	$lodspk['model']['directory'] = $conf['model']['directory'];
-  	$lodspk['view']['directory'] = $conf['view']['directory'];
-  	$lodspk['ns'] = $conf['ns'];
-  	
-  	
-  	chdir($conf['home'].$conf['model']['directory']);
-  	
+  	$lodspk['this']['local'] = $localUri;
+   	$lodspk['this']['extension'] = $extension;
+  	chdir($conf['home'].$lodspk['model']);
   	Utils::queryFile($modelFile, $endpoints['local'], $results, $first);
   	$results = Utils::internalize($results); 
   	
@@ -93,7 +92,7 @@ class TypeModule extends abstractModule{
   	}else{
   	  $resultsObj = $results;
   	}
-  	Utils::processDocument($viewFile, $lodspk, $resultsObj);
+ 	Utils::processDocument($viewFile, $lodspk, $resultsObj);
   	
   }
   
@@ -102,12 +101,15 @@ class TypeModule extends abstractModule{
   	global $results;
   	global $rPointer;
   	global $lodspk;
+  	$objResult = array();
   	//Defining default views and models
   	$curieType="";
-  	$modelFile = 'type.rdfs:Resource/html.queries';
-  	$viewFile = null;//'type.rdfs:Resource/html.template';
+  	$objResult['modelFile'] = 'main.query';
+  	$objResult['viewFile'] = null;//'html.template';
+  	$objResult['modelDir'] = $conf['model']['directory'].'type.rdfs:Resource/html.queries/';
+  	$objResult['viewDir'] = $conf['view']['directory'].'type.rdfs:Resource/'; 
   	
-  	//Get the first type available
+ 	//Get the first type available
   	$typesAndValues = array();
   	foreach($t as $v){
   	  $curie = Utils::uri2curie($v);
@@ -118,24 +120,28 @@ class TypeModule extends abstractModule{
   	}
   	arsort($typesAndValues);
   	foreach($typesAndValues as $v => $w){
-  	  $auxViewFile  = $conf['view']['directory'].$conf['type']['prefix'].$v.'/'.$extension.'.template';
-  	  $auxModelFile = $conf['model']['directory'].$conf['type']['prefix'].$v.'/'.$extension.'.queries';
+  	  $auxModelFile = $conf['model']['directory'].$conf['type']['prefix'].$v.'/';
+  	  $auxViewFile = $conf['view']['directory'].$conf['type']['prefix'].$v.'/'; 
   	  if(file_exists($auxModelFile) && file_exists($auxViewFile) && $v != null){
-  	  	$viewFile = $conf['type']['prefix'].$v.'/'.$extension.'.template';
-  	  	$modelFile = $conf['type']['prefix'].$v.'/'.$extension.'.queries';
+  	  	$auxViewFile  = $conf['view']['directory'].$conf['type']['prefix'].$v.'/'.$extension.'.template';
+  	  	$auxModelFile = $conf['model']['directory'].$conf['type']['prefix'].$v.'/'.$extension.'.queries'; 	  	
+  	  	$objResult['viewFile'] = $extension.'.template';
+  	  	$objResult['modelFile'] = $extension.'.queries';
   	  	break;
   	  }elseif($extension != 'html' &&
   	  	file_exists($conf['model']['directory'].$conf['type']['prefix'].$v.'/html.queries')){
-  	  $modelFile = $conf['type']['prefix'].$v.'/html.queries';
-  	  $viewFile = null;
+	  $auxViewFile  = $conf['view']['directory'].$conf['type']['prefix'].$v.'/'.$extension.'.template';
+  	  $auxModelFile = $conf['model']['directory'].$conf['type']['prefix'].$v.'/'.$extension.'.queries';
+  	  $objResult['modelFile'] = $conf['type']['prefix'].$v.'/html.queries';
+  	  $objResult['viewFile'] = null;
   	  trigger_error("LODSPeaKr can't find the proper query. Using HTML query instead.", E_USER_NOTICE);
   	  break;
   	  	}
   	}
-  	if($viewFile == null && $extension == 'html'){
-  	  $viewFile = 'type.rdfs:Resource/html.template';
+  	if($objResult['viewFile'] == null && $extension == 'html'){
+  	  $objResult['viewFile'] = 'html.template';
   	}
-  	return array($modelFile, $viewFile);
+  	return $objResult;
   }
   
 }
