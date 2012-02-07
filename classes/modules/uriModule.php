@@ -80,8 +80,8 @@ class UriModule extends abstractModule{
   	$lodspk['add_mirrored_uris'] = true;
   	$lodspk['this']['value'] = $uri;
   	$lodspk['this']['curie'] = Utils::uri2curie($uri);
-  	$lodspk['thislocal']['value'] = $localUri;
-  	$lodspk['thislocal']['curie'] = Utils::uri2curie($localUri);
+  	$lodspk['local']['value'] = $localUri;
+  	$lodspk['local']['curie'] = Utils::uri2curie($localUri);
   	
   	$lodspk['this']['contentType'] = $acceptContentType;
   	$lodspk['model'] = $conf['model']['directory'];
