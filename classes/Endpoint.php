@@ -49,7 +49,6 @@ class Endpoint{
           	  echo("Warning: Results from a SELECT sparql query couldn't get parsed");
           	}
           }
-        }
           return $r;
         }
         if(preg_match("/describe/i", $q)){

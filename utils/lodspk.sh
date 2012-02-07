@@ -40,19 +40,21 @@ if [[ $currentOperation == "create" ||  $currentOperation == "delete" ]]; then
   fi
   
   currentUnit=$3
-  
-  if [[ ${formats[@]} =~ $4 ]]; then
-    currentFormat=$4 
-  else
-    if [ -z "$4" ]; then
-      currentFormat="all"
+  currentFormat="html"
+  if [ ! -z "$4" ]; then
+    if [[ ${formats[@]} =~ $4 ]]; then
+      currentFormat=$4
     else
       echo "Format \"$4\" not valid"
       echo $USAGE
       exit 1
     fi
+  else
+  	if [[ $currentOperation == "delete" ]]; then
+  	  currentFormat="all"
+  	fi  	
   fi
-  $DIR/modules/create-$currentModule.sh "$currentUnit" "$currentFormat"
+  $DIR/modules/$currentOperation-$currentModule.sh "$currentUnit" "$currentFormat"
 fi
 
 ## Debug

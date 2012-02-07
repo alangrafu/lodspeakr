@@ -4,19 +4,20 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 initToken='uri'
 
-modelHtml=$(cat <<QUERY
+modelHtml=`cat <<QUERY
 SELECT ?s2 ?p2 ?s1 ?p1  WHERE {
+    GRAPH ?g{
         {
                 <{{uri}}> ?s1 ?p1 .
         }UNION{
                 ?s2 ?p2 <{{uri}}> .
         }
+    }
 }
-QUERY
-)
+QUERY`
 
 
-viewHtml=$(cat <<VIEW
+viewHtml=`cat <<VIEW
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML+RDFa 1.0//EN"
     "http://www.w3.org/MarkUp/DTD/xhtml-rdfa-1.dtd">
@@ -67,17 +68,17 @@ viewHtml=$(cat <<VIEW
     </div>
   </body>
 </html>
-VIEW)
+VIEW`
 
-modelRdf=$(cat <<QUERY
+modelRdf=`cat <<QUERY
 DESCRIBE ?resource WHERE {
   	[] a ?resource .
 }
-QUERY)
+QUERY`
 
-viewRdf=$(cat <<VIEW
+viewRdf=`cat <<VIEW
 {{r|safe}}
-VIEW)
+VIEW`
 
 modelTtl=$modelRdf
 viewTtl=$viewRdf
