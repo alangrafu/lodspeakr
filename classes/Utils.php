@@ -222,7 +222,7 @@ class Utils{
   
   public static function processDocument($viewFile, $lodspk, $data){
   	global $conf;
-  	$contentType = $lodspk['this']['contentType'];
+  	$contentType = $lodspk['contentType'];
   	$extension = Utils::getExtension($contentType); 
 
   	header('Content-Type: '.$contentType);
@@ -251,7 +251,7 @@ class Utils{
   	global $lodspk;
   	global $endpoints;
   	global $results;
-  	$lodspk['model']['directory'] = $modelDir;
+  	$lodspk['model'] = $modelDir;
   	$originalDir = getcwd();
   	$subDirs= array();
   	trigger_error("Entering $modelDir from ".getcwd(), E_USER_NOTICE);
@@ -290,7 +290,7 @@ class Utils{
   	  }
   	}
   	closedir($handle);
-  	$originalDir = $lodspk['model']['directory'];
+  	$originalDir = $lodspk['model'];
   	if(isset($subDirs)){
   	  foreach($subDirs as $v){
   	  	if(!isset($r[$modelDir])){
@@ -332,8 +332,11 @@ class Utils{
   	  $models = Convert::array_to_object($r2);
   	  $f = Convert::array_to_object($first);
  	  $vars = compact('uri', 'lodspk', 'models', 'f');
- 	  
- 	  $fnc = Haanga::compile(file_get_contents($modelFile));
+ 	  $q = file_get_contents($modelFile);
+ 	  if($q == false){
+ 	  	Utils::send500("I can't load ".$modelFile." in ".getcwd());
+ 	  }
+ 	  $fnc = Haanga::compile($q);
   	  $query = $fnc($vars, TRUE);
   	  
   	  if(is_object($lodspk)){
@@ -497,13 +500,12 @@ class Utils{
   	global $extension;
   	//$lodspk = $conf['view']['standard'];
   	$lodspk = $lodspkData;
-  	
   	if(isset($lodspkData['params'])){
   	  $lodspk['this']['params'] = $lodspkData['params'];
   	}
-  	require_once('lib/Haanga/lib/Haanga.php');
+  	require_once($conf['home'].'lib/Haanga/lib/Haanga.php');
   	Haanga::configure(array(
-  	  'template_dir' => $lodspk['view']['directory'],
+  	  'template_dir' => $lodspk['view'],
   	  'cache_dir' => $conf['home'].'cache/',
   	  ));
   	$models = $data;
@@ -517,7 +519,7 @@ class Utils{
  	}
 	if(is_string($data)){
 	  echo($data);
-	}elseif(is_file($lodspk['view']['directory'].$view)){
+	}elseif(is_file($lodspk['view'].$view)){
 	  Haanga::Load($view, $vars);
 	}else{
 	  $fnc = Haanga::compile($view);

@@ -84,8 +84,8 @@ class UriModule extends abstractModule{
   	$lodspk['thislocal']['curie'] = Utils::uri2curie($localUri);
   	
   	$lodspk['this']['contentType'] = $acceptContentType;
-  	$lodspk['model']['directory'] = $conf['model']['directory'];
-  	$lodspk['view']['directory'] = $conf['view']['directory'];
+  	$lodspk['model'] = $conf['model']['directory'];
+  	$lodspk['view'] = $conf['view']['directory'];
   	$lodspk['ns'] = $conf['ns'];
   	
   	
