@@ -1,4 +1,5 @@
 <?
+error_reporting(E_ERROR);
 $s = 'settings.inc.php';
 $c = file_get_contents($s);
 $optionarray = Array('on' => 'true', '1' => 'true', 'off' => 'false', '0' =>'false');
