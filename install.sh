@@ -23,19 +23,7 @@ fi
 back_one=`cd .. 2>/dev/null && pwd`
 parent=`basename $back_one`
 
-mkdir -p meta
-cd meta
-if [ ! -e $metadb ]; then
-  SQLITE3=`which sqlite3`
-  if [ -z "$SQLITE3" ]; then
-  	echo "SQLlite3 is required to continue installation. Please add it to your \$PATH."
-  	exit 1
-  fi
-  $SQLITE3 $metadb 'CREATE TABLE document (uri varcharg(1000), doc varchar(1000), format varchar(50));'
-else
-  echo "WARNING: SQLite database already exists."
-fi
-cd ..
+utils/create_db.sh $metadb
 
 while [ "$everything_ok" != "y" ]; do
   echo
