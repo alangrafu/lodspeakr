@@ -6,6 +6,7 @@ root_htaccess="root.htaccess"
 parent_htaccess="../.htaccess"
 settings_file="settings.inc.php"
 
+metadb="db.sqlite"
 basedir="http://localhost/my/data/"
 home=`basename \`pwd\`` # 'lodspeakr', the directory from git clone
 ns=$basedir
@@ -21,6 +22,9 @@ fi
 
 back_one=`cd .. 2>/dev/null && pwd`
 parent=`basename $back_one`
+
+utils/create_db.sh $metadb
+
 while [ "$everything_ok" != "y" ]; do
   echo
   echo "== Basic Information =="
@@ -110,19 +114,6 @@ echo ""
 echo "WARNING: Copying $root_htaccess as .htaccess in parent directory"
 echo ""
 cp $root_htaccess $parent_htaccess
-
-#Creating symlinks for turtle and ntriples
-cd views
-ln -s rdfs:Resource.view.rdf rdfs:Resource.view.nt
-ln -s rdfs:Resource.view.rdf rdfs:Resource.view.ttl
-ln -s rdfs:Resource.view.rdf rdfs:Resource.view.json
-
-cd ../models
-ln -s rdfs:Resource.model.rdf rdfs:Resource.model.nt
-ln -s rdfs:Resource.model.rdf rdfs:Resource.model.ttl
-ln -s rdfs:Resource.model.rdf rdfs:Resource.model.json
-
-cd ..
 
 mkdir cache
 

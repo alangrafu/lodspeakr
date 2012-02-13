@@ -35,10 +35,16 @@ class UriModule extends abstractModule{
   	if($modelFile == NULL){
   	  return FALSE;
   	}
-  	return $pair;
+  	$result = array( 'res' => $pair[0],
+  	  					 'page' => $pair[1], 
+  	  					 'format' => $pair[2], 
+  	  					 'modelFile' => $modelFile, 
+  	  					 'viewFile' => $viewFile);
+
+  	return $result;
   }
   
-  public function execute($pair){
+  public function execute($p){
   	global $conf;
   	global $localUri;
   	global $uri;
@@ -47,10 +53,14 @@ class UriModule extends abstractModule{
   	global $lodspk;
   	global $results;
   	global $first;
-  	list($res, $page, $format) = $pair;
+  	$res = $p['res'];
+  	$page = $p['page'];
+  	$format = $p['format'];
+  	$modelFile = $p['modelFile'];
+  	$viewFile = $p['viewFile'];
   	$uri = $res;
   	$curie = Utils::uri2curie($res);
-
+  	
   	//If resource is not the page, send a 303 to the document
   	if($res == $localUri){
   	  Utils::send303($page, $acceptContentType);
@@ -67,14 +77,14 @@ class UriModule extends abstractModule{
   	* dcterms:format for this page
   	*/
   	$acceptContentType = $format;
-
+  	
   	$curie = Utils::uri2curie($uri);
-  	list($modelFile, $viewFile) = $this->getModelandView($curie, $extension);
   	if($modelFile == NULL){
   	  return;
   	}
   	
-  	$lodspk = $conf['view']['standard'];
+  	//$lodspk = $conf['view']['standard'];
+
   	$lodspk['type'] = $modelFile;
   	$lodspk['module'] = 'uri';
   	$lodspk['add_mirrored_uris'] = true;
@@ -90,10 +100,13 @@ class UriModule extends abstractModule{
   	
   	
   	chdir($conf['home'].$conf['model']['directory']);
-  	
   	Utils::queryFile($modelFile, $endpoints['local'], $results, $first);
-  	$results = Utils::internalize($results); 
-  	
+  	if($lodspk['resultRdf']){
+  	  echo Utils::serializeRdf($results, $extension);
+  	  exit(0);
+  	}else{
+  	  $results = Utils::internalize($results); 
+  	}
   	$lodspk['first'] = Utils::getFirsts($results);
   	chdir($conf['home']);
   	if(is_array($results)){
@@ -101,17 +114,43 @@ class UriModule extends abstractModule{
   	}else{
   	  $resultsObj = $results;
   	}
+  	if($conf['debug']){
+  	  trigger_error("Using template ".$viewFile, E_USER_NOTICE);
+  	  echo("TEMPLATE: ".$viewFile."\n\n");
+  	}
   	Utils::processDocument($viewFile, $lodspk, $resultsObj);
   	
   }
   
   private static function getModelandView($uri, $extension){  	
   	global $conf;
+  	global $lodspk;
   	$auxViewFile  = $conf['view']['directory'].$conf['uri']['prefix'].$uri.'/'.$extension.'.template';
   	$auxModelFile = $conf['model']['directory'].$conf['uri']['prefix'].$uri.'/'.$extension.'.queries';
-  	if(file_exists($auxModelFile) && file_exists($auxViewFile) ){
-  	  $viewFile = $conf['uri']['prefix'].$uri.'/'.$extension.'.template';
+ 	if(file_exists($auxModelFile)){
+ 	  //Model exists
   	  $modelFile = $conf['uri']['prefix'].$uri.'/'.$extension.'.queries';
+  	  if(file_exists($auxViewFile) ){
+  	  	//View exists, everything is fine
+  	  	$viewFile = $conf['uri']['prefix'].$uri.'/'.$extension.'.template';
+  	  }elseif($extension != 'html'){
+  	  	//View doesn't exists (and is not HTML)
+  	  	$viewFile = null;  	  	
+  	  }else{
+  	  	//No HTML representation as fallback, then not recognized by URI module 
+  	  	return array(null, null);
+  	  }
+  	  return array($modelFile, $viewFile);
+  	}elseif($extension != 'html' && file_exists($conf['model']['directory'].$conf['uri']['prefix'].$uri.'/html.queries')){
+  	  $modelFile = $conf['uri']['prefix'].$uri.'/html.queries';
+  	  if(file_exists($auxViewFile) ){
+  	  	//View exists, everything is fine
+  	  	$viewFile = $conf['uri']['prefix'].$uri.'/'.$extension.'.template';
+  	  }elseif($extension != 'html'){
+  	  	//View doesn't exists (and is not HTML)
+  	  	$lodspk['transform_select_query'] = true;
+  	  	$viewFile = null;  	  	
+  	  }
   	  return array($modelFile, $viewFile);
   	}
   	return array(NULL, NULL);

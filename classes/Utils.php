@@ -174,7 +174,7 @@ class Utils{
   }
   
   
-  private static function serializeRdf($data, $extension){
+  public static function serializeRdf($data, $extension='rdf'){
   	global $conf;
   	global $lodspk;
   	$ser;
@@ -226,9 +226,6 @@ class Utils{
   	$extension = Utils::getExtension($contentType); 
 
   	header('Content-Type: '.$contentType);
-  	if($extension != 'html'){
-  	  $data = Utils::serializeRdf($data, $extension);
-  	}
   	Utils::showView($lodspk, $data, $viewFile);  	
   }
   
@@ -427,6 +424,7 @@ class Utils{
   	  	  $rPointer[$modelFile]['first'] = $rPointer[$modelFile][0];
   	  	  }*/
   	  	}else{
+  	  	  $lodspk['resultRdf'] = true;
   	  	  $rPointer[$strippedModelFile] = $aux;
   	  	}
   	  }else{
@@ -437,6 +435,7 @@ class Utils{
   	  	  $rPointer['first'] = $rPointer[0];
   	  	  }*/
   	  	}else{
+  	  	  $lodspk['resultRdf'] = true;
   	  	  $rPointer = $aux;
   	  	}  	 
   	  }
@@ -521,9 +520,12 @@ class Utils{
 	  echo($data);
 	}elseif(is_file($lodspk['view'].$view)){
 	  Haanga::Load($view, $vars);
+	}elseif($view == null){
+	  $fnc = Haanga::compile('{{models|safe}}');
+	  $fnc($vars, TRUE);
 	}else{
 	  $fnc = Haanga::compile($view);
-	  $fnc($vars, FALSE);
+	  $fnc($vars, TRUE);
 	}
   	
   }

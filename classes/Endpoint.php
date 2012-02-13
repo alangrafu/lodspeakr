@@ -61,7 +61,7 @@ class Endpoint{
           $r = json_decode($aux, true);
           return $r;
         }
-  }
+    }
   
   public function queryPost($q){
   	$params =  $this->params;
