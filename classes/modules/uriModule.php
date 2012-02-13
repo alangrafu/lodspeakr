@@ -100,7 +100,6 @@ class UriModule extends abstractModule{
   	
   	
   	chdir($conf['home'].$conf['model']['directory']);
-  	
   	Utils::queryFile($modelFile, $endpoints['local'], $results, $first);
   	if($lodspk['resultRdf']){
   	  echo Utils::serializeRdf($results, $extension);
@@ -137,6 +136,9 @@ class UriModule extends abstractModule{
   	  }elseif($extension != 'html'){
   	  	//View doesn't exists (and is not HTML)
   	  	$viewFile = null;  	  	
+  	  }else{
+  	  	//No HTML representation as fallback, then not recognized by URI module 
+  	  	return array(null, null);
   	  }
   	  return array($modelFile, $viewFile);
   	}elseif($extension != 'html' && file_exists($conf['model']['directory'].$conf['uri']['prefix'].$uri.'/html.queries')){

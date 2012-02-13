@@ -226,9 +226,6 @@ class Utils{
   	$extension = Utils::getExtension($contentType); 
 
   	header('Content-Type: '.$contentType);
-  	if($extension != 'html'){
-  	  $data = Utils::serializeRdf($data, $extension);
-  	}
   	Utils::showView($lodspk, $data, $viewFile);  	
   }
   

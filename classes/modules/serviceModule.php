@@ -14,133 +14,145 @@ class ServiceModule extends abstractModule{
   	  return FALSE;
   	}
   	$extension = Utils::getExtension($acceptContentType); 
-  	$lodspk['model'] = $conf['home'].$conf['model']['directory'].$conf['service']['prefix'].$qArr[0]."/";
+  	$lodspk['model'] = $conf['home'].$conf['model']['directory'].$conf['service']['prefix'].$qArr[0].'/';
   	$lodspk['view'] = $conf['home'].$conf['view']['directory'].$conf['service']['prefix'].$qArr[0].'/';
   	$viewFile  = $extension.".template";
   	$modelFile = $extension.".queries";
-  	if(file_exists($lodspk['model'].$modelFile) && file_exists($lodspk['view'].$viewFile) && $qArr[0] != null){
-  	  trigger_error("Using model ".$modelFile." and view ".$viewFile, E_USER_NOTICE);
- 	  return array($modelFile, $viewFile);
-  	}elseif($extension != 'html' && file_exists($lodspk['model'].$conf['service']['prefix'].$qArr[0].'/html.queries')){
-  	  $modelFile =  $conf['home'].$lodspk['model'].$conf['service']['prefix'].$qArr[0].'/html.queries';
-  	  $viewFile = null;
-  	  trigger_error("Using ".$modelFile." as model. It will be used as a CONSTRUCT", E_USER_NOTICE);
-  	  return array($modelFile, $viewFile);
+  	if(file_exists($lodspk['model']) && file_exists($lodspk['view'])){
+  	  if(!file_exists($lodspk['view'].$viewFile)){
+  	  	$viewFile = null;  	  
+  	  }
+  	  if(file_exists($lodspk['model'].$modelFile) && $qArr[0] != null){
+  	  	trigger_error("Using model ".$modelFile." and view ".$viewFile, E_USER_NOTICE);
+  	  	return array($modelFile, $viewFile);
+  	  }elseif($extension != 'html' && file_exists($lodspk['model'].'/html.queries')){
+  	  	$modelFile = 'html.queries';
+  	  	trigger_error("Using ".$modelFile." as model. It will be used as a CONSTRUCT", E_USER_NOTICE);
+  	  	return array($modelFile, $viewFile);
+  	  }else{
+  	  	Utils::send406($uri);
+  	  	exit(0);
+  	  }
   	}
   	
   	return FALSE;  
   }
-
-public function execute($service){
-  global $conf;
-  global $localUri;
-  global $uri;
-  global $acceptContentType;
-  global $endpoints;
-  global $lodspk;
-  global $first;
-  $context = array();
-  $context['contentType'] = $acceptContentType;
-  $context['endpoints'] = $endpoints;
-  //$sp = new SpecialFunction();
-  //$sp->execute($localUri, $context);
-  $f = $this->getFunction($localUri);
-  $params = array();
-  $params = $this->getParams($localUri);
-  //$params[] = $context;
-  $acceptContentType = Utils::getBestContentType($_SERVER['HTTP_ACCEPT']);
-  $extension = Utils::getExtension($acceptContentType); 
-  $args = array();
-  list($modelFile, $viewFile) = $service;
   
-  try{
-  	$prefixHeader = array();
+  public function execute($service){
+  	global $conf;
+  	global $localUri;
+  	global $uri;
+  	global $acceptContentType;
+  	global $endpoints;
+  	global $lodspk;
+  	global $first;
+  	$context = array();
+  	$context['contentType'] = $acceptContentType;
+  	$context['endpoints'] = $endpoints;
+  	//$sp = new SpecialFunction();
+  	//$sp->execute($localUri, $context);
+  	$f = $this->getFunction($localUri);
+  	$params = array();
+  	$params = $this->getParams($localUri);
+  	//$params[] = $context;
+  	$acceptContentType = Utils::getBestContentType($_SERVER['HTTP_ACCEPT']);
+  	$extension = Utils::getExtension($acceptContentType); 
+  	$args = array();
+  	list($modelFile, $viewFile) = $service;
   	
-  	for($i=0;$i<sizeof($params);$i++){
-  	  if($conf['mirror_external_uris']){
-  	  	$altUri = Utils::curie2uri($params[$i]);
-  	  	$altUri = preg_replace("|^".$conf['basedir']."|", $conf['ns']['local'], $altUri);
-  	  	$params[$i] = Utils::uri2curie($altUri);
+  	try{
+  	  $prefixHeader = array();
+  	  
+  	  for($i=0;$i<sizeof($params);$i++){
+  	  	if($conf['mirror_external_uris']){
+  	  	  $altUri = Utils::curie2uri($params[$i]);
+  	  	  $altUri = preg_replace("|^".$conf['basedir']."|", $conf['ns']['local'], $altUri);
+  	  	  $params[$i] = Utils::uri2curie($altUri);
+  	  	}
   	  }
-  	}
-  	
-  	for($i=0;$i<sizeof($params);$i++){  
-  	  $auxPrefix = Utils::getPrefix($params[$i]);
-  	  if($auxPrefix['ns'] != NULL){
-  	  	$prefixHeader[] = $auxPrefix;
+  	  
+  	  for($i=0;$i<sizeof($params);$i++){  
+  	  	$auxPrefix = Utils::getPrefix($params[$i]);
+  	  	if($auxPrefix['ns'] != NULL){
+  	  	  $prefixHeader[] = $auxPrefix;
+  	  	}
+  	  	$args["arg".$i]=$params[$i];
   	  }
-  	  $args["arg".$i]=$params[$i];
+  	  $results['params'] = $params;
+  	  
+  	  
+  	  $lodspk['home'] = $conf['basedir'];
+  	  $lodspk['baseUrl'] = $conf['basedir'];
+  	  $lodspk['module'] = 'service';
+  	  $lodspk['root'] = $conf['root'];
+  	  $lodspk['contentType'] = $acceptContentType;
+  	  $lodspk['ns'] = $conf['ns'];  	  	
+  	  $lodspk['this']['value'] = $uri;
+  	  $lodspk['this']['curie'] = Utils::uri2curie($uri);
+  	  $lodspk['this']['local'] = $localUri;  	
+  	  $lodspk['contentType'] = $acceptContentType;
+  	  $lodspk['endpoint'] = $conf['endpoint'];
+  	  
+  	  $lodspk['type'] = $modelFile;
+  	  $lodspk['header'] = $prefixHeader;
+  	  $lodspk['args'] = $args;
+  	  $lodspk['add_mirrored_uris'] = false;
+  	  $lodspk['baseUrl'] = $conf['basedir'];
+  	  $lodspk['this']['value'] = $uri;
+  	  if($viewFile == null){
+  	  	$lodspk['transform_select_query'] = true;
+  	  }
+  	  chdir($lodspk['model']);
+  	  
+  	  Utils::queryFile($modelFile, $endpoints['local'], $results, $first);
+  	if($lodspk['resultRdf']){
+  	  echo Utils::serializeRdf($results, $extension);
+  	  exit(0);
+  	}else{
+  	  $results = Utils::internalize($results); 
   	}
-  	$results['params'] = $params;
-  	
-  	
-  	$lodspk['home'] = $conf['basedir'];
-  	$lodspk['baseUrl'] = $conf['basedir'];
-  	$lodspk['module'] = 'service';
-  	$lodspk['root'] = $conf['root'];
-  	$lodspk['contentType'] = $acceptContentType;
-  	$lodspk['ns'] = $conf['ns'];  	  	
-  	$lodspk['this']['value'] = $uri;
-  	$lodspk['this']['curie'] = Utils::uri2curie($uri);
-  	$lodspk['this']['local'] = $localUri;  	
-  	$lodspk['contentType'] = $acceptContentType;
-  	$lodspk['endpoint'] = $conf['endpoint'];
-  	
-  	$lodspk['type'] = $modelFile;
-  	$lodspk['header'] = $prefixHeader;
-  	$lodspk['args'] = $args;
-  	$lodspk['add_mirrored_uris'] = false;
-  	$lodspk['baseUrl'] = $conf['basedir'];
-  	$lodspk['this']['value'] = $uri;
-  	if($viewFile == null){
-  	  $lodspk['transform_select_query'] = true;
+  	  
+  	  $lodspk['first'] = Utils::getFirsts($results);
+  	  chdir($conf['home']);
+  	  if(is_array($results)){
+  	  	$results = Convert::array_to_object($results);
+  	  }
+  	  
+  	  //Need to redefine viewFile as 'local' i.e., inside service.foo/ so I can load files with the relative path correctly
+  	  //$viewFile = $extension.".template";
+  	  
+  	  Utils::processDocument($viewFile, $lodspk, $results);  
+  	  
+  	}catch (Exception $ex){
+  	  echo $ex->getMessage();
+  	  trigger_error($ex->getMessage(), E_ERROR);
+  	  Utils::send500($uri);
   	}
-  	chdir($lodspk['model']);
-  	
-  	Utils::queryFile($modelFile, $endpoints['local'], $results, $first);
-  	$results = Utils::internalize($results);
-  	
-  	$lodspk['first'] = Utils::getFirsts($results);
-  	chdir($conf['home']);
-  	if(is_array($results)){
-  	  $results = Convert::array_to_object($results);
-  	}
-  	
-  	//Need to redefine viewFile as 'local' i.e., inside service.foo/ so I can load files with the relative path correctly
-  	//$viewFile = $extension.".template";
-
-  	Utils::processDocument($viewFile, $lodspk, $results);  
-  	
-  }catch (Exception $ex){
-  	echo $ex->getMessage();
-  	trigger_error($ex->getMessage(), E_ERROR);
-  	Utils::send500($uri);
+  	exit(0);	
   }
-  exit(0);	
-}
-
-
-protected function getFunction($uri){
-  global $conf;
-  $count = 1;
-  $prefixUri = $conf['basedir'];
-  $aux = str_replace($prefixUri, '', $uri, $count);
-  $functionAndParams = explode('/', $aux);
-  return $functionAndParams[0];
-}
-
-protected function getParams($uri){
-  global $conf;
-  $count = 1;
-  $prefixUri = $conf['basedir'];
-  $functionAndParams = explode('/', str_replace($prefixUri, '', $uri, $count));
-  if(sizeof($functionAndParams) > 1){
-  	array_shift($functionAndParams);
-  	return $functionAndParams;
-  }else{
-  	return array(null);
+  
+  
+  protected function getFunction($uri){
+  	global $conf;
+  	$count = 1;
+  	$prefixUri = $conf['basedir'];
+  	$aux = str_replace($prefixUri, '', $uri, $count);
+  	$functionAndParams = explode('/', $aux);
+  	return $functionAndParams[0];
   }
-}
-
+  
+  protected function getParams($uri){
+  	global $conf;
+  	$count = 1;
+  	$prefixUri = $conf['basedir'];
+  	$functionAndParams = explode('/', str_replace($prefixUri, '', $uri, $count));
+  	if(sizeof($functionAndParams) > 1){
+  	  array_shift($functionAndParams);
+  	  return $functionAndParams;
+  	}else{
+  	  return array(null);
+  	}
+  }
+  
 }
 ?>
