@@ -105,24 +105,24 @@ class ServiceModule extends abstractModule{
   	  chdir($lodspk['model']);
   	  
   	  Utils::queryFile($modelFile, $endpoints['local'], $results, $first);
-  	if($lodspk['resultRdf']){
-  	  echo Utils::serializeRdf($results, $extension);
-  	  exit(0);
-  	}else{
-  	  $results = Utils::internalize($results); 
-  	}
-  	  
-  	  $lodspk['first'] = Utils::getFirsts($results);
-  	  chdir($conf['home']);
-  	  if(is_array($results)){
-  	  	$results = Convert::array_to_object($results);
-  	  }
+      if(!$lodspk['resultRdf']){
+      	$results = Utils::internalize($results); 
+      	$lodspk['first'] = Utils::getFirsts($results);
+      	
+      	chdir($conf['home']);
+      	if(is_array($results)){
+      	  $resultsObj = Convert::array_to_object($results);
+      	}else{
+      	  $resultsObj = $results;
+      	}
+      }else{
+      	$resultsObj = $results;
+      }
   	  
   	  //Need to redefine viewFile as 'local' i.e., inside service.foo/ so I can load files with the relative path correctly
   	  //$viewFile = $extension.".template";
-  	  
-  	  Utils::processDocument($viewFile, $lodspk, $results);  
-  	  
+  	  chdir($conf['home']);  	  
+  	  Utils::processDocument($viewFile, $lodspk, $results);    	  
   	}catch (Exception $ex){
   	  echo $ex->getMessage();
   	  trigger_error($ex->getMessage(), E_ERROR);

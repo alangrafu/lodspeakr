@@ -224,9 +224,13 @@ class Utils{
   	global $conf;
   	$contentType = $lodspk['contentType'];
   	$extension = Utils::getExtension($contentType); 
-
+  	
   	header('Content-Type: '.$contentType);
-  	Utils::showView($lodspk, $data, $viewFile);  	
+  	if($lodspk['resultRdf']){
+  	  echo Utils::serializeRdf($data, $extension);
+  	}else{
+  	  Utils::showView($lodspk, $data, $viewFile);  	
+  	}
   }
   
   public static function getResultsType($query){
