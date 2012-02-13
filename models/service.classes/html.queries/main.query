@@ -4,5 +4,5 @@ PREFIX {{h.prefix}}: <{{h.ns}}>
 SELECT DISTINCT ?resource WHERE {
   {%if base.args.arg0 %}GRAPH <{{base.args.arg0}}>{%else%} GRAPH ?g {%endif%} {
   	[] a ?resource .
-  {%if base.args.arg0 %} } {%endif%}
+  }
 }
