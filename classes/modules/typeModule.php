@@ -84,19 +84,18 @@ class TypeModule extends abstractModule{
   	$lodspk['this']['curie'] = Utils::uri2curie($uri);
   	$lodspk['this']['local'] = $localUri;
    	$lodspk['this']['extension'] = $extension;
-   	
   	chdir($conf['home'].$conf['model']['directory']);
   	Utils::queryFile($modelFile, $endpoints['local'], $results, $first);
-    if($lodspk['resultRdf']){
-  	  echo Utils::serializeRdf($results, $extension);
-  	  exit(0);
-  	}else{
+    if(!$lodspk['resultRdf']){
   	  $results = Utils::internalize($results); 
-  	}  	
-  	$lodspk['first'] = Utils::getFirsts($results);
-  	chdir($conf['home']);
-  	if(is_array($results)){
-  	  $resultsObj = Convert::array_to_object($results);
+  	  $lodspk['first'] = Utils::getFirsts($results);
+  	  
+  	  chdir($conf['home']);
+  	  if(is_array($results)){
+  	  	$resultsObj = Convert::array_to_object($results);
+  	  }else{
+  	  	$resultsObj = $results;
+  	  }
   	}else{
   	  $resultsObj = $results;
   	}

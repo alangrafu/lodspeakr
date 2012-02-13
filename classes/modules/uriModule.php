@@ -101,19 +101,20 @@ class UriModule extends abstractModule{
   	
   	chdir($conf['home'].$conf['model']['directory']);
   	Utils::queryFile($modelFile, $endpoints['local'], $results, $first);
-  	if($lodspk['resultRdf']){
-  	  echo Utils::serializeRdf($results, $extension);
-  	  exit(0);
-  	}else{
+  	if(!$lodspk['resultRdf']){
   	  $results = Utils::internalize($results); 
-  	}
-  	$lodspk['first'] = Utils::getFirsts($results);
-  	chdir($conf['home']);
-  	if(is_array($results)){
-  	  $resultsObj = Convert::array_to_object($results);
+  	  $lodspk['first'] = Utils::getFirsts($results);
+  	  
+  	  chdir($conf['home']);
+  	  if(is_array($results)){
+  	  	$resultsObj = Convert::array_to_object($results);
+  	  }else{
+  	  	$resultsObj = $results;
+  	  }
   	}else{
   	  $resultsObj = $results;
   	}
+  	chdir($conf['home']);
   	if($conf['debug']){
   	  trigger_error("Using template ".$viewFile, E_USER_NOTICE);
   	  echo("TEMPLATE: ".$viewFile."\n\n");
