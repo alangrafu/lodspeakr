@@ -1,8 +1,12 @@
 #!/bin/bash
 
+
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-BACKUPDIR=$HOME/lodspeakr_backup
+cd $DIR
+BASE=`php getvar.php basedir`
+NAME=`echo $BASE |sed -e 's/^http:\/\///g' -e 's/\/$//g' -e 's/\//_/g'`
 cd $DIR/../..
+BACKUPDIR=$HOME/lodspeakr_backup
 if [[ ! -d $BACKUPDIR ]]; then
   echo "WARNING: No $BACKUPDIR dir. Creating it." >&2
   mkdir $BACKUPDIR
@@ -13,7 +17,7 @@ if [[ ! -d $BACKUPDIR ]]; then
   exit 1
 fi
 
-tmpFile=lodspeakr_backup_`date +%Y%m%d%H%M%S`.tar.gz
+tmpFile=$NAME"-backup-"`date +%Y%m%d%H%M%S`.tar.gz
 
 tar -czf $tmpFile settings.inc.php models views
 

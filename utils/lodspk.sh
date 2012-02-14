@@ -9,7 +9,7 @@ if [[ $# -eq 0 || "$1" == "--help" ]]; then
 fi
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-operations=( create delete debug backup )
+operations=( create delete debug backup restore )
 currentOperation=
 
 if [[ ${operations[@]} =~ $1 ]]; then
@@ -23,6 +23,11 @@ fi
 ## Backup
 if [[ $currentOperation == "backup" ]]; then
   $DIR/modules/backup.sh
+fi  
+
+## Restore
+if [[ $currentOperation == "restore" ]]; then
+  $DIR/modules/restore.sh
 fi  
 
 ## Create/delete
