@@ -71,13 +71,19 @@ class ServiceModule extends abstractModule{
   	  	}
   	  }
   	  
+  	  $segmentConnector = "";
   	  for($i=0;$i<sizeof($params);$i++){  
   	  	$auxPrefix = Utils::getPrefix($params[$i]);
   	  	if($auxPrefix['ns'] != NULL){
   	  	  $prefixHeader[] = $auxPrefix;
   	  	}
   	  	$args["arg".$i]=$params[$i];
+  	  	$args["all"] .= $segmentConnector.$params[$i];
+  	  	if($segmentConnector == ""){
+  	  	  $segmentConnector = "/";
+  	  	}
   	  }
+  	  var_dump($_SERVER['QUERY_STRING']);exit(0);
   	  $results['params'] = $params;
   	  
   	  
