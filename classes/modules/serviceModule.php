@@ -83,7 +83,6 @@ class ServiceModule extends abstractModule{
   	  	  $segmentConnector = "/";
   	  	}
   	  }
-  	  var_dump($_SERVER['QUERY_STRING']);exit(0);
   	  $results['params'] = $params;
   	  
   	  
