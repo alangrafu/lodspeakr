@@ -64,7 +64,7 @@ class ServiceModule extends abstractModule{
   	  $prefixHeader = array();
   	  
   	  for($i=0;$i<sizeof($params);$i++){
-  	  	if($conf['mirror_external_uris']){
+  	  	if($conf['mirror_external_uris'] != false){
   	  	  $altUri = Utils::curie2uri($params[$i]);
   	  	  $altUri = preg_replace("|^".$conf['basedir']."|", $conf['ns']['local'], $altUri);
   	  	  $params[$i] = Utils::uri2curie($altUri);

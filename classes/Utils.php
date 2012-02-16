@@ -468,10 +468,26 @@ class Utils{
   	  	}*/
   	  }else{
   	  	if(isset($value['uri']) && $value['uri'] == 1){
-  	  	  if($conf['mirror_external_uris']){
+  	  	  if($conf['mirror_external_uris'] != false){
   	  	  	$value['mirroredUri'] = $value['value'];
   	  	  }
-  	  	  $value['value'] = preg_replace("|^".$conf['ns']['local']."|", $conf['basedir'], $value['value']);
+  	  	  if(is_boolean($conf['mirror_external_uris'])){
+  	  	  	$value['value'] = preg_replace("|^".$conf['ns']['local']."|", $conf['basedir'], $value['value']);
+  	  	  }elseif(is_string($conf['mirror_external_uris'])){
+  	  	  	$value['value'] = preg_replace("|^".$conf['mirror_external_uris']."|", $conf['basedir'], $value['value']);
+  	  	  }elseif(is_array($conf['mirror_external_uris'])){
+  	  	  	foreach($conf['mirror_external_uris'] as $v){
+  	  	  	  $aux = preg_replace("|^".$conf['mirror_external_uris']."|", $conf['basedir'], $value['value']);
+  	  	  	  if($aux != $value['value']]){
+  	  	  	  	$value['value'] = $aux;
+  	  	  	  	break;
+  	  	  	  }
+  	  	  	}	  	  	
+  	  	  }else{
+  	  	  	Utils::send500("Error in mirroring configuration");
+  	  	  	exit(1);
+  	  	  }
+  	  	  
   	  	  $value['curie'] = Utils::uri2curie($value['value']);
   	  	  $array[$key] = $value;
   	  	}  	  	  	  	

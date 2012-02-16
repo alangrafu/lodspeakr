@@ -53,7 +53,7 @@ while [ "$everything_ok" != "y" ]; do
   if [[ "$basedir" =~ ^"$ns" ]]; then
     external="false"
   else
-    external="true"
+    external=$ns
     extra="\$conf['ns']['base']   = '$basedir';"
   fi
   
