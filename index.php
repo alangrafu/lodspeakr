@@ -59,15 +59,13 @@ if($uri == $conf['basedir']){
 }
 
 //Configure external URIs if necessary
-if($conf['mirror_external_uris'] != false){
+if(isset($conf['mirror_external_uris']) && $conf['mirror_external_uris'] != false){
   $localUri = $conf['basedir'].$_GET['q'];
   
-  if(is_boolean($conf['mirror_external_uris'])){
+  if(is_bool($conf['mirror_external_uris'])){
   	$uri = $conf['ns']['local'].$_GET['q'];
   }elseif(is_string($conf['mirror_external_uris'])){
   	$uri = $conf['mirror_external_uris'].$_GET['q'];
-  }elseif(is_array($conf['mirror_external_uris'])){
-  	$uri = $conf['ns']['local'].$_GET['q'];  	  	
   }else{
   	Utils::send500("Error in mirroring configuration");
   	exit(1);

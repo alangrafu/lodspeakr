@@ -35,11 +35,23 @@ class Utils{
   	global $conf;
   	$ns = $conf['ns'];
   	$curie = $uri;
+  	
+  	$aux = $uri;
   	foreach($ns as $k => $v){
-  	  $curie = preg_replace("|^$v|", "$k:", $uri);
-  	  if($curie != $uri){
+  	  $aux = preg_replace("|^$v|", "", $uri);
+  	  if($aux != $uri){
+  	  	$uriSegments = explode("/", $aux);
+  	  	$lastSegment = array_pop($uriSegments);
+  	  	if(sizeof($uriSegments)>0){
+  	  	  $prefix = $k."_".(implode("_", $uriSegments));
+  	  	  //Adding "new" namespace
+  	  	  $conf['ns'][$prefix] = $v.implode("/", $uriSegments)."/";
+  	  	}else{
+  	  	  $prefix = $k;
+  	  	}
+  	  	$curie = $prefix.":".$lastSegment;
   	  	break;
-  	  }
+  	  }  
   	}
   	return $curie;
   }
@@ -52,8 +64,15 @@ class Utils{
   	if(preg_match('|^//|', $parts[1])){
   	  return $curie;
   	}  	
-  	if(sizeof($parts)>1 && isset($ns[$parts[0]])){
-  	  return $ns[$parts[0]].$parts[1];
+  	if(sizeof($parts)>1 ){
+  	  if(!isset($ns[$parts[0]])){
+  		$prefixSegments = explode("_", $parts[0]);
+  		$realPrefix = array_shift($prefixSegments);
+  		$conf['ns'][$parts[0]] = $ns[$realPrefix].join("/", $prefixSegments);
+  		return $ns[$realPrefix].join("/", $prefixSegments)."/".$parts[1];
+  	  }else{
+  	  	return $ns[$parts[0]].$parts[1];
+  	  }
   	}else{
   	  return $curie;
   	}
@@ -67,7 +86,7 @@ class Utils{
   	if(preg_match('|^//|', $parts[1])){
   	  return $curie;
   	}  	
-  	return array('ns' => $ns[$parts[0]], 'prefix' => $parts[0]);;
+  	return array('ns' => $ns[$parts[0]], 'prefix' => $parts[0]);
   }
   
   public static function getTemplate($uri){
@@ -468,26 +487,18 @@ class Utils{
   	  	}*/
   	  }else{
   	  	if(isset($value['uri']) && $value['uri'] == 1){
-  	  	  if($conf['mirror_external_uris'] != false){
+  	  	  if(isset($conf['mirror_external_uris']) && $conf['mirror_external_uris'] != false){
   	  	  	$value['mirroredUri'] = $value['value'];
+  	  	  	
+  	  	  	if(is_bool($conf['mirror_external_uris'])){
+  	  	  	  $value['value'] = preg_replace("|^".$conf['ns']['local']."|", $conf['basedir'], $value['value']);
+  	  	  	}elseif(is_string($conf['mirror_external_uris'])){
+  	  	  	  $value['value'] = preg_replace("|^".$conf['mirror_external_uris']."|", $conf['basedir'], $value['value']);
+  	  	  	}else{
+  	  	  	  Utils::send500("Error in mirroring configuration");
+  	  	  	  exit(1);
+  	  	  	}
   	  	  }
-  	  	  if(is_boolean($conf['mirror_external_uris'])){
-  	  	  	$value['value'] = preg_replace("|^".$conf['ns']['local']."|", $conf['basedir'], $value['value']);
-  	  	  }elseif(is_string($conf['mirror_external_uris'])){
-  	  	  	$value['value'] = preg_replace("|^".$conf['mirror_external_uris']."|", $conf['basedir'], $value['value']);
-  	  	  }elseif(is_array($conf['mirror_external_uris'])){
-  	  	  	foreach($conf['mirror_external_uris'] as $v){
-  	  	  	  $aux = preg_replace("|^".$conf['mirror_external_uris']."|", $conf['basedir'], $value['value']);
-  	  	  	  if($aux != $value['value']]){
-  	  	  	  	$value['value'] = $aux;
-  	  	  	  	break;
-  	  	  	  }
-  	  	  	}	  	  	
-  	  	  }else{
-  	  	  	Utils::send500("Error in mirroring configuration");
-  	  	  	exit(1);
-  	  	  }
-  	  	  
   	  	  $value['curie'] = Utils::uri2curie($value['value']);
   	  	  $array[$key] = $value;
   	  	}  	  	  	  	
