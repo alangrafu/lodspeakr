@@ -53,7 +53,7 @@ while [ "$everything_ok" != "y" ]; do
   if [[ "$basedir" =~ ^"$ns" ]]; then
     external="false"
   else
-    external="true"
+    external=$ns
     extra="\$conf['ns']['base']   = '$basedir';"
   fi
   
@@ -94,7 +94,7 @@ LODSPEAKR_HOME=`pwd`/
 \$conf['home'] = '$LODSPEAKR_HOME';
 \$conf['basedir'] = '$basedir';
 \$conf['debug'] = false;
-\$conf['mirror_external_uris'] = $external;
+\$conf['mirror_external_uris'] = '$external';
 
 /*ATTENTION: By default this application is available to
  * be exported and copied (its configuration)

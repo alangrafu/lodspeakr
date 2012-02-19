@@ -3,3 +3,4 @@ SELECT DISTINCT ?g WHERE {
   	[] ?p ?resource .
   }
 }
+ order by ?g

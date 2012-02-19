@@ -67,7 +67,7 @@ class UriModule extends abstractModule{
   	}
   	
   	$uri = $res;
-  	if($conf['mirror_external_uris']){
+  	if($conf['mirror_external_uris'] != false){
   	  $localUri = preg_replace("|^".$conf['ns']['local']."|", $conf['basedir'], $res);
   	}
   	
