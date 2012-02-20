@@ -45,7 +45,7 @@ class ServiceModule extends abstractModule{
   	global $acceptContentType;
   	global $endpoints;
   	global $lodspk;
-  	global $first;
+  	global $firstResults;
   	$context = array();
   	$context['contentType'] = $acceptContentType;
   	$context['endpoints'] = $endpoints;
@@ -111,10 +111,10 @@ class ServiceModule extends abstractModule{
   	  }
   	  chdir($lodspk['model']);
   	  
-  	  Utils::queryFile($modelFile, $endpoints['local'], $results, $first);
+  	  Utils::queryFile($modelFile, $endpoints['local'], $results, $firstResults);
       if(!$lodspk['resultRdf']){
       	$results = Utils::internalize($results); 
-      	$lodspk['first'] = Utils::getFirsts($results);
+      	$lodspk['firstResults'] = Utils::getfirstResultss($results);
       	
       	chdir($conf['home']);
       	if(is_array($results)){
