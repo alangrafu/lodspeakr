@@ -11,6 +11,9 @@ class UriModule extends abstractModule{
   	global $endpoints;
   	global $lodspk;
   	
+  	if($conf['disableComponents'] == true){
+  	  return FALSE;
+  	}
   	require_once('classes/MetaDb.php');
   	$metaDb = new MetaDb($conf['metadata']['db']['location']);
   	

@@ -119,11 +119,13 @@ class TypeModule extends abstractModule{
   */	
  	//Get the firstResults type available
   	$typesAndValues = array('rdfs:Resource' => -1);
-  	foreach($t as $v){
-  	  $curie = Utils::uri2curie($v);
-  	  $typesAndValues[$curie] = 0;
-  	  if(isset($conf['type']['priorities'][$curie]) && $conf['type']['priorities'][$curie] >= 0){
-  	  	$typesAndValues[$curie] = $conf['type']['priorities'][$curie];
+  	if($conf['disableComponents'] != true){
+  	  foreach($t as $v){
+  	  	$curie = Utils::uri2curie($v);
+  	  	$typesAndValues[$curie] = 0;
+  	  	if(isset($conf['type']['priorities'][$curie]) && $conf['type']['priorities'][$curie] >= 0){
+  	  	  $typesAndValues[$curie] = $conf['type']['priorities'][$curie];
+  	  	}
   	  }
   	}
   	arsort($typesAndValues);
