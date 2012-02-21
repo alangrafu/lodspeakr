@@ -12,40 +12,43 @@
     <link rel="alternate" type="application/json" title="RDFJSON Version" href="{{lodspk.this.value}}.json" />
   </head>
   <body about="{{lodspk.this.value}}">
-    <h1>Page about <a href='{{lodspk.this.value}}'>{{lodspk.this.curie}}</a></h1>
-  {{lodspk.endpoint.local}}
-    <div>
-    <h2>Information from {{lodspk.this.curie}}</h2>
+    <h1>Default view</h1>
+
+    <div style='margin-top: 40px'>
     <table>
-    {% for row in models.main %}
-
-      {% if row.s1%}
-      <tr>
-        <td><a href='{{row.s1.value}}'>{{row.s1.curie}}</a></td>
-
-        {% if row.p1.uri == 1 %}
-        <td><a rel='{{row.s1.curie}}' href='{{row.p1.value}}'>{{row.p1.curie}}</a></td>
-        {% else %}
-        <td><span property='{{row.s1.curie}}'>{{row.p1.value}}</span></td>
-        {% endif %}
+    <tr><th>Subject</th><th>Predicate</th><th>Object</th></tr>
+    {% for row in models.po %}
+     <tr>
+<td>{%if forloop.first%}<a href='{{lodspk.this.value}}'>{{lodspk.this.curie}}</a>{%endif%}</td>
+     <td style='background-color:#c9f9c9'><a href='{{row.p.value}}'>{{row.p.curie}}</a></td>
+     
+        <td style='background-color:#c9f9c9'>
+        {%if row.o.uri == 1%}
+        <a rev='[{{row.p.curie}}]' href='{{row.o.value}}'>{{row.o.curie}}</a>
+        {%else%}
+        {{row.o.value}}
+        {%endif%}
+        </td>
 
         </tr>
-      {% endif %}
     {% endfor %}
-    </table>
+<tr><td></td><td><a href='{{lodspk.this.value}}'>{{lodspk.this.curie}}</a></td><td></td></tr>
 
-    <br/><br/>
-    <h2>Information pointing to {{lodspk.this.curie}}</h2>
-    <table>
-    {% for row in models.main %}
-      {% if row.s2%}
-     <tr>
-        <td><a href='{{row.s2.value}}'>{{row.s2.curie}}</a></td>
-        <td><a rev='[{{row.p2.curie}}]' href='{{row.s2.value}}'>{{row.p2.curie}}</a></td>
-    </tr>
-    {%endif %}
+    {% for row in models.sp %}
+      <tr>
+        <td style='background-color:#c9f9c9'><a href='{{row.s.value}}'>{{row.s.curie}}</a></td>
+
+        <td style='background-color:#c9f9c9'><a rel='{{row.s.curie}}' href='{{row.p.value}}'>{{row.p.curie}}</a></td>
+<td>{%if forloop.first%}<a href='{{lodspk.this.value}}'>{{lodspk.this.curie}}</a>{%endif%}</td>
+        </tr>
     {% endfor %}
+    <tr><th>Subject</th><th>Predicate</th><th>Object</th></tr>
+
     </table>
     </div>
+    </div>
+    
+    
+    <br/>
   </body>
 </html>

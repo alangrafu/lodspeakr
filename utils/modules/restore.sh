@@ -12,8 +12,12 @@ if [[ ! -d $BACKUPDIR ]]; then
   exit 1
 fi
 
-LIST=( `ls $BACKUPDIR/$NAME-backup*` )
+LIST=( `ls $BACKUPDIR/$NAME-backup* 2>/dev/null` )
 CHOSEN=-1
+if [ "${#LIST[@]}" -eq 0 ];then
+  echo "No backups available";
+  exit
+fi
 while [[ "$CHOSEN" -lt 0 || "$CHOSEN" -ge "${#LIST[@]}" ]] ;do
 j=0
 echo

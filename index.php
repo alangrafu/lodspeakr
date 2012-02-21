@@ -9,7 +9,7 @@ if($_GET['q'] == 'import'){
 
 //Test if LODSPeaKr is configured
 if(!file_exists('settings.inc.php')){
-  echo 'Need to configure lodspeakr first. Please run "install.sh" first. Alternatively, you can <a href="import">import an existing application</a>';
+  echo 'Need to configure lodspeakr firstResults. Please run "install.sh" firstResults. Alternatively, you can <a href="import">import an existing application</a>';
   exit(0);
 }
 
@@ -27,7 +27,7 @@ include_once('classes/Queries.php');
 include_once('classes/Endpoint.php');
 include_once('classes/Convert.php');
 $results = array();
-$first = array();
+$firstResults = array();
 $endpoints = array();
 $endpoints['local'] = new Endpoint($conf['endpoint']['local'], $conf['endpointParams']['config']);
 
