@@ -9,7 +9,7 @@ if($_GET['q'] == 'import'){
 
 //Test if LODSPeaKr is configured
 if(!file_exists('settings.inc.php')){
-  echo 'Need to configure lodspeakr firstResults. Please run "install.sh" firstResults. Alternatively, you can <a href="import">import an existing application</a>';
+  echo 'Need to configure lodspeakr first. Please run "install.sh". Alternatively, you can <a href="import">import an existing application</a>';
   exit(0);
 }
 
