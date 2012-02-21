@@ -39,7 +39,7 @@ class TypeModule extends abstractModule{
   	global $endpoints;
   	global $lodspk;
   	global $results;
-  	global $first;
+  	global $firstResults;
   	list($res, $page, $format) = $pair;
   	//If resource is not the page, send a 303 to the document
   	if($res == $localUri){
@@ -85,10 +85,10 @@ class TypeModule extends abstractModule{
   	$lodspk['this']['local'] = $localUri;
    	$lodspk['this']['extension'] = $extension;
   	chdir($conf['home'].$conf['model']['directory']);
-  	Utils::queryFile($modelFile, $endpoints['local'], $results, $first);
+  	Utils::queryFile($modelFile, $endpoints['local'], $results, $firstResults);
     if(!$lodspk['resultRdf']){
   	  $results = Utils::internalize($results); 
-  	  $lodspk['first'] = Utils::getFirsts($results);
+  	  $lodspk['firstResults'] = Utils::getfirstResultss($results);
   	  
   	  chdir($conf['home']);
   	  if(is_array($results)){
@@ -117,7 +117,7 @@ class TypeModule extends abstractModule{
   	$objResult['modelDir'] = $conf['model']['directory'].'type.rdfs:Resource/html.queries/';
   	$objResult['viewDir'] = $conf['view']['directory'].'type.rdfs:Resource/'; 
   */	
- 	//Get the first type available
+ 	//Get the firstResults type available
   	$typesAndValues = array('rdfs:Resource' => -1);
   	foreach($t as $v){
   	  $curie = Utils::uri2curie($v);
