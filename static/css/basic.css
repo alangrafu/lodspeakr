@@ -33,9 +33,10 @@ table tr td {
 	border-color: gray;
 	background-color: white;
 }
-
+td{
+  max-width:550px;
+  word-wrap: break-word;
+}
 table{
   width: 50%;
-  margin-left:100px;
-  margin-right:auto;
 }
