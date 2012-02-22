@@ -50,7 +50,7 @@ class Haanga_Extension_Filter_Googlemaps{
   	$pre = "<div id='map_canvas_".$randId."' style='width: ".$w."px; height: ".$h."px'></div><script type='text/javascript'
   	src='http://maps.googleapis.com/maps/api/js?sensor=false'></script>
     <script type='text/javascript'>
-    <![CDATA[
+    //<![CDATA[
     function initialize() {
 	  var myOptions = {
 	  zoom: 4,
@@ -89,7 +89,7 @@ class Haanga_Extension_Filter_Googlemaps{
     }
         
     google.maps.event.addDomListener(window, 'load', initialize);
-    ]]>
+    //]]>
     </script>";
     return $pre;
   }

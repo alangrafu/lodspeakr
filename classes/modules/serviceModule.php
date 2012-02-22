@@ -27,9 +27,9 @@ class ServiceModule extends abstractModule{
   	  }
   	  return array($modelFile, $viewFile);
   	}elseif(file_exists($lodspk['model'].'queries')){
-  	  if($extension != 'html'){$lodspk['resultRdf'] = true;}
  	  $modelFile = $lodspk['model'].'queries';
   	  if(!file_exists($lodspk['view'])){
+  	  	$lodspk['resultRdf'] = true;
   	  	$viewFile = null;
   	  }else{
   	  	$viewFile = $lodspk['view'];
