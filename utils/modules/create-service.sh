@@ -2,16 +2,16 @@
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-initToken='service'
+initToken='services'
 
 modelHtml=`cat  <<QUERY
 {%for h in base.header %}
 PREFIX {{h.prefix}}: <{{h.ns}}>
 {%endfor%}
 SELECT DISTINCT ?resource WHERE {
-  {%if base.args.arg0 %}GRAPH <{{lodspk.args.arg0}}>{ {%else%} GRAPH?g { {%endif%}
+  GRAPH {%if base.args.arg0 %}<{{lodspk.args.arg0}}>{%else%}?g{%endif%} {
   	[] a ?resource .
-  {%if base.args.arg0 %} } {%endif%}
+  }
 }
 QUERY`
 
@@ -36,85 +36,17 @@ viewHtml=`cat  <<VIEW
 </html>
 VIEW`
 
-modelRdf=`cat  <<QUERY
-DESCRIBE ?resource WHERE {
-  	[] a ?resource .
-}
-QUERY`
-
-viewRdf=`cat  <<QUERY
-{{r|safe}}
-QUERY`
-
-modelTtl=$modelRdf
-viewTtl=$viewRdf
-modelNt=$modelRdf
-viewNt=$viewRdf
-modelJson=$modelRdf
-viewJson=$viewJson
-
 #Check models
-mainModelDir=$DIR/../../models/$initToken.$1
+mainDir=$DIR/../../components/$initToken/$1/
 
-if [ -e "$mainModelDir" ]
+if [ -e "$mainDir" ]
 then
   echo "WARNING: At least one model for $1 exists." >&2
 else
-  mkdir $mainModelDir
+  mkdir -p $mainDir/queries
 fi
 
-obj=( )
-if [ "$2" == "all" ]
-then
-  obj=( html rdf ttl nt json )
-else
-  obj=( $2 )
-fi
-
-for i in ${obj[@]}
-do
-  if [ -e $mainModelDir/$i.queries ]
-  then
-    echo ERROR: $initToken.$1/$i.queries exists in models. Operation aborted >&2
-    exit 1
-  fi
-done
-
-
-#Check views
-mainViewDir=$DIR/../../views/$initToken.$1
-
-if [ -e "$mainViewDir" ]
-then
-  echo "WARNING: At least one view for $1 exists." >&2
-else
-  mkdir $mainViewDir
-fi
-
-
-for i in ${obj[@]}
-do
-  if [ -e $mainViewDir/$i.template ]
-  then
-    echo ERROR: $initToken.$1/$i already exist in views. Operation aborted >&2
-    exit 1
-  fi
-done
-
-
-#Create  file structure
-
-for i in ${obj[@]}
-do
-  mkdir $mainModelDir/$i.queries
-  if [ "$i" == "html" ]
-  then
-    echo "$modelHtml" > $mainModelDir/$i.queries/main.query
-    echo "$viewHtml" > $mainViewDir/$i.template
-  else
-    echo "$modelRdf" > $mainModelDir/$i.queries/main.query
-    echo "$viewRdf" > $mainViewDir/$i.template   
-  fi
-done
+echo $modelHtml > $mainDir/queries/main.query
+echo $viewHtml > $mainDir/html.template
 
 echo $initToken.$1 created/modified successfully! >&2
