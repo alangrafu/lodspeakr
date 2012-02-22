@@ -12,11 +12,11 @@ $conf['metadata']['db']['location'] = 'meta/db.sqlite';
 
 include_once('namespaces.php');
 
-$conf['model']['directory'] = 'models/'; #include trailing slash!
+$conf['model']['directory'] = 'components'; #include trailing slash!
 $conf['model']['extension'] = '.model';
 $conf['model']['default'] = 'rdfs:Resource';
 
-$conf['view']['directory'] = 'views/'; #include trailing slash!
+$conf['view']['directory'] = 'components'; #include trailing slash!
 $conf['view']['extension'] = '.view';
 $conf['view']['default'] = 'rdfs:Resource';
 
@@ -32,11 +32,11 @@ $conf['http_accept']['json'] = array('application/json', 'application/x-javascri
 $conf['http_accept']['nt']   = array('text/plain');
 
 
-$conf['service']['prefix'] = 'service.';
+$conf['service']['prefix'] = 'services';
 $conf['service']['class'] = 'classes/BasicSpecialFunction.php';
 
-$conf['type']['prefix'] = 'type.';
-$conf['uri']['prefix'] = 'uri.';
+$conf['type']['prefix'] = 'types';
+$conf['uri']['prefix'] = 'uris';
 
 //Frontpage when user goes to http://example.org/
 $conf['root'] = 'index.html';

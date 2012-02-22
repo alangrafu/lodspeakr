@@ -1,0 +1,12 @@
+{%for h in base.header %}
+PREFIX {{h.prefix}}: <{{h.ns}}>
+{%endfor%}
+SELECT DISTINCT ?resource WHERE {
+  {
+    {%if base.args.arg0 %}GRAPH <{{base.args.arg0}}>{%else%} GRAPH ?g {%endif%} {
+    	?x a ?resource .
+    }
+  }UNION{
+    ?x a ?resource .
+  }
+}order by ?resource

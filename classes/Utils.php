@@ -199,7 +199,7 @@ class Utils{
   	$ser;
   	$dPointer;
   	$docs = Utils::travelTree($data);
-  	require_once('lib/arc2/ARC2.php');
+  	require_once($conf['home'].'lib/arc2/ARC2.php');
   	$parser = ARC2::getRDFParser();
   	 $triples = array();
   	 
@@ -241,11 +241,12 @@ class Utils{
   
   public static function processDocument($viewFile, $lodspk, $data){
   	global $conf;
+  	global $lodspk;
   	$contentType = $lodspk['contentType'];
   	$extension = Utils::getExtension($contentType); 
   	
   	header('Content-Type: '.$contentType);
-  	if($lodspk['resultRdf']){
+  	if(isset($lodspk['resultRdf']) && $lodspk['resultRdf'] == true){
   	  echo Utils::serializeRdf($data, $extension);
   	}else{
   	  Utils::showView($lodspk, $data, $viewFile);  	
@@ -271,38 +272,41 @@ class Utils{
   	global $lodspk;
   	global $endpoints;
   	global $results;
+  	$strippedModelDir = str_replace('endpoint.', '', $modelDir); 	  
   	$lodspk['model'] = $modelDir;
   	$originalDir = getcwd();
   	$subDirs= array();
-  	trigger_error("Entering $modelDir from ".getcwd(), E_USER_NOTICE);
+  	trigger_error("Entering $strippedModelDir from ".getcwd(), E_USER_NOTICE);
   	chdir($modelDir);
   	$handle = opendir('.');
   	
   	while (false !== ($modelFile = readdir($handle))) {
   	  if($modelFile != "." && $modelFile != ".." && strpos($modelFile, ".") !== 0){
   	  	if(is_dir($modelFile)){
-  	  	  trigger_error("Save $modelFile for later, after all the queries in the current directory has been resolved", E_USER_NOTICE);
-  	  	  $subDirs[]=$modelFile;
+  	  	  if(strpos('endpoint.', $modelFile) == 0){
+  	  	  	trigger_error("Save $modelFile for later, after all the queries in the current directory has been resolved", E_USER_NOTICE);
+  	  	  	$subDirs[]=$modelFile;
+  	  	  }
   	  	}else{
   	  	  $e = null;
-  	  	  if(!isset($endpoints[$modelDir])){
-  	  	  	trigger_error("Creating endpoint for $modelDir", E_USER_NOTICE);
-  	  	  	if(!isset($conf['endpoint'][$modelDir])){
-  	  	  	  trigger_error("Couldn't find $modelDir as a list of available endpoints. Will continue using local", E_USER_WARNING);
+  	  	  if(!isset($endpoints[$strippedModelDir])){
+  	  	  	trigger_error("Creating endpoint for $strippedModelDir", E_USER_NOTICE);
+  	  	  	if(!isset($conf['endpoint'][$strippedModelDir])){
+  	  	  	  trigger_error("Couldn't find $strippedModelDir as a list of available endpoints. Will continue using local", E_USER_WARNING);
   	  	  	  $e = $endpoints['local'];
   	  	  	}else{  
-  	  	  	  $endpoints[$modelDir] = new Endpoint($conf['endpoint'][$modelDir], $conf['endpoint']['config']);
-  	  	  	  $e = $endpoints[$modelDir];
+  	  	  	  $endpoints[$strippedModelDir] = new Endpoint($conf['endpoint'][$strippedModelDir], $conf['endpoint']['config']);
+  	  	  	  $e = $endpoints[$strippedModelDir];
   	  	  	}
   	  	  }else{
-  	  	  	$e = $endpoints[$modelDir];
+  	  	  	$e = $endpoints[$strippedModelDir];
   	  	  }
   	  	  if($modelDir != $lodspk['type']){
-  	  	  	if(!isset($r[$modelDir]) ){
-  	  	  	  $r[$modelDir] = array();
-  	  	  	  $f[$modelDir] = array();
+  	  	  	if(!isset($r[$strippedModelDir]) ){
+  	  	  	  $r[$strippedModelDir] = array();
+  	  	  	  $f[$strippedModelDir] = array();
   	  	  	}
-  	  	  	Utils::queryFile($modelFile, $e, $r[$modelDir], $f);
+  	  	  	Utils::queryFile($modelFile, $e, $r[$strippedModelDir], $f);
   	  	  }else{
   	  	  	Utils::queryFile($modelFile, $e, $r, $f);
   	  	  }
@@ -317,13 +321,13 @@ class Utils{
   	  	  $r[$modelDir] = array();
   	  	}
   	  	if($modelDir != $lodspk['type']){
-  	  	  Utils::queryDir($v, $r[$modelDir], $f[$modelDir]);
+  	  	  Utils::queryDir($v, $r[$strippedModelDir], $f[$strippedModelDir]);
   	  	}else{
   	  	  Utils::queryDir($v, $r, $f);
   	  	}
   	  }  	
   	}
-  	chdir($conf['home']);
+  //	chdir($conf['home']);
   	//return $data;
   }
   
@@ -335,7 +339,7 @@ class Utils{
   	global $firstResults;
 	$uri = $lodspk['this']['value'];
   	$data = array();
-  	$strippedModelFile = str_replace('.query', '',$modelFile); 	  
+  	$strippedModelFile = str_replace('endpoint.', '', str_replace('.query', '',$modelFile)); 	  
  	if(!is_dir($modelFile)){
   	  require_once($conf['home'].'lib/Haanga/lib/Haanga.php');
   	  Haanga::configure(array(
@@ -464,14 +468,17 @@ class Utils{
   	  	}  	 
   	  }
   	}else{
-  	  trigger_error("$modelFile is a directory, will process it later", E_USER_NOTICE);
-  	  if($modelFile != $lodspk['type']){
-  	  	if(!isset($rPointer[$strippedModelFile])){
-  	  	  $rPointer[$strippedModelFile] = array();
+  	  if(strpos('endpoint.', $modelFile) == 0){
+  	  	
+  	  	trigger_error("$modelFile is a directory, will process it later", E_USER_NOTICE);
+  	  	if($modelFile != $lodspk['type']){
+  	  	  if(!isset($rPointer[$strippedModelFile])){
+  	  	  	$rPointer[$strippedModelFile] = array();
+  	  	  }
+  	  	  Utils::queryDir($modelFile, $rPointer[$strippedModelFile], $fPointer[$strippedModelFile]);
+  	  	}else{
+  	  	  Utils::queryDir($modelFile, $rPointer, $fPointer);
   	  	}
-  	  	Utils::queryDir($modelFile, $rPointer[$strippedModelFile], $fPointer[$strippedModelFile]);
-  	  }else{
-  	  	Utils::queryDir($modelFile, $rPointer, $fPointer);
   	  }
   	}
   }
@@ -508,12 +515,12 @@ class Utils{
   	return $array;
   }
   
-  public static function getfirstResultss($array){
+  public static function getfirstResults($array){
   	global $conf;
   	$firstResultsKeyAppearance = true;
   	foreach($array as $key => $value){
   	  if(!isset($value['value'])){
-  	  	$aux = Utils::getfirstResultss($value);
+  	  	$aux = Utils::getfirstResults($value);
   	  	if(isset($aux['0'])){
   	  	  $array[$key] = $aux['0'];
   	  	}else{
@@ -528,6 +535,7 @@ class Utils{
   public static function showView($lodspkData, $data, $view){
   	global $conf;
   	global $uri;
+  	global $lodspk;
   	global $extension;
   	//$lodspk = $conf['view']['standard'];
   	$lodspk = $lodspkData;
@@ -535,8 +543,11 @@ class Utils{
   	  $lodspk['this']['params'] = $lodspkData['params'];
   	}
   	require_once($conf['home'].'lib/Haanga/lib/Haanga.php');
+  	$viewAux = explode("/",$view);
+  	$viewFile = array_pop($viewAux);
+  	$viewPath = join("/", $viewAux);
   	Haanga::configure(array(
-  	  'template_dir' => $lodspk['view'],
+  	  'template_dir' => $conf['home'].$viewPath,
   	  'cache_dir' => $conf['home'].'cache/',
   	  ));
   	$models = $data;
@@ -550,12 +561,13 @@ class Utils{
  	}
 	if(is_string($data)){
 	  echo($data);
-	}elseif(is_file($lodspk['view'].$view)){
-	  Haanga::Load($view, $vars);
+	}elseif(is_file($conf['home'].$view)){
+	  Haanga::Load($viewFile, $vars);
 	}elseif($view == null){
 	  $fnc = Haanga::compile('{{models|safe}}');
 	  $fnc($vars, TRUE);
 	}else{
+	  echo $conf['home'].$viewPath." ".$viewFile;
 	  $fnc = Haanga::compile($view);
 	  $fnc($vars, TRUE);
 	}
