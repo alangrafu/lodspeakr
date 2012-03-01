@@ -120,6 +120,7 @@ cat $root_htaccess >> $parent_htaccess
 echo "RewriteRule ^(.+)\$ $1/index.php?q=\$1 [L]" >> $parent_htaccess
 mkdir cache
 
+
 echo
 echo "                                      *** ATTENTION ***"
 echo
