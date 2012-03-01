@@ -113,20 +113,24 @@ echo "Created new configuration file: $settings_file"
 echo ""
 echo "WARNING: Copying $root_htaccess as .htaccess in parent directory"
 echo ""
-cp $root_htaccess $parent_htaccess
-
+echo "RewriteEngine on" > $parent_htaccess
+echo >> $parent_htaccess
+echo "RewriteRule ^\$ $1/index.php [L]" >> $parent_htaccess
+cat $root_htaccess >> $parent_htaccess
+echo "RewriteRule ^(.+)\$ $1/index.php?q=\$1 [L]" >> $parent_htaccess
 mkdir cache
+
 
 echo
 echo "                                      *** ATTENTION ***"
 echo
-echo "LODSPeaKr needs the web server to have write permissions for lodspeakr/cache/ and lodspeakr/meta/."
+echo "LODSPeaKr needs the web server to have write permissions for $1/cache/ and $1/meta/."
 echo
 echo
 echo "Common ways of doing this:"
-echo " chown -R www-apache lodspeakr/cache lodspeakr/meta (find the name of the apache user in your system)"
-echo " chmod -R g+w lodspeakr/cache lodspeakr/meta (if you have a group in common with the apache user)"
-echo " chmod -R 777 lodspeakr/cache lodspeakr/meta (highly discouraged but useful to test when everything fails. It shouldn't be used in production sites)"
+echo " chown -R www-apache $1/cache $1/meta (find the name of the apache user in your system)"
+echo " chmod -R g+w $1/cache $1/meta (if you have a group in common with the apache user)"
+echo " chmod -R 777 $1/cache $1/meta (highly discouraged but useful to test when everything fails. It shouldn't be used in production sites)"
 echo
 echo "Please give the server write permissions. Otherwise, LODSPeaKr will not work."
 echo
