@@ -234,8 +234,14 @@ class Utils{
   	case 'rdf':
   	  $ser = ARC2::getRDFXMLSerializer();
   	  break;
+  	default:
+  	  $ser = null;
   	}
+  	if($ser != null){
   	$doc = $ser->getSerializedTriples($triples);
+  	}else{
+  	$doc = var_export($data, true);
+  	}
   	return $doc;
   }
   
@@ -435,7 +441,8 @@ class Utils{
 	  	}
 	  }
   	  if($conf['debug']){
-  	  	echo "$modelFile (against ".$e->getSparqlUrl().")\n-------------------------------------------------\n";
+  	  	echo "\n-------------------------------------------------\nIn ".getcwd()."\n";
+  	    echo "$modelFile (against ".$e->getSparqlUrl().")\n-------------------------------------------------\n\n";
   	  	echo $query;
   	  }
   	  trigger_error("Running query from ".$modelFile." on endpoint ".$e->getSparqlURL(), E_USER_NOTICE);
