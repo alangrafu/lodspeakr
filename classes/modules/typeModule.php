@@ -94,6 +94,7 @@ class TypeModule extends abstractModule{
   	  //chdir($conf['home']);
   	  if(is_array($results)){
   	  	$resultsObj = Convert::array_to_object($results);
+  	  	$results = $resultsObj;
   	  }else{
   	  	$resultsObj = $results;
   	  }
