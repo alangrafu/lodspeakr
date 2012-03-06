@@ -294,29 +294,31 @@ class Utils{
   	  	  	$subDirs[]=$modelFile;
   	  	  }
   	  	}else{
-  	  	  $e = null;
-  	  	  if(!isset($endpoints[$strippedModelDir])){
-  	  	  	trigger_error("Creating endpoint for $strippedModelDir", E_USER_NOTICE);
-  	  	  	if(!isset($conf['endpoint'][$strippedModelDir])){
-  	  	  	  trigger_error("Couldn't find $strippedModelDir as a list of available endpoints. Will continue using local", E_USER_WARNING);
-  	  	  	  $e = $endpoints['local'];
-  	  	  	}else{  
-  	  	  	  $endpoints[$strippedModelDir] = new Endpoint($conf['endpoint'][$strippedModelDir], $conf['endpoint']['config']);
-  	  	  	  $e = $endpoints[$strippedModelDir];
-  	  	  	}
-  	  	  }else{
-  	  	  	$e = $endpoints[$strippedModelDir];
+  	  	  if(preg_match('/\.query$/', $modelFile)){
+  	  	    $e = null;
+  	  	    if(!isset($endpoints[$strippedModelDir])){
+  	  	      trigger_error("Creating endpoint for $strippedModelDir", E_USER_NOTICE);
+  	  	      if(!isset($conf['endpoint'][$strippedModelDir])){
+  	  	        trigger_error("Couldn't find $strippedModelDir as a list of available endpoints. Will continue using local", E_USER_WARNING);
+  	  	        $e = $endpoints['local'];
+  	  	      }else{  
+  	  	        $endpoints[$strippedModelDir] = new Endpoint($conf['endpoint'][$strippedModelDir], $conf['endpoint']['config']);
+  	  	        $e = $endpoints[$strippedModelDir];
+  	  	      }
+  	  	    }else{
+  	  	      $e = $endpoints[$strippedModelDir];
+  	  	    }
+  	  	    if($modelDir != $lodspk['type']){
+  	  	      if(!isset($r[$strippedModelDir]) ){
+  	  	        $r[$strippedModelDir] = array();
+  	  	        $f[$strippedModelDir] = array();
+  	  	      }
+  	  	      Utils::queryFile($modelFile, $e, $r[$strippedModelDir], $f);
+  	  	    }else{
+  	  	      Utils::queryFile($modelFile, $e, $r, $f);
+  	  	    }
   	  	  }
-  	  	  if($modelDir != $lodspk['type']){
-  	  	  	if(!isset($r[$strippedModelDir]) ){
-  	  	  	  $r[$strippedModelDir] = array();
-  	  	  	  $f[$strippedModelDir] = array();
-  	  	  	}
-  	  	  	Utils::queryFile($modelFile, $e, $r[$strippedModelDir], $f);
-  	  	  }else{
-  	  	  	Utils::queryFile($modelFile, $e, $r, $f);
-  	  	  }
- 	  	}
+ 	  	  }
   	  }
   	}
   	closedir($handle);
