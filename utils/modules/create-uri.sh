@@ -92,7 +92,7 @@ if [ -e "$mainDir" ]
 then
   echo "WARNING: At least one model for $1 exists." >&2
 else
-  mkdir $mainDir
+  mkdir -p $mainDir
 fi
 
 #Create  file structure
