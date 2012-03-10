@@ -208,7 +208,7 @@ class Utils{
   	  $t = $parser->getTriples();
   	  $triples = array_merge($triples, $t);
   	}
-  	if($lodspk['add_mirrored_uris']){
+  	if($lodspk['mirror_external_uris']){
   	  global $uri;
   	  global $localUri;
   	  $t = array();

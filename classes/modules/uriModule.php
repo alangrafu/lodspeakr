@@ -104,7 +104,7 @@ class UriModule extends abstractModule{
   	Utils::queryFile($modelFile, $endpoints['local'], $results, $firstResults);
   	if(!$lodspk['resultRdf']){
   	  $results = Utils::internalize($results); 
-  	  $lodspk['firstResults'] = Utils::getfirstResults($results);
+  	  $firstAux = Utils::getfirstResults($results);
   	  
   	  chdir($conf['home']);
   	  if(is_array($results)){
@@ -113,6 +113,7 @@ class UriModule extends abstractModule{
   	  }else{
   	  	$resultsObj = $results;
   	  }
+  	  $lodspk['firstResults'] = Convert::array_to_object($firstAux);
   	}else{
   	  $resultsObj = $results;
   	}
