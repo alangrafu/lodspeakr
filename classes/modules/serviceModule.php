@@ -13,9 +13,22 @@ class ServiceModule extends abstractModule{
   	if(sizeof($qArr)==0){
   	  return FALSE;
   	}
+
+  	//Use .extension at the end of the service to force a particular content type
+  	if(strpos($qArr[0], '.')>0){
+  	  $aux = explode(".", $qArr[0]);
+  	  if(isset($aux[1])){
+  	    $contentTypes = $conf['http_accept'][$aux[1]];
+  	    if($contentTypes == null){
+  	      Utils::send406("Content type not acceptable\n");
+  	    }
+  	    $acceptContentType = $contentTypes[0];
+  	  }
+  	  $qArr[0] = $aux[0];
+  	}
+
   	$extension = Utils::getExtension($acceptContentType);
   	$viewFile  = null;
-  	
   	$lodspk['model'] = $conf['model']['directory'].'/'.$conf['service']['prefix'].'/'.$qArr[0].'/';
   	$lodspk['view'] = $conf['view']['directory'].'/'.$conf['service']['prefix'].'/'.$qArr[0].'/'.$extension.'.template';
   	$modelFile = $lodspk['model'].$extension.'.queries';
@@ -59,7 +72,7 @@ class ServiceModule extends abstractModule{
   	$params = array();
   	$params = $this->getParams($localUri);
   	//$params[] = $context;
-  	$acceptContentType = Utils::getBestContentType($_SERVER['HTTP_ACCEPT']);
+  	//$acceptContentType = Utils::getBestContentType($_SERVER['HTTP_ACCEPT']);
   	$extension = Utils::getExtension($acceptContentType); 
   	$args = array();
   	list($modelFile, $viewFile) = $service;
@@ -117,14 +130,16 @@ class ServiceModule extends abstractModule{
   	  Utils::queryFile($modelFile, $endpoints['local'], $results, $firstResults);
       if(!$lodspk['resultRdf']){
       	$results = Utils::internalize($results); 
-      	$lodspk['firstResults'] = Utils::getfirstResults($results);
+      	$firstAux = Utils::getfirstResults($results);
       	
     //  	chdir($conf['home']);
       	if(is_array($results)){
       	  $resultsObj = Convert::array_to_object($results);
+      	  $results = $resultsObj;
       	}else{
       	  $resultsObj = $results;
       	}
+      	$lodspk['firstResults'] = Convert::array_to_object($firstAux);
       }else{
       	$resultsObj = $results;
       }

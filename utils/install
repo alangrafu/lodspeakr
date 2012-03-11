@@ -8,7 +8,6 @@
 #    http://lodspeakr.org/install 
 #       303 redirects to this script.
 
-lodspeakr_dir="lodspeakr"
 lodspeakr_repository="git://github.com/alangrafu/lodspeakr.git"
 home=`basename $lodspeakr_repository | sed 's/.git//'`
 
@@ -23,7 +22,7 @@ fi
 if [ ! -e "$home" ]; then
    $GIT clone $lodspeakr_repository
    cd $home
-   ./install.sh $lodspeakr_dir
+   ./install.sh $home
  else
    echo "There is already an existing directory called '$home'. Installation cancelled. Remove it first and try again."
 fi

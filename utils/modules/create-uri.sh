@@ -92,14 +92,14 @@ if [ -e "$mainDir" ]
 then
   echo "WARNING: At least one model for $1 exists." >&2
 else
-  mkdir $mainDir
+  mkdir -p $mainDir
 fi
 
 #Create  file structure
 
 mkdir $mainDir/queries
-echo "$modelHtmlSP" > $mainDir/queries/sp.query
-echo "$modelHtmlPO" > $mainDir/queries/po.query
-echo "$viewHtml" > $mainDir/html.template
+echo -e "$modelHtmlSP" > $mainDir/queries/sp.query
+echo -e "$modelHtmlPO" > $mainDir/queries/po.query
+echo -e "$viewHtml" > $mainDir/html.template
 
 echo $initToken.$1 created/modified successfully! >&2

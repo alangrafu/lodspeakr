@@ -46,7 +46,7 @@ else
   mkdir -p $mainDir/queries
 fi
 
-echo $modelHtml > $mainDir/queries/main.query
-echo $viewHtml > $mainDir/html.template
+echo -e "$modelHtml" > $mainDir/queries/main.query
+echo -e "$viewHtml" > $mainDir/html.template
 
 echo $initToken.$1 created/modified successfully! >&2

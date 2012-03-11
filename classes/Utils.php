@@ -208,7 +208,7 @@ class Utils{
   	  $t = $parser->getTriples();
   	  $triples = array_merge($triples, $t);
   	}
-  	if($lodspk['add_mirrored_uris']){
+  	if($lodspk['mirror_external_uris']){
   	  global $uri;
   	  global $localUri;
   	  $t = array();
@@ -234,8 +234,14 @@ class Utils{
   	case 'rdf':
   	  $ser = ARC2::getRDFXMLSerializer();
   	  break;
+  	default:
+  	  $ser = null;
   	}
+  	if($ser != null){
   	$doc = $ser->getSerializedTriples($triples);
+  	}else{
+  	$doc = var_export($data, true);
+  	}
   	return $doc;
   }
   
@@ -288,29 +294,31 @@ class Utils{
   	  	  	$subDirs[]=$modelFile;
   	  	  }
   	  	}else{
-  	  	  $e = null;
-  	  	  if(!isset($endpoints[$strippedModelDir])){
-  	  	  	trigger_error("Creating endpoint for $strippedModelDir", E_USER_NOTICE);
-  	  	  	if(!isset($conf['endpoint'][$strippedModelDir])){
-  	  	  	  trigger_error("Couldn't find $strippedModelDir as a list of available endpoints. Will continue using local", E_USER_WARNING);
-  	  	  	  $e = $endpoints['local'];
-  	  	  	}else{  
-  	  	  	  $endpoints[$strippedModelDir] = new Endpoint($conf['endpoint'][$strippedModelDir], $conf['endpoint']['config']);
-  	  	  	  $e = $endpoints[$strippedModelDir];
-  	  	  	}
-  	  	  }else{
-  	  	  	$e = $endpoints[$strippedModelDir];
+  	  	  if(preg_match('/\.query$/', $modelFile)){
+  	  	    $e = null;
+  	  	    if(!isset($endpoints[$strippedModelDir])){
+  	  	      trigger_error("Creating endpoint for $strippedModelDir", E_USER_NOTICE);
+  	  	      if(!isset($conf['endpoint'][$strippedModelDir])){
+  	  	        trigger_error("Couldn't find $strippedModelDir as a list of available endpoints. Will continue using local", E_USER_WARNING);
+  	  	        $e = $endpoints['local'];
+  	  	      }else{  
+  	  	        $endpoints[$strippedModelDir] = new Endpoint($conf['endpoint'][$strippedModelDir], $conf['endpoint']['config']);
+  	  	        $e = $endpoints[$strippedModelDir];
+  	  	      }
+  	  	    }else{
+  	  	      $e = $endpoints[$strippedModelDir];
+  	  	    }
+  	  	    if($modelDir != $lodspk['type']){
+  	  	      if(!isset($r[$strippedModelDir]) ){
+  	  	        $r[$strippedModelDir] = array();
+  	  	        $f[$strippedModelDir] = array();
+  	  	      }
+  	  	      Utils::queryFile($modelFile, $e, $r[$strippedModelDir], $f);
+  	  	    }else{
+  	  	      Utils::queryFile($modelFile, $e, $r, $f);
+  	  	    }
   	  	  }
-  	  	  if($modelDir != $lodspk['type']){
-  	  	  	if(!isset($r[$strippedModelDir]) ){
-  	  	  	  $r[$strippedModelDir] = array();
-  	  	  	  $f[$strippedModelDir] = array();
-  	  	  	}
-  	  	  	Utils::queryFile($modelFile, $e, $r[$strippedModelDir], $f);
-  	  	  }else{
-  	  	  	Utils::queryFile($modelFile, $e, $r, $f);
-  	  	  }
- 	  	}
+ 	  	  }
   	  }
   	}
   	closedir($handle);
@@ -435,7 +443,8 @@ class Utils{
 	  	}
 	  }
   	  if($conf['debug']){
-  	  	echo "$modelFile (against ".$e->getSparqlUrl().")\n-------------------------------------------------\n";
+  	  	echo "\n-------------------------------------------------\nIn ".getcwd()."\n";
+  	    echo "$modelFile (against ".$e->getSparqlUrl().")\n-------------------------------------------------\n\n";
   	  	echo $query;
   	  }
   	  trigger_error("Running query from ".$modelFile." on endpoint ".$e->getSparqlURL(), E_USER_NOTICE);

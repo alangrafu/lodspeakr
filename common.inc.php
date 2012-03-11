@@ -53,7 +53,7 @@ $conf['debug'] = false;
 $conf['modules'] = array();
 $conf['modules']['directory'] = 'classes/modules/';
 $conf['modules']['available'] = array('static','uri', 'type', 'service');
-
+global $lodspk;
 include_once('settings.inc.php');
 $conf['view']['standard']['baseUrl'] = $conf['basedir'];
 ?>

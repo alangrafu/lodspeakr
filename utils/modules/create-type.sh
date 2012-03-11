@@ -81,7 +81,8 @@ viewHtml=`cat <<VIEW
     
     <br/>
   </body>
-</html>VIEW`
+</html>
+VIEW`
 
 
 #Check models
@@ -94,8 +95,8 @@ else
   mkdir -p $mainDir/queries
 fi
 
-echo "$modelHtmlSP" > $mainDir/queries/sp.query
-echo "$modelHtmlPO" > $mainDir/queries/po.query
-echo "$viewHtml" > $mainDir/html.template
+echo -e "$modelHtmlSP" > $mainDir/queries/sp.query
+echo -e "$modelHtmlPO" > $mainDir/queries/po.query
+echo -e "$viewHtml" > $mainDir/html.template
 
 echo $1 created successfully! >&2
