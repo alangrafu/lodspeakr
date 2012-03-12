@@ -7,7 +7,8 @@ USAGE=$USAGE" Delete component:\t\t\t\t\t$0 delete uri|type|service foo [html|rd
 USAGE=$USAGE" Turn debug:\t\t\t\t\t\t$0 debug on|off\n"
 USAGE=$USAGE" Switch to standard view/models temporaly:\t\t$0 disable on|off\n"
 USAGE=$USAGE" Backup current installation:\t\t\t\t$0 backup\n"
-USAGE=$USAGE" Restore previous instllation:\t\t\t\t$0 restore\n"
+USAGE=$USAGE" Restore previous installation:\t\t\t\t$0 restore\n"
+USAGE=$USAGE" Clear cache:\t\t\t\t\t\t$0 cache clear\n"
 USAGEDEBUG="Usage: $0 debug on|off"
 if [[ $# -eq 0 || "$1" == "--help" ]]; then
   echo -e $USAGE
@@ -15,7 +16,7 @@ if [[ $# -eq 0 || "$1" == "--help" ]]; then
 fi
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-operations=( create delete debug backup restore disable )
+operations=( create delete debug backup restore disable cache )
 currentOperation=
 
 if [[ ${operations[@]} =~ $1 ]]; then
@@ -83,10 +84,11 @@ if [[ $currentOperation == "debug" ]]; then
     exit 1
   fi
   php $DIR/modules/debug.php "$debugOperation" 
+  $DIR/modules/cache.sh clear
   exit
 fi
 
-## Backup
+## Disable
 if [[ $currentOperation == "disable" ]]; then
  defaultOptions=( on off 0 1 )
   defaultOperation=
@@ -99,5 +101,21 @@ if [[ $currentOperation == "disable" ]]; then
     exit 1
   fi
   php $DIR/modules/default.php "$defaultOperation" 
+  $DIR/modules/cache.sh clear
   exit
 fi  
+
+## Cache
+if [[ $currentOperation == "cache" ]]; then
+  cacheOptions=( clear )
+  if [[ ${cacheOptions[@]} =~ $2 ]]
+  then
+    cacheOperation=$2
+  else
+    echo -e "Cache option not supported. Operation aborted\n" >&2
+    echo -e $USAGE
+    exit 1
+  fi
+  $DIR/modules/cache.sh $2
+  exit
+fi
