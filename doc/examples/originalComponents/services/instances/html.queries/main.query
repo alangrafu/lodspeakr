@@ -1,0 +1,13 @@
+{%for h in lodspk.header %}
+PREFIX {{h.prefix}}: <{{h.ns}}>
+{%endfor%}
+SELECT DISTINCT ?resource WHERE {
+  {
+    GRAPH ?g{
+      ?resource a {{lodspk.args.arg0}}
+    }
+  }UNION{
+      ?resource a {{lodspk.args.arg0}}
+  }
+}order by ?resource
+limit 1000

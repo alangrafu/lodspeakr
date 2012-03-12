@@ -1,0 +1,6 @@
+SELECT DISTINCT ?g WHERE {
+  GRAPH ?g{
+  	[] ?p ?resource .
+  }
+}
+ order by ?g

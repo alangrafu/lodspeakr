@@ -118,7 +118,8 @@ echo "RewriteRule ^\$ $1/index.php [L]" >> $parent_htaccess
 cat $root_htaccess >> $parent_htaccess
 echo "RewriteRule ^(.+)\$ $1/index.php?q=\$1 [L]" >> $parent_htaccess
 mkdir cache
-
+cp -r doc/examples/originalComponents components
+mkdir -p components/uris
 
 echo
 echo "                                      *** ATTENTION ***"
