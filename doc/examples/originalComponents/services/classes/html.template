@@ -4,7 +4,7 @@
     <html xmlns="http://www.w3.org/1999/xhtml" {% for i, ns in lodspk.ns %}xmlns:{{i}}="{{ns}}" 
     {%endfor%}version="XHTML+RDFa 1.0" xml:lang="en">
   <head>
-    <title>My new Service</title>
+    <title>Classes available</title>
     <link href="css/basic.css" rel="stylesheet" type="text/css" media="screen" />
   </head>
   <body>
