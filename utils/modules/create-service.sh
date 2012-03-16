@@ -13,6 +13,7 @@ SELECT DISTINCT ?resource WHERE {
   	[] a ?resource .
   }
 }
+LIMIT 10
 QUERY`
 
 viewHtml=`cat  <<VIEW
@@ -22,11 +23,11 @@ viewHtml=`cat  <<VIEW
 <html xmlns="http://www.w3.org/1999/xhtml" {% for i, ns in base.ns %}xmlns:{{i}}="{{ns}}" 
     {%endfor%}version="XHTML+RDFa 1.0" xml:lang="en">
   <head>
-    <title>My new Service</title>
+    <title>$1</title>
     <link href="{{lodspk.baseUrl}}css/basic.css" rel="stylesheet" type="text/css" media="screen" />
   </head>
   <body>
-    <h1>Classes available</h1>
+    <h1>10 Classes available in this triple store</h1>
 	<ul>
     {% for row in models.main %}
         <li><a href="{{lodspk.baseUrl}}special/instances/{{ row.resource.curie }}">{{row.resource.curie}}</a></li>
