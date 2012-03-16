@@ -33,7 +33,6 @@ $conf['http_accept']['nt']   = array('text/plain');
 
 
 $conf['service']['prefix'] = 'services';
-$conf['service']['class'] = 'classes/BasicSpecialFunction.php';
 
 $conf['type']['prefix'] = 'types';
 $conf['uri']['prefix'] = 'uris';

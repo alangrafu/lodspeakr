@@ -66,8 +66,6 @@ class ServiceModule extends abstractModule{
   	$context = array();
   	$context['contentType'] = $acceptContentType;
   	$context['endpoints'] = $endpoints;
-  	//$sp = new SpecialFunction();
-  	//$sp->execute($localUri, $context);
   	$f = $this->getFunction($localUri);
   	$params = array();
   	$params = $this->getParams($localUri);
