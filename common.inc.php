@@ -21,6 +21,7 @@ $conf['view']['extension'] = '.view';
 $conf['view']['default'] = 'rdfs:Resource';
 
 $conf['static']['directory'] = 'static/'; #include trailing slash!
+$conf['static']['haanga'] = true; //Should static files be processed by Haanga? 
 
 $conf['resource']['url_delimiter'] = "%u";
 
