@@ -35,8 +35,8 @@ class Endpoint{
         $aux = curl_exec($c); // execute the curl command 
         if($conf['debug']){
           if($aux == false){
-          	trigger_error("Error executing SPARQL query: ".curl_error($c), E_USER_ERROR);
-          	echo("Error executing SPARQL query: ".curl_error($c));
+          	trigger_error("Error executing SPARQL query (".$this->sparqlUrl."): ".curl_error($c), E_USER_ERROR);
+          	echo("Error executing SPARQL query (".$this->sparqlUrl."): ".curl_error($c));
           }
         }
         curl_close($c);

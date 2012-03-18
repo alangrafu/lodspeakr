@@ -23,10 +23,37 @@ class StaticModule extends abstractModule{
   	global $uri;
   	global $acceptContentType;
   	global $endpoints;
-  	global $lodspk;
+  	global $lodspk;  	
+  	
   	header("Content-type: ");
-  	echo file_get_contents($conf['static']['directory'].$file);
+  	$uri = $localUri;
+  	if($conf['debug']){
+  	  echo "\n-------------------------------------------------\nIn ".$conf['static']['directory']."\n";
+  	  echo "Static file $file\n-------------------------------------------------\n\n";
+	  }
+	  if($conf['static']['haanga']){
+	    $lodspk['home'] = $conf['basedir'];
+	    $lodspk['baseUrl'] = $conf['basedir'];
+	    $lodspk['module'] = 'static';
+	    $lodspk['root'] = $conf['root'];
+	    $lodspk['contentType'] = $acceptContentType;
+	    $lodspk['ns'] = $conf['ns'];  	  	
+	    $lodspk['this']['value'] = $localUri;
+	    $lodspk['this']['curie'] = Utils::uri2curie($localUri);
+	    $lodspk['this']['local'] = $localUri;  	
+	    $lodspk['contentType'] = $acceptContentType;
+	    $lodspk['endpoint'] = $conf['endpoint'];	    
+	    $lodspk['type'] = $modelFile;
+	    $lodspk['header'] = $prefixHeader;
+	    $lodspk['baseUrl'] = $conf['basedir'];
+	    
+	    Utils::processDocument($conf['static']['directory'].$file, $lodspk, null);    	  
+  	}else{
+  	  echo file_get_contents($conf['static']['directory'].$file);
+  	}
   }
+  
+  
   
 }
 ?>

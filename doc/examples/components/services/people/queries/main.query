@@ -1,0 +1,10 @@
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT DISTINCT ?person ?email ?name WHERE {
+  GRAPH ?g {
+  	?person a foaf:Person ;
+  	        foaf:name ?name ;
+  			foaf:mbox ?email .
+  }
+}order by ?name

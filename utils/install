@@ -1,7 +1,12 @@
 #!/usr/bin/env bash
+#
 # Installation script for LODSPeaKr (http://lodspeakr.org)
 # Author: Alvaro Graves (alvaro@graves.cl)
 # Modified by: Tim Lebo (lebot@rpi.edu)
+#
+# The URL:
+#    http://lodspeakr.org/install 
+#       303 redirects to this script.
 
 lodspeakr_repository="git://github.com/alangrafu/lodspeakr.git"
 home=`basename $lodspeakr_repository | sed 's/.git//'`
@@ -17,7 +22,7 @@ fi
 if [ ! -e "$home" ]; then
    $GIT clone $lodspeakr_repository
    cd $home
-   ./install.sh
-else
+   ./install.sh $home
+ else
    echo "There is already an existing directory called '$home'. Installation cancelled. Remove it first and try again."
 fi

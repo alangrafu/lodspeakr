@@ -84,7 +84,7 @@ foreach($conf['modules']['available'] as $i){
   }
   require_once($currentModule);
   $module = new $className();
-  $matching = $module->match($uri) ;
+  $matching = $module->match($uri);
   if($matching != FALSE){
   	$module->execute($matching);
   	exit(0);

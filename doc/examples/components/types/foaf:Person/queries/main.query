@@ -1,0 +1,10 @@
+PREFIX twc: <http://tw.rpi.edu/schema/>
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+SELECT ?event ?eventName  WHERE {
+  GRAPH <http://tw.rpi.edu:2020/books>{
+    ?event twc:hasAttendee <{{uri}}> .
+    OPTIONAL{ 
+      ?event foaf:name ?eventName .
+    }
+  }
+}

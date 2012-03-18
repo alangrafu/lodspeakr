@@ -13,28 +13,45 @@ class ServiceModule extends abstractModule{
   	if(sizeof($qArr)==0){
   	  return FALSE;
   	}
-  	$extension = Utils::getExtension($acceptContentType); 
-  	$lodspk['model'] = $conf['home'].$conf['model']['directory'].$conf['service']['prefix'].$qArr[0].'/';
-  	$lodspk['view'] = $conf['home'].$conf['view']['directory'].$conf['service']['prefix'].$qArr[0].'/';
-  	$viewFile  = $extension.".template";
-  	$modelFile = $extension.".queries";
-  	if(file_exists($lodspk['model']) && file_exists($lodspk['view'])){
-  	  if(!file_exists($lodspk['view'].$viewFile)){
-  	  	$viewFile = null;  	  
+
+  	//Use .extension at the end of the service to force a particular content type
+  	if(strpos($qArr[0], '.')>0){
+  	  $aux = explode(".", $qArr[0]);
+  	  if(isset($aux[1])){
+  	    $contentTypes = $conf['http_accept'][$aux[1]];
+  	    if($contentTypes == null){
+  	      Utils::send406("Content type not acceptable\n");
+  	    }
+  	    $acceptContentType = $contentTypes[0];
   	  }
-  	  if(file_exists($lodspk['model'].$modelFile) && $qArr[0] != null){
-  	  	trigger_error("Using model ".$modelFile." and view ".$viewFile, E_USER_NOTICE);
-  	  	return array($modelFile, $viewFile);
-  	  }elseif($extension != 'html' && file_exists($lodspk['model'].'/html.queries')){
-  	  	$modelFile = 'html.queries';
-  	  	trigger_error("Using ".$modelFile." as model. It will be used as a CONSTRUCT", E_USER_NOTICE);
-  	  	return array($modelFile, $viewFile);
-  	  }else{
-  	  	Utils::send406($uri);
-  	  	exit(0);
-  	  }
+  	  $qArr[0] = $aux[0];
   	}
-  	
+
+  	$extension = Utils::getExtension($acceptContentType);
+  	$viewFile  = null;
+  	$lodspk['model'] = $conf['model']['directory'].'/'.$conf['service']['prefix'].'/'.$qArr[0].'/';
+  	$lodspk['view'] = $conf['view']['directory'].'/'.$conf['service']['prefix'].'/'.$qArr[0].'/'.$extension.'.template';
+  	$modelFile = $lodspk['model'].$extension.'.queries';
+  	if(file_exists($lodspk['model'].$extension.'.queries')){
+  	  if(!file_exists($lodspk['view'])){
+  	  	$viewFile = null;
+  	  }else{
+  	  	$viewFile = $lodspk['view'];
+  	  }
+  	  return array($modelFile, $viewFile);
+  	}elseif(file_exists($lodspk['model'].'queries')){
+ 	  $modelFile = $lodspk['model'].'queries';
+  	  if(!file_exists($lodspk['view'])){
+  	  	$lodspk['resultRdf'] = true;
+  	  	$viewFile = null;
+  	  }else{
+  	  	$viewFile = $lodspk['view'];
+  	  }
+  	  return array($modelFile, $viewFile);
+  	}elseif(file_exists($lodspk['model'])){
+  	  Utils::send406($uri);
+  	  exit(0);
+  	}
   	return FALSE;  
   }
   
@@ -49,17 +66,14 @@ class ServiceModule extends abstractModule{
   	$context = array();
   	$context['contentType'] = $acceptContentType;
   	$context['endpoints'] = $endpoints;
-  	//$sp = new SpecialFunction();
-  	//$sp->execute($localUri, $context);
   	$f = $this->getFunction($localUri);
   	$params = array();
   	$params = $this->getParams($localUri);
   	//$params[] = $context;
-  	$acceptContentType = Utils::getBestContentType($_SERVER['HTTP_ACCEPT']);
+  	//$acceptContentType = Utils::getBestContentType($_SERVER['HTTP_ACCEPT']);
   	$extension = Utils::getExtension($acceptContentType); 
   	$args = array();
   	list($modelFile, $viewFile) = $service;
-  	
   	try{
   	  $prefixHeader = array();
   	  
@@ -109,26 +123,28 @@ class ServiceModule extends abstractModule{
   	  if($viewFile == null){
   	  	$lodspk['transform_select_query'] = true;
   	  }
-  	  chdir($lodspk['model']);
+  	//  chdir($lodspk['model']);
   	  
   	  Utils::queryFile($modelFile, $endpoints['local'], $results, $firstResults);
       if(!$lodspk['resultRdf']){
       	$results = Utils::internalize($results); 
-      	$lodspk['firstResults'] = Utils::getfirstResultss($results);
+      	$firstAux = Utils::getfirstResults($results);
       	
-      	chdir($conf['home']);
+    //  	chdir($conf['home']);
       	if(is_array($results)){
       	  $resultsObj = Convert::array_to_object($results);
+      	  $results = $resultsObj;
       	}else{
       	  $resultsObj = $results;
       	}
+      	$lodspk['firstResults'] = Convert::array_to_object($firstAux);
       }else{
       	$resultsObj = $results;
       }
   	  
   	  //Need to redefine viewFile as 'local' i.e., inside service.foo/ so I can load files with the relative path correctly
   	  //$viewFile = $extension.".template";
-  	  chdir($conf['home']);  	  
+  	  //chdir($conf['home']);  	  
   	  Utils::processDocument($viewFile, $lodspk, $results);    	  
   	}catch (Exception $ex){
   	  echo $ex->getMessage();
