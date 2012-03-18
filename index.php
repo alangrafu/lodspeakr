@@ -9,7 +9,7 @@ if($_GET['q'] == 'import'){
 
 //Test if LODSPeaKr is configured
 if(!file_exists('settings.inc.php')){
-  echo 'Need to configure lodspeakr first. Please run "install.sh" first. Alternatively, you can <a href="import">import an existing application</a>';
+  echo 'Need to configure lodspeakr firstResults. Please run "install.sh" firstResults. Alternatively, you can <a href="import">import an existing application</a>';
   exit(0);
 }
 
@@ -27,7 +27,7 @@ include_once('classes/Queries.php');
 include_once('classes/Endpoint.php');
 include_once('classes/Convert.php');
 $results = array();
-$first = array();
+$firstResults = array();
 $endpoints = array();
 $endpoints['local'] = new Endpoint($conf['endpoint']['local'], $conf['endpointParams']['config']);
 
@@ -59,9 +59,18 @@ if($uri == $conf['basedir']){
 }
 
 //Configure external URIs if necessary
-if($conf['mirror_external_uris']){
-  $uri = $conf['ns']['local'].$_GET['q'];
+if(isset($conf['mirror_external_uris']) && $conf['mirror_external_uris'] != false){
   $localUri = $conf['basedir'].$_GET['q'];
+  
+  if(is_bool($conf['mirror_external_uris'])){
+  	$uri = $conf['ns']['local'].$_GET['q'];
+  }elseif(is_string($conf['mirror_external_uris'])){
+  	$uri = $conf['mirror_external_uris'].$_GET['q'];
+  }else{
+  	Utils::send500("Error in mirroring configuration");
+  	exit(1);
+  }
+  
 }
 
 
@@ -75,7 +84,7 @@ foreach($conf['modules']['available'] as $i){
   }
   require_once($currentModule);
   $module = new $className();
-  $matching = $module->match($uri) ;
+  $matching = $module->match($uri);
   if($matching != FALSE){
   	$module->execute($matching);
   	exit(0);

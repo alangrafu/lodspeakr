@@ -3,7 +3,7 @@ body {
 }
 
 h1{
-  font-size: 45px;
+  font-size: 24px;
 }
 
 h1,h2,body {
@@ -29,15 +29,14 @@ a:hover{
 
 
 table tr td {
-    border-width: thin;
 	padding: 2px;
-	border-style: dotted;
 	border-color: gray;
 	background-color: white;
 }
-
+td{
+  max-width:550px;
+  word-wrap: break-word;
+}
 table{
   width: 50%;
-  margin-left:100px;
-  margin-right:auto;
 }

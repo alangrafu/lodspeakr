@@ -1,13 +1,13 @@
-lodspeakr - Simple Publishing Kit for Linked Open Data
+lodspeakr - Linked Open Data Simple Publishing Kit
 author: Alvaro Graves (alvaro@graves.cl)
-version: 20120113
+version: 20120318 
 
 Simplest Installation
 ---------------------
 
 Just run
 
-            bash < <(curl -s http://lodspeakr.org/install)
+   bash < <(curl -sL http://lodspeakr.org/install)
 
 Alternative methods of installation available at
 

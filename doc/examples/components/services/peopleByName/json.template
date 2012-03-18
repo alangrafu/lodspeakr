@@ -1,0 +1,11 @@
+{
+  "people": [
+    {% for row in models.main %}
+        {
+          "uri": "{{row.person.value}}",
+          "name": "{{row.name.value}}",
+          "email": "{{row.email.value}}"
+        }{%if ! forloop.last%},{%endif%} 
+    {% endfor %}
+   ]
+}

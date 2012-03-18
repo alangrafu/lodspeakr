@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 #
-#
-
 root_htaccess="root.htaccess"
 parent_htaccess="../.htaccess"
 settings_file="settings.inc.php"
@@ -53,7 +51,7 @@ while [ "$everything_ok" != "y" ]; do
   if [[ "$basedir" =~ ^"$ns" ]]; then
     external="false"
   else
-    external="true"
+    external=$ns
     extra="\$conf['ns']['base']   = '$basedir';"
   fi
   
@@ -94,7 +92,7 @@ LODSPEAKR_HOME=`pwd`/
 \$conf['home'] = '$LODSPEAKR_HOME';
 \$conf['basedir'] = '$basedir';
 \$conf['debug'] = false;
-\$conf['mirror_external_uris'] = $external;
+\$conf['mirror_external_uris'] = '$external';
 
 /*ATTENTION: By default this application is available to
  * be exported and copied (its configuration)
@@ -113,20 +111,25 @@ echo "Created new configuration file: $settings_file"
 echo ""
 echo "WARNING: Copying $root_htaccess as .htaccess in parent directory"
 echo ""
-cp $root_htaccess $parent_htaccess
-
+echo "RewriteEngine on" > $parent_htaccess
+echo >> $parent_htaccess
+echo "RewriteRule ^\$ $1/index.php [L]" >> $parent_htaccess
+cat $root_htaccess >> $parent_htaccess
+echo "RewriteRule ^(.+)\$ $1/index.php?q=\$1 [L]" >> $parent_htaccess
 mkdir cache
+cp -r doc/examples/originalComponents components
+mkdir -p components/uris
 
 echo
 echo "                                      *** ATTENTION ***"
 echo
-echo "LODSPeaKr needs the web server to have write permissions for lodspeakr/cache/ and lodspeakr/meta/."
+echo "LODSPeaKr needs the web server to have write permissions for $1/cache/ and $1/meta/."
 echo
 echo
 echo "Common ways of doing this:"
-echo " chown -R www-apache lodspeakr/cache lodspeakr/meta (find the name of the apache user in your system)"
-echo " chmod -R g+w lodspeakr/cache lodspeakr/meta (if you have a group in common with the apache user)"
-echo " chmod -R 777 lodspeakr/cache lodspeakr/meta (highly discouraged but useful to test when everything fails. It shouldn't be used in production sites)"
+echo " chown -R www-apache $1/cache $1/meta (find the name of the apache user in your system)"
+echo " chmod -R g+w $1/cache $1/meta (if you have a group in common with the apache user)"
+echo " chmod -R 777 $1/cache $1/meta (highly discouraged but useful to test when everything fails. It shouldn't be used in production sites)"
 echo
 echo "Please give the server write permissions. Otherwise, LODSPeaKr will not work."
 echo

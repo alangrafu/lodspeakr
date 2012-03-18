@@ -35,11 +35,23 @@ class Utils{
   	global $conf;
   	$ns = $conf['ns'];
   	$curie = $uri;
+  	
+  	$aux = $uri;
   	foreach($ns as $k => $v){
-  	  $curie = preg_replace("|^$v|", "$k:", $uri);
-  	  if($curie != $uri){
+  	  $aux = preg_replace("|^$v|", "", $uri);
+  	  if($aux != $uri){
+  	  	$uriSegments = explode("/", $aux);
+  	  	$lastSegment = array_pop($uriSegments);
+  	  	if(sizeof($uriSegments)>0){
+  	  	  $prefix = $k."_".(implode("_", $uriSegments));
+  	  	  //Adding "new" namespace
+  	  	  $conf['ns'][$prefix] = $v.implode("/", $uriSegments)."/";
+  	  	}else{
+  	  	  $prefix = $k;
+  	  	}
+  	  	$curie = $prefix.":".$lastSegment;
   	  	break;
-  	  }
+  	  }  
   	}
   	return $curie;
   }
@@ -52,8 +64,15 @@ class Utils{
   	if(preg_match('|^//|', $parts[1])){
   	  return $curie;
   	}  	
-  	if(sizeof($parts)>1 && isset($ns[$parts[0]])){
-  	  return $ns[$parts[0]].$parts[1];
+  	if(sizeof($parts)>1 ){
+  	  if(!isset($ns[$parts[0]])){
+  		$prefixSegments = explode("_", $parts[0]);
+  		$realPrefix = array_shift($prefixSegments);
+  		$conf['ns'][$parts[0]] = $ns[$realPrefix].join("/", $prefixSegments);
+  		return $ns[$realPrefix].join("/", $prefixSegments)."/".$parts[1];
+  	  }else{
+  	  	return $ns[$parts[0]].$parts[1];
+  	  }
   	}else{
   	  return $curie;
   	}
@@ -67,7 +86,7 @@ class Utils{
   	if(preg_match('|^//|', $parts[1])){
   	  return $curie;
   	}  	
-  	return array('ns' => $ns[$parts[0]], 'prefix' => $parts[0]);;
+  	return array('ns' => $ns[$parts[0]], 'prefix' => $parts[0]);
   }
   
   public static function getTemplate($uri){
@@ -180,7 +199,7 @@ class Utils{
   	$ser;
   	$dPointer;
   	$docs = Utils::travelTree($data);
-  	require_once('lib/arc2/ARC2.php');
+  	require_once($conf['home'].'lib/arc2/ARC2.php');
   	$parser = ARC2::getRDFParser();
   	 $triples = array();
   	 
@@ -189,7 +208,7 @@ class Utils{
   	  $t = $parser->getTriples();
   	  $triples = array_merge($triples, $t);
   	}
-  	if($lodspk['add_mirrored_uris']){
+  	if($lodspk['mirror_external_uris']){
   	  global $uri;
   	  global $localUri;
   	  $t = array();
@@ -215,18 +234,25 @@ class Utils{
   	case 'rdf':
   	  $ser = ARC2::getRDFXMLSerializer();
   	  break;
+  	default:
+  	  $ser = null;
   	}
+  	if($ser != null){
   	$doc = $ser->getSerializedTriples($triples);
+  	}else{
+  	$doc = var_export($data, true);
+  	}
   	return $doc;
   }
   
   public static function processDocument($viewFile, $lodspk, $data){
   	global $conf;
+  	global $lodspk;
   	$contentType = $lodspk['contentType'];
   	$extension = Utils::getExtension($contentType); 
   	
   	header('Content-Type: '.$contentType);
-  	if($lodspk['resultRdf']){
+  	if(isset($lodspk['resultRdf']) && $lodspk['resultRdf'] == true){
   	  echo Utils::serializeRdf($data, $extension);
   	}else{
   	  Utils::showView($lodspk, $data, $viewFile);  	
@@ -252,42 +278,47 @@ class Utils{
   	global $lodspk;
   	global $endpoints;
   	global $results;
+  	$strippedModelDir = str_replace('endpoint.', '', $modelDir); 	  
   	$lodspk['model'] = $modelDir;
   	$originalDir = getcwd();
   	$subDirs= array();
-  	trigger_error("Entering $modelDir from ".getcwd(), E_USER_NOTICE);
+  	trigger_error("Entering $strippedModelDir from ".getcwd(), E_USER_NOTICE);
   	chdir($modelDir);
   	$handle = opendir('.');
   	
   	while (false !== ($modelFile = readdir($handle))) {
   	  if($modelFile != "." && $modelFile != ".." && strpos($modelFile, ".") !== 0){
   	  	if(is_dir($modelFile)){
-  	  	  trigger_error("Save $modelFile for later, after all the queries in the current directory has been resolved", E_USER_NOTICE);
-  	  	  $subDirs[]=$modelFile;
+  	  	  if(strpos('endpoint.', $modelFile) == 0){
+  	  	  	trigger_error("Save $modelFile for later, after all the queries in the current directory has been resolved", E_USER_NOTICE);
+  	  	  	$subDirs[]=$modelFile;
+  	  	  }
   	  	}else{
-  	  	  $e = null;
-  	  	  if(!isset($endpoints[$modelDir])){
-  	  	  	trigger_error("Creating endpoint for $modelDir", E_USER_NOTICE);
-  	  	  	if(!isset($conf['endpoint'][$modelDir])){
-  	  	  	  trigger_error("Couldn't find $modelDir as a list of available endpoints. Will continue using local", E_USER_WARNING);
-  	  	  	  $e = $endpoints['local'];
-  	  	  	}else{  
-  	  	  	  $endpoints[$modelDir] = new Endpoint($conf['endpoint'][$modelDir], $conf['endpoint']['config']);
-  	  	  	  $e = $endpoints[$modelDir];
-  	  	  	}
-  	  	  }else{
-  	  	  	$e = $endpoints[$modelDir];
+  	  	  if(preg_match('/\.query$/', $modelFile)){
+  	  	    $e = null;
+  	  	    if(!isset($endpoints[$strippedModelDir])){
+  	  	      trigger_error("Creating endpoint for $strippedModelDir", E_USER_NOTICE);
+  	  	      if(!isset($conf['endpoint'][$strippedModelDir])){
+  	  	        trigger_error("Couldn't find $strippedModelDir as a list of available endpoints. Will continue using local", E_USER_WARNING);
+  	  	        $e = $endpoints['local'];
+  	  	      }else{  
+  	  	        $endpoints[$strippedModelDir] = new Endpoint($conf['endpoint'][$strippedModelDir], $conf['endpoint']['config']);
+  	  	        $e = $endpoints[$strippedModelDir];
+  	  	      }
+  	  	    }else{
+  	  	      $e = $endpoints[$strippedModelDir];
+  	  	    }
+  	  	    if($modelDir != $lodspk['type']){
+  	  	      if(!isset($r[$strippedModelDir]) ){
+  	  	        $r[$strippedModelDir] = array();
+  	  	        $f[$strippedModelDir] = array();
+  	  	      }
+  	  	      Utils::queryFile($modelFile, $e, $r[$strippedModelDir], $f);
+  	  	    }else{
+  	  	      Utils::queryFile($modelFile, $e, $r, $f);
+  	  	    }
   	  	  }
-  	  	  if($modelDir != $lodspk['type']){
-  	  	  	if(!isset($r[$modelDir]) ){
-  	  	  	  $r[$modelDir] = array();
-  	  	  	  $f[$modelDir] = array();
-  	  	  	}
-  	  	  	Utils::queryFile($modelFile, $e, $r[$modelDir], $f[$modelDir]);
-  	  	  }else{
-  	  	  	Utils::queryFile($modelFile, $e, $r, $f);
-  	  	  }
- 	  	}
+ 	  	  }
   	  }
   	}
   	closedir($handle);
@@ -298,13 +329,13 @@ class Utils{
   	  	  $r[$modelDir] = array();
   	  	}
   	  	if($modelDir != $lodspk['type']){
-  	  	  Utils::queryDir($v, $r[$modelDir]);
+  	  	  Utils::queryDir($v, $r[$strippedModelDir], $f[$strippedModelDir]);
   	  	}else{
-  	  	  Utils::queryDir($v, $r);
+  	  	  Utils::queryDir($v, $r, $f);
   	  	}
   	  }  	
   	}
-  	chdir($conf['home']);
+  //	chdir($conf['home']);
   	//return $data;
   }
   
@@ -313,10 +344,10 @@ class Utils{
   	global $conf;
   	global $lodspk;
   	global $results;
-  	global $first;
-  	$uri = $lodspk['this']['value'];
+  	global $firstResults;
+	$uri = $lodspk['this']['value'];
   	$data = array();
-  	$strippedModelFile = str_replace('.query', '',$modelFile); 	  
+  	$strippedModelFile = str_replace('endpoint.', '', str_replace('.query', '',$modelFile)); 	  
  	if(!is_dir($modelFile)){
   	  require_once($conf['home'].'lib/Haanga/lib/Haanga.php');
   	  Haanga::configure(array(
@@ -331,8 +362,9 @@ class Utils{
   	  }
   	  $r2 = Convert::array_copy($results);
   	  $models = Convert::array_to_object($r2);
-  	  $f = Convert::array_to_object($first);
- 	  $vars = compact('uri', 'lodspk', 'models', 'f');
+  	  $f2 = Convert::array_copy($firstResults);
+  	  $first = Convert::array_to_object($f2);
+ 	  $vars = compact('uri', 'lodspk', 'models', 'first');
  	  $q = file_get_contents($modelFile);
  	  if($q == false){
  	  	Utils::send500("I can't load ".$modelFile." in ".getcwd());
@@ -411,7 +443,8 @@ class Utils{
 	  	}
 	  }
   	  if($conf['debug']){
-  	  	echo "$modelFile (against ".$e->getSparqlUrl().")\n-------------------------------------------------\n";
+  	  	echo "\n-------------------------------------------------\nIn ".getcwd()."\n";
+  	    echo "$modelFile (against ".$e->getSparqlUrl().")\n-------------------------------------------------\n\n";
   	  	echo $query;
   	  }
   	  trigger_error("Running query from ".$modelFile." on endpoint ".$e->getSparqlURL(), E_USER_NOTICE);
@@ -419,13 +452,13 @@ class Utils{
   	  if($modelFile != $lodspk['type']){
   	  	if(!isset($rPointer[$strippedModelFile])){
   	  	  $rPointer[$strippedModelFile] = array();
-  	  	  $first[$strippedModelFile] = array();
+  	  	  $firstResults[$strippedModelFile] = array();
   	  	}
   	  	if(Utils::getResultsType($query) == $conf['output']['select']){
   	  	  $rPointer[$strippedModelFile] = Utils::sparqlResult2Obj($aux);
   	  	  $fPointer[$strippedModelFile] = $rPointer[$strippedModelFile][0];
   	  	  /*if(sizeof($rPointer)>0){
-  	  	  $rPointer[$modelFile]['first'] = $rPointer[$modelFile][0];
+  	  	  $rPointer[$modelFile]['firstResults'] = $rPointer[$modelFile][0];
   	  	  }*/
   	  	}else{
   	  	  $lodspk['resultRdf'] = true;
@@ -436,7 +469,7 @@ class Utils{
   	  	  $rPointer = Utils::sparqlResult2Obj($aux);
   	  	  $fPointer[$strippedModelFile] = $rPointer[0];
   	  	  /*if(sizeof($rPointer)>0){
-  	  	  $rPointer['first'] = $rPointer[0];
+  	  	  $rPointer['firstResults'] = $rPointer[0];
   	  	  }*/
   	  	}else{
   	  	  $lodspk['resultRdf'] = true;
@@ -444,34 +477,45 @@ class Utils{
   	  	}  	 
   	  }
   	}else{
-  	  trigger_error("$modelFile is a directory, will process it later", E_USER_NOTICE);
-  	  if($modelFile != $lodspk['type']){
-  	  	if(!isset($rPointer[$strippedModelFile])){
-  	  	  $rPointer[$strippedModelFile] = array();
+  	  if(strpos('endpoint.', $modelFile) == 0){
+  	  	
+  	  	trigger_error("$modelFile is a directory, will process it later", E_USER_NOTICE);
+  	  	if($modelFile != $lodspk['type']){
+  	  	  if(!isset($rPointer[$strippedModelFile])){
+  	  	  	$rPointer[$strippedModelFile] = array();
+  	  	  }
+  	  	  Utils::queryDir($modelFile, $rPointer[$strippedModelFile], $fPointer[$strippedModelFile]);
+  	  	}else{
+  	  	  Utils::queryDir($modelFile, $rPointer, $fPointer);
   	  	}
-  	  	Utils::queryDir($modelFile, $rPointer[$strippedModelFile], $fPointer[$strippedModelFile]);
-  	  }else{
-  	  	Utils::queryDir($modelFile, $rPointer, $fPointer);
   	  }
   	}
   }
   
   public static function internalize($array){
   	global $conf;
-  	$firstKeyAppearance = true;
+  	$firstResultsKeyAppearance = true;
   	foreach($array as $key => $value){
   	  if(!isset($value['value'])){
   	  	$array[$key] = Utils::internalize($value);
-  	  	/*if($firstKeyAppearance){
-  	  	$firstKeyAppearance = false;
-  	  	$array['_first']=$array[$key];
+  	  	/*if($firstResultsKeyAppearance){
+  	  	$firstResultsKeyAppearance = false;
+  	  	$array['_firstResults']=$array[$key];
   	  	}*/
   	  }else{
   	  	if(isset($value['uri']) && $value['uri'] == 1){
-  	  	  if($conf['mirror_external_uris']){
+  	  	  if(isset($conf['mirror_external_uris']) && $conf['mirror_external_uris'] != false){
   	  	  	$value['mirroredUri'] = $value['value'];
+  	  	  	
+  	  	  	if(is_bool($conf['mirror_external_uris'])){
+  	  	  	  $value['value'] = preg_replace("|^".$conf['ns']['local']."|", $conf['basedir'], $value['value']);
+  	  	  	}elseif(is_string($conf['mirror_external_uris'])){
+  	  	  	  $value['value'] = preg_replace("|^".$conf['mirror_external_uris']."|", $conf['basedir'], $value['value']);
+  	  	  	}else{
+  	  	  	  Utils::send500("Error in mirroring configuration");
+  	  	  	  exit(1);
+  	  	  	}
   	  	  }
-  	  	  $value['value'] = preg_replace("|^".$conf['ns']['local']."|", $conf['basedir'], $value['value']);
   	  	  $value['curie'] = Utils::uri2curie($value['value']);
   	  	  $array[$key] = $value;
   	  	}  	  	  	  	
@@ -480,12 +524,12 @@ class Utils{
   	return $array;
   }
   
-  public static function getFirsts($array){
+  public static function getfirstResults($array){
   	global $conf;
-  	$firstKeyAppearance = true;
+  	$firstResultsKeyAppearance = true;
   	foreach($array as $key => $value){
   	  if(!isset($value['value'])){
-  	  	$aux = Utils::getFirsts($value);
+  	  	$aux = Utils::getfirstResults($value);
   	  	if(isset($aux['0'])){
   	  	  $array[$key] = $aux['0'];
   	  	}else{
@@ -500,6 +544,7 @@ class Utils{
   public static function showView($lodspkData, $data, $view){
   	global $conf;
   	global $uri;
+  	global $lodspk;
   	global $extension;
   	//$lodspk = $conf['view']['standard'];
   	$lodspk = $lodspkData;
@@ -507,13 +552,16 @@ class Utils{
   	  $lodspk['this']['params'] = $lodspkData['params'];
   	}
   	require_once($conf['home'].'lib/Haanga/lib/Haanga.php');
+  	$viewAux = explode("/",$view);
+  	$viewFile = array_pop($viewAux);
+  	$viewPath = join("/", $viewAux);
   	Haanga::configure(array(
-  	  'template_dir' => $lodspk['view'],
+  	  'template_dir' => $conf['home'].$viewPath,
   	  'cache_dir' => $conf['home'].'cache/',
   	  ));
   	$models = $data;
-  	$first = $lodspk['first'];
-  	unset($lodspk['first']);
+  	$first = $lodspk['firstResults'];
+  	unset($lodspk['firstResults']);
   	$lodspk = $lodspk;
   	//unset($lodspk);
   	$vars = compact('uri','lodspk', 'models', 'first');
@@ -522,12 +570,13 @@ class Utils{
  	}
 	if(is_string($data)){
 	  echo($data);
-	}elseif(is_file($lodspk['view'].$view)){
-	  Haanga::Load($view, $vars);
+	}elseif(is_file($conf['home'].$view)){
+	  Haanga::Load($viewFile, $vars);
 	}elseif($view == null){
 	  $fnc = Haanga::compile('{{models|safe}}');
 	  $fnc($vars, TRUE);
 	}else{
+	  echo $conf['home'].$viewPath." ".$viewFile;
 	  $fnc = Haanga::compile($view);
 	  $fnc($vars, TRUE);
 	}

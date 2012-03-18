@@ -15,7 +15,7 @@ class TypeModule extends abstractModule{
   	$metaDb = new MetaDb($conf['metadata']['db']['location']);
   	
   	$pair = Queries::getMetadata($localUri, $acceptContentType, $metaDb);
-  	
+
   	if($pair == NULL){ // Original URI is not in metadata
   	  if(Queries::uriExist($uri, $endpoints['local'])){
   	  	$page = Queries::createPage($uri, $localUri, $acceptContentType, $metaDb);
@@ -39,7 +39,7 @@ class TypeModule extends abstractModule{
   	global $endpoints;
   	global $lodspk;
   	global $results;
-  	global $first;
+  	global $firstResults;
   	list($res, $page, $format) = $pair;
   	//If resource is not the page, send a 303 to the document
   	if($res == $localUri){
@@ -47,7 +47,7 @@ class TypeModule extends abstractModule{
   	}
   	
   	$uri = $res;
-  	if($conf['mirror_external_uris']){
+  	if($conf['mirror_external_uris'] != false){
   	  $localUri = preg_replace("|^".$conf['ns']['local']."|", $conf['basedir'], $res);
   	}
   	
@@ -68,7 +68,7 @@ class TypeModule extends abstractModule{
   	if($viewFile == null){
   	  $lodspk['transform_select_query'] = true;
   	}
-
+  	
   	$lodspk['type'] = $modelFile;
   	$lodspk['home'] = $conf['basedir'];
   	$lodspk['baseUrl'] = $conf['basedir'];
@@ -78,24 +78,27 @@ class TypeModule extends abstractModule{
   	$lodspk['ns'] = $conf['ns'];
   	$lodspk['endpoint'] = $conf['endpoint'];
   	$lodspk['view'] = $conf['view']['directory'];
-
+  	
   	$lodspk['add_mirrored_uris'] = true;
   	$lodspk['this']['value'] = $uri;
   	$lodspk['this']['curie'] = Utils::uri2curie($uri);
   	$lodspk['this']['local'] = $localUri;
    	$lodspk['this']['extension'] = $extension;
-  	chdir($conf['home'].$conf['model']['directory']);
-  	Utils::queryFile($modelFile, $endpoints['local'], $results, $first);
+  	//chdir($conf['home'].$conf['model']['directory']);
+  	
+  	Utils::queryFile($modelFile, $endpoints['local'], $results, $firstResults);
     if(!$lodspk['resultRdf']){
   	  $results = Utils::internalize($results); 
-  	  $lodspk['first'] = Utils::getFirsts($results);
+  	  $firstAux = Utils::getfirstResults($results);
   	  
-  	  chdir($conf['home']);
+  	  //chdir($conf['home']);
   	  if(is_array($results)){
   	  	$resultsObj = Convert::array_to_object($results);
+  	  	$results = $resultsObj;
   	  }else{
   	  	$resultsObj = $results;
   	  }
+  	  $lodspk['firstResults'] = Convert::array_to_object($firstAux);
   	}else{
   	  $resultsObj = $results;
   	}
@@ -112,49 +115,50 @@ class TypeModule extends abstractModule{
   	$objResult = array('modelFile' => null, 'viewFile' => null);
   	//Defining default views and models
   	$curieType="";
-/*  	$objResult['modelFile'] = 'main.query';
-  	$objResult['viewFile'] = 'html.template';
-  	$objResult['modelDir'] = $conf['model']['directory'].'type.rdfs:Resource/html.queries/';
-  	$objResult['viewDir'] = $conf['view']['directory'].'type.rdfs:Resource/'; 
-  */	
- 	//Get the first type available
+ 	//Get the firstResults type available
   	$typesAndValues = array('rdfs:Resource' => -1);
-  	foreach($t as $v){
-  	  $curie = Utils::uri2curie($v);
-  	  $typesAndValues[$curie] = 0;
-  	  if(isset($conf['type']['priorities'][$curie]) && $conf['type']['priorities'][$curie] >= 0){
-  	  	$typesAndValues[$curie] = $conf['type']['priorities'][$curie];
+  	if($conf['disableComponents'] != true){
+  	  foreach($t as $v){
+  	  	$curie = Utils::uri2curie($v);
+  	  	$typesAndValues[$curie] = 0;
+  	  	if(isset($conf['type']['priorities'][$curie]) && $conf['type']['priorities'][$curie] >= 0){
+  	  	  $typesAndValues[$curie] = $conf['type']['priorities'][$curie];
+  	  	}
   	  }
   	}
   	arsort($typesAndValues);
+  	$extensionView = $extension.".";
+  	$extensionModel = '';
+  	if($extension != 'html'){
+  	  $extensionModel = $extension.'.';
+  	}
   	foreach($typesAndValues as $v => $w){
-  	  $auxModelFile = $conf['model']['directory'].$conf['type']['prefix'].$v.'/'.$extension.'.queries';
-  	  $auxViewFile = $conf['view']['directory'].$conf['type']['prefix'].$v.'/'.$extension.'.template'; 
+  	  $auxViewFile  = $conf['view']['directory'].'/'.$conf['type']['prefix'].'/'.$v.'/'.$extension.'.template';
+  	  $auxModelFile = $conf['model']['directory'].'/'.$conf['type']['prefix'].'/'.$v.'/'.$extension.'.queries';
   	  if($v == null){continue;}
   	  if(file_exists($auxModelFile)){
-  	  	$objResult['modelFile'] = $conf['type']['prefix'].$v.'/'.$extension.'.queries';
+  	  	$objResult['modelFile'] = $auxModelFile;//$conf['type']['prefix'].'/'.$v.'/'.$extensionModel.'queries';
   	  	if(file_exists($auxViewFile)){
-  	  	  $objResult['viewFile'] = $conf['type']['prefix'].$v.'/'.$extension.'.template';
+  	  	  $objResult['viewFile'] = $auxViewFile;//$conf['type']['prefix'].'/'.$v.'/'.$extensionView.'template';
   	  	}elseif($extension != 'html'){ //View doesn't exists (and is not HTML)
-  	  	  $objResult['viewFile'] = null;  	  	
+  	  	  $objResult['viewFile'] = null;
   	  	}
   	  	return $objResult;
-  	  }elseif($extension != 'html' &&
-  	  	file_exists($conf['model']['directory'].$conf['type']['prefix'].$v.'/html.queries')){
-	  $objResult['modelFile'] = $conf['type']['prefix'].$v.'/html.queries';
-  	  if(file_exists($auxViewFile) ){
-  	  	$objResult['viewFile'] = $conf['type']['prefix'].$v.'/'.$extension.'.template';
-  	  }else{
-  	  	$lodspk['transform_select_query'] = true;
-  	  	$objResult['viewFile'] = null;
-  	  }
-  	  trigger_error("LODSPeaKr can't find the proper query. Using HTML query instead.", E_USER_NOTICE);
-  	  break;
+  	  }elseif(file_exists($conf['model']['directory'].'/'.$conf['type']['prefix'].'/'.$v.'/queries')){
+  	  	$objResult['modelFile'] = $conf['model']['directory'].'/'.$conf['type']['prefix'].'/'.$v.'/queries';
+  	  	if(file_exists($auxViewFile) ){
+  	  	  $objResult['viewFile'] = $auxViewFile;
+  	  	}else{
+  	  	  $lodspk['transform_select_query'] = true;
+  	  	  $objResult['viewFile'] = null;
   	  	}
+  	  	trigger_error("LODSPeaKr can't find the proper query. Using HTML query instead.", E_USER_NOTICE);
+  	  	break;
+  	  }
   	}
-  	if($objResult['viewFile'] == null && $extension == 'html'){
+  	/*if($objResult['viewFile'] == null && $extensionView == 'html'){
   	  $objResult['viewFile'] = 'html.template';
-  	}
+  	}*/
   	return $objResult;
   }
   

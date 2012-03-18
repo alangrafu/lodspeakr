@@ -19,7 +19,7 @@ fi
 
 tmpFile=$NAME"-backup-"`date +%Y%m%d%H%M%S`.tar.gz
 
-tar -czf $tmpFile settings.inc.php models views
+tar -czf $tmpFile settings.inc.php components
 
 mv $tmpFile $BACKUPDIR/
 echo "New backup $tmpFile created"
