@@ -1,5 +1,5 @@
 <?
-
+$conf['version'] = '20120323';
 $conf['output']['select'] = 'json';
 $conf['output']['describe'] = 'rdf';
 $conf['endpointParams']['config']['show_inline'] = 0;

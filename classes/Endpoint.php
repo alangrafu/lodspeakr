@@ -31,6 +31,7 @@ class Endpoint{
         $url = $this->sparqlUrl.'?'.http_build_query($params, '', '&');
         curl_setopt($c, CURLOPT_URL, $url);
         curl_setopt($c, CURLOPT_HTTPHEADER, $context);
+        curl_setopt($c, CURLOPT_USERAGENT, "LODSPeaKr version ".$conf['version']);
         curl_setopt($c, CURLOPT_RETURNTRANSFER, true);
         $aux = curl_exec($c); // execute the curl command 
         if($conf['debug']){
