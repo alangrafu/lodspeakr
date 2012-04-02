@@ -34,6 +34,7 @@ $conf['http_accept']['nt']   = array('text/plain');
 
 
 $conf['service']['prefix'] = 'services';
+$conf['post']['prefix'] = 'posts';
 
 $conf['type']['prefix'] = 'types';
 $conf['uri']['prefix'] = 'uris';
@@ -52,7 +53,7 @@ $conf['debug'] = false;
 //using the modules in the following order
 $conf['modules'] = array();
 $conf['modules']['directory'] = 'classes/modules/';
-$conf['modules']['available'] = array('static','uri', 'type', 'service');
+$conf['modules']['available'] = array('static','uri', 'type', 'service', 'post');
 global $lodspk;
 include_once('settings.inc.php');
 $conf['view']['standard']['baseUrl'] = $conf['basedir'];
