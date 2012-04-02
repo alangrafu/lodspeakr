@@ -140,7 +140,8 @@ class PostModule extends abstractModule{
     foreach($pArgs as $k => $v){
       $forbiddenChars  = array( ':', '.', '/', '\\', '?', '*' );
       $acceptableChars = array( '_', '_', '_', '_', '_', '_');
-      $p[str_replace($forbiddenChars, $acceptableChars, $k)] = $v;
+      //$p[str_replace($forbiddenChars, $acceptableChars, $k)] = $v;
+      $p[$k] = $v;
     }
     return $p;
   }
