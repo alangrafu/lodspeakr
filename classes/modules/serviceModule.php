@@ -114,7 +114,7 @@ class ServiceModule extends abstractModule{
   	  $lodspk['this']['local'] = $localUri;  	
   	  $lodspk['contentType'] = $acceptContentType;
   	  $lodspk['endpoint'] = $conf['endpoint'];
-  	  
+  	  $lodspk['method'] = 'GET';
   	  $lodspk['type'] = $modelFile;
   	  $lodspk['header'] = $prefixHeader;
   	  $lodspk['args'] = $args;

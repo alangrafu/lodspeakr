@@ -82,7 +82,7 @@ class PostModule extends abstractModule{
   	  
   	  $results['params'] = $params;
   	  
-  	  
+  	  $lodspk['method'] = 'POST';
   	  $lodspk['home'] = $conf['basedir'];
   	  $lodspk['baseUrl'] = $conf['basedir'];
   	  $lodspk['module'] = 'service';
@@ -101,11 +101,8 @@ class PostModule extends abstractModule{
   	  $lodspk['add_mirrored_uris'] = false;
   	  $lodspk['baseUrl'] = $conf['basedir'];
   	  $lodspk['this']['value'] = $uri;
-  	  if($viewFile == null){
-  	  	$lodspk['transform_select_query'] = true;
-  	  }
-  	  
-  	  Utils::queryFile($modelFile, $update_endpoints['local'], $results, $firstResults);
+  	  $lodspk['status'] = Utils::updateFile($modelFile, $update_endpoints['local'], $results, $firstResults);
+
   	  Utils::processDocument($viewFile, $lodspk, $results);    	  
   	}catch (Exception $ex){
   	  echo $ex->getMessage();

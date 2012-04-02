@@ -78,7 +78,7 @@ class TypeModule extends abstractModule{
   	$lodspk['ns'] = $conf['ns'];
   	$lodspk['endpoint'] = $conf['endpoint'];
   	$lodspk['view'] = $conf['view']['directory'];
-  	
+  	$lodspk['method'] = 'GET';
   	$lodspk['add_mirrored_uris'] = true;
   	$lodspk['this']['value'] = $uri;
   	$lodspk['this']['curie'] = Utils::uri2curie($uri);

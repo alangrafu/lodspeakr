@@ -46,7 +46,7 @@ class StaticModule extends abstractModule{
 	    $lodspk['type'] = $modelFile;
 	    $lodspk['header'] = $prefixHeader;
 	    $lodspk['baseUrl'] = $conf['basedir'];
-	    
+	    $lodspk['method'] = 'GET';
 	    Utils::processDocument($conf['static']['directory'].$file, $lodspk, null);    	  
   	}else{
   	  echo file_get_contents($conf['static']['directory'].$file);

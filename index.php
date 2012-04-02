@@ -32,6 +32,9 @@ $firstResults = array();
 $endpoints = array();
 $endpoints['local'] = new Endpoint($conf['endpoint']['local'], $conf['endpointParams']['config']);
 
+$update_endpoints = array();
+$update_endpoints['local'] = new Endpoint($conf['update_endpoint']['local'], $conf['update_endpointParams']['config']);
+
 $acceptContentType = Utils::getBestContentType($_SERVER['HTTP_ACCEPT']);
 $extension = Utils::getExtension($acceptContentType); 
 

@@ -64,9 +64,9 @@ class Endpoint{
         }
     }
   
-  public function queryPost($q){
+  public function update($q){
   	$params =  $this->params;
-  	$params['query'] = $q;
+  	$params['update'] = $q;
   	$ch = curl_init();
   	curl_setopt($ch,CURLOPT_URL,$this->sparqlUrl);
   	curl_setopt($ch,CURLOPT_POST,count($params));
@@ -74,7 +74,7 @@ class Endpoint{
   	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
   	//execute post
   	$result = curl_exec($ch);
-  	return $result;
+  	return curl_getinfo($ch, CURLINFO_HTTP_CODE);
   }
   
   public function getSparqlURL(){

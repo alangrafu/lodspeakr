@@ -86,8 +86,8 @@ class UriModule extends abstractModule{
   	//$lodspk = $conf['view']['standard'];
 
   	$lodspk['type'] = $modelFile;
-  	  	$lodspk['home'] = $conf['basedir'];
-
+  	$lodspk['home'] = $conf['basedir'];
+  	$lodspk['method'] = 'GET';
   	$lodspk['module'] = 'uri';
   	$lodspk['add_mirrored_uris'] = true;
   	$lodspk['this']['value'] = $uri;
