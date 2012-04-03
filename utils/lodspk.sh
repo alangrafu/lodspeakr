@@ -2,8 +2,8 @@
 #
 # https://github.com/alangrafu/lodspeakr/blob/master/utils/ldspk.sh
 USAGE="Usage:\n"
-USAGE=$USAGE" Create component:\t\t\t\t\t$0 create uri|type|service foo [html|rdf|ttl|nt|json]\n"
-USAGE=$USAGE" Delete component:\t\t\t\t\t$0 delete uri|type|service foo [html|rdf|ttl|nt|json]\n"
+USAGE=$USAGE" Create component:\t\t\t\t\t$0 create uri|type|service|post foo [html|rdf|ttl|nt|json]\n"
+USAGE=$USAGE" Delete component:\t\t\t\t\t$0 delete uri|type|service|post foo [html|rdf|ttl|nt|json]\n"
 USAGE=$USAGE" Turn debug:\t\t\t\t\t\t$0 debug on|off\n"
 USAGE=$USAGE" Switch to standard view/models temporaly:\t\t$0 disable on|off\n"
 USAGE=$USAGE" Backup current installation:\t\t\t\t$0 backup\n"
@@ -42,7 +42,7 @@ fi
 
 ## Create/delete
 if [[ $currentOperation == "create" ||  $currentOperation == "delete" ]]; then
-  modules=( type service uri )
+  modules=( type service uri post )
   formats=( html rdf ttl nt json all )
   currentModule=
   currentFormat=

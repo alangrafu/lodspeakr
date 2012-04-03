@@ -15,6 +15,7 @@ if(!file_exists('settings.inc.php')){
 
 include_once('common.inc.php');
 
+
 //Debug output
 if($conf['debug']){
   error_reporting(E_ALL);
