@@ -87,7 +87,15 @@ class Utils{
   	  	  	  $row[$k]['uri'] = 1;
   	  	  	}elseif($v['type'] == 'bnode'){
   	  	  	  $row[$k]['curie'] = 'blankNode';
-  	  	  	}  	  	  	
+  	  	  	}else{
+  	  	  	  if($v['datatype']){
+  	  	  	    $row[$k]['type'] = $v['datatype'];
+  	  	  	  }
+  	  	  	  if($v['xml:lang']){
+  	  	  	    $row[$k]['lang'] = $v['xml:lang'];
+  	  	  	  }
+
+  	  	  	}
   	  	  }
   	  	  /*if(sizeof($aux) == 1){
   	  	  $obj = $row;
@@ -428,9 +436,6 @@ class Utils{
   	  	if(Utils::getResultsType($query) == $conf['output']['select']){
   	  	  $rPointer[$strippedModelFile] = Utils::sparqlResult2Obj($aux);
   	  	  $fPointer[$strippedModelFile] = $rPointer[$strippedModelFile][0];
-  	  	  /*if(sizeof($rPointer)>0){
-  	  	  $rPointer[$modelFile]['firstResults'] = $rPointer[$modelFile][0];
-  	  	  }*/
   	  	}else{
   	  	  $lodspk['resultRdf'] = true;
   	  	  $rPointer[$strippedModelFile] = $aux;
@@ -439,9 +444,6 @@ class Utils{
   	  	if(Utils::getResultsType($query) == $conf['output']['select']){
   	  	  $rPointer = Utils::sparqlResult2Obj($aux);
   	  	  $fPointer[$strippedModelFile] = $rPointer[0];
-  	  	  /*if(sizeof($rPointer)>0){
-  	  	  $rPointer['firstResults'] = $rPointer[0];
-  	  	  }*/
   	  	}else{
   	  	  $lodspk['resultRdf'] = true;
   	  	  $rPointer = $aux;
