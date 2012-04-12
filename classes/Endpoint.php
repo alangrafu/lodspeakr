@@ -65,16 +65,25 @@ class Endpoint{
     }
   
   public function update($q){
+        global $conf;
   	$params =  $this->params;
   	$params['update'] = $q;
   	$ch = curl_init();
-  	curl_setopt($ch,CURLOPT_URL,$this->sparqlUrl);
-  	curl_setopt($ch,CURLOPT_POST,count($params));
-  	curl_setopt($ch,CURLOPT_POSTFIELDS,http_build_query($params));
+  	curl_setopt($ch, CURLOPT_URL,$this->sparqlUrl);
+  	curl_setopt($ch, CURLOPT_POST,count($params));
+  	curl_setopt($ch, CURLOPT_POSTFIELDS,http_build_query($params));
+        curl_setopt($ch, CURLOPT_USERAGENT, "LODSPeaKr version ".$conf['version']);
   	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
   	//execute post
   	$result = curl_exec($ch);
-  	return curl_getinfo($ch, CURLINFO_HTTP_CODE);
+  	$aux = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        if($conf['debug']){
+                trigger_error("Return from update against (".$this->sparqlUrl."): ".curl_error($ch)." HTTP: ".$aux, E_USER_NOTICE);
+                echo("Return from update against (".$this->sparqlUrl."): ".curl_error($ch)." HTTP: ".$aux);
+        }
+        curl_close($ch);
+        return $aux;
+        
   }
   
   public function getSparqlURL(){

@@ -448,7 +448,6 @@ class Utils{
   	  }
   	}else{
   	  if(strpos('endpoint.', $modelFile) == 0){
-  	  	
   	  	trigger_error("$modelFile is a directory, will process it later", E_USER_NOTICE);
   	  	if($modelFile != $lodspk['type']){
   	  	  if(!isset($rPointer[$strippedModelFile])){
@@ -476,7 +475,7 @@ class Utils{
   	  	if(isset($value['uri']) && $value['uri'] == 1){
   	  	  if(isset($conf['mirror_external_uris']) && $conf['mirror_external_uris'] != false){
   	  	  	$value['mirroredUri'] = $value['value'];
-  	  	  	
+
   	  	  	if(is_bool($conf['mirror_external_uris'])){
   	  	  	  $value['value'] = preg_replace("|^".$conf['ns']['local']."|", $conf['basedir'], $value['value']);
   	  	  	}elseif(is_string($conf['mirror_external_uris'])){
@@ -536,7 +535,14 @@ class Utils{
   	//unset($lodspk);
   	$vars = compact('uri','lodspk', 'models', 'first');
   	if($conf['debug']){
-  	  var_dump($vars); 	
+          echo "\n\n-------------------------------------------------\n";
+          echo "                        Models                  \n";
+          echo "-------------------------------------------------\n";
+  	  var_dump($models); 	
+          echo "\n\n-------------------------------------------------\n";
+          echo "                    First values                  \n";
+          echo "-------------------------------------------------\n";
+  	  var_dump($first); 	
   	}
   	if(is_string($data)){
   	  echo($data);
