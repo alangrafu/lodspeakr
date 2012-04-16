@@ -73,11 +73,11 @@ class Haanga_Compiler
      *  that escape won't be called if autoescape is 
      *  activated (which is activated by default)
      */
-    public $var_is_safe=FALSE;
+    public $var_is_safe=TRUE;
     public $safes;
 
     /* compiler options */
-    static protected $autoescape = TRUE;
+    static protected $autoescape = FALSE;
     static protected $if_empty   = TRUE;
     static protected $dot_as_object = TRUE;
     static protected $strip_whitespace = FALSE;
