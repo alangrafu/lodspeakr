@@ -13,21 +13,23 @@ SELECT DISTINCT ?resource WHERE {
   	[] a ?resource .
   }
 }
+LIMIT 10
 QUERY`
 
 viewHtml=`cat  <<VIEW
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML+RDFa 1.0//EN"
-    "http://www.w3.org/MarkUp/DTD/xhtml-rdfa-1.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" {% for i, ns in base.ns %}xmlns:{{i}}="{{ns}}" 
-    {%endfor%}version="XHTML+RDFa 1.0" xml:lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML+RDFa 1.0//EN" "http://www.w3.org/MarkUp/DTD/xhtml-rdfa-1.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" {% for i, ns in lodspk.ns %}xmlns:{{i}}="{{ns}}" {%endfor%}
+      version="XHTML+RDFa 1.0" xml:lang="en">
   <head>
-    <title>My new Service</title>
+    <title>$1</title>
     <link href="{{lodspk.baseUrl}}css/basic.css" rel="stylesheet" type="text/css" media="screen" />
+    <style type="text/css">
+    </style>
   </head>
   <body>
-    <h1>Classes available</h1>
-	<ul>
+    <h1>$1</h1>
+ 	 <ul>
     {% for row in models.main %}
         <li><a href="{{lodspk.baseUrl}}special/instances/{{ row.resource.curie }}">{{row.resource.curie}}</a></li>
     {% endfor %}

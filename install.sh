@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 #
-
 root_htaccess="root.htaccess"
 parent_htaccess="../.htaccess"
 settings_file="settings.inc.php"

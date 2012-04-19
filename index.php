@@ -22,6 +22,7 @@ if($conf['debug']){
   error_reporting(E_ERROR);
 }
 
+include_once('classes/HTTPStatus.php');
 include_once('classes/Utils.php');
 include_once('classes/Queries.php');
 include_once('classes/Endpoint.php');
@@ -37,7 +38,7 @@ $extension = Utils::getExtension($acceptContentType);
 
 //Check content type is supported by LODSPeaKr
 if($acceptContentType == NULL){
-  Utils::send406($uri);
+  HTTPStatus::send406($uri);
 }
 
 //Export
@@ -67,7 +68,7 @@ if(isset($conf['mirror_external_uris']) && $conf['mirror_external_uris'] != fals
   }elseif(is_string($conf['mirror_external_uris'])){
   	$uri = $conf['mirror_external_uris'].$_GET['q'];
   }else{
-  	Utils::send500("Error in mirroring configuration");
+  	HTTPStatus::send500("Error in mirroring configuration");
   	exit(1);
   }
   
@@ -79,7 +80,7 @@ foreach($conf['modules']['available'] as $i){
   $className = $i.'Module';
   $currentModule = $conf['modules']['directory'].$className.'.php';
   if(!is_file($currentModule)){
-  	Utils::send500("<br/>Can't load or error in module <tt>".$currentModule."</tt>" );
+  	HTTPStatus::send500("<br/>Can't load or error in module <tt>".$currentModule."</tt>" );
   	exit(1);
   }
   require_once($currentModule);
@@ -91,5 +92,5 @@ foreach($conf['modules']['available'] as $i){
   }
 }
 
-Utils::send404($uri);
+HTTPStatus::send404($uri);
 ?>

@@ -1,5 +1,5 @@
 <?
-
+$conf['version'] = '20120411';
 $conf['output']['select'] = 'json';
 $conf['output']['describe'] = 'rdf';
 $conf['endpointParams']['config']['show_inline'] = 0;
@@ -21,6 +21,7 @@ $conf['view']['extension'] = '.view';
 $conf['view']['default'] = 'rdfs:Resource';
 
 $conf['static']['directory'] = 'static/'; #include trailing slash!
+$conf['static']['haanga'] = false; //Should static files be processed by Haanga? 
 
 $conf['resource']['url_delimiter'] = "%u";
 
@@ -33,7 +34,6 @@ $conf['http_accept']['nt']   = array('text/plain');
 
 
 $conf['service']['prefix'] = 'services';
-$conf['service']['class'] = 'classes/BasicSpecialFunction.php';
 
 $conf['type']['prefix'] = 'types';
 $conf['uri']['prefix'] = 'uris';

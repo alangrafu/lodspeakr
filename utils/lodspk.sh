@@ -9,6 +9,7 @@ USAGE=$USAGE" Switch to standard view/models temporaly:\t\t$0 disable on|off\n"
 USAGE=$USAGE" Backup current installation:\t\t\t\t$0 backup\n"
 USAGE=$USAGE" Restore previous installation:\t\t\t\t$0 restore\n"
 USAGE=$USAGE" Clear cache:\t\t\t\t\t\t$0 cache clear\n"
+USAGE=$USAGE" Version:\t\t\t\t\t\t$0 version\n"
 USAGEDEBUG="Usage: $0 debug on|off"
 if [[ $# -eq 0 || "$1" == "--help" ]]; then
   echo -e $USAGE
@@ -16,7 +17,7 @@ if [[ $# -eq 0 || "$1" == "--help" ]]; then
 fi
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-operations=( create delete debug backup restore disable cache )
+operations=( create delete debug backup restore disable cache version )
 currentOperation=
 
 if [[ ${operations[@]} =~ $1 ]]; then
@@ -118,4 +119,9 @@ if [[ $currentOperation == "cache" ]]; then
   fi
   $DIR/modules/cache.sh $2
   exit
+fi
+
+## Version
+if [[ $currentOperation == "version" ]]; then
+  $DIR/modules/version.sh
 fi
