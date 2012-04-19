@@ -9,7 +9,7 @@ modelHtml=`cat  <<QUERY
 PREFIX {{h.prefix}}: <{{h.ns}}>
 {%endfor%}
 SELECT DISTINCT ?resource WHERE {
-  GRAPH {%if base.args.arg0 %}<{{lodspk.args.arg0}}>{%else%}?g{%endif%} {
+  GRAPH {%if lodspk.args.arg0 %}<{{lodspk.args.arg0}}>{%else%}?g{%endif%} {
   	[] a ?resource .
   }
 }
