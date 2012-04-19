@@ -421,6 +421,7 @@ class Utils{
 	  	  HTTPStatus::send500("invalid query: " . $parser->getErrors());
 	  	}
 	  }
+  	  $query = Utils::addPrefixes($query);
   	  if($conf['debug']){
   	  	echo "\n-------------------------------------------------\nIn ".getcwd()."\n";
   	    echo "$modelFile (against ".$e->getSparqlUrl().")\n-------------------------------------------------\n\n";
@@ -544,7 +545,15 @@ class Utils{
 	if(is_string($data)){
 	  echo($data);
 	}elseif(is_file($conf['home'].$view)){
+         try{
 	  Haanga::Load($viewFile, $vars);
+          }catch(Exception $e){
+echo '<pre>';
+           echo $e->getMessage();
+var_dump($vars);
+echo($e->getMessage()."' in ".$e->getFile().":".$e->getLine()."\nStack trace:\n".$e->getTraceAsString());
+echo '</pre>';
+         }
 	}elseif($view == null){
 	  $fnc = Haanga::compile('{{models|safe}}');
 	  $fnc($vars, TRUE);
@@ -573,6 +582,23 @@ class Utils{
   	  }
   	}
   	return $triples;
+  }
+  
+  private static function addPrefixes($q){
+    global $conf;
+    $matches = array();
+    $visited = array();
+    $newQuery = $q;
+    if(preg_match_all("|\s(\w+):\w+|", $q, $matches) > 0){
+      foreach($matches[1] as $v){
+        if(!isset($visited[$v]) && isset($conf['ns'][$v])){
+          $newQuery = "PREFIX ".$v.": <".$conf['ns'][$v].">\n".$newQuery;
+          $visited[$v] = true;
+        }
+      }
+    }
+    
+    return $newQuery;
   }
   
 }
