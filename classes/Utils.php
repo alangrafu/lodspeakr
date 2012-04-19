@@ -372,56 +372,6 @@ class Utils{
   	  	  foreach($x as $v){
   	  	  	if(($resultVars[$v['s']] && $v['s_type'] == 'var')
   	  	  	  || ($resultVars[$v['p']] && $v['p_type'] == 'var')
-<<<<<<< HEAD
-  	  	  	|| ($resultVars[$v['o']] && $v['o_type'] == 'var')){
-  	  	  	array_push($sparqlConstruct, $v);
-  	  	  	}	  	  
-  	  	  }
-  	  	  $construct = "";
-  	  	  foreach($sparqlConstruct as $v){
-  	  	    if($v['s_type'] == 'uri'){
-  	  	      $construct .= "<".$v['s']."> ";
-  	  	    }elseif($v['s_type'] == 'var'){
-  	  	      $construct .= '?'.$v['s'].' ';
-  	  	    }else{
-  	  	      $construct.= $v['s']." ";
-  	  	    }
-  	  	    
-  	  	    if($v['p_type'] == 'uri'){
-  	  	      $construct .= "<".$v['p']."> ";
-  	  	    }elseif($v['p_type'] == 'var'){
-  	  	      $construct .= '?'.$v['p'].' ';
-  	  	    }else{
-  	  	      $construct.= $v['p']." ";
-  	  	    }
-  	  	    
-  	  	    if($v['o_type'] == 'uri'){
-  	  	      $construct .= "<".$v['o']."> ";
-  	  	    }elseif($v['o_type'] == 'literal'){
-  	  	      $construct .= '"'.$v['o'].'" ';
-  	  	    }elseif($v['o_type'] == 'var'){
-  	  	      $construct .= '?'.$v['o'].' ';
-  	  	    }else{
-  	  	      $construct.= $v['o']." ";
-  	  	    }
-  	  	    
-  	  	    $construct .= ".\n";
-  	  	  }
-  	  	  if($construct == ""){
-  	  	    if(sizeof($q_infos['query']['result_vars'])>0){
-  	  	      //For now, assuming variables are in the GRAPH ?g
-  	  	      $query = "CONSTRUCT {?g ?x ?y} WHERE{GRAPH ?g{?g ?x ?y}}";
-  	  	    }else{
-  	  	      HTTPStatus::send500();
-  	  	    }
-  	  	  }else{
-  	  	    $query = preg_replace('/select\n?.*\n?where/i', 'CONSTRUCT {'.$construct.'} WHERE', $query);
-  	  	  }
-  	  	}else {
-  	  	  HTTPStatus::send500("invalid query: " . $parser->getErrors());
-  	  	}
-  	  }
-=======
 	  	  	|| ($resultVars[$v['o']] && $v['o_type'] == 'var')){
 	  	  	array_push($sparqlConstruct, $v);
 	  	  	}	  	  
@@ -471,7 +421,6 @@ class Utils{
 	  	}
 	  }
   	  $query = Utils::addPrefixes($query);
->>>>>>> master
   	  if($conf['debug']){
   	  	echo "\n-------------------------------------------------\nIn ".getcwd()."\n";
   	    echo "$modelFile (against ".$e->getSparqlUrl().")\n-------------------------------------------------\n\n";
@@ -588,7 +537,6 @@ class Utils{
   	$lodspk = $lodspk;
   	//unset($lodspk);
   	$vars = compact('uri','lodspk', 'models', 'first');
-<<<<<<< HEAD
   	if($conf['debug']){
           echo "\n\n-------------------------------------------------\n";
           echo "                        Models                  \n";
@@ -611,31 +559,6 @@ class Utils{
   	  $fnc = Haanga::compile($view);
   	  $fnc($vars, TRUE);
   	}
-=======
- 	if($conf['debug']){
- 	  var_dump($vars); 	
- 	}
-	if(is_string($data)){
-	  echo($data);
-	}elseif(is_file($conf['home'].$view)){
-         try{
-	  Haanga::Load($viewFile, $vars);
-          }catch(Exception $e){
-echo '<pre>';
-           echo $e->getMessage();
-var_dump($vars);
-echo($e->getMessage()."' in ".$e->getFile().":".$e->getLine()."\nStack trace:\n".$e->getTraceAsString());
-echo '</pre>';
-         }
-	}elseif($view == null){
-	  $fnc = Haanga::compile('{{models|safe}}');
-	  $fnc($vars, TRUE);
-	}else{
-	  echo $conf['home'].$viewPath." ".$viewFile;
-	  $fnc = Haanga::compile($view);
-	  $fnc($vars, TRUE);
-	}
->>>>>>> master
   	
   }
   
@@ -657,8 +580,6 @@ echo '</pre>';
   	}
   	return $triples;
   }
-  
-<<<<<<< HEAD
   
   public static function updateFile($modelFile, $e, &$rPointer, &$fPointer){
   	global $conf;
@@ -789,7 +710,6 @@ echo '</pre>';
   }
   
   
-=======
   private static function addPrefixes($q){
     global $conf;
     $matches = array();
@@ -807,7 +727,6 @@ echo '</pre>';
     return $newQuery;
   }
   
->>>>>>> master
 }
 
 ?>
