@@ -20,12 +20,12 @@ class TypeModule extends abstractModule{
   	  if(Queries::uriExist($uri, $endpoints['local'])){
   	  	$page = Queries::createPage($uri, $localUri, $acceptContentType, $metaDb);
   	  	if($page == NULL){
-  	  	  Utils::send500("Can't write sqlite database.");
+  	  	  HTTPStatus::send500("Can't write sqlite database.");
   	  	}
-  	  	Utils::send303($page, $acceptContentType);
+  	  	HTTPStatus::send303($page, $acceptContentType);
   	  	exit(0);
   	  }else{
-  	  	return false; //Utils::send404($uri);
+  	  	return false;
   	  }
   	}
   	return $pair;
@@ -43,7 +43,7 @@ class TypeModule extends abstractModule{
   	list($res, $page, $format) = $pair;
   	//If resource is not the page, send a 303 to the document
   	if($res == $localUri){
-  	  Utils::send303($page, $acceptContentType);
+  	  HTTPStatus::send303($page, $acceptContentType);
   	}
   	
   	$uri = $res;
