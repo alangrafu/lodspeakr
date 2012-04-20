@@ -5,10 +5,10 @@ parent_htaccess="../.htaccess"
 settings_file="settings.inc.php"
 
 metadb="db.sqlite"
-basedir="http://localhost/my/data/"
+basedir="http://localhost/my/data"
 home=`basename \`pwd\`` # 'lodspeakr', the directory from git clone
 ns=$basedir
-endpoint="http://localhost/sparql?"
+endpoint="http://localhost/sparql"
 everything_ok="n"
 
 if [ -e "$parent_htaccess" ]; then
@@ -43,6 +43,7 @@ while [ "$everything_ok" != "y" ]; do
   read -u 1 aux_ns
   echo ""
   if [ "$aux_ns" != "" ]; then
+    aux_ns="`echo $aux_ns | sed 's/\/$//'`/" # remove any ending slash and append one.
     ns=$aux_ns
   fi
 
@@ -51,7 +52,7 @@ while [ "$everything_ok" != "y" ]; do
   if [[ "$basedir" =~ ^"$ns" ]]; then
     external="false"
   else
-    external=$ns
+    external="\$conf['ns']['local']"
     extra="\$conf['ns']['base']   = '$basedir';"
   fi
   
@@ -92,7 +93,6 @@ LODSPEAKR_HOME=`pwd`/
 \$conf['home'] = '$LODSPEAKR_HOME';
 \$conf['basedir'] = '$basedir';
 \$conf['debug'] = false;
-\$conf['mirror_external_uris'] = '$external';
 
 /*ATTENTION: By default this application is available to
  * be exported and copied (its configuration)
@@ -104,6 +104,8 @@ LODSPEAKR_HOME=`pwd`/
 #If you want to add/overrid a namespace, add it here
 \$conf['ns']['local']   = '$ns';
 $extra
+
+\$conf['mirror_external_uris'] = $external;
 ?>" 
 echo "$content" > $settings_file
 chmod 644 $settings_file
@@ -119,7 +121,8 @@ echo "RewriteRule ^(.+)\$ $1/index.php?q=\$1 [L]" >> $parent_htaccess
 mkdir cache
 cp -r doc/examples/originalComponents components
 mkdir -p components/uris
-
+bold=`tput bold`
+normal=`tput sgr0`
 echo
 echo "                                      *** ATTENTION ***"
 echo
@@ -127,10 +130,17 @@ echo "LODSPeaKr needs the web server to have write permissions for $1/cache/ and
 echo
 echo
 echo "Common ways of doing this:"
-echo " chown -R www-apache $1/cache $1/meta (find the name of the apache user in your system)"
-echo " chmod -R g+w $1/cache $1/meta (if you have a group in common with the apache user)"
-echo " chmod -R 777 $1/cache $1/meta (highly discouraged but useful to test when everything fails. It shouldn't be used in production sites)"
+echo " ${bold}chown -R www-apache $1/cache $1/meta${normal} (find the name of the apache user in your system)"
+echo " ${bold}chown -R apache $1/cache $1/meta${normal} (find the name of the apache user in your system)"
+echo " ${bold}chown -R www-data $1/cache $1/meta${normal} (find the name of the apache user in your system)"
+echo " ${bold}chmod -R g+w $1/cache $1/meta${normal} (if you have a group in common with the apache user)"
+echo " ${bold}chmod -R 777 $1/cache $1/meta${normal} (highly discouraged but useful to test when everything fails. It shouldn't be used in production sites)"
 echo
 echo "Please give the server write permissions. Otherwise, LODSPeaKr will not work."
 echo
-echo "You can now visit $basedir to navigate through your data."
+echo
+echo
+echo "--------------------------------------------------------------------------------------------------------"
+echo "You can now visit ${bold}$basedir${normal} to navigate through your data."
+echo "--------------------------------------------------------------------------------------------------------"
+echo
