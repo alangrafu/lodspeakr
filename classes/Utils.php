@@ -624,8 +624,12 @@ class Utils{
   	    echo "$modelFile (against ".$e->getSparqlUrl().")\n-------------------------------------------------\n\n";
   	  	echo $query;
   	  }
+  	  $query = Utils::addPrefixes($query);
   	  trigger_error("Running query from ".$modelFile." on endpoint ".$e->getSparqlURL(), E_USER_NOTICE);
   	  $status = $e->update($query, Utils::getResultsType($query)); 
+          if($status >=400 && $status < 600){
+            trigger_error("Error updating using ".$query, E_USER_ERROR);
+          }
   	  return $status;
   	}else{
   	  if(strpos('endpoint.', $modelFile) == 0){  	  	

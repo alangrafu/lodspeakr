@@ -25,7 +25,8 @@ class StaticModule extends abstractModule{
   	global $endpoints;
   	global $lodspk;  	
   	
-  	header("Content-type: ");
+  	header("Content-type: ".$this->getContentType($file));
+
   	$uri = $localUri;
   	if($conf['debug']){
   	  echo "\n-------------------------------------------------\nIn ".$conf['static']['directory']."\n";
@@ -53,7 +54,21 @@ class StaticModule extends abstractModule{
   	}
   }
   
-  
+  private function getContentType($file){
+    $contenttype = array();
+    $contenttype['html'] = 'text/html';
+    $contenttype['css']  = 'text/css';
+    $contenttype['js']   = 'text/javascript';
+    $contenttype['png']  = 'image/png';
+    $contenttype['jpg']  = 'image/jpeg';
+    $contenttype['jpeg'] = 'image/jpeg';
+    $contenttype['gif']  = 'image/gif';
+    $extension = strtolower(end(explode(".", $file)));
+    if(isset($contenttype[$extension])){
+      return $contenttype[$extension];
+    }
+    return 'text/plain';
+  }  
   
 }
 ?>
