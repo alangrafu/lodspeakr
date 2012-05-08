@@ -60,14 +60,11 @@ $conf['modules'] = array();
 $conf['modules']['directory'] = 'classes/modules/';
 
 $conf['modules']['available'] = array('static','uri', 'type', 'service');
-<<<<<<< HEAD
-
 //Uncomment next line to enable sessions
 //$conf['modules']['available'] = array('session', 'static','uri', 'type', 'service');
 
-=======
+
 global $lodspk;
->>>>>>> 190d4897be9d90712085169270a6e105600063f5
 include_once('settings.inc.php');
 $conf['view']['standard']['baseUrl'] = $conf['basedir'];
 ?>
