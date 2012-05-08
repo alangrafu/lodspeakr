@@ -4,15 +4,15 @@
     <html xmlns="http://www.w3.org/1999/xhtml" {% for i, ns in lodspk.ns %}xmlns:{{i}}="{{ns}}" 
     {%endfor%}version="XHTML+RDFa 1.0" xml:lang="en">
   <head>
-    <title>My new Service</title>
-    <link href="css/basic.css" rel="stylesheet" type="text/css" media="screen" />
+    <title>Instances of {{lodspk.args.arg0}}</title>
+    <link href="../css/basic.css" rel="stylesheet" type="text/css" media="screen" />
   </head>
   <body>
-    <h1>Classes available</h1>
-{%include "../header.inc"%}
+    <h1>Instances of class {{lodspk.args.arg0}}</h1>
+{%include "../../includes/header.inc"%}
 	<ul>
     {% for row in models.main %}
-        <li><a href="{{lodspk.baseUrl}}instances/{{ row.resource.curie }}">{{row.resource.curie}}</a></li>
+        <li><a href="{{ row.resource.value }}">{{row.resource.curie}}</a></li>
     {% endfor %}
     </ul>
   </body>

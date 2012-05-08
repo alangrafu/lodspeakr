@@ -11,27 +11,27 @@ class UriModule extends abstractModule{
   	global $endpoints;
   	global $lodspk;
   	
+  	if($conf['disableComponents'] == true){
+  	  return FALSE;
+  	}
   	require_once('classes/MetaDb.php');
   	$metaDb = new MetaDb($conf['metadata']['db']['location']);
-  	
   	$pair = Queries::getMetadata($localUri, $acceptContentType, $metaDb);
-  	
   	if($pair == NULL){ // Original URI is not in metadata
   	  if(Queries::uriExist($uri, $endpoints['local'])){
   	  	$page = Queries::createPage($uri, $localUri, $acceptContentType, $metaDb);
   	  	if($page == NULL){
-  	  	  Utils::send500("Can't write sqlite database.");
+  	  	  HTTPStatus::send500("Can't write sqlite database.");
   	  	}
-  	  	Utils::send303($page, $acceptContentType);
+  	  	HTTPStatus::send303($page, $acceptContentType);
   	  	exit(0);
   	  }else{
-  	  	return false; //Utils::send404($uri);
+  	  	return false;
   	  }
   	}
   	$extension = Utils::getExtension($pair[2]); 
   	$curie = Utils::uri2curie($pair[0]);
   	list($modelFile, $viewFile) = $this->getModelandView($curie, $extension);
-  	
   	if($modelFile == NULL){
   	  return FALSE;
   	}
@@ -63,7 +63,7 @@ class UriModule extends abstractModule{
   	
   	//If resource is not the page, send a 303 to the document
   	if($res == $localUri){
-  	  Utils::send303($page, $acceptContentType);
+  	  HTTPStatus::send303($page, $acceptContentType);
   	}
   	
   	$uri = $res;
@@ -86,35 +86,38 @@ class UriModule extends abstractModule{
   	//$lodspk = $conf['view']['standard'];
 
   	$lodspk['type'] = $modelFile;
+  	  	$lodspk['home'] = $conf['basedir'];
+
   	$lodspk['module'] = 'uri';
   	$lodspk['add_mirrored_uris'] = true;
   	$lodspk['this']['value'] = $uri;
   	$lodspk['this']['curie'] = Utils::uri2curie($uri);
   	$lodspk['local']['value'] = $localUri;
   	$lodspk['local']['curie'] = Utils::uri2curie($localUri);
-  	
-  	$lodspk['this']['contentType'] = $acceptContentType;
+  	$lodspk['contentType'] = $acceptContentType;
   	$lodspk['model'] = $conf['model']['directory'];
   	$lodspk['view'] = $conf['view']['directory'];
   	$lodspk['ns'] = $conf['ns'];
   	
   	
-  	chdir($conf['home'].$conf['model']['directory']);
+  	//chdir($conf['home'].$conf['model']['directory']);
   	Utils::queryFile($modelFile, $endpoints['local'], $results, $firstResults);
   	if(!$lodspk['resultRdf']){
   	  $results = Utils::internalize($results); 
-  	  $lodspk['firstResults'] = Utils::getfirstResultss($results);
+  	  $firstAux = Utils::getfirstResults($results);
   	  
   	  chdir($conf['home']);
   	  if(is_array($results)){
   	  	$resultsObj = Convert::array_to_object($results);
+  	  	$results = $resultsObj;
   	  }else{
   	  	$resultsObj = $results;
   	  }
+  	  $lodspk['firstResults'] = Convert::array_to_object($firstAux);
   	}else{
   	  $resultsObj = $results;
   	}
-  	chdir($conf['home']);
+  	//chdir($conf['home']);
   	if($conf['debug']){
   	  trigger_error("Using template ".$viewFile, E_USER_NOTICE);
   	  echo("TEMPLATE: ".$viewFile."\n\n");
@@ -126,14 +129,14 @@ class UriModule extends abstractModule{
   private static function getModelandView($uri, $extension){  	
   	global $conf;
   	global $lodspk;
-  	$auxViewFile  = $conf['view']['directory'].$conf['uri']['prefix'].$uri.'/'.$extension.'.template';
-  	$auxModelFile = $conf['model']['directory'].$conf['uri']['prefix'].$uri.'/'.$extension.'.queries';
- 	if(file_exists($auxModelFile)){
+  	$auxViewFile  = $conf['view']['directory'].'/'.$conf['uri']['prefix'].'/'.$uri.'/'.$extension.'.template';
+  	$auxModelFile = $conf['model']['directory'].'/'.$conf['uri']['prefix'].'/'.$uri.'/'.$extension.'.queries';
+  	if(file_exists($auxModelFile)){
  	  //Model exists
-  	  $modelFile = $conf['uri']['prefix'].$uri.'/'.$extension.'.queries';
+  	  $modelFile = $auxModelFile;//$conf['uri']['prefix'].$uri.'/'.$extension.'.queries';
   	  if(file_exists($auxViewFile) ){
   	  	//View exists, everything is fine
-  	  	$viewFile = $conf['uri']['prefix'].$uri.'/'.$extension.'.template';
+  	  	$viewFile = $conf['model']['directory'].'/'.$conf['uri']['prefix'].'/'.$uri.'/'.$extension.'.template';
   	  }elseif($extension != 'html'){
   	  	//View doesn't exists (and is not HTML)
   	  	$viewFile = null;  	  	
@@ -142,11 +145,11 @@ class UriModule extends abstractModule{
   	  	return array(null, null);
   	  }
   	  return array($modelFile, $viewFile);
-  	}elseif($extension != 'html' && file_exists($conf['model']['directory'].$conf['uri']['prefix'].$uri.'/html.queries')){
-  	  $modelFile = $conf['uri']['prefix'].$uri.'/html.queries';
-  	  if(file_exists($auxViewFile) ){
+  	}elseif(file_exists($conf['model']['directory'].'/'.$conf['uri']['prefix'].'/'.$uri.'/queries')){
+  	  $modelFile = $conf['model']['directory'].'/'.$conf['uri']['prefix'].'/'.$uri.'/queries';//$conf['uri']['prefix'].$uri.'/html.queries';
+	  if(file_exists($auxViewFile) ){
   	  	//View exists, everything is fine
-  	  	$viewFile = $conf['uri']['prefix'].$uri.'/'.$extension.'.template';
+  	  	$viewFile = $conf['model']['directory'].'/'.$conf['uri']['prefix'].'/'.$uri.'/'.$extension.'.template';
   	  }elseif($extension != 'html'){
   	  	//View doesn't exists (and is not HTML)
   	  	$lodspk['transform_select_query'] = true;
@@ -154,6 +157,7 @@ class UriModule extends abstractModule{
   	  }
   	  return array($modelFile, $viewFile);
   	}
+
   	return array(NULL, NULL);
   }
   

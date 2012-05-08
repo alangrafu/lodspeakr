@@ -1,0 +1,9 @@
+PREFIX geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>
+PREFIX dbp: <http://dbpedia.org/ontology/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT distinct ?lat ?lon ?name WHERE {
+<{{first.birthplace.bplace.value}}> rdfs:label ?name ;
+				    geo:lat  ?lat;
+                                    geo:long ?lon.
+}limit 1

@@ -1,0 +1,8 @@
+PREFIX twc: <http://tw.rpi.edu/schema/>
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+PREFIX dbp: <http://dbpedia.org/ontology/>
+SELECT distinct ?bplace  WHERE {
+  GRAPH <http://tw.rpi.edu:2020/books>{
+  	<{{uri}}> dbp:birthPlace ?bplace
+  }
+}

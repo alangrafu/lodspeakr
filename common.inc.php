@@ -1,5 +1,5 @@
 <?
-
+$conf['version'] = '20120411';
 $conf['output']['select'] = 'json';
 $conf['output']['describe'] = 'rdf';
 $conf['endpointParams']['config']['show_inline'] = 0;
@@ -12,15 +12,16 @@ $conf['metadata']['db']['location'] = 'meta/db.sqlite';
 
 include_once('namespaces.php');
 
-$conf['model']['directory'] = 'models/'; #include trailing slash!
+$conf['model']['directory'] = 'components'; #include trailing slash!
 $conf['model']['extension'] = '.model';
 $conf['model']['default'] = 'rdfs:Resource';
 
-$conf['view']['directory'] = 'views/'; #include trailing slash!
+$conf['view']['directory'] = 'components'; #include trailing slash!
 $conf['view']['extension'] = '.view';
 $conf['view']['default'] = 'rdfs:Resource';
 
 $conf['static']['directory'] = 'static/'; #include trailing slash!
+$conf['static']['haanga'] = false; //Should static files be processed by Haanga? 
 
 $conf['resource']['url_delimiter'] = "%u";
 
@@ -32,11 +33,10 @@ $conf['http_accept']['json'] = array('application/json', 'application/x-javascri
 $conf['http_accept']['nt']   = array('text/plain');
 
 
-$conf['service']['prefix'] = 'service.';
-$conf['service']['class'] = 'classes/BasicSpecialFunction.php';
+$conf['service']['prefix'] = 'services';
 
-$conf['type']['prefix'] = 'type.';
-$conf['uri']['prefix'] = 'uri.';
+$conf['type']['prefix'] = 'types';
+$conf['uri']['prefix'] = 'uris';
 
 //Frontpage when user goes to http://example.org/
 $conf['root'] = 'index.html';
@@ -60,10 +60,14 @@ $conf['modules'] = array();
 $conf['modules']['directory'] = 'classes/modules/';
 
 $conf['modules']['available'] = array('static','uri', 'type', 'service');
+<<<<<<< HEAD
 
 //Uncomment next line to enable sessions
 //$conf['modules']['available'] = array('session', 'static','uri', 'type', 'service');
 
+=======
+global $lodspk;
+>>>>>>> 190d4897be9d90712085169270a6e105600063f5
 include_once('settings.inc.php');
 $conf['view']['standard']['baseUrl'] = $conf['basedir'];
 ?>
