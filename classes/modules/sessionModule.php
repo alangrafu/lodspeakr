@@ -22,9 +22,10 @@ class SessionModule extends abstractModule{
         if($this->validateAuthentication($_POST)){
           session_start();
           $_SESSION['lodspk'] = 1;
-          Utils::send303($conf['basedir'], '');
+          HTTPStatus::send303($conf['basedir'], '');
+          return false;
         }else{
-          Utils::send401("Authentication not valid.");
+          HTTPStatus::send401("Authentication not valid.");
           return true;
         }
       }
@@ -33,7 +34,7 @@ class SessionModule extends abstractModule{
       if(isset($_SESSION['lodspk'])){
         return false;
       }else{
-        Utils::send303($conf['basedir'].$this->sessionUri, '');
+        HTTPStatus::send303($conf['basedir'].$this->sessionUri, '');
         return true;
       }
     }
