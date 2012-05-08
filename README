@@ -1,11 +1,11 @@
 lodspeakr - Linked Open Data Simple Publishing Kit
 author: Alvaro Graves (alvaro@graves.cl)
-version: 20120318 
+version: 20120419 
 
 Simplest Installation
 ---------------------
 
-Just run
+Simply go to your web server root directory (e.g., /var/www), create a new folder, cd into it and run
 
    bash < <(curl -sL http://lodspeakr.org/install)
 

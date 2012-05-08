@@ -37,7 +37,7 @@ class Importer{
   	}elseif(isset($_POST['importtext'])){
   	  $parser->parse(RDF, $_POST['importtext']);
   	}else{
-  	  Utils::send500();
+  	  HTTPStatus::send500();
   	  exit(0);
   	}
   	$triples = $parser->getTriples();

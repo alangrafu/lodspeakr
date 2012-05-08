@@ -9,7 +9,7 @@ modelHtml=`cat  <<QUERY
 PREFIX {{h.prefix}}: <{{h.ns}}>
 {%endfor%}
 SELECT DISTINCT ?resource WHERE {
-  GRAPH {%if base.args.arg0 %}<{{lodspk.args.arg0}}>{%else%}?g{%endif%} {
+  GRAPH {%if lodspk.args.arg0 %}<{{lodspk.args.arg0}}>{%else%}?g{%endif%} {
   	[] a ?resource .
   }
 }
@@ -28,8 +28,8 @@ viewHtml=`cat  <<VIEW
     </style>
   </head>
   <body>
-    <h1>10 Classes available in this triple store</h1>
-	<ul>
+    <h1>$1</h1>
+ 	 <ul>
     {% for row in models.main %}
         <li><a href="{{lodspk.baseUrl}}special/instances/{{ row.resource.curie }}">{{row.resource.curie}}</a></li>
     {% endfor %}

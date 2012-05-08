@@ -1,36 +1,7 @@
 <? 
 
 class Utils{
-  
-  public static function send303($uri, $ext){
-  	header("HTTP/1.0 303 See Other");
-  	header("Location: ".$uri);
-  	header("Content-type: ".$ext);
-  	echo $uri."\n\n";
-  	exit(0);
-  }
-  
-  public static function send404($uri){
-  	header("HTTP/1.0 404 Not Found");
-  	echo "LODSPeaKr could not find ".$uri." or information about it.\nNo URIs in the triple store, or services configured with that URI\n";
-  	exit(0);
-  }
-  
-  public static function send406($uri){
-  	header("HTTP/1.0 406 Not Acceptable");
-  	echo "LODSPeaKr can't find a representation suitable for the content type you accept\n\n";
-  	exit(0);
-  }
-  
-  public static function send500($msg = null){
-  	header("HTTP/1.0 500 Internal Server Error");
-  	echo "An internal error ocurred. Please try later\n\n";
-  	if($msg != null){
-  	  echo $msg;
-  	}
-  	exit(0);
-  }
-  
+    
   public static function uri2curie($uri){
   	global $conf;
   	$ns = $conf['ns'];
@@ -116,7 +87,15 @@ class Utils{
   	  	  	  $row[$k]['uri'] = 1;
   	  	  	}elseif($v['type'] == 'bnode'){
   	  	  	  $row[$k]['curie'] = 'blankNode';
-  	  	  	}  	  	  	
+  	  	  	}else{
+  	  	  	  if($v['datatype']){
+  	  	  	    $row[$k]['type'] = $v['datatype'];
+  	  	  	  }
+  	  	  	  if($v['xml:lang']){
+  	  	  	    $row[$k]['lang'] = $v['xml:lang'];
+  	  	  	  }
+
+  	  	  	}
   	  	  }
   	  	  /*if(sizeof($aux) == 1){
   	  	  $obj = $row;
@@ -268,7 +247,7 @@ class Utils{
   	}elseif(preg_match("/construct/i", $query)){
   	  return $conf['output']['describe'];
   	}else{
-  	  Utils::send500(null);
+  	  HTTPStatus::send500(null);
   	} 
   }
   
@@ -367,7 +346,7 @@ class Utils{
  	  $vars = compact('uri', 'lodspk', 'models', 'first');
  	  $q = file_get_contents($modelFile);
  	  if($q == false){
- 	  	Utils::send500("I can't load ".$modelFile." in ".getcwd());
+ 	  	HTTPStatus::send500("I can't load ".$modelFile." in ".getcwd());
  	  }
  	  $fnc = Haanga::compile($q);
   	  $query = $fnc($vars, TRUE);
@@ -433,15 +412,16 @@ class Utils{
 	  	  	  //For now, assuming variables are in the GRAPH ?g
 	  	  	  $query = "CONSTRUCT {?g ?x ?y} WHERE{GRAPH ?g{?g ?x ?y}}";
 	  	  	}else{
-	  	  	  Utils::send500();
+	  	  	  HTTPStatus::send500();
 	  	  	}
 	  	  }else{
 	  	  	$query = preg_replace('/select\n?.*\n?where/i', 'CONSTRUCT {'.$construct.'} WHERE', $query);
 	  	  }
 	  	}else {
-	  	  Utils::send500("invalid query: " . $parser->getErrors());
+	  	  HTTPStatus::send500("invalid query: " . $parser->getErrors());
 	  	}
 	  }
+  	  $query = Utils::addPrefixes($query);
   	  if($conf['debug']){
   	  	echo "\n-------------------------------------------------\nIn ".getcwd()."\n";
   	    echo "$modelFile (against ".$e->getSparqlUrl().")\n-------------------------------------------------\n\n";
@@ -457,9 +437,6 @@ class Utils{
   	  	if(Utils::getResultsType($query) == $conf['output']['select']){
   	  	  $rPointer[$strippedModelFile] = Utils::sparqlResult2Obj($aux);
   	  	  $fPointer[$strippedModelFile] = $rPointer[$strippedModelFile][0];
-  	  	  /*if(sizeof($rPointer)>0){
-  	  	  $rPointer[$modelFile]['firstResults'] = $rPointer[$modelFile][0];
-  	  	  }*/
   	  	}else{
   	  	  $lodspk['resultRdf'] = true;
   	  	  $rPointer[$strippedModelFile] = $aux;
@@ -468,9 +445,6 @@ class Utils{
   	  	if(Utils::getResultsType($query) == $conf['output']['select']){
   	  	  $rPointer = Utils::sparqlResult2Obj($aux);
   	  	  $fPointer[$strippedModelFile] = $rPointer[0];
-  	  	  /*if(sizeof($rPointer)>0){
-  	  	  $rPointer['firstResults'] = $rPointer[0];
-  	  	  }*/
   	  	}else{
   	  	  $lodspk['resultRdf'] = true;
   	  	  $rPointer = $aux;
@@ -512,7 +486,7 @@ class Utils{
   	  	  	}elseif(is_string($conf['mirror_external_uris'])){
   	  	  	  $value['value'] = preg_replace("|^".$conf['mirror_external_uris']."|", $conf['basedir'], $value['value']);
   	  	  	}else{
-  	  	  	  Utils::send500("Error in mirroring configuration");
+  	  	  	  HTTPStatus::send500("Error in mirroring configuration");
   	  	  	  exit(1);
   	  	  	}
   	  	  }
@@ -571,7 +545,15 @@ class Utils{
 	if(is_string($data)){
 	  echo($data);
 	}elseif(is_file($conf['home'].$view)){
+         try{
 	  Haanga::Load($viewFile, $vars);
+          }catch(Exception $e){
+echo '<pre>';
+           echo $e->getMessage();
+var_dump($vars);
+echo($e->getMessage()."' in ".$e->getFile().":".$e->getLine()."\nStack trace:\n".$e->getTraceAsString());
+echo '</pre>';
+         }
 	}elseif($view == null){
 	  $fnc = Haanga::compile('{{models|safe}}');
 	  $fnc($vars, TRUE);
@@ -600,6 +582,23 @@ class Utils{
   	  }
   	}
   	return $triples;
+  }
+  
+  private static function addPrefixes($q){
+    global $conf;
+    $matches = array();
+    $visited = array();
+    $newQuery = $q;
+    if(preg_match_all("|\s(\w+):\w+|", $q, $matches) > 0){
+      foreach($matches[1] as $v){
+        if(!isset($visited[$v]) && isset($conf['ns'][$v])){
+          $newQuery = "PREFIX ".$v.": <".$conf['ns'][$v].">\n".$newQuery;
+          $visited[$v] = true;
+        }
+      }
+    }
+    
+    return $newQuery;
   }
   
 }

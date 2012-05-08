@@ -1,6 +1,6 @@
 <?php
 
-class Haanga_Extension_Filter_Path
+class Haanga_Extension_Filter_Uripath
 {
     static function generator($cmp, $args)
     {

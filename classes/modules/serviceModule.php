@@ -20,7 +20,7 @@ class ServiceModule extends abstractModule{
   	  if(isset($aux[1])){
   	    $contentTypes = $conf['http_accept'][$aux[1]];
   	    if($contentTypes == null){
-  	      Utils::send406("Content type not acceptable\n");
+  	      HTTPStatus::send406("Content type not acceptable\n");
   	    }
   	    $acceptContentType = $contentTypes[0];
   	  }
@@ -31,6 +31,7 @@ class ServiceModule extends abstractModule{
   	$viewFile  = null;
   	$lodspk['model'] = $conf['model']['directory'].'/'.$conf['service']['prefix'].'/'.$qArr[0].'/';
   	$lodspk['view'] = $conf['view']['directory'].'/'.$conf['service']['prefix'].'/'.$qArr[0].'/'.$extension.'.template';
+  	$lodspk['serviceName'] = $qArr[0];
   	$modelFile = $lodspk['model'].$extension.'.queries';
   	if(file_exists($lodspk['model'].$extension.'.queries')){
   	  if(!file_exists($lodspk['view'])){
@@ -49,7 +50,7 @@ class ServiceModule extends abstractModule{
   	  }
   	  return array($modelFile, $viewFile);
   	}elseif(file_exists($lodspk['model'])){
-  	  Utils::send406($uri);
+  	  HTTPStatus::send406($uri);
   	  exit(0);
   	}
   	return FALSE;  
@@ -149,7 +150,7 @@ class ServiceModule extends abstractModule{
   	}catch (Exception $ex){
   	  echo $ex->getMessage();
   	  trigger_error($ex->getMessage(), E_ERROR);
-  	  Utils::send500($uri);
+  	  HTTPStatus::send500($uri);
   	}
   	exit(0);	
   }
