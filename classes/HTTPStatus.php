@@ -9,6 +9,12 @@ class HTTPStatus{
   	echo $uri."\n\n";
   	exit(0);
   }
+
+  public static function send401($msg){
+  	header("HTTP/1.0 401 Forbidden");
+  	echo $msg;
+  	exit(0);
+  }
   
   public static function send404($uri){
   	header("HTTP/1.0 404 Not Found");
