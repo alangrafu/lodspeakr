@@ -48,11 +48,21 @@ $conf['type']['priorities']['rdfs:Resource'] = -1;
 //Debug
 $conf['debug'] = false;
 
+//Session module
+//First version: really simple user/pass
+$conf['session']['user'] = 'admin';
+$conf['session']['password'] = 'admin';
+
+
 //Modules: LODSPeaKr will try to match the requested URI
 //using the modules in the following order
 $conf['modules'] = array();
 $conf['modules']['directory'] = 'classes/modules/';
+
 $conf['modules']['available'] = array('static','uri', 'type', 'service');
+
+//Uncomment next line to enable sessions
+//$conf['modules']['available'] = array('session', 'static','uri', 'type', 'service');
 
 include_once('settings.inc.php');
 $conf['view']['standard']['baseUrl'] = $conf['basedir'];
