@@ -11,6 +11,10 @@
     <!--[if lt IE 9]>
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
+<style type="text/css">
+  div.application { min-height:250px;margin-bottom:20px }
+  td.words{width:50%; min-width:50%;text-align: justify; vertical-align:top}
+</style>
   </head>
   <body>
     <div class="wrapper">
@@ -26,21 +30,33 @@
       </header>
       <section>
 <h2>DocuSPeaKr</h2>
-<div style='height:200px;margin-bottom:120px'>
+<div class="application">
 <h4><b>URL: <a href='https://github.com/alangrafu/docuspeakr'>https://github.com/alangrafu/docuspeakr</a></b></h4>
-<table><tr>
-<td style="vertical-align: top; width:50%; text-align: justify">
+<table style="width:139%"><tr>
+<td class="words">
 DocuSPeaKr is a system to publish documentation of an OWL ontology. It is based on LODSPeaKr. It queries a triple store and find all the classes and predicates and displays information about them in a clear form. It supports multilingual labels and descriptions via rdfs:label and rdfs:comment. A demo (in english) is available at <a href='http://graves.cl/myStudentOntology/index'>http://graves.cl/myStudentOntology/index</a> and in spanish at <a href='http://graves.cl/myStudentOntology/index/es'>http://graves.cl/myStudentOntology/index/es</a>.</td>
 <td style="align:right;vertical-align:text-top;">
-<a href='https://github.com/alangrafu/docuspeakr'><img style='width:450px;' src='http://lodspeakr.org/img/docuspeakr.png'/></a>
+<a href='https://github.com/alangrafu/docuspeakr'><img style='max-width:350px;' src='http://lodspeakr.org/img/docuspeakr.png'/></a>
+</td>
+</tr></table>
+</div>
+<h2>WWW2012 Mobile Webapp</h2>
+<div class="application">
+<h4><b>URL: <a href='https://github.com/alangrafu/WWW2012-mobile-webapp'>https://github.com/alangrafu/WWW2012-mobile-webapp</a></b></h4>
+<table style="width:139%"><tr>
+<td class="words">
+Using LODSPeaKr, I created a new webapp for WWW2012. It includes wordclouds, historical data of publications displayed in bar graphs, twitter stream and more. 
+</td>
+<td style="align:right;vertical-align:text-top;">
+<a href='https://github.com/alangrafu/WWW2012-mobile-webapp'><img style='height:350px;' src='http://lodspeakr.org/img/www2012.png'/></a>
 </td>
 </tr></table>
 </div>
 <h2>PROV Ontology documentation</h2>
-<div style='height:200px;margin-bottom:70px'>
+<div class="application">
 <h4><b>URL: <a href='http://aquarius.tw.rpi.edu/prov-wg/prov-o'>http://aquarius.tw.rpi.edu/prov-wg/prov-o</a></b></h4>
-<table><tr>
-<td style="vertical-align: top; width:50%; text-align: justify">
+<table style="width:139%"><tr>
+<td class="words">
 The Editor's draft for PROV Ontology shows information live information about PROV (such as domain and range for properties). This information is obtained live form a SPARQL endpoint. In this way, the latest changes in the ontology will be always reflected in the documentation.</td>
 <td style="align:right;vertical-align:text-top;">
 <a href='http://aquarius.tw.rpi.edu/prov-wg/prov-o'><img style='width:450px;' src='http://lodspeakr.org/sites/default/files/prov-o.png'/></a>
@@ -48,10 +64,10 @@ The Editor's draft for PROV Ontology shows information live information about PR
 </tr></table>
 </div>
 <h2>DataFAQs - Linked Data Quality Reports</h2>
-<div style='height:200px;margin-bottom:70px'>
+<div class="application">
 <h4><b>URL: <a href='https://github.com/timrdf/DataFAQs/wiki'>https://github.com/timrdf/DataFAQs/wiki</a></b></h4>
-<table><tr>
-<td style="vertical-align: top; width:50%; text-align: justify">
+<table style="width:139%"><tr>
+<td class="words">
 The DataFAQs linked data evaluation framework provides automated, asynchronous feedback to Publishers, Curators, and Consumers about different quality aspects of the data, such as consistency, connectedness, use of best practices, etc. LOSPeaKr is used to publish and analyze the bricks of the <a href='https://github.com/timrdf/DataFAQs/wiki/FAqT-Brick'>FAqT cube</a> </td>
 <td style="align:right;vertical-align:text-top;">
 <a href='https://github.com/timrdf/DataFAQs/wiki'><img src='http://lodspeakr.org/sites/default/files/DataFAQs.png'/></a>
@@ -59,35 +75,35 @@ The DataFAQs linked data evaluation framework provides automated, asynchronous f
 </tr></table>
 </div>
 <h2>Demo on RPI Centers' funding</h2>
-<div style='height:200px;margin-bottom:200px'>
+<div class="application">
 <h4><b>URL: <a href='http://logd.tw.rpi.edu/demo/rpidemo'>http://logd.tw.rpi.edu/demo/rpidemo</a></b></h4>
-<table><tr>
-<td style="vertical-align: top; width:50%; text-align: justify">
+<table style="width:139%"><tr>
+<td class="words">
 We created a demo showing data about funding sources for several research centers at RPI. The radio of the pie chart show the amount of money given to each center, while each color represents a different source (federal, state, etc). The width of the links between indicates the number of research that two centers have in common. The data was converted into RDF and stored in a triple store. All the pages are generated by LODSPeaKr, as well as the JSON API that feeds the graphs that were created using d3.js.</td>
 <td style="align:right;vertical-align:text-top;">
-<a href='http://logd.tw.rpi.edu/demo/rpidemo'><img style='width:600px' src='http://lodspeakr.org/sites/default/files/rpidemo.png'/></a>
+<a href='http://logd.tw.rpi.edu/demo/rpidemo'><img style='width:400px' src='http://lodspeakr.org/sites/default/files/rpidemo.png'/></a>
 </td>
 </tr></table>
 </div>
 
 <h2>Information about farmers markets in the US</h2>
-<div style='height:400px;margin-bottom:10px'>
+<div class="application">
 <h4><b>URL: <a href='http://graves.cl/farmersmarket'>http://graves.cl/farmersmarket</a></b></h4>
-<table><tr>
-<td style="vertical-align: top; width:50%; text-align: justify">
+<table style="width:139%"><tr>
+<td class="words">
 Demo created specially to show some of the features of LODSPeaKr at the Open Government Data Camp (<a href='http://ogdcamp.org'>ogdcamp 2011</a>). This demo takes data from <a href='http://www.data.gov/details/4383'>Dataset 4384</a> available at <a href='http://data.gov'>Data.gov</a>. The current copy of the data was taken from a version created at <a href='logd.tw.rpi.edu/source/data-gov/dataset_page/4383/version/2010-Oct-22/conversion/enhancement/1'>Tetherless World Constellation</a>. This demo also provides some (very) simple search capabilities, based on the zipcode where the farmers market is located. Finally, it integrates data from <a href='http://dbpedia.org'>DBpedia</a> that gives human-readable information about the state where the farmers market is located. </td>
 <td style="align:right;">
-<a href='http://graves.cl/farmersmarket'><img src='http://lodspeakr.org/sites/default/files/farmersmarket.png'/></a>
+<a href='http://graves.cl/farmersmarket'><img style='width:400px' src='http://lodspeakr.org/sites/default/files/farmersmarket.png'/></a>
 </td>
 </tr></table>
 </div>
 
 
 <h2>Mobile Webapp for the Federation of Earth Science Informatics Partners</h2>
-<div style='height:400px;margin-bottom:70px'>
+<div class="application">
 <h4><b>URL: <a href='http://aquarius.tw.rpi.edu/essi-lod/instances'>http://aquarius.tw.rpi.edu/essi-lod/instances</a></b></h4>
-<table><tr>
-<td style="vertical-align: top; width:50%; text-align: justify">
+<table style="width:139%"><tr>
+<td class="words">
 <a href='http://tw.rpi.edu/web/person/EricRozell'>Eric Rozell</a> wrote a mobile webapp for the attendants for the next ESSI conference using LODSPeaKr. It includes data from published papers, sessions, authors as well as keywords and meetings, among other useful information.
 </td>
 <td style="align:right;">
@@ -98,23 +114,23 @@ Demo created specially to show some of the features of LODSPeaKr at the Open Gov
 
 
 <h2>Events related to public safety in Troy, NY</h2>
-<div style='height:500px;margin-bottom:70px'>
+<div class="application">
 <h4><b>URL: <a href='http://publicsafetymap.org'>http://publicsafetymap.org</a></b></h4>
-<table><tr>
-<td style="vertical-align: top; width:50%; text-align: justify">
+<table style="width:139%"><tr>
+<td class="words">
 A few years ago I started a project to consolidate and visualize all the available data related to public safety in the city of Troy NY. The hardest part was to parse and convert the data, but after that, people could explore different kinds of events, searching by type and date. Since every event was modelled as an instance of a class (e.g., MotoVehicleTheft, Larceny, etc.) it was natural to publish the specific data for each event as dereferenceable URIs. A few years ago I did that just by exporting everything as RDF/XML, however now those details are exported using LODSPeaKr: In this way, when a URI is dereferenced, it will provide the best representation (HTML, RDF/XML, RDFJSON, Turtle or N-Triples) based on the format the agent or browser supports).
 </td>
 <td style="vertical-align: top;align:right;">
-<a href='http://publicsafetymap.org/US/NY/Troy/RPS/Event/040002'><img src='http://lodspeakr.org/sites/default/files/publicsafety.png' /></a>
+<a href='http://publicsafetymap.org/US/NY/Troy/RPS/Event/040002'><img style='width:400px' src='http://lodspeakr.org/sites/default/files/publicsafety.png' /></a>
 </td></tr></table>
 </div>
 
 
 <h2>Demo: Information about The Beatles</h2>
+<div class="application">
 <h4><b>URL: <a href='http://lodspeakr.org/beatles/the_beatles'>http://lodspeakr.org/beatles/the_beatles</a></b></h4>
-<div>
-<table><tr>
-<td style="vertical-align: top; width:50%; text-align: justify">
+<table style="width:139%"><tr>
+<td class="words"> 
 LODSPeaKr allows the use of templating based on the type of each resource when it is consumed by humans. There is a default template which provides RDFa, but it is also possible to create your own templates. In this demo, there are templates for <a href='http://xmlns.com/foaf/spec/#term_Person'>foaf:Person</a> and <a href='http://musicontology.com/#term_Record'>mo:Record</a> but <strong>NO</strong> for the type mo:Group (so it uses the default).
 <br/>
 You can start navigating the data starting by the resource about <a href='http://lodspeakr.org/beatles/the_beatles'>The Beatles</a>. 
@@ -127,7 +143,7 @@ You can use the data in RDF/XML, Turtle, or N-Triples. Just point your parser (e
 </td>
 <td>
 </td>
-<td style="vertical-align:top"><a href='http://lodspeakr.org/beatles/the_beatles'><img src='http://lodspeakr.org/sites/default/files/beatles.png'/></a>
+<td style="vertical-align:top"><a href='http://lodspeakr.org/beatles/the_beatles'><img style='width:400px' src='http://lodspeakr.org/sites/default/files/beatles.png'/></a>
 </td>
 </tr>
 </table>
