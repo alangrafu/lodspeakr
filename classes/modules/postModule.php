@@ -1,5 +1,7 @@
 <?
+global $conf;
 require_once('abstractModule.php');
+require_once($conf['home'].'/classes/Utils.php');
 class PostModule extends abstractModule{
   //Post module
   
@@ -79,9 +81,13 @@ class PostModule extends abstractModule{
 	  $args = $this->getParamsPost($_POST);
 
   	try{
-  	  
   	  $results['params'] = $params;
-  	  
+  	  require_once($conf['home']."/lib/arc2/ARC2.php");
+  	  $parser = ARC2::getRDFParser();
+  	  $parser->parse($conf['basedir'], $_POST['request']);
+  	  $ser = ARC2::getNTriplesSerializer();
+  	  $triples = $parser->getTriples();
+  	  $args['triples'] = $ser->getSerializedTriples($triples);
   	  $lodspk['method'] = 'POST';
   	  $lodspk['home'] = $conf['basedir'];
   	  $lodspk['baseUrl'] = $conf['basedir'];

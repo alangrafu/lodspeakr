@@ -15,6 +15,12 @@ class HTTPStatus{
   	echo "LODSPeaKr could not find ".$uri." or information about it.\nNo URIs in the triple store, or services configured with that URI\n";
   	exit(0);
   }
+
+  public static function send405($uri){
+  	header("HTTP/1.0 405 Method Not Allowed");
+  	echo "LODSPeaKr could not process this URI using the method requested.\n";
+  	exit(0);
+  }
   
   public static function send406($uri){
   	header("HTTP/1.0 406 Not Acceptable");
