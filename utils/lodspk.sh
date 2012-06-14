@@ -85,7 +85,7 @@ if [[ $currentOperation == "debug" ]]; then
     exit 1
   fi
   php $DIR/modules/debug.php "$debugOperation" 
-  $DIR/modules/cache.sh clear
+  $DIR/modules/cache.sh clear nometa
   exit
 fi
 
