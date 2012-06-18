@@ -102,7 +102,7 @@ if [[ $currentOperation == "disable" ]]; then
     exit 1
   fi
   php $DIR/modules/default.php "$defaultOperation" 
-  $DIR/modules/cache.sh clear
+  $DIR/modules/cache.sh clear nometa
   exit
 fi  
 
