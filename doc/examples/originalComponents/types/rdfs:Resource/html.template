@@ -1,28 +1,55 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML+RDFa 1.0//EN"
-    "http://www.w3.org/MarkUp/DTD/xhtml-rdfa-1.dtd">
-    <html xmlns="http://www.w3.org/1999/xhtml" {% for i, ns in lodspk.ns %}xmlns:{{i}}="{{ns}}" 
-    {%endfor%}version="XHTML+RDFa 1.0" xml:lang="en">
-    <head>
-    <title>Page about {{lodspk.this.value}}</title>
-    <link href="{{lodspk.home}}css/basic.css" rel="stylesheet" type="text/css" media="screen" />
-    <link rel="alternate" type="application/rdf+xml" title="RDF/XML Version" href="{{lodspk.this.value}}.rdf" />
-    <link rel="alternate" type="text/turtle" title="Turtle Version" href="{{lodspk.this.value}}.ttl" />
-    <link rel="alternate" type="text/plain" title="N-Triples Version" href="{{lodspk.this.value}}.nt" />
-    <link rel="alternate" type="application/json" title="RDFJSON Version" href="{{lodspk.this.value}}.json" />
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Instances of class {{lodspk.args.arg0}}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link href="{{lodspk.home}}css/bootstrap.min.css" rel="stylesheet" type="text/css" media="screen" />
+    <style>
+      body {
+        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+      }
+    </style>
+    <link href="{{lodspk.home}}css/bootstrap-responsive.min.css" rel="stylesheet" type="text/css" media="screen" />
+    <script type="text/javascript" src="{{lodspk.home}}js/jquery.js"></script>
+    <script type="text/javascript" src="{{lodspk.home}}js/bootstrap.min.js"></script>
   </head>
-  <body about="{{lodspk.this.value}}">
+  <body>
+<div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" href="{{lodspk.home}}">LODSPeaKr</a>
+          <div class="nav-collapse">
+            <ul class="nav">
+              <li class="active"><a href="#">Home</a></li>
+              <li><a href="classes">Classes</a></li>
+              <li><a href="namedGraphs">Named Graphs</a></li>
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
     <h1>Default view</h1>
 
-    <div style='margin-top: 40px'>
-    <table>
-    <tr><th>Subject</th><th>Predicate</th><th>Object</th></tr>
+    <table class="table table-striped">
+    <thead>
+      <tr><th>Subject</th><th>Predicate</th><th>Object</th></tr>
+    </thead>
     {% for row in models.po %}
      <tr>
 <td>{%if forloop.first%}<a href='{{lodspk.this.value}}'>{{lodspk.this.curie}}</a>{%endif%}</td>
-     <td style='background-color:#c9f9c9'><a href='{{row.p.value}}'>{{row.p.curie}}</a></td>
+     <td><a href='{{row.p.value}}'>{{row.p.curie}}</a></td>
      
-        <td style='background-color:#c9f9c9'>
+        <td>
         {%if row.o.uri == 1%}
         <a rev='[{{row.p.curie}}]' href='{{row.o.value}}'>{{row.o.curie}}</a>
         {%else%}
@@ -32,7 +59,6 @@
 
         </tr>
     {% endfor %}
-<tr><td></td><td><a href='{{lodspk.this.value}}'>{{lodspk.this.curie}}</a></td><td></td></tr>
 
     {% for row in models.sp %}
       <tr>
@@ -42,11 +68,12 @@
 <td>{%if forloop.first%}<a href='{{lodspk.this.value}}'>{{lodspk.this.curie}}</a>{%endif%}</td>
         </tr>
     {% endfor %}
-    <tr><th>Subject</th><th>Predicate</th><th>Object</th></tr>
+    <thead>
+      <tr><th>Subject</th><th>Predicate</th><th>Object</th></tr>
+    </thead>
 
     </table>
     </div>    
     
-    <br/>
   </body>
 </html>

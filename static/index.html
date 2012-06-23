@@ -1,18 +1,70 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML+RDFa 1.0//EN"
-    "http://www.w3.org/MarkUp/DTD/xhtml-rdfa-1.dtd">
-    <html xmlns="http://www.w3.org/1999/xhtml" 
-    version="XHTML+RDFa 1.0" xml:lang="en">
+<!DOCTYPE html>
+<html lang="en">
   <head>
-    <title>Main</title>
-    <link href="css/basic.css" rel="stylesheet" type="text/css" media="screen" />
+    <meta charset="utf-8">
+    <title>LODSPeaKr Basic Menu</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css" media="screen" />
+    <style>
+      body {
+        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+      }
+    </style>
+    <link href="css/bootstrap-responsive.min.css" rel="stylesheet" type="text/css" media="screen" />
+    <script type="text/javascript" src="js/jquery.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
   </head>
   <body>
-    <h1>Services available</h1>
-	<ul>
-        <li><a href='classes'>List of classes in the triple store</a></li>
-        <li><a href='namedGraphs'>Named graphs in the triple store</a></li>
-    </ul>
+ <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" href="#">LODSPeaKr</a>
+          <div class="nav-collapse">
+            <ul class="nav">
+              <li class="active"><a href="#">Home</a></li>
+              <li><a href="classes">Classes</a></li>
+              <li><a href="namedGraphs">Named Graphs</a></li>
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <img src="img/lodspeakr_logotype.png" style="opacity: 0.1; position: absolute; right:0px; top:60%"/>
+      <h1>LODSPeaKr is installed!</h1>
+      <p>If you are reading this, it means LODSPeaKr is installed successfully!. From here there are several things you can do:</p>
+      <div class="span5 well">
+      <h2>Explore your data!</h2>
+        <p>Your data is already published as Linked Data. This includes <a href='http://en.wikipedia.org/wiki/Content_negotiation'>Content Negotiation</a>, which gives you the ability to serve your data in multiple formats. You can start by looking the <a href='classes'>classes</a> in your triple store or the <a href='namedGraphs'>named graphs</a> available.</p>
+      </div>
+      <div class="span5 well">
+      <h2>Add static files</h2>
+        <p>You can also serve (and use) files that help you to present your content the way you want (JavaScript, CSS, images, etc). Just copy them on the <code>static</code> folder inside lodspeakr and you are ready to use them. For more information <a href='https://github.com/alangrafu/lodspeakr/wiki/Statics'>about static files in LODSPeaKR, please check the wiki</a>.</p>
+      </div>
+      <div class="span5 well">
+      <h2>Understanding components</h2>
+        <p>In LODSPeaKr, components are entities (usually a set of templates and sparql queries) that serve are applied when a particular URI is being retrieved. The templates are based on <a href='http://haanga.org/'>Haanga</a>, and you can see <a href='https://github.com/alangrafu/lodspeakr/wiki/Examples-how-to-use-haanga-in-lodspeakr'>several examples of Haanga in LODSPeaKr in the wiki</a>.</p>
+        <p>Currently, LODSPeaKr supports 3 types of components. You can learn <a href='https://github.com/alangrafu/lodspeakr/wiki/Creating-components-in-LODSPeaKr'>how to create components</a> in the wiki.</p>
+        <ul>
+          <li><strong>Type components:</strong> Allow you to define how LODSPeaKr should expose data for instances of a certain class (for example all instances of <code>foaf:Person</code>).</li>
+          <li><strong>Service components:</strong> You can create web services and URIs that are not in the triple store to serve aggregated data, create APIs, etc. You can even <a href=''>pass parameters to these services</a>, making them very flexible.</li>
+          <li><strong>URI components:</strong> In some cases, you want to treat a particular URI different than others of the same type. To do that, you can create a URI component, to specify a particular set of SPARQL queries and template for it.</li>
+          </ul>
+       </p>
+      </div>
+      <div class="span5 well">
+      <h2>Use <code>lodspk.sh</code>, LODSPeaKr command-line tool</h2>
+      <p><code>lodspk.sh</code> is a tool that simplifies the creation and edit of components. It also simplifies the process of debugging and cleaning the cache. Check all the <a href='https://github.com/alangrafu/lodspeakr/wiki/Using-lodspk.sh'>options including with it</a>. Is it <strong>highly recommended</strong> to use it when creating, developing and debugging components.</p>
+      </div>
+    </div>
   </body>
 </html>
 

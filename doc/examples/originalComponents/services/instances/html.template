@@ -1,19 +1,49 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML+RDFa 1.0//EN"
-    "http://www.w3.org/MarkUp/DTD/xhtml-rdfa-1.dtd">
-    <html xmlns="http://www.w3.org/1999/xhtml" {% for i, ns in lodspk.ns %}xmlns:{{i}}="{{ns}}" 
-    {%endfor%}version="XHTML+RDFa 1.0" xml:lang="en">
+<!DOCTYPE html>
+<html lang="en">
   <head>
-    <title>Instances of {{lodspk.args.arg0}}</title>
-    <link href="../css/basic.css" rel="stylesheet" type="text/css" media="screen" />
+    <meta charset="utf-8">
+    <title>Instances of class {{lodspk.args.arg0}}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link href="{{lodspk.home}}css/bootstrap.min.css" rel="stylesheet" type="text/css" media="screen" />
+    <style>
+      body {
+        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+      }
+    </style>
+    <link href="{{lodspk.home}}css/bootstrap-responsive.min.css" rel="stylesheet" type="text/css" media="screen" />
+    <script type="text/javascript" src="{{lodspk.home}}js/jquery.js"></script>
+    <script type="text/javascript" src="{{lodspk.home}}js/bootstrap.min.js"></script>
   </head>
   <body>
-    <h1>Instances of class {{lodspk.args.arg0}}</h1>
-{%include "../../includes/header.inc"%}
+<div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" href="#">LODSPeaKr</a>
+          <div class="nav-collapse">
+            <ul class="nav">
+              <li class="active"><a href="#">Home</a></li>
+              <li><a href="classes">Classes</a></li>
+              <li><a href="namedGraphs">Named Graphs</a></li>
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <h1>Instances of class {{lodspk.args.arg0}}</h1>
 	<ul>
     {% for row in models.main %}
         <li><a href="{{ row.resource.value }}">{{row.resource.curie}}</a></li>
     {% endfor %}
     </ul>
+   </div>
   </body>
 </html>

@@ -1,19 +1,55 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML+RDFa 1.0//EN"
-    "http://www.w3.org/MarkUp/DTD/xhtml-rdfa-1.dtd">
-    <html xmlns="http://www.w3.org/1999/xhtml" {% for i, ns in lodspk.ns %}xmlns:{{i}}="{{ns}}" 
-    {%endfor%}version="XHTML+RDFa 1.0" xml:lang="en">
+<!DOCTYPE html>
+<html lang="en">
   <head>
-    <title>Named Graphs</title>
-    <link href="css/basic.css" rel="stylesheet" type="text/css" media="screen" />
+    <meta charset="utf-8">
+    <title>LODSPeaKr: Named graphs</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css" media="screen" />
+    <style>
+      body {
+        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+      }
+    </style>
+    <link href="css/bootstrap-responsive.min.css" rel="stylesheet" type="text/css" media="screen" />
+    <script type="text/javascript" src="js/jquery.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
   </head>
   <body>
-    <h1>Named graphs available</h1>
-{%include "../../includes/header.inc"%}
-	<ul>
+ <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" href="{{lodspk.home}}">LODSPeaKr</a>
+          <div class="nav-collapse">
+            <ul class="nav">
+              <li><a href="{{lodspk.home}}">Home</a></li>
+              <li><a href="classes">Classes</a></li>
+              <li class="active"><a href="namedGraphs">Named Graphs</a></li>
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <h1>Named graphs available</h1>
+  {%if first.main.g%}
+      <ul>
     {% for row in models.main %}
         <li>{{row.g.value}}</li>
     {% endfor %}
-    </ul>
+      </ul>
+  {%else%}
+    <div class="alert alert-info">
+      <p>No named graphs found</p>
+    </div>
+  {%endif%}
+    </div>
   </body>
 </html>
