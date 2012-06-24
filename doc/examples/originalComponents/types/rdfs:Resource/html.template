@@ -89,9 +89,9 @@
 
     {% for row in models.sp %}
       <tr>
-        <td style='background-color:#c9f9c9'><a href='{{row.s.value}}'>{{row.s.curie}}</a></td>
+        <td><a href='{{row.s.value}}'>{{row.s.curie}}</a></td>
 
-        <td style='background-color:#c9f9c9'><a rel='{{row.s.curie}}' href='{{row.p.value}}'>{{row.p.curie}}</a></td>
+        <td><a rel='{{row.s.curie}}' href='{{row.p.value}}'>{{row.p.curie}}</a></td>
 <td>{%if forloop.first%}<a href='{{lodspk.this.value}}'>{{lodspk.this.curie}}</a>{%endif%}</td>
         </tr>
     {% endfor %}
