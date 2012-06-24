@@ -11,10 +11,34 @@
       body {
         padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
       }
+      .wait{
+        background-image:url('img/wait.gif');
+        background-repeat:no-repeat;
+        padding-right:20px;
+        background-position: right;
+      }
     </style>
     <link href="css/bootstrap-responsive.min.css" rel="stylesheet" type="text/css" media="screen" />
     <script type="text/javascript" src="js/jquery.js"></script>
     <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap-typeahead.js"></script>
+    <script type="text/javascript">
+    $(document).ready(function(){
+        $('.typeahead').typeahead({
+            source: function (typeahead, query) {
+              $('.typeahead').addClass('wait');[]
+              return $.get('search/'+encodeURIComponent(query), { }, function (data) {
+                  $('.typeahead').removeClass('wait');[]
+                  return typeahead.process(data);
+              }, 'json');
+            },
+            onselect: function (obj) {
+              $('.typeahead').attr('disabled', true);
+              window.location = obj.uri;
+            }
+        });
+    });
+    </script>
   </head>
   <body>
  <div class="navbar navbar-fixed-top">
@@ -32,6 +56,9 @@
               <li><a href="classes">Classes</a></li>
               <li><a href="namedGraphs">Named Graphs</a></li>
             </ul>
+            <form class="navbar-search pull-left" action="">
+              <input type="text" data-provide="typeahead" class="typeahead search-query span2" placeholder="Search"/>
+            </form>
           </div><!--/.nav-collapse -->
         </div>
       </div>
@@ -51,7 +78,7 @@
       </div>
       <div class="span5 well">
       <h2>Understanding components</h2>
-        <p>In LODSPeaKr, components are entities (usually a set of templates and sparql queries) that serve are applied when a particular URI is being retrieved. The templates are based on <a href='http://haanga.org/'>Haanga</a>, and you can see <a href='https://github.com/alangrafu/lodspeakr/wiki/Examples-how-to-use-haanga-in-lodspeakr'>several examples of Haanga in LODSPeaKr in the wiki</a>.</p>
+        <p>In LODSPeaKr, components are entities (usually a set of templates and sparql queries) that are applied when a particular URI is being retrieved. The templates are based on <a href='http://haanga.org/'>Haanga</a>, and you can see <a href='https://github.com/alangrafu/lodspeakr/wiki/Examples-how-to-use-haanga-in-lodspeakr'>several examples of Haanga in LODSPeaKr in the wiki</a>.</p>
         <p>Currently, LODSPeaKr supports 3 types of components. You can learn <a href='https://github.com/alangrafu/lodspeakr/wiki/Creating-components-in-LODSPeaKr'>how to create components</a> in the wiki.</p>
         <ul>
           <li><strong>Type components:</strong> Allow you to define how LODSPeaKr should expose data for instances of a certain class (for example all instances of <code>foaf:Person</code>).</li>
