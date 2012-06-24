@@ -1,0 +1,10 @@
+SELECT ?p ?o  WHERE {
+  {
+    GRAPH ?g{
+                <{{uri}}> ?p ?o.
+    }
+  }UNION{     
+                <{{uri}}> ?p ?o .
+  }
+}
+
