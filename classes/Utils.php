@@ -355,7 +355,7 @@ class Utils{
   	  	$lodspkObj = Convert::object_to_array($lodspk);
   	    $lodspk = $lodspkObj;
   	  }
-  	  
+  	  $query = Utils::addPrefixes($query);
   	  if($lodspk['transform_select_query']==true){
   	  	include_once($conf['home'].'lib/arc2/ARC2.php');
   	  	$parser = ARC2::getSPARQLParser();
@@ -418,10 +418,9 @@ class Utils{
 	  	  	$query = preg_replace('/select\n?.*\n?where/i', 'CONSTRUCT {'.$construct.'} WHERE', $query);
 	  	  }
 	  	}else {
-	  	  HTTPStatus::send500("invalid query: " . $parser->getErrors());
+	  	  HTTPStatus::send500("invalid query: " . var_export($parser->getErrors(), true)."\n\nQUERY:\n".$query);
 	  	}
 	  }
-  	  $query = Utils::addPrefixes($query);
   	  if($conf['debug']){
   	  	echo "\n-------------------------------------------------\nIn ".getcwd()."\n";
   	    echo "$modelFile (against ".$e->getSparqlUrl().")\n-------------------------------------------------\n\n";
