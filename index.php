@@ -59,6 +59,7 @@ if($uri == $conf['basedir']){
   exit(0);
 }
 
+
 //Configure external URIs if necessary
 if(isset($conf['mirror_external_uris']) && $conf['mirror_external_uris'] != false){
   $localUri = $conf['basedir'].$_GET['q'];
