@@ -59,7 +59,7 @@ $conf['session']['password'] = 'admin';
 $conf['modules'] = array();
 $conf['modules']['directory'] = 'classes/modules/';
 
-$conf['modules']['available'] = array('static','uri', 'type', 'service');
+$conf['modules']['available'] = array('static','uri', 'type', 'service', 'export');
 //Uncomment next line to enable sessions
 //$conf['modules']['available'] = array('session', 'static','uri', 'type', 'service');
 

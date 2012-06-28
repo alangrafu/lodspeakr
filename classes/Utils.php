@@ -1,7 +1,7 @@
 <? 
 
 class Utils{
-    
+  
   public static function uri2curie($uri){
   	global $conf;
   	$ns = $conf['ns'];
