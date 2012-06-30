@@ -41,6 +41,9 @@ class HTTPStatus{
     global $conf;
     global $lodspk;
     $lodspk['root'] = $conf['root'];
+  	$lodspk['home'] = $conf['basedir'];
+  	$lodspk['baseUrl'] = $conf['basedir'];
+  	$lodspk['ns'] = $conf['ns'];
   	$lodspk['this']['value'] = $uri;
   	$lodspk['this']['curie'] = Utils::uri2curie($uri);
   	$lodspk['this']['local'] = $localUri;
