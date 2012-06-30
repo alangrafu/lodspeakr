@@ -544,15 +544,15 @@ class Utils{
 	if(is_string($data)){
 	  echo($data);
 	}elseif(is_file($conf['home'].$view)){
-         try{
-	  Haanga::Load($viewFile, $vars);
-          }catch(Exception $e){
-echo '<pre>';
-           echo $e->getMessage();
-var_dump($vars);
-echo($e->getMessage()."' in ".$e->getFile().":".$e->getLine()."\nStack trace:\n".$e->getTraceAsString());
-echo '</pre>';
-         }
+	  try{
+	    Haanga::Load($viewFile, $vars);
+	  }catch(Exception $e){
+	    echo '<pre>';
+	    echo $e->getMessage();
+	    var_dump($vars);
+	    echo($e->getMessage()."' in ".$e->getFile().":".$e->getLine()."\nStack trace:\n".$e->getTraceAsString());
+	    echo '</pre>';
+	  }
 	}elseif($view == null){
 	  $fnc = Haanga::compile('{{models|safe}}');
 	  $fnc($vars, TRUE);
