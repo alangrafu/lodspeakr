@@ -9,6 +9,7 @@ $conf['endpoint']['dbpedia'] = 'http://dbpedia.org/sparql';
 $conf['endpoint']['logd'] = 'http://logd.tw.rpi.edu/sparql';
 
 $conf['metadata']['db']['location'] = 'meta/db.sqlite';
+$conf['httpStatus']['directory'] = 'components/status';
 
 include_once('namespaces.php');
 
@@ -33,10 +34,10 @@ $conf['http_accept']['json'] = array('application/json', 'application/x-javascri
 $conf['http_accept']['nt']   = array('text/plain');
 
 
-$conf['service']['prefix'] = 'services';
-
-$conf['type']['prefix'] = 'types';
-$conf['uri']['prefix'] = 'uris';
+$conf['service']['prefix']      = 'services';
+$conf['type']['prefix']         = 'types';
+$conf['uri']['prefix']          = 'uris';
+$conf['redirect']['prefix']     = 'redirect';
 
 //Frontpage when user goes to http://example.org/
 $conf['root'] = 'index.html';
