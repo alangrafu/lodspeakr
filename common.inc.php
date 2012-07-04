@@ -1,5 +1,5 @@
 <?
-$conf['version'] = '20120630';
+$conf['version'] = '20120704';
 $conf['output']['select'] = 'json';
 $conf['output']['ask'] = 'json';
 $conf['output']['describe'] = 'rdf';
