@@ -240,14 +240,17 @@ class Utils{
   
   public static function getResultsType($query){
   	global $conf;
+  	global $uri;
   	if(preg_match("/select/i", $query)){
   	  return $conf['output']['select'];
   	}elseif(preg_match("/describe/i", $query)){
   	  return $conf['output']['describe'];
   	}elseif(preg_match("/construct/i", $query)){
   	  return $conf['output']['describe'];
+  	}elseif(preg_match("/ask/i", $query)){
+  	  return $conf['output']['ask'];
   	}else{
-  	  HTTPStatus::send500(null);
+  	  HTTPStatus::send500($uri);
   	} 
   }
   
@@ -257,7 +260,7 @@ class Utils{
   	global $lodspk;
   	global $endpoints;
   	global $results;
-  	$strippedModelDir = str_replace('endpoint.', '', $modelDir); 	  
+  	$strippedModelDir = str_replace('endpoint.', '', $modelDir); 	
   	$lodspk['model'] = $modelDir;
   	$originalDir = getcwd();
   	$subDirs= array();
@@ -324,7 +327,7 @@ class Utils{
   	global $lodspk;
   	global $results;
   	global $firstResults;
-	$uri = $lodspk['this']['value'];
+  	global $uri;
   	$data = array();
   	$strippedModelFile = str_replace('endpoint.', '', str_replace('.query', '',$modelFile)); 	  
  	if(!is_dir($modelFile)){
@@ -583,7 +586,7 @@ class Utils{
   	return $triples;
   }
   
-  private static function addPrefixes($q){
+  public static function addPrefixes($q){
     global $conf;
     $matches = array();
     $visited = array();

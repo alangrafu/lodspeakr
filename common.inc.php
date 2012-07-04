@@ -1,6 +1,7 @@
 <?
 $conf['version'] = '20120630';
 $conf['output']['select'] = 'json';
+$conf['output']['ask'] = 'json';
 $conf['output']['describe'] = 'rdf';
 $conf['endpointParams']['config']['show_inline'] = 0;
 $conf['endpointParams']['config']['named_graph'] = '';
@@ -19,7 +20,7 @@ $conf['model']['default'] = 'rdfs:Resource';
 
 $conf['view']['directory'] = 'components'; #include trailing slash!
 $conf['view']['extension'] = '.view';
-$conf['view']['default'] = 'rdfs:Resource';
+$conf['view']['default'] = 'rdfs:Resource';       
 
 $conf['static']['directory'] = 'static/'; #include trailing slash!
 $conf['static']['haanga'] = false; //Should static files be processed by Haanga? 
@@ -38,6 +39,8 @@ $conf['service']['prefix']      = 'services';
 $conf['type']['prefix']         = 'types';
 $conf['uri']['prefix']          = 'uris';
 $conf['redirect']['prefix']     = 'redirect';
+$conf['sparqlFilter']['prefix']     = 'sparqlFilter';
+$conf['sparqlFilter']['filterFileName']     = 'filter.query';
 
 //Frontpage when user goes to http://example.org/
 $conf['root'] = 'index.html';
@@ -60,7 +63,12 @@ $conf['session']['password'] = 'admin';
 $conf['modules'] = array();
 $conf['modules']['directory'] = 'classes/modules/';
 
-$conf['modules']['available'] = array('static','uri', 'type', 'service');//, 'export');
+$conf['modules']['available'] = array('static','uri', 'type', 'service');
+
+
+//To add sparqlFilter module, copy the following line in your settings.inc.php
+//$conf['modules']['available'] = array('static','uri', 'sparqlFilter', 'type', 'service');
+
 //Uncomment next line to enable sessions
 //$conf['modules']['available'] = array('session', 'static','uri', 'type', 'service');
 

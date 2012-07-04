@@ -16,7 +16,6 @@ class Endpoint{
         if($output != null){
           $this->params['output'] = $output;
         }
-
         if($output == 'xml'){
           $accept = 'application/sparql-results+xml';
         }elseif($output == 'rdf'){
