@@ -103,7 +103,7 @@ class ServiceModule extends abstractModule{
   	  $results['params'] = $params;
   	  
   	  
-  	  $lodspk['home'] = $conf['ns']['local'];
+  	  $lodspk['home'] = $conf['basedir'];
   	  $lodspk['baseUrl'] = $conf['basedir'];
   	  $lodspk['module'] = 'service';
   	  $lodspk['root'] = $conf['root'];
