@@ -111,7 +111,8 @@ class ServiceModule extends abstractModule{
   	  $lodspk['ns'] = $conf['ns'];  	  	
   	  $lodspk['this']['value'] = $uri;
   	  $lodspk['this']['curie'] = Utils::uri2curie($uri);
-  	  $lodspk['this']['local'] = $localUri;  	
+  	  $lodspk['local']['value'] = $localUri;
+  	  $lodspk['local']['curie'] = Utils::uri2curie($localUri);
   	  $lodspk['contentType'] = $acceptContentType;
   	  $lodspk['endpoint'] = $conf['endpoint'];
   	  

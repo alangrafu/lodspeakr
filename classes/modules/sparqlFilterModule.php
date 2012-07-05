@@ -107,7 +107,8 @@ public function execute($pair){
   	$lodspk['add_mirrored_uris'] = true;
   	$lodspk['this']['value'] = $uri;
   	$lodspk['this']['curie'] = Utils::uri2curie($uri);
-  	$lodspk['this']['local'] = $localUri;
+  	$lodspk['local']['value'] = $localUri;
+  	$lodspk['local']['curie'] = Utils::uri2curie($localUri);
    	$lodspk['this']['extension'] = $extension;
   	//chdir($conf['home'].$conf['model']['directory']);
   	

@@ -40,7 +40,8 @@ class StaticModule extends abstractModule{
 	    $lodspk['ns'] = $conf['ns'];  	  	
 	    $lodspk['this']['value'] = $localUri;
 	    $lodspk['this']['curie'] = Utils::uri2curie($localUri);
-	    $lodspk['this']['local'] = $localUri;  	
+  	  $lodspk['local']['value'] = $localUri;
+  	  $lodspk['local']['curie'] = Utils::uri2curie($localUri);
 	    $lodspk['contentType'] = $acceptContentType;
 	    $lodspk['endpoint'] = $conf['endpoint'];	    
 	    $lodspk['type'] = $modelFile;
