@@ -10,7 +10,7 @@
     <link rel="alternate" type="text/turtle" title="Turtle Version" href="{{lodspk.local.value}}.ttl" />
     <link rel="alternate" type="text/plain" title="N-Triples Version" href="{{lodspk.local.value}}.nt" />
     <link rel="alternate" type="application/json" title="RDFJSON Version" href="{{lodspk.local.value}}.json" />
-    <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css" media="screen" />
+    <link href="{{lodspk.home}}css/bootstrap.min.css" rel="stylesheet" type="text/css" media="screen" />
     <style>
       body {
         padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
@@ -22,10 +22,10 @@
         background-position: right;
       }
     </style>
-    <link href="css/bootstrap-responsive.min.css" rel="stylesheet" type="text/css" media="screen" />
-    <script type="text/javascript" src="js/jquery.js"></script>
-    <script type="text/javascript" src="js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="js/bootstrap-typeahead.js"></script>
+    <link href="{{lodspk.home}}css/bootstrap-responsive.min.css" rel="stylesheet" type="text/css" media="screen" />
+    <script type="text/javascript" src="{{lodspk.home}}js/jquery.js"></script>
+    <script type="text/javascript" src="{{lodspk.home}}js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="{{lodspk.home}}js/bootstrap-typeahead.js"></script>
     <script type="text/javascript">
     $(document).ready(function(){
         $('.typeahead').typeahead({
