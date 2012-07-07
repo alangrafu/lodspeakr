@@ -20,6 +20,9 @@ class Haanga_Extension_Filter_Googlemaps{
   	if($names[4] != null && $names[4] != ""){
   	  $h = $names[4];
   	}
+  	if($names[5] != null && $names[4] != ""){
+  	  $z = $names[4];
+  	}
   	
   	foreach($obj as $k){
   	  if(!$firstColumn){
@@ -46,14 +49,16 @@ class Haanga_Extension_Filter_Googlemaps{
   	  $nameArr .= '"'.$k->$names[2]->value.'"';
   	  $firstColumn = false;
   	}
-  	
+        $zoom = 4;
+        if($z != null){$zoom = $z}
+	
   	$pre = "<div id='map_canvas_".$randId."' style='width: ".$w."px; height: ".$h."px'></div><script type='text/javascript'
   	src='http://maps.googleapis.com/maps/api/js?sensor=false'></script>
     <script type='text/javascript'>
     //<![CDATA[
     function initialize() {
 	  var myOptions = {
-	  zoom: 4,
+	  zoom: ".$zoom.",
 	  center: new google.maps.LatLng(0, 0),
 	  mapTypeId: google.maps.MapTypeId.ROADMAP
 	  };
