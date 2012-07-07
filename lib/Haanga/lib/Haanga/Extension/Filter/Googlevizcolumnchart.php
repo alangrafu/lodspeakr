@@ -25,15 +25,15 @@ class Haanga_Extension_Filter_GoogleVizColumnChart{
   	  $i++;
   	  $j=0;
   	}
-  	
-  	$pre = "<div id='columnchart_div'></div><script type='text/javascript' src='https://www.google.com/jsapi'></script>
+  	$divId = uniqid("columnchart_div");
+  	$pre = "<div id='".$divId."'></div><script type='text/javascript' src='https://www.google.com/jsapi'></script>
     <script type='text/javascript'>
     google.load('visualization', '1', {packages:['corechart']});
     google.setOnLoadCallback(drawChart);
     function drawChart() {
     var data = new google.visualization.DataTable();
     data.addRows(".$i.");\n
-".$data."    var columnchart = new google.visualization.ColumnChart(document.getElementById('columnchart_div'));
+".$data."    var columnchart = new google.visualization.ColumnChart(document.getElementById('".$divId."'));
 columnchart.draw(data, {showRowNumber: true, width: '80%'});
     }
     </script>";
