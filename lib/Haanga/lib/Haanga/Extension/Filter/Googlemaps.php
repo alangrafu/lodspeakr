@@ -13,7 +13,7 @@ class Haanga_Extension_Filter_Googlemaps{
   	$latArr =""; $longArr=""; $nameArr = "";
   	$w = "400";
   	$h = "300";
-  	$zoom = "10";
+  	$zoom = "4";
   	if($names[3] != null && $names[3] != ""){
   	  $w = $names[3];
   	}

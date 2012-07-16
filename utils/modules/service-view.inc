@@ -16,7 +16,7 @@
         padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
       }
       .wait{
-        background-image:url('img/wait.gif');
+        background-image:url('{{lodspk.home}}img/wait.gif');
         background-repeat:no-repeat;
         padding-right:20px;
         background-position: right;
@@ -31,7 +31,7 @@
         $('.typeahead').typeahead({
             source: function (typeahead, query) {
               $('.typeahead').addClass('wait');[]
-              return $.get('search/'+encodeURIComponent(query), { }, function (data) {
+              return $.get('{{lodspk.home}}search/'+encodeURIComponent(query), { }, function (data) {
                   $('.typeahead').removeClass('wait');[]
                   return typeahead.process(data);
               }, 'json');
