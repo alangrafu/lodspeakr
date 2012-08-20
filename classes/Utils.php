@@ -87,7 +87,10 @@ class Utils{
   	  	  	  $row[$k]['uri'] = 1;
   	  	  	}elseif($v['type'] == 'bnode'){
   	  	  	  $row[$k]['curie'] = 'blankNode';
+  	  	  	  $row[$k]['blank'] = 1;
   	  	  	}else{
+  	  	  	  $row[$k]['literal'] = 1;
+  	  	  	  $row[$k]['curie'] = $v['value'];
   	  	  	  if($v['datatype']){
   	  	  	    $row[$k]['type'] = $v['datatype'];
   	  	  	  }

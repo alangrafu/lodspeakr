@@ -71,7 +71,7 @@
     <div class="container">
     <h1>Default view</h1>
 
-    <table class="table table-striped">
+    <table class="table table-striped" about="{{uri}}">
     <thead>
       <tr><th>Subject</th><th>Predicate</th><th>Object</th></tr>
     </thead>
@@ -82,9 +82,11 @@
      
         <td>
         {%if row.o.uri == 1%}
-        <a rev='[{{row.p.curie}}]' href='{{row.o.value}}'>{{row.o.curie}}</a>
+        <a rel='{{row.p.value}}' href='{{row.o.value}}'>{{row.o.curie}}</a>
+        {%elif row.o.blank == 1%}
+        <a rel='{{row.p.value}}' href='{{row.o.value}}'>{{row.o.curie}}</a>
         {%else%}
-        {{row.o.value}}
+        <span property='{{row.p.value}}'>{{row.o.value}}</span>
         {%endif%}
         </td>
 
@@ -95,7 +97,7 @@
       <tr>
         <td><a href='{{row.s.value}}'>{{row.s.curie}}</a></td>
 
-        <td><a rel='{{row.s.curie}}' href='{{row.p.value}}'>{{row.p.curie}}</a></td>
+        <td><a rev='{{row.s.value}}' href='{{row.p.value}}'>{{row.p.curie}}</a></td>
 <td>{%if forloop.first%}<a href='{{lodspk.this.value}}'>{{lodspk.this.curie}}</a>{%endif%}</td>
         </tr>
     {% endfor %}
