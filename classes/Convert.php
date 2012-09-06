@@ -1,4 +1,4 @@
-<?
+<?php
 //Based (but corrected) from http://www.php.net/manual/en/language.types.object.php#102735
 
 final class Convert {

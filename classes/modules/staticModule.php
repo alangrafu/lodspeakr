@@ -1,4 +1,5 @@
-<?
+<?php
+
 require_once('abstractModule.php');
 class StaticModule extends abstractModule{
   //Static module

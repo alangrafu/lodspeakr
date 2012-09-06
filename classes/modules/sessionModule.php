@@ -1,4 +1,5 @@
-<?
+<?php
+
 require_once('abstractModule.php');
 class SessionModule extends abstractModule{
   //Session module

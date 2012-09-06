@@ -1,4 +1,5 @@
-<?
+<?php
+
 abstract class AbstractModule{
   
   abstract protected function match($uri);

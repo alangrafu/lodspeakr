@@ -1,4 +1,4 @@
-<?
+<?php
 
 class Queries{
   public static function uriExist($uri, $e){

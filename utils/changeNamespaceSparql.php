@@ -1,4 +1,4 @@
-<?
+<?php
 /*
 Simple proxy Sparql changer 
 for "translating" the query and results from one namespace to another.

@@ -1,4 +1,5 @@
-<?
+<?php
+
 define("LS", "http://lodspeakr.org/lda/");
 define("SKOS", "http://www.w3.org/2004/02/skos/core#");
 define("RDF", "http://www.w3.org/1999/02/22-rdf-syntax-ns#");

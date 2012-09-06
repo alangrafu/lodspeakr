@@ -1,4 +1,5 @@
-<?
+<?php
+
 require_once('abstractModule.php');
 class ExportModule extends abstractModule{
   private $serialization;

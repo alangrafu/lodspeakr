@@ -1,4 +1,5 @@
-<?
+<?php
+
 //Import
 if($_GET['q'] == 'import'){
   include_once('classes/Importer.php');
