@@ -84,6 +84,7 @@ class Utils{
   	  	  	$row[$k]['value'] = $v['value'];
   	  	  	if($v['type'] == 'uri'){
   	  	  	  $row[$k]['curie'] = Utils::uri2curie($v['value']);
+  	  	  	  $row[$k]['localname'] = array_pop(explode(":",$row[$k]['curie']));  	  	  	  
   	  	  	  $row[$k]['uri'] = 1;
   	  	  	}elseif($v['type'] == 'bnode'){
   	  	  	  $row[$k]['curie'] = 'blankNode';
