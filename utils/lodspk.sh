@@ -15,7 +15,12 @@ USAGE=$USAGE" Backup current installation:\t\t\t\t$0 backup\n"
 USAGE=$USAGE" Restore previous installation:\t\t\t\t$0 restore\n"
 USAGE=$USAGE"\n===ENDPOINT MANAGEMENT==\n"
 USAGE=$USAGE" Add endpoint:\t\t\t\t\t\t$0 add endpoint prefix http://example.com/sparql\n"
+USAGE=$USAGE" Remove endpoint:\t\t\t\t\t$0 remove endpoint prefix \n"
 USAGE=$USAGE" List endpoints:\t\t\t\t\t$0 list endpoints\n"
+USAGE=$USAGE"\n===NAMESPACE MANAGEMENT==\n"
+USAGE=$USAGE" Add namespace:\t\t\t\t\t\t$0 add namespace prefix http://example.com/sparql\n"
+USAGE=$USAGE" Remove namespace:\t\t\t\t\t$0 remove namespace prefix \n"
+USAGE=$USAGE" List namespaces:\t\t\t\t\t$0 list namespaces\n"
 USAGE=$USAGE"\n===VERSION==\n"
 USAGE=$USAGE" Version:\t\t\t\t\t\t$0 version\n"
 USAGEDEBUG="Usage: $0 debug on|off"
@@ -241,7 +246,7 @@ fi
 
 ## List
 if [[ $currentOperation == "list" ]]; then
-  listOperation=( endpoints modules components )
+  listOperation=( endpoints modules components namespaces )
   if [[ ${listOperation[@]} =~ $2 && $2 != "" ]]
   then
     listOperation=$2
