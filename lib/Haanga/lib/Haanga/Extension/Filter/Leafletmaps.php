@@ -1,6 +1,6 @@
 <?php
 
-class Haanga_Extension_Filter_Googlemaps{
+class Haanga_Extension_Filter_Leafletmaps{
   public $is_safe = TRUE;
   static function main($obj, $varname){
   	$data = "";
@@ -48,47 +48,41 @@ class Haanga_Extension_Filter_Googlemaps{
   	  $firstColumn = false;
   	  array_push($points, $currentPoint);
   	}
-  	$pre = "<div style='width:".$w."px;height:".$h."px;'><div id='map_canvas' style='height:100%;width:100%;border: 1px solid #333;' ></div></div>
-    <script src='https://maps.googleapis.com/maps/api/js?sensor=false'></script>
-    <script type='text/javascript'>
+  	
+  	$centerLat = ($south+$north)/2;
+  	$centerLon = ($east+$west)/2;
+  	$pre = "<div id='map_$randId' style='height: 580px;'></div>
+  	<script src='http://cdn.leafletjs.com/leaflet-0.4/leaflet.js'></script>
+  	<script type='text/javascript'>
     //<![CDATA[
+    
+    function loadCssFile() {
+     var fileref=document.createElement('link');
+     fileref.setAttribute('rel', 'stylesheet');
+     fileref.setAttribute('type', 'text/css');
+     fileref.setAttribute('href', 'http://cdn.leafletjs.com/leaflet-0.4/leaflet.css');
+     document.getElementsByTagName('head')[0].appendChild(fileref);
+    }
+    
+    
     function initialize_$randId() {
-	  
-	  var southWest = new google.maps.LatLng(".$south.", ".$west.");
-	  var northEast = new google.maps.LatLng(".$north.", ".$east.");
-	  
-	  
-	  var lngSpan = southWest.lng() - northEast.lng();
-	  var latSpan = southWest.lat() + northEast.lat();
-	  var locations = ".json_encode($points).";
-	  
-	  var mapOptions = ".json_encode($options).";
-	  mapOptions.mapTypeId= google.maps.MapTypeId.ROADMAP;
-	  
-    var map = new google.maps.Map(document.getElementById('map_canvas'),mapOptions); 
-	  var bounds = new google.maps.LatLngBounds(southWest, northEast);
-	  map.fitBounds(bounds);
+ 	   var locations = ".json_encode($points).";	  
+	   var mapOptions = ".json_encode($options).";
+	   mapOptions.attribution = osmAttrib;
+	   
+	   map = new L.Map('map_$randId');
+	   var osmUrl='http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+	   var osmAttrib='Map data &copy; <a href=\"http://openstreetmap.org\">OpenStreetMap</a> contributors';
+	   var osm = new L.TileLayer(osmUrl, mapOptions );			
+	   map.setView([$centerLat, $centerLon],mapOptions.zoom);
+	   map.addLayer(osm);
+	   
+	   for(var i=0;i<locations.length;i++){
+	     L.marker([locations[i].lat, locations[i].long]).addTo(map).bindPopup(locations[i].label)
+	   }
+	  }
 
-    var infowindow = new google.maps.InfoWindow();
-
-    var marker, i;
-
-    for (i = 0; i < locations.length; i++) {  
-      marker = new google.maps.Marker({
-        position: new google.maps.LatLng(locations[i].lat, locations[i].long),
-        title: locations[i].label,
-        map: map
-      });
-
-      google.maps.event.addListener(marker, 'click', (function(marker, i) {
-        return function() {
-          infowindow.setContent('<p>'+locations[i].label+'</p>')
-          infowindow.open(map, marker);
-        }
-      })(marker, i));
-    }
-	  
-    }
+//    loadCssFile();
     initialize_$randId();
     //]]>
     </script>";

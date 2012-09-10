@@ -5,18 +5,15 @@ class Haanga_Extension_Filter_GoogleVizPieChart{
   static function main($obj, $varname){
   	$data = "";
   	$i = 0;
+    $options = array();
   	$randId = rand();
   	$firstColumn = true;
   	$names = explode(",", $varname);
   	$w = "400";
-  	$h = "300";
+  	$h = "400";
   	
-  	if($names[3] != null && $names[3] != ""){
-  	  $w = $names[3];
-  	}
-  	if($names[4] != null && $names[4] != ""){
-  	  $h = $names[4];
-  	}
+  	$options['width'] = $w;
+  	$options['height'] = $h;
   	
   	$data .= "data.addColumn('string', '".$names[0]."');";
     $data .= "data.addColumn('number', '".$names[1]."');";
@@ -25,16 +22,25 @@ class Haanga_Extension_Filter_GoogleVizPieChart{
   	  $data .="        data.setCell($i, 1, ".$k->$names[1]->value.");\n";
   	  $i++;
   	}
+
+    //Getting options
+    for($j=2; $j < count($names); $j++){
+      $pair = explode("=", $names[$j]);
+      $key = trim($pair[0], "\" '");
+      $value = trim($pair[1], "\" '");
+      $options[$key] = $value;     
+    }
   	
-  	$pre = "<div id='piechart_div_".$randId."' style='width: ".$w."px; height: ".$h."px'></div><script type='text/javascript' src='https://www.google.com/jsapi'></script>
+  	$pre = "<div id='piechart_div_".$randId."'></div><script type='text/javascript' src='https://www.google.com/jsapi'></script>
     <script type='text/javascript'>
+    var options_$randId = ".json_encode($options)."; 
     google.load('visualization', '1', {packages:['corechart']});
     google.setOnLoadCallback(drawChart_".$randId.");
     function drawChart_".$randId."() {
     var data = new google.visualization.DataTable();
     data.addRows(".$i.");\n
     ".$data."    var piechart = new google.visualization.PieChart(document.getElementById('piechart_div_".$randId."'));
-    piechart.draw(data);
+    piechart.draw(data, options_$randId);
     }
     </script>";
     return $pre;

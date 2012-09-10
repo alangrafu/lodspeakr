@@ -1,6 +1,6 @@
 <?php
 
-class Haanga_Extension_Filter_GoogleVizColumnChart{
+class Haanga_Extension_Filter_GoogleVizScatterChart{
   public $is_safe = TRUE;
   static function main($obj, $varname){
   	$data = "";
@@ -18,17 +18,13 @@ class Haanga_Extension_Filter_GoogleVizColumnChart{
   	  }
   	  $fieldCounter++;
   	  $columnType = 'number';
-  	  if($firstColumn){
-  	  	$columnType = 'string';
-  	  	$firstColumn = false;
-  	  }
   	  array_push($varList, $v);
   	  $data .= "        data.addColumn('".$columnType."', '".$v."');\n";
   	}
 
   	foreach($obj as $k){  	  
   	  foreach($varList as $v){
-  	    $value = ($j==0)?"'".$k->$v->value."'":$k->$v->value;
+  	    $value = $k->$v->value;
   	  	$data .="        data.setCell($i, $j, ".$value.");\n";
   	  	$j++;
   	  } 
@@ -56,8 +52,8 @@ class Haanga_Extension_Filter_GoogleVizColumnChart{
     function drawChart() {
     var data = new google.visualization.DataTable();
     data.addRows(".$i.");\n
-".$data."    var columnchart = new google.visualization.ColumnChart(document.getElementById('".$divId."'));
-columnchart.draw(data, options_$divId);
+".$data."    var barchart = new google.visualization.ScatterChart(document.getElementById('".$divId."'));
+barchart.draw(data, options_$divId);
     }
     </script>";
     return $pre;
