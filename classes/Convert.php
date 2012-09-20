@@ -96,9 +96,9 @@ final class Convert {
          }
          $pointer = $lodspk['baseUrl'].'lodspeakr/components/'.$conf[$lodspk['module']]['prefix']."/".$lodspk['componentName']."/queries/".$aux.".query";
          if(isset($lodspk['source'][$key])){
-          $lodspk['source'][$key] = array_merge($lodspk['source'][$key], $root);
+          $lodspk['queries'][$key] = array_merge($lodspk['source'][$key], $root);
          }else{
-           $lodspk['source'][$key] = $root;
+           $lodspk['queries'][$key] = $root;
          }
       }
     }
