@@ -540,9 +540,9 @@ class Utils{
   	  'cache_dir' => $conf['home'].'cache/',
   	  ));
   	$models = $data;
+  	Convert::getPaths($models, "");
   	$first = $lodspk['firstResults'];
   	unset($lodspk['firstResults']);
-  	$lodspk = $lodspk;
   	//unset($lodspk);
   	$vars = compact('uri','lodspk', 'models', 'first');
  	if($conf['debug']){

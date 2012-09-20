@@ -33,6 +33,7 @@ class ServiceModule extends abstractModule{
   	$lodspk['model'] = $conf['model']['directory'].'/'.$conf['service']['prefix'].'/'.$qArr[0].'/';
   	$lodspk['view'] = $conf['view']['directory'].'/'.$conf['service']['prefix'].'/'.$qArr[0].'/'.$extension.'.template';
   	$lodspk['serviceName'] = $qArr[0];
+  	$lodspk['componentName'] = $qArr[0];
   	$modelFile = $lodspk['model'].$extension.'.queries';
   	if(file_exists($lodspk['model'].$extension.'.queries')){
   	  if(!file_exists($lodspk['view'])){

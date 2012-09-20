@@ -138,6 +138,7 @@ class TypeModule extends abstractModule{
   	  $auxViewFile  = $conf['view']['directory'].'/'.$conf['type']['prefix'].'/'.$v.'/'.$extension.'.template';
   	  $auxModelFile = $conf['model']['directory'].'/'.$conf['type']['prefix'].'/'.$v.'/'.$extension.'.queries';
   	  if($v == null){continue;}
+  	  $lodspk['componentName'] = $v;
   	  if(file_exists($auxModelFile)){
   	  	$objResult['modelFile'] = $auxModelFile;//$conf['type']['prefix'].'/'.$v.'/'.$extensionModel.'queries';
   	  	if(file_exists($auxViewFile)){

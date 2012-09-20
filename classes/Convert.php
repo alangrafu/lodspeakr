@@ -69,5 +69,41 @@ final class Convert {
   	
   	return $aRetAr;
   }
+  
+  
+  static public function getPaths ($r, $path, $results) {
+    global $lodspk;
+    global $conf;
+    $arr = array();
+    foreach($r as $k => $v){
+      if($k == "params" ){
+        continue;
+      }
+      if($k == "0"){//if query
+        return NULL;
+      }
+      $next = self::getPaths($r->$k, $path."endpoint.".$k."/", $arr);
+      if($next == NULL){
+         $aux = $path.$k;
+         $root = array();
+         $pointer = &$root;
+         $aux2 = explode("/", $aux);
+         $key = str_ireplace("endpoint.", "", array_shift($aux2));
+         foreach($aux2 as $w){
+           $x = str_ireplace("endpoint.", "", $w);
+           $pointer[$x] = array();
+           $pointer = &$pointer[$x];
+         }
+         $pointer = $lodspk['baseUrl'].'lodspeakr/components/'.$conf[$lodspk['module']]['prefix']."/".$lodspk['componentName']."/queries/".$aux.".query";
+         if(isset($lodspk['source'][$key])){
+          $lodspk['source'][$key] = array_merge($lodspk['source'][$key], $root);
+         }else{
+           $lodspk['source'][$key] = $root;
+         }
+      }
+    }
+    return 1;
+  }
+
 }
 ?>
