@@ -25,8 +25,9 @@ class StaticModule extends abstractModule{
   	global $acceptContentType;
   	global $endpoints;
   	global $lodspk;  	
-  	
-  	header("Content-type: ");
+  	$extension = array_pop(explode(".", $file));
+  	$ct = $this->getContentType($extension);
+  	header("Content-type: ".$ct);
   	$uri = $localUri;
   	if($conf['debug']){
   	  echo "\n-------------------------------------------------\nIn ".$conf['static']['directory']."\n";
@@ -53,6 +54,33 @@ class StaticModule extends abstractModule{
   	}else{
   	  echo file_get_contents($conf['static']['directory'].$file);
   	}
+  }
+  
+  private function getContentType($e){
+    $contentTypes = array('html' => 'text/html',
+                          'css'  => 'text/css',
+                          'js'   => 'application/javascript',
+                          'json' => 'application/json',
+                          'nt'   => 'text/plain',
+                          'ttl'  => 'text/turtle',
+                          'png'  => 'image/png',
+                          'jpg'  => 'image/jpeg',
+                          'gif'  => 'image/gif',
+                          'bmp'  => 'image/bmp',
+                          'pdf'  => 'application/pdf',
+                          'zip'  => 'application/zip',
+                          'gz'   => 'application/gzip'
+                          );
+    
+   //Add new/override existing mime types defined by user
+   foreach($conf['static']['mimetypes'] as $k => $v){
+     $contentTypes[$k] = $v;
+   }
+   
+   if(isset($contentTypes[$e])){
+     return $contentTypes[$e];
+   }
+   return ""; //empty string seems to work fine with browsers
   }
   
   
