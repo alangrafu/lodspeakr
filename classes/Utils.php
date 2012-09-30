@@ -422,7 +422,7 @@ class Utils{
 	  	  	  HTTPStatus::send500();
 	  	  	}
 	  	  }else{
-	  	  	$query = preg_replace('/select\n?.*\n?where/i', 'CONSTRUCT {'.$construct.'} WHERE', $query);
+	  	  	$query = preg_replace('/select\s*.*\s*(where)?/i', 'CONSTRUCT {'.$construct.'} WHERE', $query);
 	  	  }
 	  	}else {
 	  	  //HTTPStatus::send500("invalid query: " . var_export($parser->getErrors(), true)."\n\nQUERY:\n".$query);
