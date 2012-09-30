@@ -422,7 +422,8 @@ class Utils{
 	  	  	  HTTPStatus::send500();
 	  	  	}
 	  	  }else{
-	  	  	$query = preg_replace('/select\s*.*\s*(where)?\s*{/i', 'CONSTRUCT {'.$construct.'} WHERE{', $query);
+	  	    echo $query;
+	  	  	$query = preg_replace('/select\s*[^{]*\s*(where)?\s*{/i', 'CONSTRUCT {'.$construct.'} WHERE{', $query);
 	  	  }
 	  	}else {
 	  	  return;
