@@ -8,12 +8,25 @@ class Haanga_Extension_Filter_GoogleVizTable{
   	$j = 0;
   	$randId = rand();
   	$names = explode(",", $varname);
+  	$varList = array();
   	foreach($names as $v){
-  	  $data .= "        data.addColumn('string', '".$v."');\n";
+  	  $variable['name'] = $v;
+  	  $variable['value'] = 'value';
+  	  if(strpos($v, ".")){
+  	    $aux = explode(".", $v);
+  	    $variable['name'] = $aux[0];
+  	    $variable['value'] = $aux[1];
+  	  }
+  	  array_push($varList, $variable);
+  	  $data .= "        data.addColumn('string', '".$variable['name']."');\n";
   	}
+  	
+  	
   	foreach($obj as $k){  	  
-  	  foreach($names as $v){
-  	  	$data .="        data.setCell($i, $j, '".$k->$v->value."');\n";
+  	  foreach($varList as $v){
+  	    $name = $v['name'];
+  	    $val = $v['value'];
+  	  	$data .="        data.setCell($i, $j, '".$k->$name->$val."');\n";
   	  	$j++;
   	  } 
   	  $i++;

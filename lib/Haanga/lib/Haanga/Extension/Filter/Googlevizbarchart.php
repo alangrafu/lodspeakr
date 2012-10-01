@@ -16,19 +16,28 @@ class Haanga_Extension_Filter_GoogleVizBarChart{
   	  if(strpos($v,"=")){
   	    break;
   	  }
+  	  $variable['name'] = $v;
+  	  $variable['value'] = 'value';
+  	  if(strpos($v, ".")){
+  	    $aux = explode(".", $v);
+  	    $variable['name'] = $aux[0];
+  	    $variable['value'] = $aux[1];
+  	  }
   	  $fieldCounter++;
   	  $columnType = 'number';
   	  if($firstColumn){
   	  	$columnType = 'string';
   	  	$firstColumn = false;
   	  }
-  	  array_push($varList, $v);
-  	  $data .= "        data.addColumn('".$columnType."', '".$v."');\n";
+  	  array_push($varList, $variable);
+  	  $data .= "        data.addColumn('".$columnType."', '".$variable['name']."');\n";
   	}
 
   	foreach($obj as $k){  	  
   	  foreach($varList as $v){
-  	    $value = ($j==0)?"'".$k->$v->value."'":$k->$v->value;
+  	    $name = $v['name'];
+  	    $val = $v['value'];
+  	    $value = ($j==0)?"'".$k->$name->$val."'":$k->$name->$val;
   	  	$data .="        data.setCell($i, $j, ".$value.");\n";
   	  	$j++;
   	  } 
