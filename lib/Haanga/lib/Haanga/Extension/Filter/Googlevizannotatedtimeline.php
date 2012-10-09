@@ -13,9 +13,17 @@ class Haanga_Extension_Filter_GoogleVizAnnotatedTimeline{
   	$fieldCounter=0;
   	$varList = array();
   	foreach($names as $v){
+  	  $variable['name'] = $v;
+  	  $variable['value'] = 'value';
   	  if(strpos($v,"=")){
   	    break;
   	  }
+  	  if(strpos($v, ".")){
+  	    $aux = explode(".", $v);
+  	    $variable['name'] = $aux[0];
+  	    $variable['value'] = $aux[1];
+  	  }
+  	  array_push($varList, $variable);
   	  
   	  $columnType = 'number';
 
@@ -26,18 +34,20 @@ class Haanga_Extension_Filter_GoogleVizAnnotatedTimeline{
   	    $columnType = 'string';
   	  }
   	  array_push($varList, $v);
-  	  $data .= "        data.addColumn('".$columnType."', '".$v."');\n";
+  	  $data .= "        data.addColumn('".$columnType."', '".$variable['name']."');\n";
   	  $fieldCounter++;
   	}
 
   	foreach($obj as $k){  	  
   	  $j=0;
   	  foreach($varList as $v){
-  	    $value = $k->$v->value;
+  	    $name = $v['name'];
+  	    $val = $v['value'];
+  	    $value = $k->$name->$val."ASDASD";
   	    if($j==0){
-  	      $value = "new Date(".date("Y, m, d", strtotime($k->$v->value)).")";
-  	    }elseif(($j - 2) %3 == 0 || ($j - 3) %3 == 0){
-  	      $value = "'".$k->$v->value."'";
+  	      $value = "new Date(".date("Y, m, d", strtotime($k->$name->$val)).")";
+  	    }elseif($j-2>=0 && (($j - 2) %3 == 0 || ($j - 3) %3 == 0)){
+  	      $value = "'".$k->$name->$val."'";
   	    }
   	  	$data .="        data.setCell($i, $j, ".$value.");\n";
   	  	$j++;

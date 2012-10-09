@@ -1,6 +1,6 @@
 <?php
 
-$conf['version'] = '20120910';
+$conf['version'] = '20120704';
 $conf['output']['select'] = 'json';
 $conf['output']['ask'] = 'json';
 $conf['output']['describe'] = 'rdf';
@@ -73,6 +73,7 @@ $conf['modules']['available'] = array('static','uri', 'type', 'service');
 //Uncomment next line to enable sessions
 //$conf['modules']['available'] = array('session', 'static','uri', 'type', 'service');
 
+$conf['admin']['pass'] = 'admin';
 
 global $lodspk;
 include_once('settings.inc.php');
