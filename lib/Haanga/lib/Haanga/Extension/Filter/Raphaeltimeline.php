@@ -1,6 +1,6 @@
 <?php
 
-class Haanga_Extension_Filter_GoogleVizColumnChart{
+class Haanga_Extension_Filter_RaphaelTimeline{
   public $is_safe = TRUE;
   static function main($obj, $varname){
   	$data = "";
@@ -16,39 +16,40 @@ class Haanga_Extension_Filter_GoogleVizColumnChart{
   	  if(strpos($v,"=")){
   	    break;
   	  }
-  	  $variable['name'] = $v;
-  	  $variable['value'] = 'value';
-  	  if(strpos($v, ".")){
-  	    $aux = explode(".", $v);
-  	    $variable['name'] = $aux[0];
-  	    $variable['value'] = $aux[1];
-  	  }
-  	  $fieldCounter++;
+  	  
   	  $columnType = 'number';
+
   	  if($firstColumn){
-  	  	$columnType = 'string';
+  	  	$columnType = 'date';
   	  	$firstColumn = false;
+  	  }elseif(($fieldCounter - 2) %3 == 0 || ($fieldCounter - 3) %3 == 0){
+  	    $columnType = 'string';
   	  }
-  	  array_push($varList, $variable);
-  	  $data .= "        data.addColumn('".$columnType."', '".$variable['name']."');\n";
+  	  array_push($varList, $v);
+  	  $data .= "        data.addColumn('".$columnType."', '".$v."');\n";
+  	  $fieldCounter++;
   	}
 
   	foreach($obj as $k){  	  
+  	  $j=0;
   	  foreach($varList as $v){
-  	    $name = $v['name'];
-  	    $val = $v['value'];
-  	    $value = ($j==0)?"'".$k->$name->$val."'":$k->$name->$val;
+  	    $value = $k->$v->value;
+  	    if($j==0){
+  	      $value = "new Date(".date("Y, m, d", strtotime($k->$v->value)).")";
+  	    }elseif(($j - 2) %3 == 0 || ($j - 3) %3 == 0){
+  	      $value = "'".$k->$v->value."'";
+  	    }
   	  	$data .="        data.setCell($i, $j, ".$value.");\n";
   	  	$j++;
   	  } 
   	  $i++;
-  	  $j=0;
   	}
 
   	
   	//Getting options
   	$options['height'] = 400;
   	$options['width'] = 400;
+  	$options['displayAnnotations'] = 'true';
     for($z=$fieldCounter; $z < count($names); $z++){
       $pair = explode("=", $names[$z]);
       $key = trim($pair[0], "\" '");
@@ -56,17 +57,17 @@ class Haanga_Extension_Filter_GoogleVizColumnChart{
       $options[$key] = $value;     
     }
 
-  	$divId = uniqid("columnchart_div");
-  	$pre = "<div id='".$divId."'></div><script type='text/javascript' src='https://www.google.com/jsapi'></script>
+  	$divId = uniqid("timeline_div");
+  	$pre = "<div id='".$divId."' style='width: 700px; height: 240px;'></div><script type='text/javascript' src='https://www.google.com/jsapi'></script>
     <script type='text/javascript'>
-    var options_$divId = ".json_encode($options, JSON_UNESCAPED_UNICODE)."; 
-    google.load('visualization', '1', {packages:['corechart']});
+    var options_$divId = ".json_encode($options)."; 
+    google.load('visualization', '1', {packages:['annotatedtimeline']});
     google.setOnLoadCallback(drawChart);
     function drawChart() {
     var data = new google.visualization.DataTable();
     data.addRows(".$i.");\n
-".$data."    var columnchart = new google.visualization.ColumnChart(document.getElementById('".$divId."'));
-columnchart.draw(data, options_$divId);
+".$data."    var timeline = new google.visualization.AnnotatedTimeLine(document.getElementById('".$divId."'));
+timeline.draw(data, options_$divId);
     }
     </script>";
     return $pre;

@@ -21,6 +21,10 @@ USAGE=$USAGE"\n===NAMESPACE MANAGEMENT==\n"
 USAGE=$USAGE" Add namespace:\t\t\t\t\t\t$0 add namespace prefix http://example.com/sparql\n"
 USAGE=$USAGE" Remove namespace:\t\t\t\t\t$0 remove namespace prefix \n"
 USAGE=$USAGE" List namespaces:\t\t\t\t\t$0 list namespaces\n"
+USAGE=$USAGE"\n===MODULES===\n"
+USAGE=$USAGE" Enable module:\t\t\t\t\t\t$0 enable module position\n"
+USAGE=$USAGE" Disable module:\t\t\t\t\t$0 disable module\n"
+USAGE=$USAGE" List modules:\t\t\t\t\t$0 list modules\n"
 USAGE=$USAGE"\n===VERSION==\n"
 USAGE=$USAGE" Version:\t\t\t\t\t\t$0 version\n"
 USAGEDEBUG="Usage: $0 debug on|off"
@@ -30,7 +34,7 @@ if [[ $# -eq 0 || "$1" == "--help" ]]; then
 fi
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-operations=( create delete debug backup restore default cache version enable disable add remove list )
+operations=( create delete debug backup restore default cache version enable disable add remove list details )
 currentOperation=
 
 if [[ ${operations[@]} =~ $1 ]]; then
@@ -262,5 +266,26 @@ if [[ $currentOperation == "list" ]]; then
   else
     php $DIR/modules/list-$listOperation.php
   fi
+  exit
+fi
+
+
+## Details
+if [[ $currentOperation == "details" ]]; then
+  if [ "$#" != "3" ]; then
+    echo -e $USAGE
+    exit 1
+  fi
+  detailOperation=( type service uri )
+  if [[ ${detailOperation[@]} =~ $2 && $2 != "" ]]
+  then
+    detailOperation=$2
+  else
+    echo -e "Option '$2' not supported. Operation aborted\n" >&2
+    echo -e $USAGE
+    exit 1
+  fi
+  cd $DIR/..
+  $DIR/modules/detail-component.sh $detailOperation $3
   exit
 fi

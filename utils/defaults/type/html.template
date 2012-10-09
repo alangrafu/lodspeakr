@@ -83,13 +83,9 @@
      
         <td>
         {%if row.o.uri == 1%}
-        <a rel='{{row.p.value}}' href='{{row.o.value}}'>{{row.o.curie}}</a>
-        {%endif%}
-        {%if row.o.blank == 1%}
-        <span property='{{row.p.value}}'>{{row.o.value}}</span>
-        {%endif%}
-        {%if row.o.literal == 1%}
-        <span property='{{row.p.value}}'>{{row.o.value}}</span>
+        <a rev='[{{row.p.curie}}]' href='{{row.o.value}}'>{{row.o.curie}}</a>
+        {%else%}
+        {{row.o.value}}
         {%endif%}
         </td>
 
