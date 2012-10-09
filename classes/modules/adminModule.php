@@ -332,7 +332,7 @@ textarea{ font-family: Monaco,'Droid Sans Mono'; font-size: 80%}
     if($_SERVER['REQUEST_METHOD'] == 'GET'){
       $nstable = "";
       foreach($conf['ns'] as $k=>$v){
-       $nstable .= "<tr><td>".$k."</td><td id='$k'>".$v."</td><td><button class='button edit-button' data-prefix='$k' data-ns='$v'>Edit</button></tr>";
+       $nstable .= "<tr><td>".$k."</td><td id='$k'>".$v."</td><td><button class='button btn edit-button' data-prefix='$k' data-ns='$v'>Edit</button></tr>";
       }
       echo $this->head."
      <div class='fluid-row'>
@@ -399,7 +399,7 @@ textarea{ font-family: Monaco,'Droid Sans Mono'; font-size: 80%}
     if($_SERVER['REQUEST_METHOD'] == 'GET'){
       $nstable = "";
       foreach($conf['endpoint'] as $k=>$v){
-        $nstable .= "<tr><td>".$k."</td><td id='$k'>".$v."</td><td><button class='button edit-button' data-prefix='$k' data-ns='$v'>Edit</button></tr>";
+        $nstable .= "<tr><td>".$k."</td><td id='$k'>".$v."</td><td><button class='button btn edit-button' data-prefix='$k' data-ns='$v'>Edit</button></tr>";
       }
       echo $this->head."
       <div class='fluid-row'>
@@ -478,18 +478,20 @@ textarea{ font-family: Monaco,'Droid Sans Mono'; font-size: 80%}
       }else{
         if(preg_match("/^\w/", $line) ){
             $lastComponentType = trim($line);
+            $singleLastComponentType = preg_replace('/(.*)s$/', '\1', $lastComponentType);
             $menu .= "<ul class='nav nav-list'>
-            <li class='nav-header'>".$lastComponentType."  <button class='btn btn-mini btn-info'>new</button></li>\n";
+            <li class='nav-header'>".$lastComponentType."  <button class='btn btn-mini btn-info new-button' style='float:right' data-type='$singleLastComponentType'>new</button></li>\n";
         }else{
           $componentName = trim($line);
-          $menu .= "<li><a href='#' class='lodspk-component' data-component-type='$lastComponentType' data-component-name='$componentName'>".$componentName."</a></li>\n";
+          $menu .= "<li class='component-li'> <button type='button' class='close hide lodspk-delete-component' data-component-type='$singleLastComponentType' data-component-name='$componentName' style='align:left'>x</button>
+          <a href='#' class='lodspk-component' data-component-type='$lastComponentType' data-component-name='$componentName'>".$componentName."</a></li>\n";
         }
       }
     }
     echo $this->head ."
     <script src='".$conf['basedir'] ."js/editor.js'></script>
     <div class='row-fluid'>
-     <div class='span3 well'>$menu</div>
+     <div class='span3 well'>$menu<div id='component-msg' class='alert hide'></div></div>
      <div class='bs-docs-template span9'>
       <textarea class='field span12' rows='8' cols='25' id='template-editor'></textarea>
       <button class='btn btn-info disabled' id='template-save-button' data-url=''>Save</button>
@@ -501,14 +503,14 @@ textarea{ font-family: Monaco,'Droid Sans Mono'; font-size: 80%}
       <div class='container'>
        <div class='row-fluid'>
         <div class='span3 well'>
-          <legend>Templates  <button class='btn btn-mini btn-info'>new</button></legend>
+          <legend>Templates  <!-- button class='btn btn-mini btn-info'>new</button --></legend>
          <ul class='nav nav-list' id='template-list'>
          </ul>        
         </div>
        </div>
        <div class='row-fluid'>
         <div class='span3 well'>
-          <legend>Queries  <button class='btn btn-mini btn-info'>new</button></legend>
+          <legend>Queries  <!-- button class='btn btn-mini btn-info'>new</button --></legend>
          <ul class='nav nav-list' id='query-list'>
          </ul>
         </div>
@@ -537,6 +539,20 @@ textarea{ font-family: Monaco,'Droid Sans Mono'; font-size: 80%}
   	case "save":
   	  if(sizeof($params) > 2){
   	    $this->saveComponent($params);
+  	  }else{
+  	    HTTPStatus::send404($params[1]);
+  	  }
+  	  break;  	  
+  	case "create":
+  	  if(sizeof($params) > 2){
+  	    $this->createComponent($params);
+  	  }else{
+  	    HTTPStatus::send404($params[1]);
+  	  }
+  	  break;  	  
+  	case "delete":
+  	  if(sizeof($params) > 2){
+  	    $this->deleteComponent($params);
   	  }else{
   	    HTTPStatus::send404($params[1]);
   	  }
@@ -594,6 +610,48 @@ textarea{ font-family: Monaco,'Droid Sans Mono'; font-size: 80%}
       }
     }
   }
+  
+  protected function createComponent($params){
+    $path = implode("/", array_slice($params, 1));
+    if($_SERVER['REQUEST_METHOD'] == 'POST'){
+      if(sizeof($params) != 3){
+        HTTPStatus::send404();
+        exit(0);
+      }
+      $return_var = 0;
+      exec ("utils/lodspk.sh create ".$params[1]." ".$params[2], &$output, $return_var);  
+      //echo $return_var;exit(0);
+      if($return_var !== 0){
+        HTTPStatus::send500($params[0]." ".$params[1]);
+      }else{
+        echo json_encode(array('success' => true, 'size' => $result));          
+      }
+    }else{
+      HTTPStatus::send406();
+      exit(0);
+    }
+  }
+
+  protected function deleteComponent($params){
+    $path = implode("/", array_slice($params, 1));
+    if($_SERVER['REQUEST_METHOD'] == 'POST'){
+      if(sizeof($params) != 3){
+        HTTPStatus::send404();
+        exit(0);
+      }
+      $return_var = 0;
+      exec ("utils/lodspk.sh delete ".$params[1]." ".$params[2], &$output, $return_var);  
+      if($return_var !== 0){
+        HTTPStatus::send500($params[0]." ".$params[1]);
+      }else{
+        echo json_encode(array('success' => true, 'size' => $result));          
+      }
+    }else{
+      HTTPStatus::send406();
+      exit(0);
+    }
+  }
+  
   protected function stopEndpoint(){
     $return_var = 0;
     exec ("utils/modules/stop-endpoint.sh", &$output, $return_var);  
