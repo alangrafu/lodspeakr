@@ -48,7 +48,7 @@ $conf['root'] = 'index.html';
 $conf['extension_connector'] = '.';
 
 //Priority for rdfs:Resource (default). Priorities should be >=0
-$conf['type']['priorities']['rdfs:Resource'] = -1;
+$conf['type']['priority']['rdfs:Resource'] = -1;
 
 //Debug
 $conf['debug'] = false;
