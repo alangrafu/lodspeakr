@@ -1,4 +1,5 @@
 
+
 RewriteRule ^$ lodspeakr/index.php [L]
 
 RewriteCond %{REQUEST_FILENAME} !-f 
