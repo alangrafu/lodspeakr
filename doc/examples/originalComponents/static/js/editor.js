@@ -2,6 +2,14 @@ $(document).ready(function(){
     var relPos = "../lodspeakr/components/";
     var templateBuffer = "";
     var queryBuffer = "";
+    
+    $("#query-test-button").on('click', function(e){
+      var query = $("#query-editor").val();
+      var endpoint = $("#endpoint-list>option:selected").val();
+      $("#results").empty();
+      $("#query-test-button").addClass('disabled').html('<img src="../img/wait.gif"/>');
+      executeQuery(query, endpoint);
+    });
     $(".component-li").on({
         mouseenter: function(){
           $(this).children(".lodspk-delete-component").removeClass("hide");
@@ -73,6 +81,40 @@ $(document).ready(function(){
       updateEvents();
   });
  });
+ 
+ function executeQuery(q, e){
+   $.ajax({
+       dataType: 'jsonp',
+       data: {
+         query: q,
+         format: 'application/sparql-results+json'
+       },
+       url: e,
+       success: function(data){
+         var variables = new Array();
+         var header = $("<tr></tr>");
+         $(data.head.vars).each(function(i, item){
+             variables.push(item);
+             header.append("<td><strong>"+item+"</strong></td>");
+         });
+         $("#results").append(header);
+         $(data.results.bindings).each(function(i, item){
+             var row = $("<tr></tr>");
+             $.each(variables, function(j, jtem){
+                 row.append("<td>"+item[jtem].value+"</td>");
+             });
+             $("#results").append(row);
+         });
+         $("#query-test-button").removeClass('disabled').html('Test this query against');
+       },
+       error: function(e){
+         $("#results-msg").html("An error occurred when sending a query to the endpoint").show().delay(2000).fadeOut("slow");
+         $("#query-test-button").removeClass('disabled').html('Test this query against');
+       },
+       timeout: 20000,
+   });
+ }
+ 
  function updateEvents(){
    $(".lodspk-template").on("click", function(e){
        var fileUrl = $(this).attr("data-url");
