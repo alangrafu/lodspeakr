@@ -101,7 +101,7 @@ LODSPEAKR_HOME=`pwd`/
  */ 
 \$conf['export'] = true;
 
-#If you want to add/overrid a namespace, add it here
+# If you want to add/override a namespace, add it here
 \$conf['ns']['local']   = '$ns';
 $extra
 
