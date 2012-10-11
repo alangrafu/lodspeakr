@@ -127,7 +127,7 @@ textarea{ font-family: Monaco,'Droid Sans Mono'; font-size: 80%}
     </div>
 
     <div class='container'>
-      <img src='img/lodspeakr_logotype.png' style='opacity: 0.1; position: absolute; right:0px; top:60%'/>
+      <img src='../img/lodspeakr_logotype.png' style='opacity: 0.1; position: absolute; right:0px; top:60%'/>
 ";
   private $foot ="    </div>
   </body>
@@ -537,14 +537,14 @@ textarea{ font-family: Monaco,'Droid Sans Mono'; font-size: 80%}
       <div class='container'>
        <div class='row-fluid'>
         <div class='span3 well'>
-          <legend>Views  <!-- button class='btn btn-mini btn-info'>new</button --></legend>
+          <legend>Views  <button class='btn btn-mini btn-info new-file-button hide new-file-button-view' data-component=''>new</button></legend>
          <ul class='nav nav-list' id='template-list'>
          </ul>        
         </div>
        </div>
        <div class='row-fluid'>
         <div class='span3 well'>
-          <legend>Models  <!-- button class='btn btn-mini btn-info'>new</button --></legend>
+          <legend>Models  <button class='btn btn-mini btn-info new-file-button hide new-file-button-model' data-component=''>new</button></legend>
          <ul class='nav nav-list' id='query-list'>
          </ul>
         </div>
@@ -597,6 +597,20 @@ textarea{ font-family: Monaco,'Droid Sans Mono'; font-size: 80%}
   	case "delete":
   	  if(sizeof($params) > 2){
   	    $this->deleteComponent($params);
+  	  }else{
+  	    HTTPStatus::send404($params[1]);
+  	  }
+  	  break;  	  
+  	case "add":
+  	  if(sizeof($params) > 2){
+  	    $this->addFile($params);
+  	  }else{
+  	    HTTPStatus::send404($params[1]);
+  	  }
+  	  break;  	  
+  	case "remove":
+  	  if(sizeof($params) > 2){
+  	    $this->deleteFile($params);
   	  }else{
   	    HTTPStatus::send404($params[1]);
   	  }
@@ -695,6 +709,53 @@ textarea{ font-family: Monaco,'Droid Sans Mono'; font-size: 80%}
       exit(0);
     }
   }
+  
+  protected function deleteFile($params){
+    $path = "components/".implode("/", array_slice($params, 1));
+    if($_SERVER['REQUEST_METHOD'] == 'POST'){
+      if(sizeof($params) < 3){
+        HTTPStatus::send404();
+        exit(0);
+      }
+      $return_var = 0;
+      exec ("rm ".$path, &$output, $return_var);  
+      if($return_var !== 0){
+        echo json_encode(array('success' => false, path => $path));          
+      }else{
+        echo json_encode(array('success' => true, path => $path));          
+      }
+    }else{
+      HTTPStatus::send406();
+      exit(0);
+    }
+  }
+  
+  
+  protected function addFile($params){
+    $path = "components/".implode("/", array_slice($params, 1));
+    if($_SERVER['REQUEST_METHOD'] == 'POST'){
+      if(sizeof($params) < 3){
+        HTTPStatus::send404();
+        exit(0);
+      }
+      $return_var = 0;
+      if(file_exists($path)){
+        echo json_encode(array('success' => false));
+        return;
+      }
+      exec("touch ".$path, &$output, $return_var);  
+      //echo $return_var;exit(0);
+      if($return_var !== 0){
+        HTTPStatus::send500("touch ".$path);
+      }else{
+        echo json_encode(array('success' => true));          
+      }
+    }else{
+      HTTPStatus::send406();
+      exit(0);
+    }
+  }
+
   
   protected function stopEndpoint(){
     $return_var = 0;

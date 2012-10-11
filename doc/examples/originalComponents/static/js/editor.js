@@ -18,50 +18,67 @@ $(document).ready(function(){
           $(".lodspk-delete-component").addClass("hide");
         }
     });   
-    $(".lodspk-delete-component").on({
-        click: function(){
-          var componentName = $(this).attr("data-component-name");
-          var componentType = $(this).attr("data-component-type");
-          var url = "components/delete/"+componentType+"/"+componentName;
-          if (confirm("Are you sure you want to delete this component?")) {
-            $.ajax({
-                type: 'POST',
-                url: url,
-                data: {content: $("#template-editor").val()},
-                success: function(data){if(data.success == true){
-                  $("#component-msg").removeClass('hide').addClass('alert-success').html("Component removed!").show().delay(2000).fadeOut("slow").removeClass('alert-success');
-                  setTimeout(window.location.reload(), 2000);
-                }},
-                error: function(data){
-                  $("#component-msg").removeClass('hide').addClass('alert-error').html("Error removing component!").show().delay(2000).fadeOut("slow").removeClass('alert-error');
-                },
-                dataType: 'json'
-            });
-          }
-        }
-    });
 
- $(".new-button").on("click", function(e){
-     var componentName = prompt("Please enter the name of the new component","newComponent");
-     var url = "components/create/"+$(this).attr("data-type")+"/"+componentName;
-     $.ajax({
+ function executePost(url, data, message){
+      $.ajax({
          type: 'POST',
          url: url,
-         data: {content: $("#template-editor").val()},
+         data: data,
          success: function(data){if(data.success == true){
-           $("#component-msg").removeClass('hide').addClass('alert-success').html("Saved!").show().delay(2000).fadeOut("slow").removeClass('alert-success');
-           setTimeout(window.location.reload(), 2000);
-         }},
+           $(message.id).removeClass('hide').addClass('alert-success').html(message.success).show().delay(2000).fadeOut("slow").removeClass('alert-success');
+           if(message.triggerElement != undefined && message.triggerEvent != undefined ){
+             $(message.triggerElement).trigger(message.triggerEvent);
+           }else{
+             setTimeout(window.location.reload(), 2000);
+           }
+         }else{
+           $(message.id).removeClass('hide').addClass('alert-error').html(message.failure).show().delay(2000).fadeOut("slow").removeClass('alert-error');         
+         }
+         },
          error: function(data){
-           $("#component-msg").removeClass('hide').addClass('alert-error').html("Error creating a new service!").show().delay(2000).fadeOut("slow").removeClass('alert-error');
+           $(message.id).removeClass('hide').addClass('alert-error').html(message.error).show().delay(2000).fadeOut("slow").removeClass('alert-error');
          },
          dataType: 'json'
      });
-
+ }   
+    
+ $(".new-button").on("click", function(e){
+     var componentName = prompt("Please enter the name of the new component","newComponent");
+     if(componentName != null){
+       var url   = "components/create/"+$(this).attr("data-type")+"/"+componentName;
+       var data  = {content: $("#template-editor").val()};
+       var msgId = "#component-msg";
+       executePost(url, data, {id:msgId, success: "Saved!", failure: "Can't create new component. Probably permissions problem or component already exists", error: "Error creating a new component!"});
+     }
  });
+
+  $(".new-file-button").on("click", function(e){
+     var componentName = prompt("Please enter the name of the new component","newComponent");
+     if(componentName != null){
+       var url   = "components/add/"+$(this).attr("data-component")+"/"+componentName;
+       var data  = {content: $("#template-editor").val()};
+       var msgId = "#component-msg";
+       executePost(url, data, {id:msgId, success: "Saved!", failure: "Can't create new file. Probably permissions problem or file already exists", error: "Error creating a new file!"});
+     }
+  });
+  
+  $(".lodspk-delete-component").on({
+      click: function(){
+        var componentName = $(this).attr("data-component-name");
+        var componentType = $(this).attr("data-component-type");
+        var url = "components/delete/"+componentType+"/"+componentName;
+        if (confirm("Are you sure you want to delete this component?")) {
+          executePost(url, data, {id:msgId, success: "Component deleted!", failure: "Can't delete component. Probably permissions problem", error: "Error deleting component!"});      
+        }
+      }
+  });
+  
+  
+ 
  $(".lodspk-component").on("click", function(e){
      var componentType = $(this).attr("data-component-type");
      var componentName = $(this).attr("data-component-name");
+     var dataParent = ".lodspk-component[data-component-type="+componentType+"][data-component-name="+componentName+"]";
      var url="components/details/"+componentType+"/"+componentName;
      templateBuffer = "";
      queryBuffer = "";
@@ -72,13 +89,18 @@ $(document).ready(function(){
       $("#query-list").empty()
       $.each(data.views, function(i, item){
           var viewUrl = relPos+componentType+"/"+componentName+"/"+item;
-          $("#template-list").append("<li><a class='lodspk-template' href='#template-save-button' data-url='"+viewUrl+"'>"+item+"</a></li>") ;
+          var viewFileUrl = componentType+"/"+componentName+"/"+item;
+          $("#template-list").append("<li class='file-li'><button type='button' class='close hide lodspk-delete-file' data-parent='"+dataParent+"' data-file='"+viewFileUrl+"' style='align:left'>x</button><a class='lodspk-template' href='#template-save-button' data-url='"+viewUrl+"'>"+item+"</a></li>") ;
       });
       $.each(data.models, function(i, item){
           var modelUrl = relPos+componentType+"/"+componentName+"/queries/"+item;
-          $("#query-list").append("<li><a href='#query-save-button' class='lodspk-query' data-url='"+modelUrl+"'>"+item+"</a></li>")        
+          var modelFileUrl = componentType+"/"+componentName+"/queries/"+item;
+          $("#query-list").append("<li class='file-li'><button type='button' class='close hide lodspk-delete-file' data-parent='"+dataParent+"' data-file='"+modelFileUrl+"' style='align:left'>x</button><a href='#query-save-button' class='lodspk-query' data-url='"+modelUrl+"'>"+item+"</a></li>")        
       });
       updateEvents();
+      $(".new-file-button").removeClass("hide");
+      $(".new-file-button-view").attr("data-component", componentType+"/"+componentName );
+      $(".new-file-button-model").attr("data-component", componentType+"/"+componentName+"/queries" );
   });
  });
  
@@ -116,6 +138,26 @@ $(document).ready(function(){
  }
  
  function updateEvents(){
+   $(".lodspk-delete-file").on({
+       click: function(){
+         var fileName = $(this).attr("data-file");
+         var url = "components/remove/"+fileName;
+         var msgId = "#component-msg";
+         if (confirm("Are you sure you want to delete this component?")) {
+           executePost(url, "", {id:msgId, success: "File deleted!", failure: "Can't delete file. Probably permissions problem", error: "Error deleting file!", triggerElement:  $(this).attr("data-parent"), triggerEvent: 'click'});      
+         }
+       }
+   });
+   
+
+   $(".file-li").on({
+       mouseenter: function(){
+         $(this).children(".lodspk-delete-file").removeClass("hide");
+       },
+       mouseleave: function(){
+         $(".lodspk-delete-file").addClass("hide");
+       }
+   });   
    $(".lodspk-template").on("click", function(e){
        var fileUrl = $(this).attr("data-url");
        $.ajax({
