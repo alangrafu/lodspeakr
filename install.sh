@@ -144,6 +144,9 @@ echo "Please give the server write permissions. Otherwise, LODSPeaKr will not wo
 echo
 echo
 echo
+echo "See https://github.com/alangrafu/lodspeakr/wiki/Installation for further information"
+echo
+echo
 echo "--------------------------------------------------------------------------------------------------------"
 echo "You can now visit ${bold}$basedir${normal} to navigate through your data."
 echo "--------------------------------------------------------------------------------------------------------"
