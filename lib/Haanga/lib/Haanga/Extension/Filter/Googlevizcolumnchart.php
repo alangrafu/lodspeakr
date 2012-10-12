@@ -59,7 +59,7 @@ class Haanga_Extension_Filter_GoogleVizColumnChart{
   	$divId = uniqid("columnchart_div");
   	$pre = "<div id='".$divId."'></div><script type='text/javascript' src='https://www.google.com/jsapi'></script>
     <script type='text/javascript'>
-    var options_$divId = ".json_encode($options, JSON_UNESCAPED_UNICODE)."; 
+    var options_$divId = ".json_encode($options)."; 
     google.load('visualization', '1', {packages:['corechart']});
     google.setOnLoadCallback(drawChart);
     function drawChart() {
