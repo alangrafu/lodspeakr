@@ -113,12 +113,15 @@ echo "Created new configuration file: $settings_file"
 echo ""
 echo "WARNING: Copying $root_htaccess as .htaccess in parent directory"
 echo ""
-echo "RewriteEngine on" > $parent_htaccess
+
+echo "<IfModule mod_rewrite.c>" > $parent_htaccess
+echo "RewriteEngine on" >> $parent_htaccess
 echo >> $parent_htaccess
 newBase=`echo $basedir|sed -e "s|https\{0,1\}://[^\/]*||g"`
 echo "RewriteBase $newBase" >> $parent_htaccess
 cat $root_htaccess >> $parent_htaccess
 echo "RewriteRule ^(.+)\$ $1/index.php?q=\$1 [L]" >> $parent_htaccess
+echo "</IfModule>" >> $parent_htaccess
 mkdir cache
 cp -r doc/examples/originalComponents components
 mkdir -p components/uris
