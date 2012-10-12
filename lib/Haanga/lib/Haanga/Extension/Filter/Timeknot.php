@@ -3,6 +3,7 @@
 class Haanga_Extension_Filter_Timeknot{
   public $is_safe = TRUE;
   static function main($obj, $varname){
+    global $lodspk;
   	$data = array();
   	$i = 0;
   	$j = 0;
