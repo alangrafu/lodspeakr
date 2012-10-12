@@ -1,4 +1,4 @@
-<?
+<?php
 
 # Where is LODSPeaKr's root located? (don't include word 'lodspeakr')
 $conf['basedir'] = 'http://foo/bar/'; #include final slash
