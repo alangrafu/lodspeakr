@@ -87,7 +87,7 @@ fi
   
 LODSPEAKR_HOME=`pwd`/
   
-  content="<?
+  content="<?php
 
 \$conf['endpoint']['local'] = '$endpoint';
 \$conf['home'] = '$LODSPEAKR_HOME';
