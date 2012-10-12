@@ -6,7 +6,7 @@ class Haanga_Extension_Filter_Googlemaps{
   	$data = "";
   	$i = 0;
   	$j = 0;
-  	$randId = rand();
+  	$randId = uniqid("_mapID_");
   	$firstColumn = true;
   	$names = explode(",", $varname);
   	$north = -90; $south=90; $east=-180; $west = 180;
@@ -14,7 +14,6 @@ class Haanga_Extension_Filter_Googlemaps{
   	$options = array();
   	$options['width'] = 500;
   	$options['height'] = 500;
-  	$options['zoom'] = 10;
   	for($z=3; $z < count($names); $z++){
       $pair = explode("=", $names[$z]);
       $key = trim($pair[0], "\" '");
@@ -62,11 +61,17 @@ class Haanga_Extension_Filter_Googlemaps{
 	  var latSpan = southWest.lat() + northEast.lat();
 	  var locations = ".json_encode($points).";
 	  
-	  var mapOptions = ".json_encode($options).";
-	  mapOptions.mapTypeId= google.maps.MapTypeId.ROADMAP;
+	  var mapOptions$randId = ".json_encode($options, JSON_NUMERIC_CHECK).";
+	  mapOptions$randId.mapTypeId= google.maps.MapTypeId.ROADMAP;
 	  
-    var map = new google.maps.Map(document.getElementById('map_canvas'),mapOptions); 
+    var map = new google.maps.Map(document.getElementById('map_canvas'),mapOptions$randId); 
 	  var bounds = new google.maps.LatLngBounds(southWest, northEast);
+    if(mapOptions$randId.zoom){
+	    var zoomChangeBoundsListener = google.maps.event.addListener(map, 'bounds_changed', function(event) {
+	  google.maps.event.removeListener(zoomChangeBoundsListener);
+	  map.setZoom( mapOptions$randId.zoom );
+    });
+    }
 	  map.fitBounds(bounds);
 
     var infowindow = new google.maps.InfoWindow();
