@@ -142,10 +142,10 @@ if [[ $currentOperation == "add" ]]; then
   php $DIR/modules/add-$addOperation.php $3 $4
   rc=$?
   if [[ $rc != 0 ]] ; then
-    echo -e "Endpoint with prefix '$3' already exist, please remove it first." >&2
+    echo -e "The $addOperation with prefix '$3' already exist, please remove it first." >&2
     exit
   fi
-  echo -e "Endpoint $4 added successfully as $3!" >&2
+  echo -e "The $addOperation $4 was added successfully as $3!" >&2
   exit
 fi
 
@@ -164,10 +164,10 @@ if [[ $currentOperation == "remove" ]]; then
   php $DIR/modules/remove-$addOperation.php $3
   rc=$?
   if [[ $rc != 0 ]] ; then
-    echo -e "Something went wrong while removing '$4'. Please check your settings.inc.php" >&2
+    echo -e "Something went wrong while removing '$3'. Please check your settings.inc.php" >&2
     exit
   fi
-  echo -e "Endpoint $4 removed successfully!" >&2
+  echo -e "The $addOperation $3 was removed successfully!" >&2
   exit
 fi
 
