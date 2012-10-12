@@ -5,11 +5,16 @@ class Haanga_Extension_Filter_GoogleVizColumnChart{
   static function main($obj, $varname){
   	$data = "";
   	$i = 0;
-  	$j = 0;
-  	$firstColumn = true;
     $options = array();
+  	$randId = rand();
+  	$firstColumn = true;
   	$names = explode(",", $varname);
+  	$j = 0;
 
+  	
+  	$options['width'] = 400;
+  	$options['height'] = 400;
+  	
   	$fieldCounter=0;
   	$varList = array();
   	foreach($names as $v){

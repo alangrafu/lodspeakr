@@ -5,6 +5,7 @@ class Haanga_Extension_Filter_GoogleVizPieChart{
   static function main($obj, $varname){
   	$data = "";
   	$i = 0;
+  	$j = 0;
     $options = array();
   	$randId = rand();
   	$firstColumn = true;
@@ -15,12 +16,39 @@ class Haanga_Extension_Filter_GoogleVizPieChart{
   	$options['width'] = $w;
   	$options['height'] = $h;
   	
-  	$data .= "data.addColumn('string', '".$names[0]."');";
-    $data .= "data.addColumn('number', '".$names[1]."');";
-  	foreach($obj as $k){  	  
-  	  $data .="        data.setCell($i, 0, '".$k->$names[0]->value."');\n";
-  	  $data .="        data.setCell($i, 1, ".$k->$names[1]->value.");\n";
+  	$fieldCounter=0;
+  	$varList = array();
+  	foreach($names as $v){
+  	  if(strpos($v,"=")){
+  	    break;
+  	  }
+  	  $variable['name'] = $v;
+  	  $variable['value'] = 'value';
+  	  if(strpos($v, ".")){
+  	    $aux = explode(".", $v);
+  	    $variable['name'] = $aux[0];
+  	    $variable['value'] = $aux[1];
+  	  }
+  	  $fieldCounter++;
+  	  $columnType = 'number';
+  	  if($firstColumn){
+  	  	$columnType = 'string';
+  	  	$firstColumn = false;
+  	  }
+  	  array_push($varList, $variable);
+  	  $data .= "        data.addColumn('".$columnType."', '".$variable['name']."');\n";
+  	}
+
+  	foreach($obj as $k){
+   	  foreach($varList as $v){
+  	    $name = $v['name'];
+  	    $val = $v['value'];
+  	    $value = ($j==0)?"'".$k->$name->$val."'":$k->$name->$val;
+  	  	$data .="        data.setCell($i, $j, ".$value.");\n";
+  	  	$j++;
+  	  } 
   	  $i++;
+  	  $j=0;
   	}
 
     //Getting options
