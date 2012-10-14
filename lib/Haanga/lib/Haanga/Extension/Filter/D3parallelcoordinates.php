@@ -80,7 +80,7 @@ var line = d3.svg.line(),
 
 var svg = d3.select("#'.$randId.'").append("svg")
     .attr("width", width)
-    .attr("height", height)
+    .attr("height", height).style("font", "10px sans-serif")
     .append("svg:g")
     .attr("transform", "translate(" + m[3] + "," + m[0] + ")");
 ;
@@ -100,7 +100,7 @@ var x = d3.scale.ordinal().rangePoints([0, w], 1),
       .attr("class", "background")
     .selectAll("path")
       .data(json)
-    .enter().append("path")
+    .enter().append("path").style("fill", "none").style("stroke", "#ccc").style("stroke-opacity", .4).style("shape-rendering", "crispEdges")
       .attr("d", path);
 
   // Add blue foreground lines for focus.
@@ -108,7 +108,7 @@ var x = d3.scale.ordinal().rangePoints([0, w], 1),
       .attr("class", "foreground")
     .selectAll("path")
       .data(json)
-    .enter().append("path").style("stroke-width", "'.$options['strokeWidth'].'").style("stroke", "'.$options['color'].'")
+    .enter().append("path").style("fill", "none").style("stroke-width", "'.$options['strokeWidth'].'").style("stroke", "'.$options['color'].'").style("stroke-opacity", .7)
       .attr("d", path).attr("name", function(d){return d.p}).on("mouseover", mouseover).on("mouseout", mouseout);
 
   // Add a group element for each dimension.
@@ -126,10 +126,10 @@ var x = d3.scale.ordinal().rangePoints([0, w], 1),
       .attr("text-anchor", "middle")
       .attr("y", -9)
       .text(String);
-
+  svg.selectAll(".axis line, .axis path").style("fill", "none").style("stroke", "#000")
   // Add and store a brush for each axis.
   g.append("g")
-      .attr("class", "brush")
+      .attr("class", "brush").style("fill-opacity",.3).style("stroke", "#fff").style("shape-rendering", "crispEdges")
       .each(function(d) { d3.select(this).call(y[d].brush = d3.svg.brush().y(y[d]).on("brush", brush)); })
     .selectAll("rect")
       .attr("x", -8)
