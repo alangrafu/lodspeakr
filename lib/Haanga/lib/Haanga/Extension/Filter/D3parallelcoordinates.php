@@ -38,7 +38,7 @@ class Haanga_Extension_Filter_D3ParallelCoordinates{
   	$options['width'] = 960;
   	$options['height'] = 500;
   	$options['color'] = '#aec7e8';
-  	$options['highlightedColor'] = $options['color'];
+  	$options['highlightedColor'] = '#00477f';
   	$options['radius'] = 10;
   	$options['highlightedStrokeWidth'] = '3px';
   	$options['strokeWidth'] = '1px';
