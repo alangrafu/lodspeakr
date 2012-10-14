@@ -16,15 +16,24 @@ class Haanga_Extension_Filter_GoogleVizScatterChart{
   	  if(strpos($v,"=")){
   	    break;
   	  }
+  	  $variable['name'] = $v;
+  	  $variable['value'] = 'value';
+  	  if(strpos($v, ".")){
+  	    $aux = explode(".", $v);
+  	    $variable['name'] = $aux[0];
+  	    $variable['value'] = $aux[1];
+  	  }
   	  $fieldCounter++;
   	  $columnType = 'number';
-  	  array_push($varList, $v);
-  	  $data .= "        data.addColumn('".$columnType."', '".$v."');\n";
+  	  array_push($varList, $variable);
+  	  $data .= "        data.addColumn('".$columnType."', '".$variable['name']."');\n";
   	}
 
   	foreach($obj as $k){  	  
   	  foreach($varList as $v){
-  	    $value = $k->$v->value;
+  	    $name = $v['name'];
+  	    $val = $v['value'];
+  	    $value = $k->$name->$val;
   	  	$data .="        data.setCell($i, $j, ".$value.");\n";
   	  	$j++;
   	  } 
@@ -43,7 +52,7 @@ class Haanga_Extension_Filter_GoogleVizScatterChart{
       $options[$key] = $value;     
     }
 
-  	$divId = uniqid("columnchart_div");
+  	$divId = uniqid("scatterchart_div");
   	$pre = "<div id='".$divId."'></div><script type='text/javascript' src='https://www.google.com/jsapi'></script>
     <script type='text/javascript'>
     var options_$divId = ".json_encode($options)."; 
