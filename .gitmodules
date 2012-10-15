@@ -1,3 +1,0 @@
-[submodule "doc/examples/originalComponents/static/admin/codemirror"]
-	path = doc/examples/originalComponents/static/admin/codemirror
-	url = git://github.com/marijnh/CodeMirror.git
