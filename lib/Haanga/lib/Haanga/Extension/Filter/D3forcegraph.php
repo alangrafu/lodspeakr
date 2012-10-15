@@ -71,14 +71,37 @@ class Haanga_Extension_Filter_D3ForceGraph{
   	
   	$pre = '<div id="'.$randId.'"></div><script src="http://d3js.org/d3.v2.min.js?2.9.3"></script>
 <script>
+/*
+Based on
+http://jsfiddle.net/nrabinowitz/QMKm3/
+http://bl.ocks.org/3680999
+*/
  function initD3ForceGraph'.$randId.'(json) {
   
   var width = '.$options['width'].',
   height = '.$options['height'].'
   
-  var svg = d3.select("#'.$randId.'").append("svg")
-  .attr("width", width)
-  .attr("height", height);
+
+ var svg = d3.select("#'.$randId.'")
+  .append("svg:svg")
+    .attr("width", width)
+    .attr("height", height)
+    .attr("pointer-events", "all")
+  .append("svg:g")
+    .call(d3.behavior.zoom().scaleExtent([0.1, 20]).on("zoom", redraw))
+  .append("svg:g");
+
+svg.append("svg:rect")
+    .attr("width", width)
+    .attr("height", height)
+    .attr("fill", "white");
+
+function redraw() {
+  svg.attr("transform",
+      "translate(" + d3.event.translate + ")"
+      + " scale(" + d3.event.scale + ")");
+}
+
   
   svg.append("svg:defs").append("svg:marker").attr("id", "marker")
   .attr("viewBox", "0 -5 10 10")
@@ -131,6 +154,7 @@ class Haanga_Extension_Filter_D3ForceGraph{
       node.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
   });
 }
+
 var jsonD3'.$randId.' = '.json_encode($json).';
 initD3ForceGraph'.$randId.'(jsonD3'.$randId.')
 </script>';

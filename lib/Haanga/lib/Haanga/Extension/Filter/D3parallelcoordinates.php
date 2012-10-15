@@ -65,7 +65,7 @@ class Haanga_Extension_Filter_D3ParallelCoordinates{
   	
   	$pre = '<div id="'.$randId.'"><div id="name'.$randId.'" style="font-family:sans-serif;font-size:15px;height:25px"><h2> </h2></div></div><script src="http://d3js.org/d3.v2.min.js?2.9.3"></script>
 <script>
-
+/* Based on http://bl.ocks.org/1341021 */
 function initD3ParallelCoordinates'.$randId.'(json){
 var width = '.$options['width'].',
     height = '.$options['height'].'
