@@ -87,7 +87,7 @@ fi
   
 LODSPEAKR_HOME=`pwd`/
   
-  content="<?php
+content="<?php
 
 \$conf['endpoint']['local'] = '$endpoint';
 \$conf['home'] = '$LODSPEAKR_HOME';
@@ -113,12 +113,15 @@ echo "Created new configuration file: $settings_file"
 echo ""
 echo "WARNING: Copying $root_htaccess as .htaccess in parent directory"
 echo ""
-echo "RewriteEngine on" > $parent_htaccess
+
+echo "<IfModule mod_rewrite.c>" > $parent_htaccess
+echo "RewriteEngine on" >> $parent_htaccess
 echo >> $parent_htaccess
 newBase=`echo $basedir|sed -e "s|https\{0,1\}://[^\/]*||g"`
 echo "RewriteBase $newBase" >> $parent_htaccess
 cat $root_htaccess >> $parent_htaccess
 echo "RewriteRule ^(.+)\$ $1/index.php?q=\$1 [L]" >> $parent_htaccess
+echo "</IfModule>" >> $parent_htaccess
 mkdir cache
 cp -r doc/examples/originalComponents components
 mkdir -p components/uris
@@ -139,6 +142,9 @@ echo " ${bold}chmod -R 777 $1/cache $1/meta${normal} (highly discouraged but use
 echo
 echo "Please give the server write permissions. Otherwise, LODSPeaKr will not work."
 echo
+echo
+echo
+echo "See https://github.com/alangrafu/lodspeakr/wiki/Installation for further information"
 echo
 echo
 echo "--------------------------------------------------------------------------------------------------------"

@@ -20,7 +20,7 @@ class MetaDb{
 	        }
 			$db = NULL;
 		}catch(PDOException $e){
-				print 'Exception query : '.$e->getMessage()."\n".$this->dbLocation."\n";
+				print 'Exception query : '.$e->getMessage()."\nDatabase used:".$this->dbLocation."\nPlease check the webserver has write permissions to the file AND the directory, as well as you have installed the driver for PHP and SQLite";
 				exit(10);
 		}
         return $results;

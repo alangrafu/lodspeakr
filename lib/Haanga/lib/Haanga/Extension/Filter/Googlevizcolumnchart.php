@@ -5,11 +5,16 @@ class Haanga_Extension_Filter_GoogleVizColumnChart{
   static function main($obj, $varname){
   	$data = "";
   	$i = 0;
-  	$j = 0;
-  	$firstColumn = true;
     $options = array();
+  	$randId = rand();
+  	$firstColumn = true;
   	$names = explode(",", $varname);
+  	$j = 0;
 
+  	
+  	$options['width'] = 400;
+  	$options['height'] = 400;
+  	
   	$fieldCounter=0;
   	$varList = array();
   	foreach($names as $v){
@@ -59,7 +64,7 @@ class Haanga_Extension_Filter_GoogleVizColumnChart{
   	$divId = uniqid("columnchart_div");
   	$pre = "<div id='".$divId."'></div><script type='text/javascript' src='https://www.google.com/jsapi'></script>
     <script type='text/javascript'>
-    var options_$divId = ".json_encode($options, JSON_UNESCAPED_UNICODE)."; 
+    var options_$divId = ".json_encode($options)."; 
     google.load('visualization', '1', {packages:['corechart']});
     google.setOnLoadCallback(drawChart);
     function drawChart() {

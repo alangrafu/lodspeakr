@@ -1,6 +1,6 @@
 <?php
 
-class Haanga_Extension_Filter_GoogleVizScatterChart{
+class Haanga_Extension_Filter_GoogleVizLineChart{
   public $is_safe = TRUE;
   static function main($obj, $varname){
   	$data = "";
@@ -25,6 +25,10 @@ class Haanga_Extension_Filter_GoogleVizScatterChart{
   	  }
   	  $fieldCounter++;
   	  $columnType = 'number';
+  	  if($firstColumn){
+  	  	$columnType = 'string';
+  	  	$firstColumn = false;
+  	  }
   	  array_push($varList, $variable);
   	  $data .= "        data.addColumn('".$columnType."', '".$variable['name']."');\n";
   	}
@@ -33,7 +37,7 @@ class Haanga_Extension_Filter_GoogleVizScatterChart{
   	  foreach($varList as $v){
   	    $name = $v['name'];
   	    $val = $v['value'];
-  	    $value = $k->$name->$val;
+  	    $value = ($j==0)?"'".$k->$name->$val."'":$k->$name->$val;
   	  	$data .="        data.setCell($i, $j, ".$value.");\n";
   	  	$j++;
   	  } 
@@ -52,7 +56,7 @@ class Haanga_Extension_Filter_GoogleVizScatterChart{
       $options[$key] = $value;     
     }
 
-  	$divId = uniqid("scatterchart_div");
+  	$divId = uniqid("linechart_div");
   	$pre = "<div id='".$divId."'></div><script type='text/javascript' src='https://www.google.com/jsapi'></script>
     <script type='text/javascript'>
     var options_$divId = ".json_encode($options)."; 
@@ -61,7 +65,7 @@ class Haanga_Extension_Filter_GoogleVizScatterChart{
     function drawChart() {
     var data = new google.visualization.DataTable();
     data.addRows(".$i.");\n
-".$data."    var barchart = new google.visualization.ScatterChart(document.getElementById('".$divId."'));
+".$data."    var barchart = new google.visualization.LineChart(document.getElementById('".$divId."'));
 barchart.draw(data, options_$divId);
     }
     </script>";

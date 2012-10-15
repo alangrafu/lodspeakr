@@ -5,10 +5,10 @@ $conf['basedir'] = 'http://foo/bar/'; #include final slash
 
 # What is the namespace of your data?
 $conf['ns']['local']   = 'http://foo/bar/data/';
-#If you want to add/overrid a namespace, add it here
+# If you want to add/override a namespace, add it here
 $conf['ns']['other']   = 'http://example.org/data/';
 
-#Where is your SPARQL endpoint
+# Where is your SPARQL endpoint
 $conf['endpoint']['host'] = 'http://myendpoint/sparql';
 
 $conf['home'] = '/Users/alvarograves/github/lodspeakr/'; #change to the location of LODSPeaKr in the dir tree

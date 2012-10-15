@@ -485,9 +485,9 @@ class Utils{
   	  	}*/
   	  }else{
   	  	if(isset($value['uri']) && $value['uri'] == 1){
-  	  	  if(isset($conf['mirror_external_uris']) && $conf['mirror_external_uris'] != false){
-  	  	  	$value['mirroredUri'] = $value['value'];
-  	  	  	
+  	  	  //If there is no mirroring, it wouldn't hurt to have available this value (e.g., using templates from a mirrored instance to a non-mirrored one)
+  	  	  $value['mirroredUri'] = $value['value'];
+  	  	  if(isset($conf['mirror_external_uris']) && $conf['mirror_external_uris'] != false){  	  	  	
   	  	  	if(is_bool($conf['mirror_external_uris'])){
   	  	  	  $value['value'] = preg_replace("|^".$conf['ns']['local']."|", $conf['basedir'], $value['value']);
   	  	  	}elseif(is_string($conf['mirror_external_uris'])){
