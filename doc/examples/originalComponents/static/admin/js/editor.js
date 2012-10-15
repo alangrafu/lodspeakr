@@ -1,10 +1,8 @@
 $(document).ready(function(){
     var relPos = "../lodspeakr/components/";
-    var templateBuffer = "";
-    var queryBuffer = "";
     
     $("#query-test-button").on('click', function(e){
-      var query = $("#query-editor").val();
+      var query = queryEditor.getValue();
       var endpoint = $("#endpoint-list>option:selected").val();
       $("#results").empty();
       $("#query-test-button").addClass('disabled').html('<img src="../img/wait.gif"/>');
@@ -82,15 +80,15 @@ $(document).ready(function(){
      var url="components/details/"+componentType+"/"+componentName;
      templateBuffer = "";
      queryBuffer = "";
-     $("#template-editor").val("");
-     $("#query-editor").val("");
+     templateEditor.setValue("");
+     queryEditor.setValue("");
   $.get(url, function(data){
       $("#template-list").empty()
       $("#query-list").empty()
       $.each(data.views, function(i, item){
           var viewUrl = relPos+componentType+"/"+componentName+"/"+item;
           var viewFileUrl = componentType+"/"+componentName+"/"+item;
-          $("#template-list").append("<li class='file-li'><button type='button' class='close hide lodspk-delete-file' data-parent='"+dataParent+"' data-file='"+viewFileUrl+"' style='align:left'>x</button><a class='lodspk-template' href='#template-save-button' data-url='"+viewUrl+"'>"+item+"</a></li>") ;
+          $("#template-list").append("<li class='file-li'><button type='button' class='close hide lodspk-delete-file' data-parent='"+dataParent+"' data-file='"+viewFileUrl+"' style='align:left'>x</button><a class='lodspk-template' href='#template-editor' data-url='"+viewUrl+"'>"+item+"</a></li>") ;
       });
       $.each(data.models, function(i, item){
           var modelUrl = relPos+componentType+"/"+componentName+"/queries/"+item;
@@ -164,9 +162,12 @@ $(document).ready(function(){
            cache: false,
            url: fileUrl, 
            success: function(data){
-           $("#template-editor").val(data);
+           templateEditor.setValue(data);
            templateBuffer = data;
            $("#template-save-button").attr("data-url", fileUrl).addClass("disabled");
+           $('html, body').stop().animate({
+                      scrollTop: $('body').offset().top
+                    }, 100);
        }
        });
    });
@@ -176,27 +177,30 @@ $(document).ready(function(){
            cache: false,
            url: fileUrl, 
            success: function(data){
-           $("#query-editor").val(data);
+           queryEditor.setValue(data);
            queryBuffer = data;
            $("#query-save-button").attr("data-url", fileUrl).addClass("disabled");
+           $('#query-editor').stop().animate({
+                      scrollTop: $('body').offset().top
+                    }, 100);
        }
        });
    });
    //Turn 'save' buttons disable when no change has been made
-   $("#query-editor").on("keyup", function(e){
+   /*$("#query-editor").on("keyup", function(e){
      if($("#query-editor").val() == queryBuffer){
        $("#query-save-button").addClass("disabled");
      }else{
        $("#query-save-button").removeClass("disabled");     
      }
    });
-   $("#template-editor").on("keyup", function(e){
+   templateEditor.("keyup", function(e){
      if($("#template-editor").val() == templateBuffer){
        $("#template-save-button").addClass("disabled");
      }else{
        $("#template-save-button").removeClass("disabled");     
      }
-   }); 
+   });*/ 
    //Save action
    $("#template-save-button").on("click", function(e){
        if(!$("#template-save-button").hasClass("disabled")){
@@ -204,14 +208,14 @@ $(document).ready(function(){
          $.ajax({
              type: 'POST',
              url: url,
-             data: {content: $("#template-editor").val()},
+             data: {content: templateEditor.getValue()},
              success: function(data){if(data.success == true){
                $("#template-msg").removeClass('hide').html("Saved!").show().delay(2000).fadeOut("slow");
              }},
              dataType: 'json'
          });
          
-         templateBuffer=$("#template-save-button").val();
+         templateBuffer=templateEditor.getValue();
          $("#template-save-button").addClass('disabled');
        }
    });
@@ -221,7 +225,7 @@ $(document).ready(function(){
          $.ajax({
              type: 'POST',
              url: url,
-             data: {content: $("#query-editor").val()},
+             data: {content: queryEditor.getValue()},
              success: function(data){if(data.success == true){
                $("#query-msg").removeClass('hide').html("Saved!").show().delay(2000).fadeOut("slow");
              }else{
@@ -234,7 +238,7 @@ $(document).ready(function(){
              dataType: 'json'
          });
          
-         queryBuffer=$("#query-save-button").val();
+         queryBuffer=queryEditor.getValue();
          $("#query-save-button").addClass('disabled');
        }
    });
