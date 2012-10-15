@@ -12,10 +12,14 @@ class AdminModule extends abstractModule{
     <meta name='description' content=''>
     <meta name='author' content=''>
     <link href='../css/bootstrap.min.css' rel='stylesheet' type='text/css' media='screen' />
+    <link href='codemirror/lib/codemirror.css' rel='stylesheet' type='text/css' media='screen' />
+    
     <style>
       body {
         padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
       }
+       .CodeMirror {border: 1px solid black;}
+      .cm-mustache {color: #0ca;}
       .wait{
         background-image:url('img/wait.gif');
         background-repeat:no-repeat;
@@ -80,7 +84,6 @@ class AdminModule extends abstractModule{
      -moz-border-radius: 4px 0 4px 0;
           border-radius: 4px 0 4px 0;
 }
-textarea{ font-family: Monaco,'Droid Sans Mono'; font-size: 80%}
     </style>
     <link href='../css/bootstrap-responsive.min.css' rel='stylesheet' type='text/css' media='screen' />
     <script type='text/javascript' src='../js/jquery.js'></script>
@@ -138,12 +141,19 @@ textarea{ font-family: Monaco,'Droid Sans Mono'; font-size: 80%}
   public function match($uri){
     global $localUri;
     global $conf;
+    //URLs used by this component. Other URLs starting with admin/* won't be considered by this module
+    
+    $operations = array("menu", "load", "remove", "endpoints", "namespaces", "components", "");
   	$q = preg_replace('|^'.$conf['basedir'].'|', '', $localUri);
   	$qArr = explode('/', $q);
   	if(sizeof($qArr)==0){
   	  return FALSE;
   	}
-  	if($qArr[0] == "admin"){
+  	if(!$this->auth()){
+  	  HTTPStatus::send401("Forbidden\n");
+  	  exit(0);
+  	}
+  	if($qArr[0] == "admin" && array_search($qArr[1], $operations) !== FALSE){
   	  return $qArr;
   	}  	
   	return FALSE;  
@@ -157,10 +167,6 @@ textarea{ font-family: Monaco,'Droid Sans Mono'; font-size: 80%}
   	global $endpoints;
   	global $lodspk;
   	global $firstResults;
-  	if(!$this->auth()){
-  	  HTTPStatus::send401("Forbidden\n");
-  	  exit(0);
-  	}
   	if(sizeof($params) == 1){
   	  header( 'Location: admin/menu' ) ;
   	  exit(0);
@@ -520,14 +526,13 @@ textarea{ font-family: Monaco,'Droid Sans Mono'; font-size: 80%}
       }
     }
     echo $this->head ."
-    <script type='application/javascript'>
+    <script type='application/javascript'>   
     $namespaces
     </script>
-    <script src='".$conf['basedir'] ."js/editor.js'></script>
     <div class='row-fluid'>
      <div class='span3 well'>$menu<div id='component-msg' class='alert hide'></div></div>
      <div class='bs-docs-template span9'>
-      <textarea class='field span12' rows='8' cols='25' id='template-editor'></textarea>
+      <textarea class='field span12' rows='8' cols='25' id='template-editor' name='template-editor'></textarea>
       <button class='btn btn-info disabled' id='template-save-button' data-url=''>Save</button>
       <div class='alert alert-success hide' id='template-msg'></div>
      </div>
@@ -570,6 +575,53 @@ textarea{ font-family: Monaco,'Droid Sans Mono'; font-size: 80%}
     </div>
    </div>
   </div>
+    <script src='".$conf['basedir'] ."admin/codemirror/lib/codemirror.js'></script>
+    <script src='".$conf['basedir'] ."admin/codemirror/lib/util/overlay.js'></script>
+    <script src='".$conf['basedir'] ."admin/codemirror/mode/xml/xml.js'></script>
+    <script src='".$conf['basedir'] ."admin/codemirror/mode/sparql/sparql.js'></script>
+    <script>
+    var templateBuffer = '';
+    var queryBuffer = '';
+    CodeMirror.defineMode('mustache', function(config, parserConfig) {
+  var mustacheOverlay = {
+    token: function(stream, state) {
+      var ch;
+      if (stream.match('{{')) {
+        while ((ch = stream.next()) != null)
+          if (ch == '}' && stream.next() == '}') break;
+        stream.eat('}');
+        return 'mustache';
+      }
+      while (stream.next() != null && !stream.match('{{', false)) {}
+      return null;
+    }
+  };
+  return CodeMirror.overlayMode(CodeMirror.getMode(config, parserConfig.backdrop || 'text/html'), mustacheOverlay);
+});
+
+
+    var templateEditor = CodeMirror.fromTextArea(document.getElementById('template-editor'), {mode: 'mustache',
+    onChange:function(e){
+     if(templateEditor.getValue() == templateBuffer){
+       $('#template-save-button').addClass('disabled');
+     }else{
+       $('#template-save-button').removeClass('disabled');
+     }
+     }
+     });
+     var queryEditor = CodeMirror.fromTextArea(document.getElementById('query-editor'), {mode: 'sparql',
+    onChange:function(e){
+     if(queryEditor.getValue() == queryBuffer){
+       $('#query-save-button').addClass('disabled');
+     }else{
+       $('#query-save-button').removeClass('disabled');
+     }
+     }
+
+});
+    </script>
+        <script src='".$conf['basedir'] ."admin/js/editor.js'></script>
+
 
     ".$this->foot;
   }
