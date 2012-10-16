@@ -1,6 +1,46 @@
 $(document).ready(function(){
     var relPos = "../lodspeakr/components/";
     
+    var templateBuffer = '';
+    var queryBuffer = '';
+    CodeMirror.defineMode('mustache', function(config, parserConfig) {
+  var mustacheOverlay = {
+    token: function(stream, state) {
+      var ch;
+      if (stream.match('{{')) {
+        while ((ch = stream.next()) != null)
+          if (ch == '}' && stream.next() == '}') break;
+        stream.eat('}');
+        return 'mustache';
+      }
+      while (stream.next() != null && !stream.match('{{', false)) {}
+      return null;
+    }
+  };
+  return CodeMirror.overlayMode(CodeMirror.getMode(config, parserConfig.backdrop || 'text/html'), mustacheOverlay);
+});
+
+
+    var templateEditor = CodeMirror.fromTextArea(document.getElementById('template-editor'), {mode: 'mustache',
+    onChange:function(e){
+     if(templateEditor.getValue() == templateBuffer){
+       $('#template-save-button').addClass('disabled');
+     }else{
+       $('#template-save-button').removeClass('disabled');
+     }
+     }
+     });
+     var queryEditor = CodeMirror.fromTextArea(document.getElementById('query-editor'), {mode: 'sparql',
+    onChange:function(e){
+     if(queryEditor.getValue() == queryBuffer){
+       $('#query-save-button').addClass('disabled');
+     }else{
+       $('#query-save-button').removeClass('disabled');
+     }
+     }
+
+});
+
     $("#query-test-button").on('click', function(e){
       var query = queryEditor.getValue();
       var endpoint = $("#endpoint-list>option:selected").val();
@@ -51,12 +91,21 @@ $(document).ready(function(){
  });
 
   $(".new-file-button").on("click", function(e){
-     var componentName = prompt("Please enter the name of the new component","newComponent");
-     if(componentName != null){
-       var url   = "components/add/"+$(this).attr("data-component")+"/"+componentName;
+     var fileName = "";
+     if($(this).hasClass("new-file-button-view")){
+       fileName = prompt("Please enter the name of the new view","json.template");
+       fileName = /\w+\.template$/g.exec(fileName);
+     }else{
+       fileName = prompt("Please enter the name of the new model","newModel.query");
+       fileName = /\w+\.query$/g.exec(fileName);
+     }
+     if(fileName != null){
+       var url   = "components/add/"+$(this).attr("data-component")+"/"+fileName;
        var data  = {content: $("#template-editor").val()};
        var msgId = "#component-msg";
        executePost(url, data, {id:msgId, success: "Saved!", failure: "Can't create new file. Probably permissions problem or file already exists", error: "Error creating a new file!"});
+     }else{
+       alert("File name is not valid. It has to end with a .query for models and with .template for views");
      }
   });
   
@@ -65,8 +114,9 @@ $(document).ready(function(){
         var componentName = $(this).attr("data-component-name");
         var componentType = $(this).attr("data-component-type");
         var url = "components/delete/"+componentType+"/"+componentName;
+       var msgId = "#component-msg";
         if (confirm("Are you sure you want to delete this component?")) {
-          executePost(url, data, {id:msgId, success: "Component deleted!", failure: "Can't delete component. Probably permissions problem", error: "Error deleting component!"});      
+          executePost(url, "", {id:msgId, success: "Component deleted!", failure: "Can't delete component. Probably permissions problem", error: "Error deleting component!"});      
         }
       }
   });
@@ -74,6 +124,8 @@ $(document).ready(function(){
   
  
  $(".lodspk-component").on("click", function(e){
+     $(".lodspk-component").removeClass("strong");
+     $(this).addClass("strong");
      var componentType = $(this).attr("data-component-type");
      var componentName = $(this).attr("data-component-name");
      var dataParent = ".lodspk-component[data-component-type="+componentType+"][data-component-name="+componentName+"]";
@@ -93,7 +145,10 @@ $(document).ready(function(){
       $.each(data.models, function(i, item){
           var modelUrl = relPos+componentType+"/"+componentName+"/queries/"+item;
           var modelFileUrl = componentType+"/"+componentName+"/queries/"+item;
-          $("#query-list").append("<li class='file-li'><button type='button' class='close hide lodspk-delete-file' data-parent='"+dataParent+"' data-file='"+modelFileUrl+"' style='align:left'>x</button><a href='#query-save-button' class='lodspk-query' data-url='"+modelUrl+"'>"+item+"</a></li>")        
+          $("#query-list").append("<li class='file-li'><button type='button' class='close hide lodspk-delete-file' data-parent='"+dataParent+"' data-file='"+modelFileUrl+"' style='align:left'>x</button><a href='#query-save-button' class='lodspk-query' data-url='"+modelUrl+"'>"+item+"</a></li>");
+          $('html, body').stop().animate({
+                      scrollTop: $('#query-list').offset().top
+                    }, 100);
       });
       updateEvents();
       $(".new-file-button").removeClass("hide");
@@ -157,6 +212,8 @@ $(document).ready(function(){
        }
    });   
    $(".lodspk-template").on("click", function(e){
+     $(".lodspk-template").removeClass("strong");
+     $(this).addClass("strong");
        var fileUrl = $(this).attr("data-url");
        $.ajax({
            cache: false,
@@ -172,6 +229,8 @@ $(document).ready(function(){
        });
    });
    $(".lodspk-query").on("click", function(e){
+     $(".lodspk-query").removeClass("strong");
+     $(this).addClass("strong");
        var fileUrl = $(this).attr("data-url");
        $.ajax({
            cache: false,

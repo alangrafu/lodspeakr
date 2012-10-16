@@ -26,6 +26,7 @@ class AdminModule extends abstractModule{
         padding-right:20px;
         background-position: right;
       }
+      .strong{font-weight: 900; font-size:120%}
       /* Base class */
 .bs-docs-template {
   position: relative;
@@ -149,11 +150,11 @@ class AdminModule extends abstractModule{
   	if(sizeof($qArr)==0){
   	  return FALSE;
   	}
-  	if(!$this->auth()){
-  	  HTTPStatus::send401("Forbidden\n");
-  	  exit(0);
-  	}
   	if($qArr[0] == "admin" && array_search($qArr[1], $operations) !== FALSE){
+  	  if(!$this->auth()){
+  	    HTTPStatus::send401("Forbidden\n");
+  	    exit(0);
+  	  }
   	  return $qArr;
   	}  	
   	return FALSE;  
@@ -579,48 +580,7 @@ class AdminModule extends abstractModule{
     <script src='".$conf['basedir'] ."admin/codemirror/lib/util/overlay.js'></script>
     <script src='".$conf['basedir'] ."admin/codemirror/mode/xml/xml.js'></script>
     <script src='".$conf['basedir'] ."admin/codemirror/mode/sparql/sparql.js'></script>
-    <script>
-    var templateBuffer = '';
-    var queryBuffer = '';
-    CodeMirror.defineMode('mustache', function(config, parserConfig) {
-  var mustacheOverlay = {
-    token: function(stream, state) {
-      var ch;
-      if (stream.match('{{')) {
-        while ((ch = stream.next()) != null)
-          if (ch == '}' && stream.next() == '}') break;
-        stream.eat('}');
-        return 'mustache';
-      }
-      while (stream.next() != null && !stream.match('{{', false)) {}
-      return null;
-    }
-  };
-  return CodeMirror.overlayMode(CodeMirror.getMode(config, parserConfig.backdrop || 'text/html'), mustacheOverlay);
-});
-
-
-    var templateEditor = CodeMirror.fromTextArea(document.getElementById('template-editor'), {mode: 'mustache',
-    onChange:function(e){
-     if(templateEditor.getValue() == templateBuffer){
-       $('#template-save-button').addClass('disabled');
-     }else{
-       $('#template-save-button').removeClass('disabled');
-     }
-     }
-     });
-     var queryEditor = CodeMirror.fromTextArea(document.getElementById('query-editor'), {mode: 'sparql',
-    onChange:function(e){
-     if(queryEditor.getValue() == queryBuffer){
-       $('#query-save-button').addClass('disabled');
-     }else{
-       $('#query-save-button').removeClass('disabled');
-     }
-     }
-
-});
-    </script>
-        <script src='".$conf['basedir'] ."admin/js/editor.js'></script>
+    <script src='".$conf['basedir'] ."admin/js/editor.js'></script>
 
 
     ".$this->foot;
