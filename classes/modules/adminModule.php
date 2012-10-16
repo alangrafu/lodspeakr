@@ -749,6 +749,20 @@ class AdminModule extends abstractModule{
   
   protected function addFile($params){
     $path = "components/".implode("/", array_slice($params, 1));
+    $basicContent = "SELECT * WHERE{
+      ?s ?p ?o
+    }LIMIT 10";
+    if(strpos($path, ".template") !== FALSE){
+      //It is not a query, but a template
+      $basicContent = "<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv='Content-type' content='text/html; charset=utf-8'>
+  </head>
+  <body>
+  </body>
+</html>";
+    }
     if($_SERVER['REQUEST_METHOD'] == 'POST'){
       if(sizeof($params) < 3){
         HTTPStatus::send404();
@@ -759,12 +773,14 @@ class AdminModule extends abstractModule{
         echo json_encode(array('success' => false));
         return;
       }
-      exec("touch ".$path, &$output, $return_var);  
+      //exec("touch ".$path, &$output, $return_var);  
+      $return_var = file_put_contents($path, $basicContent );
+
       //echo $return_var;exit(0);
-      if($return_var !== 0){
-        HTTPStatus::send500("touch ".$path);
+      if($return_var === FALSE){
+        HTTPStatus::send500("touch ".var_export($return_var, true)." ".$path);
       }else{
-        echo json_encode(array('success' => true));          
+        echo json_encode(array('success' => true, 'return' => $return_var));          
       }
     }else{
       HTTPStatus::send406();

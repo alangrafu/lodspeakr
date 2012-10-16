@@ -109,7 +109,8 @@ $(document).ready(function(){
        var url   = "components/add/"+$(this).attr("data-component")+"/"+fileName;
        var data  = {content: $("#template-editor").val()};
        var msgId = "#component-msg";
-       executePost(url, data, {id:msgId, success: "Saved!", failure: "Can't create new file. Probably permissions problem or file already exists", error: "Error creating a new file!"});
+       var comp = $(this).attr("data-component").split("/");
+       executePost(url, data, {id:msgId, success: "Saved!", failure: "Can't create new file. Probably permissions problem or file already exists", error: "Error creating a new file!", triggerElement: "[data-component-type="+comp[0]+"][data-component-name="+comp[1]+"]" , triggerEvent: 'click'});
      }
   });
   
