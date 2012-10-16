@@ -94,18 +94,22 @@ $(document).ready(function(){
      var fileName = "";
      if($(this).hasClass("new-file-button-view")){
        fileName = prompt("Please enter the name of the new view","json.template");
-       fileName = /\w+\.template$/g.exec(fileName);
+       if(! /[^\/\s]+\.template$/g.test(fileName)){
+         alert("File name is not valid. It has to end with a .template");
+         return;
+       }
      }else{
        fileName = prompt("Please enter the name of the new model","newModel.query");
-       fileName = /\w+\.query$/g.exec(fileName);
+       if(! /^(endpoint\.[^\/\s]+\/)*[^\/\s]+\.query$/.test(fileName)){
+         alert("File name is not valid. Format is [endpoint.ENDPOINTPREFIX/]*FILENAME.query");
+         return;
+       }
      }
      if(fileName != null){
        var url   = "components/add/"+$(this).attr("data-component")+"/"+fileName;
        var data  = {content: $("#template-editor").val()};
        var msgId = "#component-msg";
        executePost(url, data, {id:msgId, success: "Saved!", failure: "Can't create new file. Probably permissions problem or file already exists", error: "Error creating a new file!"});
-     }else{
-       alert("File name is not valid. It has to end with a .query for models and with .template for views");
      }
   });
   
@@ -145,10 +149,10 @@ $(document).ready(function(){
       $.each(data.models, function(i, item){
           var modelUrl = relPos+componentType+"/"+componentName+"/queries/"+item;
           var modelFileUrl = componentType+"/"+componentName+"/queries/"+item;
-          $("#query-list").append("<li class='file-li'><button type='button' class='close hide lodspk-delete-file' data-parent='"+dataParent+"' data-file='"+modelFileUrl+"' style='align:left'>x</button><a href='#query-save-button' class='lodspk-query' data-url='"+modelUrl+"'>"+item+"</a></li>");
+          $("#query-list").append("<li class='file-li'><button type='button' class='close hide lodspk-delete-file' data-parent='"+dataParent+"' data-file='"+modelFileUrl+"' style='align:left'>x</button><a href='#' class='lodspk-query' data-url='"+modelUrl+"'>"+item+"</a></li>");
           $('html, body').stop().animate({
-                      scrollTop: $('#query-list').offset().top
-                    }, 100);
+                      scrollTop: $('#template-list').offset().top - 100
+                    }, 500);
       });
       updateEvents();
       $(".new-file-button").removeClass("hide");
@@ -223,8 +227,8 @@ $(document).ready(function(){
            templateBuffer = data;
            $("#template-save-button").attr("data-url", fileUrl).addClass("disabled");
            $('html, body').stop().animate({
-                      scrollTop: $('body').offset().top
-                    }, 100);
+                      scrollTop: $('body').offset().top-100
+                    }, 500);
        }
        });
    });
@@ -239,9 +243,9 @@ $(document).ready(function(){
            queryEditor.setValue(data);
            queryBuffer = data;
            $("#query-save-button").attr("data-url", fileUrl).addClass("disabled");
-           $('#query-editor').stop().animate({
-                      scrollTop: $('body').offset().top
-                    }, 100);
+           $('html, body').stop().animate({
+                      scrollTop: $('.bs-docs-query').offset().top-100
+                    }, 1000);
        }
        });
    });

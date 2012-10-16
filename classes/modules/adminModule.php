@@ -730,15 +730,19 @@ class AdminModule extends abstractModule{
         exit(0);
       }
       $return_var = 0;
-      exec ("rm ".$path, &$output, $return_var);  
-      if($return_var !== 0){
-        echo json_encode(array('success' => false, path => $path));          
+      if(strpos($path, "components") === 0 && strpos($path, '..') === FALSE){
+        exec ("rm ".$path, &$output, $return_var);  
+        if($return_var !== 0){
+          echo json_encode(array('success' => false, path => $path));          
+        }else{
+          echo json_encode(array('success' => true, path => $path));          
+        }
       }else{
-        echo json_encode(array('success' => true, path => $path));          
+        HTTPStatus::send406();
+        exit(0);
       }
     }else{
-      HTTPStatus::send406();
-      exit(0);
+      echo json_encode(array('success' => false, path => $path));              
     }
   }
   
