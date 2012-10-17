@@ -25,6 +25,8 @@ USAGE=$USAGE"\n===MODULES===\n"
 USAGE=$USAGE" Enable module:\t\t\t\t\t\t$0 enable module position\n"
 USAGE=$USAGE" Disable module:\t\t\t\t\t$0 disable module\n"
 USAGE=$USAGE" List modules:\t\t\t\t\t$0 list modules\n"
+USAGE=$USAGE" \n===ADMIN USER===\n"
+USAGE=$USAGE" Change password:\t\t\t\t\t$0 change password NEWPASSWORD\n"
 USAGE=$USAGE"\n===VERSION==\n"
 USAGE=$USAGE" Version:\t\t\t\t\t\t$0 version\n"
 USAGEDEBUG="Usage: $0 debug on|off"
@@ -34,7 +36,7 @@ if [[ $# -eq 0 || "$1" == "--help" ]]; then
 fi
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-operations=( create delete debug backup restore default cache version enable disable add remove list details )
+operations=( create delete debug backup restore default cache version enable disable add remove list details change )
 currentOperation=
 
 if [[ ${operations[@]} =~ $1 ]]; then
@@ -287,5 +289,29 @@ if [[ $currentOperation == "details" ]]; then
   fi
   cd $DIR/..
   $DIR/modules/detail-component.sh $detailOperation $3
+  exit
+fi
+
+## Change
+if [[ $currentOperation == "change" ]]; then
+  if [ "$#" != "3" ]; then
+    echo -e $USAGE
+    exit 1
+  fi
+  changeOperation=( password )
+  if [[ ${changeOperation[@]} =~ $2 && $2 != "" ]]
+  then
+    changeOperation=$2
+  else
+    echo -e "Option '$2' not supported. Operation aborted\n" >&2
+    echo -e $USAGE
+    exit 1
+  fi
+  if [[ $3 == "" ]]; then
+    echo "Error: No new password given"
+    echo -e $USAGE;
+    exit 1
+  fi
+  php $DIR/modules/change-password.php $3
   exit
 fi
