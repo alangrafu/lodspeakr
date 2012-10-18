@@ -120,7 +120,7 @@ echo >> $parent_htaccess
 newBase=`echo $basedir|sed -e "s|https\{0,1\}://[^\/]*||g"`
 echo "RewriteBase $newBase" >> $parent_htaccess
 cat $root_htaccess >> $parent_htaccess
-echo "RewriteRule ^(.+)\$ $home/index.php?q=\$home [L]" >> $parent_htaccess
+echo "RewriteRule ^(.+)\$ $home/index.php?q=\$1 [L]" >> $parent_htaccess
 echo "</IfModule>" >> $parent_htaccess
 mkdir -p cache
 cp -r doc/examples/originalComponents components
