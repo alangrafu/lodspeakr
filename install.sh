@@ -120,25 +120,32 @@ echo >> $parent_htaccess
 newBase=`echo $basedir|sed -e "s|https\{0,1\}://[^\/]*||g"`
 echo "RewriteBase $newBase" >> $parent_htaccess
 cat $root_htaccess >> $parent_htaccess
-echo "RewriteRule ^(.+)\$ $1/index.php?q=\$1 [L]" >> $parent_htaccess
+echo "RewriteRule ^(.+)\$ $home/index.php?q=\$home [L]" >> $parent_htaccess
 echo "</IfModule>" >> $parent_htaccess
-mkdir cache
+mkdir -p cache
 cp -r doc/examples/originalComponents components
 mkdir -p components/uris
 bold=`tput bold`
 normal=`tput sgr0`
+wwwUser=`ps aux|egrep "apache|httpd|www" |egrep -v "grep|root"|awk '{print $1}'|uniq`  
 echo
 echo "                                      *** ATTENTION ***"
 echo
-echo "LODSPeaKr needs the web server to have write permissions for $1/cache/ and $1/meta/."
+echo "LODSPeaKr needs the web server to have write permissions for $home/cache/ and $home/meta/."
 echo
 echo
 echo "Common ways of doing this:"
-echo " ${bold}chown -R www-apache $1/cache $1/meta${normal} (find the name of the apache user in your system)"
-echo " ${bold}chown -R apache $1/cache $1/meta${normal} (find the name of the apache user in your system)"
-echo " ${bold}chown -R www-data $1/cache $1/meta${normal} (find the name of the apache user in your system)"
-echo " ${bold}chmod -R g+w $1/cache $1/meta${normal} (if you have a group in common with the apache user)"
-echo " ${bold}chmod -R 777 $1/cache $1/meta${normal} (highly discouraged but useful to test when everything fails. It shouldn't be used in production sites)"
+if [ "$wwwUser" != "" ]; then
+  echo " ${bold}sudo chown -R $wwwUser $home/cache $home/meta${normal}"
+  echo "OR"
+  echo " ${bold}sudo chmod -R 777 $home/cache $home/meta${normal} (highly discouraged but useful to test when everything fails. It shouldn't be used in production sites)"
+else
+  echo " ${bold}chown -R www-apache $home/cache $home/meta${normal} (find the name of the apache user in your system)"
+  echo " ${bold}chown -R apache $home/cache $home/meta${normal} (find the name of the apache user in your system)"
+  echo " ${bold}chown -R www-data $home/cache $home/meta${normal} (find the name of the apache user in your system)"
+  echo " ${bold}chmod -R g+w $home/cache $home/meta${normal} (if you have a group in common with the apache user)"
+  echo " ${bold}chmod -R 777 $home/cache $home/meta${normal} (highly discouraged but useful to test when everything fails. It shouldn't be used in production sites)"
+fi
 echo
 echo "Please give the server write permissions. Otherwise, LODSPeaKr will not work."
 echo
