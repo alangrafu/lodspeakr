@@ -1,6 +1,6 @@
 $(document).ready(function(){
     var relPos = "../lodspeakr/components/";
-    
+    var currentXhr = null;    
     var templateBuffer = '';
     var queryBuffer = '';
     CodeMirror.defineMode('mustache', function(config, parserConfig) {
@@ -42,11 +42,16 @@ $(document).ready(function(){
 });
 
     $("#query-test-button").on('click', function(e){
-      var query = queryEditor.getValue();
-      var endpoint = $("#endpoint-list>option:selected").val();
       $("#results").empty();
-      $("#query-test-button").addClass('disabled').html('<img src="../img/wait.gif"/>');
-      executeQuery(query, endpoint);
+      if($(this).hasClass("btn-success")){
+        var query = queryEditor.getValue();
+        var endpoint = $("#endpoint-list>option:selected").val();
+        $("#query-test-button").removeClass('btn-success').html('<img src="../img/wait.gif"/> Stop');
+        currentXhr = executeQuery(query, endpoint);
+      }else{
+        currentXhr.abort();
+        $(this).addClass('btn-success').html('Test this query against');
+      }
     });
     $(".component-li").on({
         mouseenter: function(){
@@ -163,7 +168,7 @@ $(document).ready(function(){
  });
  
  function executeQuery(q, e){
-   $.ajax({
+   return $.ajax({
        dataType: 'jsonp',
        data: {
          query: q,
@@ -181,15 +186,19 @@ $(document).ready(function(){
          $(data.results.bindings).each(function(i, item){
              var row = $("<tr></tr>");
              $.each(variables, function(j, jtem){
-                 row.append("<td>"+item[jtem].value+"</td>");
+                 var value = "";
+                 if(item[jtem] != undefined){
+                   value = item[jtem].value;
+                 }
+                 row.append("<td>"+value+"</td>");
              });
              $("#results").append(row);
          });
-         $("#query-test-button").removeClass('disabled').html('Test this query against');
+         $("#query-test-button").addClass('btn-success').html('Test this query against');
        },
        error: function(e){
          $("#results-msg").html("An error occurred when sending a query to the endpoint").show().delay(2000).fadeOut("slow");
-         $("#query-test-button").removeClass('disabled').html('Test this query against');
+         $("#query-test-button").addClass('btn-success').html('Test this query against');
        },
        timeout: 20000,
    });
@@ -246,7 +255,7 @@ $(document).ready(function(){
            $("#query-save-button").attr("data-url", fileUrl).addClass("disabled");
            $('html, body').stop().animate({
                       scrollTop: $('.bs-docs-query').offset().top-100
-                    }, 1000);
+                    }, 100);
        }
        });
    });

@@ -571,6 +571,7 @@ class AdminModule extends abstractModule{
        <h2>Query results preview</h2>
        <span class='alert alert-error hide' id='results-msg'></span>
        <table class='table' id='results'></table>
+       <div style='height:300px'></div>
       </div>
      </div>
     </div>
@@ -837,6 +838,7 @@ class AdminModule extends abstractModule{
     if (!($data = $this->http_digest_parse($_SERVER['PHP_AUTH_DIGEST'])) ||
       !isset($users[$data['username']]))
       return FALSE;
+  
     //die('Wrong Credentials!');
     // generate the valid response
     $A1 = md5($data['username'] . ':' . $realm . ':' . $users[$data['username']]);
