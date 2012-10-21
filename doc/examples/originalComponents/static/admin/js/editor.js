@@ -232,6 +232,7 @@ $(document).ready(function(){
        $.ajax({
            cache: false,
            url: fileUrl, 
+           dataType: 'text',
            success: function(data){
            templateEditor.setValue(data);
            templateBuffer = data;
