@@ -8,7 +8,7 @@
 #    http://visualbox.org/install 
 #       303 redirects to this script.
 
-lodspeakr_repository="git@github.com:alangrafu/visualbox.git"
+lodspeakr_repository="git://github.com/alangrafu/visualbox.git"
 home=`basename $lodspeakr_repository | sed 's/.git//'`
 
 source ~/.bashrc
