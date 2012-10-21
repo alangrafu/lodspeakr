@@ -55,8 +55,8 @@ $conf['debug'] = false;
 
 //Session module
 //First version: really simple user/pass
-$conf['session']['user'] = 'admin';
-$conf['session']['password'] = 'admin';
+//$conf['session']['user'] = 'admin';
+//$conf['session']['password'] = 'admin';
 
 
 //Modules: LODSPeaKr will try to match the requested URI
