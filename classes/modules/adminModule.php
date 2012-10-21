@@ -102,7 +102,6 @@ class AdminModule extends abstractModule{
           <a class='brand' href='../admin'>LODSPK Admin Menu</a>
           <div class='nav-collapse'>
             <ul class='nav'>
-              <li ><a href='../admin'>Admin home</a></li>
               <li class='dropdown'>
                <a class='dropdown-toggle' data-toggle='dropdown' href='#'>SPARQL Endpoint<b class='caret'></b></a>
                <ul class='dropdown-menu'>
