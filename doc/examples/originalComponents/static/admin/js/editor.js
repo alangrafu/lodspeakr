@@ -1,5 +1,5 @@
 $(document).ready(function(){
-    var relPos = "../lodspeakr/components/";
+    var relPos = "../visualbox/components/";
     var currentXhr = null;    
     var templateBuffer = '';
     var queryBuffer = '';
