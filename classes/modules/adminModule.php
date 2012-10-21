@@ -440,7 +440,7 @@ class AdminModule extends abstractModule{
       <input type='text' name='prefix' id='prefix' value='local'/>
       <span class='help-block'>The prefix to describe this namespace ('local' is the one used to mirror URIs of the data in this server)</span>
       <label for='file'>Endpoint</label>
-      <input type='text' name='endpoint' id='endpoint' value='".$conf['ns']['local']."'/>
+      <input type='text' name='endpoint' id='endpoint' value='".$conf['endpoint']['local']."'/>
       <span class='help-block'>The endpoint URL</span>
       <br />
       <button type='submit' class='btn'>Submit</button></form>
