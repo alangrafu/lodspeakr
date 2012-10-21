@@ -108,8 +108,8 @@ class AdminModule extends abstractModule{
                <ul class='dropdown-menu'>
               <!--li><a href='../admin/start'>Start endpoint</a></li>
               <li><a href='../admin/stop'>Stop endpoint</a></li-->
-              <li><a href='../admin/load'>Add RDF</a></li>
-              <li><a href='../admin/remove'>Remove RDF</a></li>
+              <!--li><a href='../admin/load'>Add RDF</a></li>
+              <li><a href='../admin/remove'>Remove RDF</a></li-->
                </ul>
               </li>
               <li>
@@ -144,7 +144,7 @@ class AdminModule extends abstractModule{
     global $conf;
     //URLs used by this component. Other URLs starting with admin/* won't be considered by this module
     
-    $operations = array("menu", "load", "remove", "endpoints", "namespaces", "components", "");
+    $operations = array("menu", /*"load", "remove",*/ "endpoints", "namespaces", "components", "");
   	$q = preg_replace('|^'.$conf['basedir'].'|', '', $localUri);
   	$qArr = explode('/', $q);
   	if(sizeof($qArr)==0){
@@ -186,12 +186,12 @@ class AdminModule extends abstractModule{
   	case "stop":
   	  $this->stopEndpoint();
   	  break;*/
-  	case "load":
+  	/*case "load":
   	  $this->loadRDF();
   	  break;
   	case "remove":
   	  $this->deleteRDF();
-  	  break;
+  	  break;*/
   	case "namespaces":
   	  $this->editNamespaces();
   	  break;
