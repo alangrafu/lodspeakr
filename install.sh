@@ -131,28 +131,25 @@ wwwUser=`ps aux|egrep "apache|httpd|www" |egrep -v "grep|root"|awk '{print $1}'|
 echo
 echo "                                      *** ATTENTION ***"
 echo
-echo "LODSPeaKr needs the web server to have write permissions for $home/cache/ and $home/meta/."
+echo "LODSPeaKr needs the web server to have write permissions for $home/cache/ $home/meta/ $home/components and $home/settings.inc.php."
 echo
 echo
 echo "Common ways of doing this:"
 if [ "$wwwUser" != "" ]; then
-  echo " ${bold}sudo chown -R $wwwUser $home/cache $home/meta${normal}"
+  echo " ${bold}sudo chown -R $wwwUser $home/cache $home/meta${normal} $home/components $home/settings.inc.php"
   echo "OR"
-  echo " ${bold}sudo chmod -R 777 $home/cache $home/meta${normal} (highly discouraged but useful to test when everything fails. It shouldn't be used in production sites)"
+  echo " ${bold}sudo chmod -R 777 $home/cache $home/meta${normal} $home/components $home/settings.inc.php (highly discouraged but useful to test when everything fails. It shouldn't be used in production sites)"
 else
-  echo " ${bold}chown -R www-apache $home/cache $home/meta${normal} (find the name of the apache user in your system)"
-  echo " ${bold}chown -R apache $home/cache $home/meta${normal} (find the name of the apache user in your system)"
-  echo " ${bold}chown -R www-data $home/cache $home/meta${normal} (find the name of the apache user in your system)"
-  echo " ${bold}chmod -R g+w $home/cache $home/meta${normal} (if you have a group in common with the apache user)"
-  echo " ${bold}chmod -R 777 $home/cache $home/meta${normal} (highly discouraged but useful to test when everything fails. It shouldn't be used in production sites)"
+  echo " ${bold}chown -R www-apache $home/cache $home/meta${normal} $home/components $home/settings.inc.php (find the name of the apache user in your system)"
+  echo " ${bold}chown -R apache $home/cache $home/meta${normal} $home/components $home/settings.inc.php (find the name of the apache user in your system)"
+  echo " ${bold}chown -R www-data $home/cache $home/meta${normal} $home/components $home/settings.inc.php (find the name of the apache user in your system)"
+  echo " ${bold}chmod -R g+w $home/cache $home/meta${normal} $home/components $home/settings.inc.php (if you have a group in common with the apache user)"
+  echo " ${bold}chmod -R 777 $home/cache $home/meta${normal} $home/components $home/settings.inc.php (highly discouraged but useful to test when everything fails. It shouldn't be used in production sites)"
 fi
 echo
-echo "Please give the server write permissions. Otherwise, LODSPeaKr will not work."
-echo
-echo
+echo "Please give the server write permissions. Otherwise, LODSPeaKr will NOT WORK."
 echo
 echo "See https://github.com/alangrafu/lodspeakr/wiki/Installation for further information"
-echo
 echo
 echo "--------------------------------------------------------------------------------------------------------"
 echo "You can now visit ${bold}$basedir${normal} to navigate through your data."
