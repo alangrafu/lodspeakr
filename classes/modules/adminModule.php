@@ -7,7 +7,7 @@ class AdminModule extends abstractModule{
 <html lang='en'>
   <head>
     <meta charset='utf-8'>
-    <title>LODSPeaKr Admin Menu</title>
+    <title>Visualbox Admin Menu</title>
     <meta name='viewport' content='width=device-width, initial-scale=1.0'>
     <meta name='description' content=''>
     <meta name='author' content=''>
@@ -99,7 +99,7 @@ class AdminModule extends abstractModule{
             <span class='icon-bar'></span>
             <span class='icon-bar'></span>
           </a>
-          <a class='brand' href='../admin'>LODSPK Admin Menu</a>
+          <a class='brand' href='../admin'>Visualbox menu</a>
           <div class='nav-collapse'>
             <ul class='nav'>
               <li class='dropdown'>
