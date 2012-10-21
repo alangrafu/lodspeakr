@@ -26,7 +26,7 @@ class Haanga_Extension_Filter_GoogleVizTable{
   	  foreach($varList as $v){
   	    $name = $v['name'];
   	    $val = $v['value'];
-  	  	$data .="        data.setCell($i, $j, '".$k->$name->$val."');\n";
+  	  	$data .="        data.setCell($i, $j, '".str_replace("'", "\'",$k->$name->$val)."');\n";
   	  	$j++;
   	  } 
   	  $i++;

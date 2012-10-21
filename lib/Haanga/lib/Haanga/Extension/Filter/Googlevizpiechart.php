@@ -43,8 +43,8 @@ class Haanga_Extension_Filter_GoogleVizPieChart{
    	  foreach($varList as $v){
   	    $name = $v['name'];
   	    $val = $v['value'];
-  	    $value = ($j==0)?"'".$k->$name->$val."'":$k->$name->$val;
-  	  	$data .="        data.setCell($i, $j, ".$value.");\n";
+  	    $value = ($j==0)?"'".str_replace("'", "\'",$k->$name->$val)."'":$k->$name->$val;
+  	  	$data .="        data.setCell($i, $j, ".str_replace("'", "\'",$value).");\n";
   	  	$j++;
   	  } 
   	  $i++;
