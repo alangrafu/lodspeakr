@@ -138,11 +138,12 @@ echo "Common ways of doing this:"
 if [ "$wwwUser" != "" ]; then
   echo " ${bold}sudo chown -R $wwwUser $home/cache $home/meta${normal} $home/components $home/settings.inc.php"
   echo "OR"
-  echo " ${bold}sudo chmod -R 777 $home/cache $home/meta${normal} $home/components $home/settings.inc.php (highly discouraged but useful to test when everything fails. It shouldn't be used in production sites)"
+  echo " ${bold}sudo chmod -R 777 $home/cache $home/meta${normal} $home/components $home/settings.inc.php"
+  echo " (highly discouraged but useful to test when everything fails. It shouldn't be used in production sites)"
 else
+  echo " ${bold}chown -R www-data $home/cache $home/meta${normal} $home/components $home/settings.inc.php (find the name of the apache user in your system)"
   echo " ${bold}chown -R www-apache $home/cache $home/meta${normal} $home/components $home/settings.inc.php (find the name of the apache user in your system)"
   echo " ${bold}chown -R apache $home/cache $home/meta${normal} $home/components $home/settings.inc.php (find the name of the apache user in your system)"
-  echo " ${bold}chown -R www-data $home/cache $home/meta${normal} $home/components $home/settings.inc.php (find the name of the apache user in your system)"
   echo " ${bold}chmod -R g+w $home/cache $home/meta${normal} $home/components $home/settings.inc.php (if you have a group in common with the apache user)"
   echo " ${bold}chmod -R 777 $home/cache $home/meta${normal} $home/components $home/settings.inc.php (highly discouraged but useful to test when everything fails. It shouldn't be used in production sites)"
 fi
