@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <title>My visualization</title>
+ </head>
+ <body>
+   {{models.main|GoogleVizTable:"s.curie,p.curie,o.curie"}}
+ </body>
+</html>
+
