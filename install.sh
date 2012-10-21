@@ -131,7 +131,7 @@ wwwUser=`ps aux|egrep "apache|httpd|www" |egrep -v "grep|root"|awk '{print $1}'|
 echo
 echo "                                      *** ATTENTION ***"
 echo
-echo "LODSPeaKr needs the web server to have write permissions for $home/cache/ $home/meta/ $home/components and $home/settings.inc.php."
+echo "Visualbox needs the web server to have write permissions for $home/cache/ $home/meta/ $home/components and $home/settings.inc.php."
 echo
 echo
 echo "Common ways of doing this:"

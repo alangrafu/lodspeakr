@@ -102,15 +102,15 @@ class AdminModule extends abstractModule{
           <a class='brand' href='../admin'>Visualbox menu</a>
           <div class='nav-collapse'>
             <ul class='nav'>
-              <li class='dropdown'>
+              <!--li class='dropdown'>
                <a class='dropdown-toggle' data-toggle='dropdown' href='#'>SPARQL Endpoint<b class='caret'></b></a>
                <ul class='dropdown-menu'>
-              <!--li><a href='../admin/start'>Start endpoint</a></li>
-              <li><a href='../admin/stop'>Stop endpoint</a></li-->
+              <li><a href='../admin/start'>Start endpoint</a></li>
+              <li><a href='../admin/stop'>Stop endpoint</a></li>
               <!--li><a href='../admin/load'>Add RDF</a></li>
-              <li><a href='../admin/remove'>Remove RDF</a></li-->
+              <li><a href='../admin/remove'>Remove RDF</a></li>
                </ul>
-              </li>
+              </li-->
               <li>
                <a class='dropdown-toggle' data-toggle='dropdown' href='../admin/namespaces'>Namespaces<b class='caret'></b></a>
               </li>
@@ -509,19 +509,29 @@ class AdminModule extends abstractModule{
     }
     $namespaces = "var ns = ".json_encode($conf['ns']);
     $lastComponentType="";
+    $onlyService = false;
     foreach($output as $line){
       if($line == ""){
           $menu .= "</ul>\n";
       }else{
         if(preg_match("/^\w/", $line) ){
             $lastComponentType = trim($line);
+            if($lastComponentType == 'services'){
+              $onlyService = true;
+            }else{
+              $onlyService = false;
+            }
             $singleLastComponentType = preg_replace('/(.*)s$/', '\1', $lastComponentType);
-            $menu .= "<ul class='nav nav-list'>
-            <li class='nav-header'>".$lastComponentType."  <button class='btn btn-mini btn-info new-button' style='float:right' data-type='$singleLastComponentType'>new</button></li>\n";
+            if($onlyService){
+              $menu .= "<ul class='nav nav-list'>
+              <li class='nav-header'>".$lastComponentType."  <button class='btn btn-mini btn-info new-button' style='float:right' data-type='$singleLastComponentType'>new</button></li>\n";
+            }
         }else{
           $componentName = trim($line);
-          $menu .= "<li class='component-li'> <button type='button' class='close hide lodspk-delete-component' data-component-type='$singleLastComponentType' data-component-name='$componentName' style='align:left'>x</button>
+          if($onlyService){
+            $menu .= "<li class='component-li'> <button type='button' class='close hide lodspk-delete-component' data-component-type='$singleLastComponentType' data-component-name='$componentName' style='align:left'>x</button>
           <a href='#' class='lodspk-component' data-component-type='$lastComponentType' data-component-name='$componentName'>".$componentName."</a></li>\n";
+          }
         }
       }
     }
