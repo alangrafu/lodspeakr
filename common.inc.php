@@ -64,7 +64,7 @@ $conf['debug'] = false;
 $conf['modules'] = array();
 $conf['modules']['directory'] = 'classes/modules/';
 
-$conf['modules']['available'] = array('static','uri', 'type', 'service');
+$conf['modules']['available'] = array('admin', 'static','uri', 'type', 'service');
 
 
 //To add sparqlFilter module, copy the following line in your settings.inc.php
