@@ -1,5 +1,5 @@
 $(document).ready(function(){
-    var relPos = "../visualbox/components/";
+    var relPos = "../lodspeakr/components/";
     var currentXhr = null;    
     var templateBuffer = '';
     var queryBuffer = '';
@@ -232,7 +232,6 @@ $(document).ready(function(){
        $.ajax({
            cache: false,
            url: fileUrl, 
-           dataType: 'text',
            success: function(data){
            templateEditor.setValue(data);
            templateBuffer = data;
