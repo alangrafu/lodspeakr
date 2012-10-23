@@ -90,7 +90,7 @@ var x = d3.scale.ordinal().rangePoints([0, w], 1),
 
   // Extract the list of dimensions and create a scale for each.
   x.domain(dimensions = d3.keys(json[0]).filter(function(d) {
-    return d != "p" && (y[d] = d3.scale.linear()
+    return d != "'.$varList[0]['name'].'" && (y[d] = d3.scale.linear()
         .domain(d3.extent(json, function(p) { return +p[d]; }))
         .range([h, 0]));
   }));
@@ -109,7 +109,7 @@ var x = d3.scale.ordinal().rangePoints([0, w], 1),
     .selectAll("path")
       .data(json)
     .enter().append("path").style("fill", "none").style("stroke-width", "'.$options['strokeWidth'].'").style("stroke", "'.$options['color'].'").style("stroke-opacity", .7)
-      .attr("d", path).attr("name", function(d){return d.p}).on("mouseover", mouseover).on("mouseout", mouseout);
+      .attr("d", path).attr("name", function(d){console.log("Adding "+d.'.$varList[0]['name'].');return d.'.$varList[0]['name'].'}).on("mouseover", mouseover).on("mouseout", mouseout);
 
   // Add a group element for each dimension.
   var g = svg.selectAll(".dimension")
