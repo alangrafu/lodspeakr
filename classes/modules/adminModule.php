@@ -534,7 +534,6 @@ class AdminModule extends abstractModule{
      <div class='bs-docs-template span9'>
       <textarea class='field span12' rows='8' cols='25' id='template-editor' name='template-editor'></textarea>
       <button class='btn btn-info disabled' id='template-save-button' data-url=''>Save</button>
-      <a href='#' id='preview-button' class='hide'><button class='btn btn-success'  style='float:right;' >View component</button></a>
       <div class='alert alert-success hide' id='template-msg'></div>
      </div>
     </div> 
@@ -553,6 +552,11 @@ class AdminModule extends abstractModule{
           <legend>Models  <button class='btn btn-mini btn-info new-file-button hide new-file-button-model' data-component=''>new</button></legend>
          <ul class='nav nav-list' id='query-list'>
          </ul>
+        </div>
+       </div>
+       <div class='row-fluid'>
+        <div class='span3'>
+         <a href='#' id='preview-button' class='hide'><button class='btn btn-success btn-large'>View component</button></a>
         </div>
        </div>
       </div>
