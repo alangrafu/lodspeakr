@@ -145,8 +145,9 @@ $(document).ready(function(){
      templateEditor.setValue("");
      queryEditor.setValue("");
   $.get(url, function(data){
-      $("#template-list").empty()
-      $("#query-list").empty()
+      $("#template-list").empty();
+      $("#query-list").empty();
+      $("#preview-button").attr("target", "_new").attr("href", "../"+componentName).removeClass("hide");
       $.each(data.views, function(i, item){
           var viewUrl = relPos+componentType+"/"+componentName+"/"+item;
           var viewFileUrl = componentType+"/"+componentName+"/"+item;

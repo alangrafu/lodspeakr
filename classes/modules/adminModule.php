@@ -544,6 +544,7 @@ class AdminModule extends abstractModule{
      <div class='bs-docs-template span9'>
       <textarea class='field span12' rows='8' cols='25' id='template-editor' name='template-editor'></textarea>
       <button class='btn btn-info disabled' id='template-save-button' data-url=''>Save</button>
+      <a href='#' id='preview-button' class='hide'><button class='btn btn-success'  style='float:right;' >View component</button></a>
       <div class='alert alert-success hide' id='template-msg'></div>
      </div>
     </div> 
