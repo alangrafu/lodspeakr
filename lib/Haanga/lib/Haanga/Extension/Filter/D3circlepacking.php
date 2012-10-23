@@ -130,7 +130,7 @@ var vis = d3.select("#clusterpacking'.$randId.'").append("svg")
 
 }
     
-var jsonD3'.$randId.' = '.json_encode($json, JSON_NUMERIC_CHECK).';
+var jsonD3'.$randId.' = '.json_encode($json).';
 initD3CirclePacking'.$randId.'(jsonD3'.$randId.')
 </script>';
   	return $pre.$post;
