@@ -818,20 +818,19 @@ class AdminModule extends abstractModule{
     global $conf;
     $output = array();
     echo $this->head."
-      <div class='span5 well'>
-      <h2>Options</h2>
-      <p>You can do several operations on this module:</p>
-      <ul>
-        <li>You can <a href='load'>load</a> or <a href='remove'>remove</a> RDF data from a named graph.</li>    
-        <li>You edit <a href='namespaces'>edit namespaces</a></li>    
-        <li>You edit <a href='endpoints'>edit endpoints</a></li>    
-      </ul>
-      </div>
       <div class='well span5'>
             <h2>Components Editor</h2>
             <p>You can create, remove and edit components (services types, etc) using the <a href='components'>editor</a></p>
             <a href='components'><button class='btn btn-large btn-info'>Go to Editor</button></a>
 </div>
+      <div class='span5 well'>
+      <h2>Options</h2>
+      <p>You can also:</p>
+      <ul>
+        <li>Add, remove or <a href='namespaces'>edit namespaces</a></li>    
+        <li>Add, remove or <a href='endpoints'>edit endpoints</a></li>    
+      </ul>
+      </div>
       ".$this->foot;
 
   }
