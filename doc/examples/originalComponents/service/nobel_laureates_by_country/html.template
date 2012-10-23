@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <title>Total of Nobel laureates in Physics by country</title>
+   <style>
+     body{font: 11px sans-serif;}
+   </style>
+  </head>
+ <body>
+   <h2>Total of Nobel laureates in Physics by country</h2>
+  {{models.main|GoogleVizPieChart:"countryLabel,total,width=900,height=500"}}
+</body>
+</html>

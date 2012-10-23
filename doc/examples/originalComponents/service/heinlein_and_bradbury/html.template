@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <title>People influenced by Robert Heinlein and Ray Bradbury</title>
+   <style>body{font: 10px sans-serif;}</style>
+ </head>
+ <body>
+   <h2>People influenced by Robert Heinlein and Ray Bradbury</h2>
+  {{models.main|D3ForceGraph:"child,parent"}}
+ </body>
+</html>
+
