@@ -61,7 +61,7 @@ class Haanga_Extension_Filter_Googlemaps{
 	  var latSpan = southWest.lat() + northEast.lat();
 	  var locations = ".json_encode($points).";
 	  
-	  var mapOptions$randId = ".json_encode($options, JSON_NUMERIC_CHECK).";
+	  var mapOptions$randId = ".json_encode($options).";
 	  mapOptions$randId.mapTypeId= google.maps.MapTypeId.ROADMAP;
 	  
     var map = new google.maps.Map(document.getElementById('map_canvas'),mapOptions$randId); 
