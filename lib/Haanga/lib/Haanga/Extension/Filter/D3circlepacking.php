@@ -105,7 +105,7 @@ var pack = d3.layout.pack()
 var vis = d3.select("#clusterpacking'.$randId.'").append("svg")
     .attr("width", width)
     .attr("height", height)
-    .attr("class", "pack")
+    .attr("class", "pack").style("font", "10px sans-serif")
   .append("g")
     .attr("transform", "translate(2, 2)");
 
@@ -118,7 +118,9 @@ var vis = d3.select("#clusterpacking'.$randId.'").append("svg")
   node.append("title")
       .text(function(d) { return d.name + (d.children ? "" : ": " + format(d.size)); });
 
-  node.append("circle")
+  node.append("circle").style("fill", function(d) { return d.children ? "rgb(31, 119, 180)" : "#ff7f0e"; })
+      .style("fill-opacity", function(d) { return d.children ? ".25" : "1"; })
+      .style("stroke", "rgb(31, 119, 180)").style("stroke-width", "1px")
       .attr("r", function(d) { return d.r; });
 
   node.filter(function(d) { return !d.children; }).append("text")
