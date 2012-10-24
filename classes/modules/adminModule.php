@@ -788,12 +788,23 @@ class AdminModule extends abstractModule{
         echo json_encode(array('success' => false));
         return;
       }
-      //exec("touch ".$path, &$output, $return_var);  
+      $dirpath=$path;
+      $dirArray = explode("/", $path);
+      array_pop($dirArray);
+      $dirpath = implode("/", $dirArray);
+      if(!is_dir($dirpath)){
+        $oldumask = umask(0);
+        $return_var = mkdir($dirpath, 0755, true);
+        umask($oldumask);
+        if($return_var === FALSE){
+          HTTPStatus::send500("mkdir ".var_export($return_var, true)." ".$dirpath);
+        }
+      }
       $return_var = file_put_contents($path, $basicContent );
 
       //echo $return_var;exit(0);
       if($return_var === FALSE){
-        HTTPStatus::send500("touch ".var_export($return_var, true)." ".$path);
+        HTTPStatus::send500("file_puts_content ".var_export($return_var, true)." ".$path);
       }else{
         echo json_encode(array('success' => true, 'return' => $return_var));          
       }

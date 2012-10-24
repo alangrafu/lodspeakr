@@ -20,7 +20,7 @@ $(document).ready(function(){
   return CodeMirror.overlayMode(CodeMirror.getMode(config, parserConfig.backdrop || 'text/html'), mustacheOverlay);
 });
 
-
+    //Create Template and Query Editor
     var templateEditor = CodeMirror.fromTextArea(document.getElementById('template-editor'), {mode: 'mustache',
     onChange:function(e){
      if(templateEditor.getValue() == templateBuffer){
@@ -39,8 +39,10 @@ $(document).ready(function(){
      }
      }
 
-});
+    });
 
+
+    //Test button
     $("#query-test-button").on('click', function(e){
       $("#results").empty();
       if($(this).hasClass("btn-success")){
@@ -53,6 +55,8 @@ $(document).ready(function(){
         $(this).addClass('btn-success').html('Test this query against');
       }
     });
+
+    //X button on components
     $(".component-li").on({
         mouseenter: function(){
           $(this).children(".lodspk-delete-component").removeClass("hide");
@@ -95,20 +99,28 @@ $(document).ready(function(){
      }
  });
 
+  //New file
   $(".new-file-button").on("click", function(e){
      var fileName = "";
      if($(this).hasClass("new-file-button-view")){
-       fileName = prompt("Please enter the name of the new view","json.template");
-       if(! /[^\/\s]+\.template$/g.test(fileName)){
-         alert("File name is not valid. It has to end with a .template");
+       fileName = prompt("Please enter the name of the new view","json");
+       
+       if(! /[^\/\.\s]+$/g.test(fileName)){
+         alert("File name is not valid. It can't have spaces or .");
          return;
        }
+       fileName = fileName+".template";
      }else{
-       fileName = prompt("Please enter the name of the new model","newModel.query");
-       if(! /^(endpoint\.[^\/\s]+\/)*[^\/\s]+\.query$/.test(fileName)){
-         alert("File name is not valid. Format is [endpoint.ENDPOINTPREFIX/]*FILENAME.query");
+       fileName = prompt("Please enter the name of the new model","newModel");
+       if(! /^([^\/\s]+\/)*[^\/\s]+$/.test(fileName)){
+         alert("File name is not valid. Format is [ENDPOINTPREFIX/]*FILENAME");
          return;
        }
+       var filePath = fileName.split("/");
+       lastFilePath = filePath.pop();
+       lastFilePath += ".query";
+       filePath = filePath.map(function(d){return "endpoint."+d});
+       fileName = filePath.join("/")+"/"+lastFilePath;
      }
      if(fileName != null){
        var url   = "components/add/"+$(this).attr("data-component")+"/"+fileName;
@@ -151,12 +163,14 @@ $(document).ready(function(){
       $.each(data.views, function(i, item){
           var viewUrl = relPos+componentType+"/"+componentName+"/"+item;
           var viewFileUrl = componentType+"/"+componentName+"/"+item;
-          $("#template-list").append("<li class='file-li'><button type='button' class='close hide lodspk-delete-file' data-parent='"+dataParent+"' data-file='"+viewFileUrl+"' style='align:left'>x</button><a class='lodspk-template' href='#template-editor' data-url='"+viewUrl+"'>"+item+"</a></li>") ;
+          var displayName = item.replace(".template","");
+          $("#template-list").append("<li class='file-li'><button type='button' class='close hide lodspk-delete-file' data-parent='"+dataParent+"' data-file='"+viewFileUrl+"' style='align:left'>x</button><a class='lodspk-template' href='#template-editor' data-url='"+viewUrl+"'>"+displayName+"</a></li>") ;
       });
       $.each(data.models, function(i, item){
           var modelUrl = relPos+componentType+"/"+componentName+"/queries/"+item;
           var modelFileUrl = componentType+"/"+componentName+"/queries/"+item;
-          $("#query-list").append("<li class='file-li'><button type='button' class='close hide lodspk-delete-file' data-parent='"+dataParent+"' data-file='"+modelFileUrl+"' style='align:left'>x</button><a href='#' class='lodspk-query' data-url='"+modelUrl+"'>"+item+"</a></li>");
+          var displayName = item.split("/").map(function(d){return d.replace("endpoint.","").replace(".query", "")}).join("/");
+          $("#query-list").append("<li class='file-li'><button type='button' class='close hide lodspk-delete-file' data-parent='"+dataParent+"' data-file='"+modelFileUrl+"' style='align:left'>x</button><a href='#' class='lodspk-query' data-url='"+modelUrl+"'>"+displayName+"</a></li>");
           $('html, body').stop().animate({
                       scrollTop: $('#template-list').offset().top - 100
                     }, 500);
