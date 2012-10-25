@@ -1,7 +1,12 @@
 Visualbox
 =========
+
 author: Alvaro Graves (alvaro@graves.cl)
+
 version: 20121025
+
+
+Visualbox is a simplified edition of [LODSPeaKr](http://lodspeakr.org) focused on allowing people to create visualizations using Linked Data.
 
 Simplest Installation
 ---------------------
@@ -24,6 +29,4 @@ Finally, give write permissions to the web server in `visualbox/meta`, `visualbo
 
 Now you can go to `http://localhost/visualizations` and you should see the welcome page. You can check now [How to create a new visualization](https://github.com/alangrafu/visualbox/wiki/How-to-create-a-new-visualization)
 
-More documentation on installation of LODSPeaKr/Visualbox is available at the LODSPeaKr wiki:
-
-    https://github.com/alangrafu/lodspeakr/wiki
+More documentation on installation of LODSPeaKr/Visualbox is available at the [LODSPeaKr wiki](https://github.com/alangrafu/lodspeakr/wiki)
