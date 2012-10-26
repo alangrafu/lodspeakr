@@ -33,7 +33,8 @@ class StaticModule extends abstractModule{
   	  echo "\n-------------------------------------------------\nIn ".$conf['static']['directory']."\n";
   	  echo "Static file $file\n-------------------------------------------------\n\n";
 	  }
-	  if($conf['static']['haanga']){
+	  $htmlExtension = 'html';
+	  if($conf['static']['haanga'] && substr_compare($file, $htmlExtension, -strlen($htmlExtension), strlen($htmlExtension)) === 0){
 	    $lodspk['home'] = $conf['basedir'];
 	    $lodspk['baseUrl'] = $conf['basedir'];
 	    $lodspk['module'] = 'static';
