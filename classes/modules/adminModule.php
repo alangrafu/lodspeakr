@@ -27,6 +27,32 @@ class AdminModule extends abstractModule{
         background-position: right;
       }
       .strong{font-weight: 900; font-size:120%}
+      .cheat-sheet{
+      -moz-border-radius: 15px;
+      -webkit-border-radius: 15px;
+      border-radius: 15px;
+        background:lightgray;
+        width:400px;
+        padding:5px;
+        position:absolute;
+        border:1px solid black;
+        right:-370px;
+        top:121px;
+        opacity:0.9
+      }
+      .cheat-title{
+	writing-mode:tb-rl;
+	-webkit-transform:rotate(90deg);
+	-moz-transform:rotate(90deg);
+	-o-transform: rotate(90deg);
+	white-space:nowrap;
+	display:block;
+	width:20px;
+	height:40px;
+	font-size:24px;
+	font-weight:normal;
+	text-shadow: 0px 0px 1px #333;      
+	}
       /* Base class */
 .bs-docs-template {
   position: relative;
@@ -39,6 +65,10 @@ class AdminModule extends abstractModule{
      -moz-border-radius: 4px;
           border-radius: 4px;
 }
+ .cheat-list{
+   margin-left:60px;
+   margin-top:-40px;
+ }
 
 /* Echo out a label for the example */
 .bs-docs-template:after {

@@ -19,7 +19,33 @@ $(document).ready(function(){
   };
   return CodeMirror.overlayMode(CodeMirror.getMode(config, parserConfig.backdrop || 'text/html'), mustacheOverlay);
 });
-
+    
+    var cheatSheet = $("body").append("<div id='cheat' class='cheat-sheet'></div>");
+    $("#cheat").on('mouseenter', function(){$(this).animate({right: '+=200'}, 180)})
+               .on('mouseleave', function(){$(this).animate({right: '-=200'}, 180)}).html("<span class='cheat-title'>Visualization Filters</span>");
+    
+    $("#cheat").append("<ul id='cheat-list' class='cheat-list'></ul>");
+    
+    var visualizationsEnabled = [ 'D3CirclePacking', 
+                                  'D3Dendrogram', 
+                                  'D3ForceGraph', 
+                                  'D3ParallelCoordinates', 
+                                  'GoogleMaps', 
+                                  'GoogleVizBarChart',
+                                  'GoogleVizColumnChart',
+                                  'GoogleVizLineChart',
+                                  'GoogleVizPieChart',
+                                  'GoogleVizScatterChart',
+                                  'GoogleVizTable',
+                                  'Timeknots'];
+    $.each(visualizationsEnabled, function(index, value){
+      $("#cheat-list").append("<li><a href='#' class='cheat-link'>"+value+"</a></li>");
+    });
+    
+    $(".cheat-link").on('click', function(){
+      var visualFilter = '{{models.main|'+$(this).html()+':""}}';
+      templateEditor.replaceSelection(visualFilter);
+    });
     //Create Template and Query Editor
     var templateEditor = CodeMirror.fromTextArea(document.getElementById('template-editor'), {mode: 'mustache',
     onChange:function(e){
