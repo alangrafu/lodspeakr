@@ -38,7 +38,7 @@ $(document).ready(function(){
     $("body").append(tip);
     var cheatSheet = $("body").append("<div id='cheat' class='cheat-sheet'></div>");
     $("#cheat").on('mouseenter', function(){$(this).animate({right: '+=200'}, 180)})
-               .on('mouseleave', function(){$(this).animate({right: '-=200'}, 180);tip.css("top", 0).css("left", 0)}).html("<span class='cheat-title'>Visualization Filters</span>")
+               .on('mouseleave', function(){$(this).animate({right: '-=200'}, 180);tip.css("top", 1000).css("left", 0)}).html("<span class='cheat-title'>Visualization Filters</span>")
                .on('mousemove', function(e){tip.css("top", e.pageY-100).css("left", e.pageX-430)});
     
     $("#cheat").append("<ul id='cheat-list' class='cheat-list'></ul>");
@@ -63,8 +63,8 @@ $(document).ready(function(){
       var visualFilter = '{{models.main|'+$(this).html()+':"'+$(this).attr("data-params")+'"}}';
       templateEditor.replaceSelection(visualFilter);
     })
-                    .on('mouseenter', function(){var visualFilter = '<h3>'+$(this).html()+'</h3><p style="background:#ccc">{{models.main|'+$(this).html()+':"'+$(this).attr("data-params")+'"}}</p><img src="img/'+$(this).attr("data-img")+'"/>';tip.html(visualFilter).animate({opacity: .95}, 200)})
-                    .on('mouseleave', function(){tip.animate({opacity: '0'}, 200)});
+                    .on('mouseenter', function(){var visualFilter = '<h3>'+$(this).html()+'</h3><p style="background:#ccc">{{models.main|'+$(this).html()+':"'+$(this).attr("data-params")+'"}}</p><img src="img/'+$(this).attr("data-img")+'"/>';tip.html(visualFilter).animate({opacity: .95}, 20)})
+                    .on('mouseleave', function(){tip.animate({opacity: '0'}, 20)});
     //Create Template and Query Editor
     var templateEditor = CodeMirror.fromTextArea(document.getElementById('template-editor'), {mode: 'mustache',
     onChange:function(e){
