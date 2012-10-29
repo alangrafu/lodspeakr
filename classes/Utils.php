@@ -350,7 +350,7 @@ class Utils{
   	  $models = Convert::array_to_object($r2);
   	  $f2 = Convert::array_copy($firstResults);
   	  $first = Convert::array_to_object($f2);
- 	  $vars = compact('uri', 'lodspk', 'models', 'first');
+ 	  $vars = compact('uri', 'lodspk', 'conf', 'models', 'first');
  	  $q = file_get_contents($modelFile);
  	  if($q == false){
  	  	HTTPStatus::send500("I can't load ".$modelFile." in ".getcwd());
@@ -545,7 +545,7 @@ class Utils{
   	$first = $lodspk['firstResults'];
   	unset($lodspk['firstResults']);
   	//unset($lodspk);
-  	$vars = compact('uri','lodspk', 'models', 'first');
+  	$vars = compact('uri','lodspk', 'conf',  'models', 'first');
  	if($conf['debug']){
  	  var_dump($vars); 	
  	}
