@@ -101,7 +101,7 @@ content="<?php
  */ 
 \$conf['export'] = true;
 
-#If you want to add/overrid a namespace, add it here
+# If you want to add/override a namespace, add it here
 \$conf['ns']['local']   = '$ns';
 $extra
 
@@ -136,10 +136,9 @@ echo
 echo
 echo "Common ways of doing this:"
 if [ "$wwwUser" != "" ]; then
-  echo " ${bold}sudo chown -R $wwwUser $home/cache $home/meta${normal} $home/components $home/settings.inc.php"
+  echo " ${bold}chmod -R g+w $home/cache $home/meta${normal}; sudo chgrp -R $wwwUser $home/cache $home/meta${normal}"
   echo "OR"
-  echo " ${bold}sudo chmod -R 777 $home/cache $home/meta${normal} $home/components $home/settings.inc.php"
-  echo " (highly discouraged but useful to test when everything fails. It shouldn't be used in production sites)"
+  echo " ${bold}chmod -R 777 $home/cache $home/meta${normal} (highly discouraged but useful to test when everything fails. It shouldn't be used in production sites)"
 else
   echo " ${bold}chown -R www-data $home/cache $home/meta${normal} $home/components $home/settings.inc.php (find the name of the apache user in your system)"
   echo " ${bold}chown -R www-apache $home/cache $home/meta${normal} $home/components $home/settings.inc.php (find the name of the apache user in your system)"
