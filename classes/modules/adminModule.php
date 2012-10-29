@@ -53,7 +53,7 @@ class AdminModule extends abstractModule{
 	font-weight:normal;
 	text-shadow: 0px 0px 1px #333;      
 	}
-      /* Base class */
+	/* Base class */
 .bs-docs-template {
   position: relative;
   margin: 0px 0;
