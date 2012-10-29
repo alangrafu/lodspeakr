@@ -29,7 +29,7 @@ while [ "$everything_ok" != "y" ]; do
   echo
   echo "LODSPeaKr needs to know three (3) URIs to minimally configure itself:"
   echo 
-  echo    "(1/3) At what URL will `pwd |sed -e 's/lodspeakr$//'` be available? (e.g. http://localhost/$parent/)"
+  echo    "(1/2) At what URL will `pwd |sed -e 's/lodspeakr$//'` be available? (e.g. http://localhost/$parent/)"
   echo    "**Note** DO NOT include 'lodspeakr/' in the URL"
   echo -n "(default '$basedir'): "
   read -u 1 aux_basedir
@@ -38,14 +38,15 @@ while [ "$everything_ok" != "y" ]; do
   basedir=$aux_basedir
 
   ns=$basedir
-  echo    "(2/3) What local namespace you will use?"
-  echo -n "(default '$ns'): "
-  read -u 1 aux_ns
-  echo ""
-  if [ "$aux_ns" != "" ]; then
-    aux_ns="`echo $aux_ns | sed 's/\/$//'`/" # remove any ending slash and append one.
-    ns=$aux_ns
-  fi
+##Visualbox doesn't need this
+#  echo    "(2/3) What local namespace you will use?"
+#  echo -n "(default '$ns'): "
+#  read -u 1 aux_ns
+#  echo ""
+#  if [ "$aux_ns" != "" ]; then
+#    aux_ns="`echo $aux_ns | sed 's/\/$//'`/" # remove any ending slash and append one.
+#    ns=$aux_ns
+#  fi
 
   external=""
   extra=""
@@ -56,7 +57,7 @@ while [ "$everything_ok" != "y" ]; do
     extra="\$conf['ns']['base']   = '$basedir';"
   fi
   
-  echo    "(3/3) What is the URL of your SPARQL endpoint?"
+  echo    "(2/2) What is the URL of your SPARQL endpoint?"
   echo -n "(default $endpoint): "
   read -u 1 aux_endpoint
   echo ""
@@ -70,7 +71,7 @@ while [ "$everything_ok" != "y" ]; do
   echo
   echo "Base URL is                        $basedir"
   echo "lodspeakr is installed at          $basedir$home"
-  echo "The local namespace is             $ns"
+#  echo "The local namespace is             $ns"
   echo "Your SPARQL endpoint is located at $endpoint"
 
   echo
@@ -136,9 +137,9 @@ echo
 echo
 echo "Common ways of doing this:"
 if [ "$wwwUser" != "" ]; then
-  echo " ${bold}chmod -R g+w $home/cache $home/meta${normal}; sudo chgrp -R $wwwUser $home/cache $home/meta${normal}"
+  echo " ${bold}chmod -R g+w $home/cache $home/meta $home/settings.inc.php${normal}; sudo chgrp -R $wwwUser $home/cache $home/meta $home/settings.inc.php${normal} "
   echo "OR"
-  echo " ${bold}chmod -R 777 $home/cache $home/meta${normal} (highly discouraged but useful to test when everything fails. It shouldn't be used in production sites)"
+  echo " ${bold}chmod -R 777 $home/cache $home/meta $home/settings.inc.php${normal} (highly discouraged but useful to test when everything fails. It shouldn't be used in production sites)"
 else
   echo " ${bold}chown -R www-data $home/cache $home/meta${normal} $home/components $home/settings.inc.php (find the name of the apache user in your system)"
   echo " ${bold}chown -R www-apache $home/cache $home/meta${normal} $home/components $home/settings.inc.php (find the name of the apache user in your system)"
