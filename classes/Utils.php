@@ -431,11 +431,16 @@ class Utils{
 	  }
   	  if($conf['debug']){
   	  	echo "\n-------------------------------------------------\nIn ".getcwd()."\n";
-  	    echo "$modelFile (against ".$e->getSparqlUrl().")\n-------------------------------------------------\n\n";
+  	    echo "$modelFile (against ".$e->getSparqlUrl().")\n";
   	  	echo $query;
   	  }
   	  trigger_error("Running query from ".$modelFile." on endpoint ".$e->getSparqlURL(), E_USER_NOTICE);
-  	  $aux = $e->query($query, Utils::getResultsType($query)); 
+  	  $initTime = microtime(true);
+  	  $aux = $e->query($query, Utils::getResultsType($query));
+  	  $endTime = microtime(true);
+  	  if($conf['debug']){
+  	    echo "Execution time: ".($endTime - $initTime)." seconds\n-------------------------------------------------\n\n";
+  	  }
   	  if($modelFile != $lodspk['type']){
   	  	if(!isset($rPointer[$strippedModelFile])){
   	  	  $rPointer[$strippedModelFile] = array();
