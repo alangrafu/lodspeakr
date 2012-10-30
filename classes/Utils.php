@@ -432,7 +432,7 @@ class Utils{
   	  if($conf['debug']){
   	  	echo "\n-------------------------------------------------\nIn ".getcwd()."\n";
   	    echo "$modelFile (against ".$e->getSparqlUrl().")\n";
-  	  	echo $query;
+  	  	echo $query."\n";
   	  }
   	  trigger_error("Running query from ".$modelFile." on endpoint ".$e->getSparqlURL(), E_USER_NOTICE);
   	  $initTime = microtime(true);
@@ -441,6 +441,12 @@ class Utils{
   	  if($conf['debug']){
   	    echo "Execution time: ".($endTime - $initTime)." seconds\n-------------------------------------------------\n\n";
   	  }
+  	  $timeObj = new stdClass();
+  	  $timeObj->query = new stdClass();
+  	  $timeObj->query->value = $modelFile;
+  	  $timeObj->time = new stdClass();
+  	  $timeObj->time->value = ($endTime - $initTime);
+  	  $lodspk['queryTimes'][$modelFile] = $timeObj;
   	  if($modelFile != $lodspk['type']){
   	  	if(!isset($rPointer[$strippedModelFile])){
   	  	  $rPointer[$strippedModelFile] = array();
@@ -537,6 +543,7 @@ class Utils{
   	if(isset($lodspkData['params'])){
   	  $lodspk['this']['params'] = $lodspkData['params'];
   	}
+  	$lodspk['queryTimes'] = Convert::array_to_object($lodspk['queryTimes']);
   	require_once($conf['home'].'lib/Haanga/lib/Haanga.php');
   	$viewAux = explode("/",$view);
   	$viewFile = array_pop($viewAux);
