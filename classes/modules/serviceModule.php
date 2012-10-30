@@ -144,11 +144,10 @@ class ServiceModule extends abstractModule{
       	$lodspk['firstResults'] = Convert::array_to_object($firstAux);
       }else{
       	$resultsObj = $results;
-      }
-  	  
+      }  	  
   	  //Need to redefine viewFile as 'local' i.e., inside service.foo/ so I can load files with the relative path correctly
   	  //$viewFile = $extension.".template";
-  	  //chdir($conf['home']);  	  
+  	  //chdir($conf['home']); 
   	  Utils::processDocument($viewFile, $lodspk, $results);    	  
   	}catch (Exception $ex){
   	  echo $ex->getMessage();
