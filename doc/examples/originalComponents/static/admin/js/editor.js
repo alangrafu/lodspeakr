@@ -47,6 +47,7 @@ $(document).ready(function(){
                                   {name: 'D3Dendrogram',  params: "childNode,parentNode", img: "dendrogram.png"},
                                   {name: 'D3ForceGraph',  params: "sourceNode,TargetNode", img: "graph.png"},
                                   {name: 'D3ParallelCoordinates',  params: "label,value1,value2,...,valueN", img: "parallelcoordinates.png"},
+                                  {name: 'D3WordCloud', params: "textVariable", img: "wordcloud.png"},
                                   {name: 'GoogleMaps',  params: "latitude,longitude,label", img: "maps.png"},
                                   {name: 'GoogleVizBarChart', params: "valuesInAxisX,valuesInAxisY", img: "barchart.png"},
                                   {name: 'GoogleVizColumnChart', params: "valuesInAxisX,valuesInAxisY", img: "columnchart.png"},
