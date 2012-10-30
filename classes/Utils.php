@@ -543,7 +543,9 @@ class Utils{
   	if(isset($lodspkData['params'])){
   	  $lodspk['this']['params'] = $lodspkData['params'];
   	}
-  	$lodspk['queryTimes'] = Convert::array_to_object($lodspk['queryTimes']);
+  	if(isset($lodspk['queryTimes'])){
+  	  $lodspk['queryTimes'] = Convert::array_to_object($lodspk['queryTimes']);
+  	}
   	require_once($conf['home'].'lib/Haanga/lib/Haanga.php');
   	$viewAux = explode("/",$view);
   	$viewFile = array_pop($viewAux);
