@@ -162,7 +162,18 @@ class AdminModule extends abstractModule{
     <div class='container'>
       <img src='../img/lodspeakr_logotype.png' style='opacity: 0.1; position: absolute; right:0px; top:60%'/>
 ";
-  private $foot ="    </div>
+  private $foot ="        <div id='embed-box' class='modal hide fade'>
+    <div class='modal-header'>
+    <button type='button' class='close' data-dismiss='modal' aria-hidden='true'>&times;</button>
+    <h3>Embed this code</h3>
+    </div>
+    <div id='embed-body' class='modal-body'>
+    
+    </div>
+    <div class='modal-footer'>
+    <a href='#' class='btn' data-dismiss='modal'>Close</a>
+    </div>
+    </div></div>
   </body>
 </html>
 ";
@@ -566,7 +577,8 @@ class AdminModule extends abstractModule{
       }
     }
     echo $this->head ."
-    <script type='application/javascript'>   
+    <script type='application/javascript'> 
+    var home='".$conf['basedir']."';
     $namespaces
     </script>
     <div class='row-fluid'>
@@ -596,7 +608,8 @@ class AdminModule extends abstractModule{
        </div>
        <div class='row-fluid'>
         <div class='span3'>
-         <a href='#' id='preview-button' class='hide'><button class='btn btn-success btn-large'>View component</button></a>
+         <p><a href='#' id='preview-button' class='hide'><button class='btn btn-success btn-large'>View component</button></a></p>
+         <p><button id='embed-button' class='btn btn-success btn-large hide'>Embed component</button></p>
         </div>
        </div>
       </div>
