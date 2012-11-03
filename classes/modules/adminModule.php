@@ -167,8 +167,10 @@ class AdminModule extends abstractModule{
     <button type='button' class='close' data-dismiss='modal' aria-hidden='true'>&times;</button>
     <h3>Embed this code</h3>
     </div>
-    <div id='embed-body' class='modal-body'>
-    
+    <div  class='modal-body'>
+     <form class='form-inline'><fieldset><label>Width:</label> <input type='text' class='input-small embed-size' id='embed-width' value='600px'/>  <label>Height:</label> <input type='text' class='input-small embed-size' id='embed-height' value='400px'/></fieldset></form>
+     <div id='embed-body'>
+     </div>
     </div>
     <div class='modal-footer'>
     <a href='#' class='btn' data-dismiss='modal'>Close</a>
