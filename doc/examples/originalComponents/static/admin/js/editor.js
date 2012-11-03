@@ -206,6 +206,7 @@ $(document).ready(function(){
       $("#template-list").empty();
       $("#query-list").empty();
       $("#preview-button").attr("target", "_new").attr("href", "../"+componentName).removeClass("hide");
+      $("#embed-button").attr("data-url", "../"+componentName).removeClass("hide");
       $.each(data.views, function(i, item){
           var viewUrl = relPos+componentType+"/"+componentName+"/"+item;
           var viewFileUrl = componentType+"/"+componentName+"/"+item;
@@ -378,5 +379,12 @@ $(document).ready(function(){
          $("#query-save-button").addClass('disabled');
        }
    });
+   
+   $("#embed-button").on('click', function(e){
+                   var url = $(this).attr('data-url').replace("../", home);
+                   var code = "&lt;iframe src='"+url+"' style='overflow-x: hidden;overflow-y: hidden;' frameborder='0' width='600px' height='400px'&gt;&lt;/iframe&gt;";
+                   $("#embed-body").html(code);
+                   $("#embed-box").modal('show');
+   })
  }
 });
