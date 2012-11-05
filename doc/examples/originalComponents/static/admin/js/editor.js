@@ -55,7 +55,7 @@ $(document).ready(function(){
                                   {name: 'GoogleVizPieChart', params: "valuesInAxisX,valuesInAxisY", img: "piechart.png"},
                                   {name: 'GoogleVizScatterChart', params: "valuesInAxisX,valuesInAxisY", img: "piechart.png"},
                                   {name: 'GoogleVizTable', params: "column1,column2,...,columnN", img: "table.png"},
-                                  {name: 'Timeknots', params: "date,label[,image]", img: "timeknots.png"}];
+                                  {name: 'Timeknot', params: "date,label[,image]", img: "timeknots.png"}];
     $.each(visualizationsEnabled, function(index, value){
       $("#cheat-list").append("<li><a href='#' class='cheat-link' data-params='"+value.params+"' data-img='"+value.img+"'>"+value.name+"</a></li>");
     });
