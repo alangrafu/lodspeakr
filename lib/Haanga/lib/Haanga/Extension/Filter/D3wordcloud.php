@@ -54,18 +54,21 @@ function D3WordCloud'.$randId.'(words, newcfg){
   var cfg = {width: 300,
              height: 300,
              font: "sans-serif",
-             color: "black"
+             color: "black",
+             stopwords: ["of", "the", "a", "or", "to", "and", "for", "at", "with", "without"]
   };
   for(i in newcfg){
     cfg[i] = newcfg[i];
   }
   var countingWords = {};
   for(i in words){
-    var d = words[i];
-    if(countingWords[d] != undefined){ 
-      countingWords[d] += 1
-    }else{
-      countingWords[d] = 1
+    var d = words[i].replace(/\)\(\./gi, "");
+    if(cfg.stopwords.indexOf(d)<0){
+      if(countingWords[d] != undefined){ 
+        countingWords[d] += 1
+      }else{
+        countingWords[d] = 1
+      }
     }
   }
   var totalWords = new Array();
