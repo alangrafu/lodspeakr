@@ -127,7 +127,7 @@ cp -r doc/examples/originalComponents components
 mkdir -p components/uris
 bold=`tput bold`
 normal=`tput sgr0`
-wwwUser=`ps aux|egrep "apache|httpd|www" |egrep -v "grep|root"|awk '{print $1}'|uniq`  
+wwwUser=`ps aux|egrep "apache|httpd|www" |egrep -v "grep|root"|awk '{print $1}'|uniq|tail -1`  
 echo
 echo "                                      *** ATTENTION ***"
 echo
