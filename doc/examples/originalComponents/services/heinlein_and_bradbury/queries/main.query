@@ -1,0 +1,15 @@
+#Get all the people that has been influenced by Heinlein AND Bradbury
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX dbp:  <http://dbpedia.org/ontology/>
+PREFIX d: <http://dbpedia.org/resource/>
+
+SELECT DISTINCT ?child ?parent WHERE{
+  ?childNode dbp:influencedBy ?parentNode;
+             dbp:influencedBy d:Robert_A._Heinlein;
+             dbp:influencedBy d:Ray_Bradbury;
+            rdfs:label ?child .
+  ?parentNode rdfs:label ?parent .
+  FILTER(LANG(?child) = "en" && LANG(?parent) = "en")
+  FILTER(?parentNode = d:Robert_A._Heinlein || ?parentNode = d:Ray_Bradbury )
+}
+    

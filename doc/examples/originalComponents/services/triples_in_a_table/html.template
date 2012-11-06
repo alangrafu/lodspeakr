@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <style>
+   body{font: 11px sans-serif;}
+  </style>
+  <title>A set of triples in a Google table</title>
+ </head>
+ <body>
+   <h2>A set of triples in a Google table</h2>
+   {{models.main|GoogleVizTable:"s.curie,p.curie,o.curie"}}
+ </body>
+</html>
+

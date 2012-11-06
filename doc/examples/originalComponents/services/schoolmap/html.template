@@ -1,0 +1,9 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  </head>
+  <body>
+   {{models.education_uk.main|GoogleMaps:"lat,long,name"}}
+  </body>
+</html>

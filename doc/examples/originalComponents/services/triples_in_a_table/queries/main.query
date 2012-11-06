@@ -1,0 +1,6 @@
+#Get any 20 triples
+
+SELECT * WHERE {
+ ?s ?p ?o
+}
+LIMIT 20

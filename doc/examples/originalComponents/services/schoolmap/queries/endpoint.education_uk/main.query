@@ -1,0 +1,13 @@
+#Get schools in the City of London district, including geolocation and name
+
+PREFIX sch-ont:   <http://education.data.gov.uk/def/school/>
+PREFIX geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>
+
+SELECT ?school ?name ?lat ?long WHERE {
+  ?school a sch-ont:School;
+          sch-ont:establishmentName ?name;
+          geo:lat ?lat;
+          geo:long ?long;
+          sch-ont:districtAdministrative <http://statistics.data.gov.uk/id/local-authority-district/00AA>.
+}
+ORDER BY ?name

@@ -1,0 +1,15 @@
+#Get all the movies directed by Stanley Kubrick that have a release date
+#The MAX function is a tricky way of obtaining just one value in case there are multiple dates associated
+
+PREFIX dbp: <http://dbpedia.org/resource/>
+PREFIX dbo: <http://dbpedia.org/ontology/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT ?movie ?label MAX(?r) AS ?releaseDate WHERE{
+  ?movie dbo:director dbp:Stanley_Kubrick ;
+         rdfs:label ?label;
+         dbo:releaseDate ?r .
+  
+  #Filter forces to get only the label in english
+  FILTER( LANG(?label) = "en")
+}GROUP BY ?movie ?label

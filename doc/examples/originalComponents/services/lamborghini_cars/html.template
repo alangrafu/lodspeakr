@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <title>Measures of different models of Lamborghini cars</title>
+  <style>body{font: 11px sans-serif;}</style>
+ </head>
+ <body>
+   <h2>Measures of different models of Lamborghini cars</h2>
+  {{models.main|D3ParallelCoordinates:"carLabel,wheelbase,carWidth,carLength,transmission,height=300"}}
+ </body>
+</html>
+

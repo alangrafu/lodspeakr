@@ -1,0 +1,13 @@
+#Get a bunch of numbers related to Lamborghini cars
+PREFIX dcterms: <http://purl.org/dc/terms/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT ?carLabel ?wheelbase ?carWidth ?carLength ?transmission WHERE {
+ ?car dcterms:subject <http://dbpedia.org/resource/Category:Lamborghini_vehicles>;
+      <http://dbpedia.org/ontology/Automobile/wheelbase> ?wheelbase;
+      <http://dbpedia.org/ontology/MeanOfTransportation/height> ?carWidth;
+      <http://dbpedia.org/ontology/MeanOfTransportation/length> ?carLength;
+      <http://dbpedia.org/property/transmission> ?transmission;
+      rdfs:label ?carLabel.
+  FILTER(LANG(?carLabel) = "en")
+}

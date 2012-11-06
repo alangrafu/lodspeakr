@@ -1,0 +1,19 @@
+#Get the 10 largest cities by area in the US
+
+PREFIX dcterms: <http://purl.org/dc/terms/>
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+PREFIX dbp: <http://dbpedia.org/property/>
+PREFIX sch: <http://schema.org/>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT DISTINCT ?city SAMPLE(?lat) AS ?latitude SAMPLE(?long) AS ?longitude CONCAT(?city, "<br>(", xsd:string(?area), " SqKM)") AS ?areaAndName WHERE{
+ ?city a sch:City ;
+       <http://dbpedia.org/ontology/country> <http://dbpedia.org/resource/United_States> ;
+       geo:lat ?lat ;
+       geo:long ?long;
+       dbp:areaTotalKm ?area .
+
+}GROUP BY ?city ?area
+ORDER BY DESC(?area)
+LIMIT 10

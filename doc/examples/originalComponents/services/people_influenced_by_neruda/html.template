@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <title>People influenced by Pablo Neruda</title>
+   <style>body{font: 10px sans-serif}</style>
+ </head>
+ <body>
+   <h2>People influenced by Pablo Neruda</h2>
+  {{models.main|D3Dendrogram:"child,parent"}}
+ </body>
+</html>
+

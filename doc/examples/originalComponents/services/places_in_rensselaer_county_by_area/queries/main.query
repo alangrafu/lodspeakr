@@ -1,0 +1,19 @@
+#Get places in Rensselaer county and their area
+PREFIX d: <http://dbpedia.org/ontology/>
+
+SELECT max(?sLabel) as ?s max(?cLabel) as ?c (max(?t) as ?area) WHERE{
+  {
+    ?s d:isPartOf <http://dbpedia.org/resource/Rensselaer_County,_New_York>;
+       d:areaTotal ?t ;
+       rdfs:label ?sLabel;
+       d:isPartOf ?c .
+    ?c rdfs:label ?cLabel.
+    FILTER(?c = <http://dbpedia.org/resource/Rensselaer_County,_New_York>)
+    FILTER(lang(?cLabel) = "en")
+  }UNION{
+    ?s rdfs:label ?sLabel .
+    FILTER(?s = <http://dbpedia.org/resource/Rensselaer_County,_New_York>)
+  }
+FILTER(lang(?sLabel) = "en")
+
+}group by ?sLabel ?cLabel

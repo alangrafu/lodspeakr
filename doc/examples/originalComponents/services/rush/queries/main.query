@@ -1,0 +1,5 @@
+#Words in any literal related to Rush
+SELECT ?words WHERE{
+  <http://dbpedia.org/resource/Rush_(band)> ?p ?words .
+  FILTER(LANG(?words) = "en")
+}

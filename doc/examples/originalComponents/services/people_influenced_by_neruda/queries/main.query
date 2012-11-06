@@ -1,0 +1,27 @@
+#People influenced by Pablo Neruda
+#Beware this query is tricky, in SPARQL 1.1 it should be much simpler
+
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX dbp:  <http://dbpedia.org/ontology/>
+PREFIX d: <http://dbpedia.org/resource/>
+SELECT DISTINCT ?child ?parent WHERE{
+  {
+    ?childNode dbp:influencedBy ?mid ;
+               rdfs:label ?child .
+    ?mid dbp:influencedBy ?parentNode;
+    	 rdfs:label ?parent .
+    FILTER(LANG(?parent) = "en" && ?parentNode = d:Pablo_Neruda)
+  }UNION{
+    ?childNode dbp:influencedBy d:Pablo_Neruda;
+               dbp:influencedBy ?parentNode;
+               rdfs:label ?child .
+    ?parentNode rdfs:label ?parent .
+    
+    FILTER(LANG(?parent) = "en" && ?parentNode = d:Pablo_Neruda)
+  }UNION{
+    d:Pablo_Neruda rdfs:label ?child  
+  }
+  FILTER(LANG(?child) = "en")
+
+}
+    
