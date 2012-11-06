@@ -55,7 +55,7 @@ function D3WordCloud'.$randId.'(words, newcfg){
              height: 300,
              font: "sans-serif",
              color: "black",
-             stopwords: ["of", "the", "a", "or", "to", "and", "for", "at", "with", "without"]
+             stopwords: ["of", "the", "a", "or", "to", "and", "for", "at", "with", "without", "in", "from", "is", "are", "were", "was", "this", "that", "these", "those", "in", "on"]
   };
   for(i in newcfg){
     cfg[i] = newcfg[i];
