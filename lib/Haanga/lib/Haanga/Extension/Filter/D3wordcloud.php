@@ -62,7 +62,7 @@ function D3WordCloud'.$randId.'(words, newcfg){
   }
   var countingWords = {};
   for(i in words){
-    var d = words[i].replace(/\)\(\./gi, "");
+    var d = words[i].replace(/[()\.]/gi, "");
     if(cfg.stopwords.indexOf(d)<0){
       if(countingWords[d] != undefined){ 
         countingWords[d] += 1
