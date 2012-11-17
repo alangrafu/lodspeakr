@@ -194,7 +194,7 @@ class AdminModule extends abstractModule{
   	  return FALSE;
   	}
   	if($qArr[0] == "admin" && array_search($qArr[1], $operations) !== FALSE){
-  	  if(!$this->auth()){
+  	  if($conf['admin']['pass'] !== FALSE && !$this->auth()){
   	    HTTPStatus::send401("Forbidden\n");
   	    exit(0);
   	  }
