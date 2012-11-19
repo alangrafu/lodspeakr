@@ -4,3 +4,4 @@ SELECT DISTINCT ?g WHERE {
   }
 }
  order by ?g
+limit {{lodspk.maxResults}}

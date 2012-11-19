@@ -1,6 +1,3 @@
-{%for h in lodspk.header %}
-PREFIX {{h.prefix}}: <{{h.ns}}>
-{%endfor%}
 SELECT DISTINCT ?resource WHERE {
   {
     GRAPH ?g{
@@ -10,4 +7,4 @@ SELECT DISTINCT ?resource WHERE {
       ?resource a {{lodspk.args.arg0}}
   }
 }order by ?resource
-limit 1000
+limit {{lodspk.maxResults}}

@@ -1,10 +1,10 @@
 SELECT DISTINCT ?resource WHERE {
   {
-    GRAPH {%if lodspk.args.arg0 %}<{{lodspk.args.arg0}}>{%else%}?g{%endif%} {
-  	  [] a ?resource .
+    GRAPH ?g {
+    	?x a ?resource .
     }
   }UNION{
-    [] a ?resource .
+    ?x a ?resource .
   }
-}
-LIMIT 10
+}order by ?resource
+LIMIT {{lodspk.maxResults}}

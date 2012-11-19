@@ -6,4 +6,4 @@ SELECT ?p ?o  WHERE {
   }UNION{     
                 <{{uri}}> ?p ?o .
   }
-}
+}LIMIT {{lodspk.maxResults}}

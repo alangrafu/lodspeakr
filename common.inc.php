@@ -76,6 +76,8 @@ $conf['modules']['available'] = array('static','uri', 'type', 'service');
 $conf['admin']['pass'] = 'admin';
 
 global $lodspk;
+
+$lodspk['maxResults'] = 1000;
 include_once('settings.inc.php');
 $conf['view']['standard']['baseUrl'] = $conf['basedir'];
 ?>
