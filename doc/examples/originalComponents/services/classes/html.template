@@ -1,0 +1,11 @@
+{%include "../../includes/header.inc"%}
+    <div class="container-fluid">
+    <h1>Classes available</h1>
+	<ul>
+    {% for row in models.main %}
+        <li><a href="{{lodspk.baseUrl}}instances/{{ row.resource.curie }}">{{row.resource.curie}}</a></li>
+    {% endfor %}
+      </ul>
+    </div>
+  </body>
+</html>

@@ -8,4 +8,3 @@
   {{models.main|GoogleVizTable:"s,p,o"}}
  </body>
 </html>
-

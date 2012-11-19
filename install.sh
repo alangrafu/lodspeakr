@@ -95,18 +95,15 @@ content="<?php
 \$conf['basedir'] = '$basedir';
 \$conf['debug'] = false;
 
-/*ATTENTION: By default this application is available to
- * be exported and copied (its configuration)
- * by others. If you do not want that, 
- * turn the next option as false
- */ 
-\$conf['export'] = true;
-
-# If you want to add/override a namespace, add it here
 \$conf['ns']['local']   = '$ns';
 $extra
 
 \$conf['mirror_external_uris'] = $external;
+
+//Variables in $lodspk can be used to store user info.
+//For examples, 'title' will be used in the header
+//(you can forget about all conventions and use your own as well)
+\$lodspk['title'] = 'LODSPeaKr';
 ?>" 
 echo "$content" > $settings_file
 chmod 644 $settings_file

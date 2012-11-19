@@ -1,0 +1,10 @@
+SELECT DISTINCT ?resource WHERE {
+  {
+    GRAPH ?g {
+    	?x a ?resource .
+    }
+  }UNION{
+    ?x a ?resource .
+  }
+}order by ?resource
+LIMIT {{lodspk.maxResults}}
