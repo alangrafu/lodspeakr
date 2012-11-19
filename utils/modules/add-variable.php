@@ -10,7 +10,7 @@ $varName = array_shift($varArray);
 if($varName != "conf" && $varName != "lodspk"){
   exit(124);
 }
-$varString = $varName."['".join("']['",$varArray)."'];";
+$varString = $varName."['".join("']['",$varArray)."']";
 $varValue = $argv[2];
 $newLines = array();
 $lines = explode("\n", $c);
