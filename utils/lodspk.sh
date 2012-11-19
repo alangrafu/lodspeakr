@@ -28,6 +28,8 @@ USAGE=$USAGE" List modules:\t\t\t\t\t\t$0 list modules\n"
 USAGE=$USAGE"\n===VARIABLES===\n"
 USAGE=$USAGE" Add any variable:\t\t\t\t\t$0 add variable value\n"
 USAGE=$USAGE" Where variable has the form conf.something or lodspk.something\n"
+USAGE=$USAGE" Remove any variable:\t\t\t\t\t$0 remove variable\n"
+USAGE=$USAGE" If the variable is part of LODSPeaKr, it will return to its default value\n"
 USAGE=$USAGE" \n===ADMIN USER===\n"
 USAGE=$USAGE" Change password:\t\t\t\t\t$0 change password NEWPASSWORD\n"
 USAGE=$USAGE"\n===VERSION==\n"
@@ -161,7 +163,7 @@ fi
 
 ## Remove
 if [[ $currentOperation == "remove" ]]; then
-  addOperation=( endpoint namespace )
+  addOperation=( endpoint namespace variable )
   if [[ ${addOperation[@]} =~ $2 && $2 != "" && $3 != "" ]]
   then
     addOperation=$2
@@ -171,7 +173,7 @@ if [[ $currentOperation == "remove" ]]; then
     exit 1
   fi
   cd $DIR/..
-  php $DIR/modules/remove-$addOperation.php $3
+  php $DIR/modules/remove-$addOperation.php ${3}
   rc=$?
   if [[ $rc != 0 ]] ; then
     echo -e "Something went wrong while removing '$3'. Please check your settings.inc.php" >&2
