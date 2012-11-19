@@ -24,7 +24,10 @@ USAGE=$USAGE" List namespaces:\t\t\t\t\t$0 list namespaces\n"
 USAGE=$USAGE"\n===MODULES===\n"
 USAGE=$USAGE" Enable module:\t\t\t\t\t\t$0 enable module position\n"
 USAGE=$USAGE" Disable module:\t\t\t\t\t$0 disable module\n"
-USAGE=$USAGE" List modules:\t\t\t\t\t$0 list modules\n"
+USAGE=$USAGE" List modules:\t\t\t\t\t\t$0 list modules\n"
+USAGE=$USAGE"\n===VARIABLES===\n"
+USAGE=$USAGE" Add any variable:\t\t\t\t\t$0 add variable value\n"
+USAGE=$USAGE" Where variable has the form conf.something or lodspk.something\n"
 USAGE=$USAGE" \n===ADMIN USER===\n"
 USAGE=$USAGE" Change password:\t\t\t\t\t$0 change password NEWPASSWORD\n"
 USAGE=$USAGE"\n===VERSION==\n"
@@ -131,7 +134,7 @@ fi
 
 ## Add
 if [[ $currentOperation == "add" ]]; then
-  addOperation=( endpoint namespace )
+  addOperation=( endpoint namespace variable )
   if [[ ${addOperation[@]} =~ $2 && $2 != "" && $3 != ""  ]]
   then
     addOperation=$2
@@ -141,10 +144,15 @@ if [[ $currentOperation == "add" ]]; then
     exit 1
   fi
   cd $DIR/..
-  php $DIR/modules/add-$addOperation.php $3 $4
+  args=$@
+  php $DIR/modules/add-$addOperation.php $3 "${4}"
   rc=$?
-  if [[ $rc != 0 ]] ; then
+  if [[ $rc = 123 ]] ; then
     echo -e "The $addOperation with prefix '$3' already exist, please remove it first." >&2
+    exit
+  fi
+  if [[ $rc = 124 ]] ; then
+    echo -e "The $addOperation with did not stated with 'conf' or 'lodspk'. Please correct that." >&2
     exit
   fi
   echo -e "The $addOperation $4 was added successfully as $3!" >&2
