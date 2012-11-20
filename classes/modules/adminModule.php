@@ -15,106 +15,116 @@ class AdminModule extends abstractModule{
     <link href='codemirror/lib/codemirror.css' rel='stylesheet' type='text/css' media='screen' />
     
     <style>
-      body {
-        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
-      }
-       .CodeMirror {border: 1px solid black;}
-      .cm-mustache {color: #0ca;}
-      .wait{
-        background-image:url('img/wait.gif');
-        background-repeat:no-repeat;
-        padding-right:20px;
-        background-position: right;
-      }
-      .strong{font-weight: 900; font-size:120%}
-      .cheat-sheet{
-      -moz-border-radius: 15px;
-      -webkit-border-radius: 15px;
-      border-radius: 15px;
-        background:lightgray;
-        width:400px;
-        padding:5px;
-        position:absolute;
-        border:1px solid black;
-        right:-370px;
-        top:121px;
-        opacity:0.9
-      }
-      .cheat-title{
-	writing-mode:tb-rl;
-	-webkit-transform:rotate(90deg);
-	-moz-transform:rotate(90deg);
-	-o-transform: rotate(90deg);
-	white-space:nowrap;
-	display:block;
-	width:20px;
-	height:40px;
-	font-size:24px;
-	font-weight:normal;
-	text-shadow: 0px 0px 1px #333;      
-	}
-	/* Base class */
-.bs-docs-template {
-  position: relative;
-  margin: 0px 0;
-  padding: 39px 19px 14px;
-  *padding-top: 19px;
-  background-color: #fff;
-  border: 1px solid #ddd;
-  -webkit-border-radius: 4px;
-     -moz-border-radius: 4px;
-          border-radius: 4px;
-}
- .cheat-list{
-   margin-left:60px;
-   margin-top:-40px;
- }
-
-/* Echo out a label for the example */
-.bs-docs-template:after {
-  content: 'Template';
-  position: absolute;
-  top: -1px;
-  left: -1px;
-  padding: 3px 7px;
-  font-size: 12px;
-  font-weight: bold;
-  background-color: #f5f5f5;
-  border: 1px solid #ddd;
-  color: #9da0a4;
-  -webkit-border-radius: 4px 0 4px 0;
-     -moz-border-radius: 4px 0 4px 0;
-          border-radius: 4px 0 4px 0;
-}
-
-.bs-docs-query {
-  position: relative;
-  margin: 0px 0;
-  padding: 39px 19px 14px;
-  *padding-top: 19px;
-  background-color: #fff;
-  border: 1px solid #ddd;
-  -webkit-border-radius: 4px;
-     -moz-border-radius: 4px;
-          border-radius: 4px;
-}
-
-/* Echo out a label for the example */
-.bs-docs-query:after {
-  content: 'Query';
-  position: absolute;
-  top: -1px;
-  left: -1px;
-  padding: 3px 7px;
-  font-size: 12px;
-  font-weight: bold;
-  background-color: #f5f5f5;
-  border: 1px solid #ddd;
-  color: #9da0a4;
-  -webkit-border-radius: 4px 0 4px 0;
-     -moz-border-radius: 4px 0 4px 0;
-          border-radius: 4px 0 4px 0;
-}
+    body {
+    padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+    }
+    .CodeMirror {border: 1px solid black;}
+    .cm-mustache {color: #0ca;}
+    .wait{
+    background-image:url('img/wait.gif');
+    background-repeat:no-repeat;
+    padding-right:20px;
+    background-position: right;
+    }
+    .strong{font-weight: 900; font-size:120%}
+    .cheat-sheet{
+    -moz-border-radius: 15px;
+    -webkit-border-radius: 15px;
+    border-radius: 15px;
+    min-height: 200px;
+    background:lightgray;
+    width:400px;
+    padding:5px;
+    position:absolute;
+    border:1px solid black;
+    right:-370px;
+    opacity:0.9
+    }
+    .cheat-title{
+    writing-mode:tb-rl;
+    -webkit-transform:rotate(90deg);
+    -moz-transform:rotate(90deg);
+    -o-transform: rotate(90deg);
+    white-space:nowrap;
+    display:block;
+    width:20px;
+    height:40px;
+    font-size:24px;
+    font-weight:normal;
+    text-shadow: 0px 0px 1px #333;      
+    }
+    .first-editor{
+	  top:120px;
+	  }
+	  .second-editor{
+	  top:540px;
+	  }
+	  /* Base class */
+	  .bs-docs-template {
+	  position: relative;
+	  margin: 0px 0;
+	  padding: 39px 19px 14px;
+	  *padding-top: 19px;
+	  background-color: #fff;
+	  border: 1px solid #ddd;
+	  -webkit-border-radius: 4px;
+	  -moz-border-radius: 4px;
+	  border-radius: 4px;
+	  }
+	  .cheat-list{
+	  margin-left:60px;
+	  margin-top:-30px;
+	  }
+	  
+	  .sparql-list{
+	  margin-left:60px;
+	  margin-top:-40px;
+	  }
+	  /* Echo out a label for the example */
+	  .bs-docs-template:after {
+	  content: 'Template';
+	  position: absolute;
+	  top: -1px;
+	  left: -1px;
+	  padding: 3px 7px;
+	  font-size: 12px;
+	  font-weight: bold;
+	  background-color: #f5f5f5;
+	  border: 1px solid #ddd;
+	  color: #9da0a4;
+	  -webkit-border-radius: 4px 0 4px 0;
+	  -moz-border-radius: 4px 0 4px 0;
+	  border-radius: 4px 0 4px 0;
+	  }
+	  
+	  .bs-docs-query {
+	  position: relative;
+	  margin: 0px 0;
+	  padding: 39px 19px 14px;
+	  *padding-top: 19px;
+	  background-color: #fff;
+	  border: 1px solid #ddd;
+	  -webkit-border-radius: 4px;
+	  -moz-border-radius: 4px;
+	  border-radius: 4px;
+	  }
+	  
+	  /* Echo out a label for the example */
+	  .bs-docs-query:after {
+	  content: 'Query';
+	  position: absolute;
+	  top: -1px;
+	  left: -1px;
+	  padding: 3px 7px;
+	  font-size: 12px;
+	  font-weight: bold;
+	  background-color: #f5f5f5;
+	  border: 1px solid #ddd;
+	  color: #9da0a4;
+	  -webkit-border-radius: 4px 0 4px 0;
+	  -moz-border-radius: 4px 0 4px 0;
+	  border-radius: 4px 0 4px 0;
+	  }
     </style>
     <link href='../css/bootstrap-responsive.min.css' rel='stylesheet' type='text/css' media='screen' />
     <script type='text/javascript' src='../js/jquery.js'></script>
