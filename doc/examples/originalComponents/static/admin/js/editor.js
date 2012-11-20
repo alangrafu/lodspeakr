@@ -19,53 +19,8 @@ $(document).ready(function(){
   };
   return CodeMirror.overlayMode(CodeMirror.getMode(config, parserConfig.backdrop || 'text/html'), mustacheOverlay);
 });
-    var tip = $('<div></div>');
-        tip.css("width", "400px")
-           .css("height", "220px")
-           .css("font", "Monaco")
-           .css("font-size", "13px")
-           .css("text-wrap", "unrestricted")
-           .css("position", "absolute")
-           .css("z-index", "100")
-           .css("background","white")
-           .css("border", "1px solid black")
-           .css("-moz-border-radius", "8px 8px")
-           .css("border-radius", "8px 8px")
-           .css("font-family", "Helvetica Neue")
-           .css("color", "black")
-           .css("padding", "5px")
-           .css("opacity", 0);
-    $("body").append(tip);
-    var cheatSheet = $("body").append("<div id='cheat' class='cheat-sheet'></div>");
-    $("#cheat").on('mouseenter', function(){$(this).animate({right: '+=200'}, 180)})
-               .on('mouseleave', function(){$(this).animate({right: '-=200'}, 180);tip.css("top", 1000).css("left", 0)}).html("<span class='cheat-title'>Visualization Filters</span>")
-               .on('mousemove', function(e){tip.css("top", e.pageY-100).css("left", e.pageX-430)});
-    
-    $("#cheat").append("<ul id='cheat-list' class='cheat-list'></ul>");
-    
-    var visualizationsEnabled = [ {name: 'D3CirclePacking', params: "childNode,parentNode", img: "circlepacking.png"}, 
-                                  {name: 'D3Dendrogram',  params: "childNode,parentNode", img: "dendrogram.png"},
-                                  {name: 'D3ForceGraph',  params: "sourceNode,TargetNode", img: "graph.png"},
-                                  {name: 'D3ParallelCoordinates',  params: "label,value1,value2,...,valueN", img: "parallelcoordinates.png"},
-                                  {name: 'D3WordCloud', params: "textVariable", img: "wordcloud.png"},
-                                  {name: 'GoogleMaps',  params: "latitude,longitude,label", img: "maps.png"},
-                                  {name: 'GoogleVizBarChart', params: "valuesInAxisX,valuesInAxisY", img: "barchart.png"},
-                                  {name: 'GoogleVizColumnChart', params: "valuesInAxisX,valuesInAxisY", img: "columnchart.png"},
-                                  {name: 'GoogleVizLineChart', params: "valuesInAxisX,valuesInAxisY", img: "linechart.png"},
-                                  {name: 'GoogleVizPieChart', params: "valuesInAxisX,valuesInAxisY", img: "piechart.png"},
-                                  {name: 'GoogleVizScatterChart', params: "valuesInAxisX,valuesInAxisY", img: "piechart.png"},
-                                  {name: 'GoogleVizTable', params: "column1,column2,...,columnN", img: "table.png"},
-                                  {name: 'Timeknot', params: "date,label[,image]", img: "timeknots.png"}];
-    $.each(visualizationsEnabled, function(index, value){
-      $("#cheat-list").append("<li><a href='#' class='cheat-link' data-params='"+value.params+"' data-img='"+value.img+"'>"+value.name+"</a></li>");
-    });
-    
-    $(".cheat-link").on('click', function(){
-      var visualFilter = '{{models.main|'+$(this).html()+':"'+$(this).attr("data-params")+'"}}';
-      templateEditor.replaceSelection(visualFilter);
-    })
-                    .on('mouseenter', function(){var visualFilter = '<h3>'+$(this).html()+'</h3><p style="background:#ccc">{{models.main|'+$(this).html()+':"'+$(this).attr("data-params")+'"}}</p><img src="img/'+$(this).attr("data-img")+'"/>';tip.html(visualFilter).animate({opacity: .95}, 20)})
-                    .on('mouseleave', function(){tip.animate({opacity: '0'}, 20)});
+
+
     //Create Template and Query Editor
     var templateEditor = CodeMirror.fromTextArea(document.getElementById('template-editor'), {mode: 'mustache',
     onChange:function(e){
@@ -86,6 +41,77 @@ $(document).ready(function(){
      }
 
     });
+
+    var tip = $('<div></div>');
+        tip.css("width", "400px")
+           .css("height", "220px")
+           .css("font", "Monaco")
+           .css("font-size", "13px")
+           .css("text-wrap", "unrestricted")
+           .css("position", "absolute")
+           .css("z-index", "100")
+           .css("background","white")
+           .css("border", "1px solid black")
+           .css("-moz-border-radius", "8px 8px")
+           .css("border-radius", "8px 8px")
+           .css("font-family", "Helvetica Neue")
+           .css("color", "black")
+           .css("padding", "5px")
+           .css("opacity", 0);
+    $("body").append(tip);
+    var cheatSheet = $("body").append("<div id='cheat' class='cheat-sheet first-editor'></div>");
+    $("#cheat").on('mouseenter', function(){$(this).animate({right: '+=200'}, 180)})
+    .on('mouseleave', function(){$(this).animate({right: '-=200'}, 180);tip.css("top", 1000).css("left", 0)}).html("<span class='cheat-title'>Visualization Filters</span>")
+    .on('mousemove', function(e){tip.css("top", e.pageY-100).css("left", e.pageX-430)});
+    
+    $("#cheat").append("<ul id='cheat-list' class='cheat-list'></ul>");
+    
+    var visualizationsEnabled = [ {name: 'D3CirclePacking', params: "childNode,parentNode", img: "circlepacking.png"}, 
+      {name: 'D3Dendrogram',  params: "childNode,parentNode", img: "dendrogram.png"},
+      {name: 'D3ForceGraph',  params: "sourceNode,TargetNode", img: "graph.png"},
+      {name: 'D3ParallelCoordinates',  params: "label,value1,value2,...,valueN", img: "parallelcoordinates.png"},
+      {name: 'D3WordCloud', params: "textVariable", img: "wordcloud.png"},
+      {name: 'GoogleMaps',  params: "latitude,longitude,label", img: "maps.png"},
+      {name: 'GoogleVizBarChart', params: "valuesInAxisX,valuesInAxisY", img: "barchart.png"},
+      {name: 'GoogleVizColumnChart', params: "valuesInAxisX,valuesInAxisY", img: "columnchart.png"},
+      {name: 'GoogleVizLineChart', params: "valuesInAxisX,valuesInAxisY", img: "linechart.png"},
+      {name: 'GoogleVizPieChart', params: "valuesInAxisX,valuesInAxisY", img: "piechart.png"},
+      {name: 'GoogleVizScatterChart', params: "valuesInAxisX,valuesInAxisY", img: "piechart.png"},
+      {name: 'GoogleVizTable', params: "column1,column2,...,columnN", img: "table.png"},
+    {name: 'Timeknot', params: "date,label[,image]", img: "timeknots.png"}];
+    $.each(visualizationsEnabled, function(index, value){
+        $("#cheat-list").append("<li><a href='#' class='cheat-link' data-params='"+value.params+"' data-img='"+value.img+"'>"+value.name+"</a></li>");
+    });
+    
+    $(".cheat-link").on('click', function(){
+        var visualFilter = '{{models.main|'+$(this).html()+':"'+$(this).attr("data-params")+'"}}';
+        templateEditor.replaceSelection(visualFilter);
+    })
+    .on('mouseenter', function(){var visualFilter = '<h3>'+$(this).html()+'</h3><p style="background:#ccc">{{models.main|'+$(this).html()+':"'+$(this).attr("data-params")+'"}}</p><img src="img/'+$(this).attr("data-img")+'"/>';tip.html(visualFilter).animate({opacity: .95}, 20)})
+    .on('mouseleave', function(){tip.animate({opacity: '0'}, 20)});
+
+ var sparqlSheet = $("body").append("<div id='sparql' class='cheat-sheet second-editor'></div>").css("top:520px");
+    $("#sparql").on('mouseenter', function(){$(this).animate({right: '+=200'}, 180)})
+    .on('mouseleave', function(){$(this).animate({right: '-=200'}, 180);tip.css("top", 1000).css("left", 0)}).html("<span class='cheat-title'>SPARQL Queries</span>")
+    .on('mousemove', function(e){tip.css("top", e.pageY-100).css("left", e.pageX-430)});
+       
+    $("#sparql").append("<ul id='sparql-list' class='cheat-list'></ul>");
+    
+    
+    var sparqlQueriesEnabled = [ {name: 'Get classes', query: "SELECT DISTINCT ?class WHERE {\n [] a ?class\n}\n#You can change the limit to obtain more results\nLIMIT 100"}, 
+      {name: 'Get instances of a class',  query: "SELECT DISTINCT ?instance WHERE{\n  ?instance a <http://my/class>\n}\n#You can change the limit to obtain more results\nLIMIT 100"},
+      {name: 'Get properties of a resource', query: "SELECT DISTINCT ?property ?object WHERE{\n  <http://my/resource> ?property ?object\n}\n#You can change the limit to obtain more results\nLIMIT 100"},
+       {name: 'All properties pointing to a resource', query: "SELECT DISTINCT ?subject ?object WHERE{\n ?subject ?property <http://my/resource>\n}\n#You can change the limit to obtain more results\nLIMIT 100"}];
+
+                                  
+    $.each(sparqlQueriesEnabled, function(index, value){
+      $("#sparql-list").append("<li><a href='#query-editor' class='sparql-link' data-query='"+value.query+"'>"+value.name+"</a></li>");
+    });
+    $(".sparql-link").on('click', function(){
+        queryEditor.setValue($(this).attr('data-query'));
+    })
+                              
+    
 
 
     //Test button
