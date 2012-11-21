@@ -577,7 +577,7 @@ class AdminModule extends abstractModule{
             $singleLastComponentType = preg_replace('/(.*)s$/', '\1', $lastComponentType);
             if($onlyService){
               $menu .= "<ul class='nav nav-list'>
-              <li class='nav-header'>".$lastComponentType."  <button class='btn btn-mini btn-info new-button' style='float:right' data-type='$singleLastComponentType'>new</button></li>\n";
+              <li class='nav-header'>Components  <button class='btn btn-mini btn-info new-button' style='float:right' data-type='$singleLastComponentType'>new</button></li>\n";
             }
         }else{
           $componentName = trim($line);
