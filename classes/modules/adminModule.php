@@ -583,7 +583,7 @@ class AdminModule extends abstractModule{
           $componentName = trim($line);
           if($onlyService){
             $menu .= "<li class='component-li'> <button type='button' class='close hide lodspk-delete-component' data-component-type='$singleLastComponentType' data-component-name='$componentName' style='align:left'>x</button>
-          <a href='#' class='lodspk-component' data-component-type='$lastComponentType' data-component-name='$componentName'>".$componentName."</a></li>\n";
+          <a href='#$componentName' class='lodspk-component' data-component-type='$lastComponentType' data-component-name='$componentName'>".$componentName."</a></li>\n";
           }
         }
       }
@@ -606,7 +606,7 @@ class AdminModule extends abstractModule{
       <div class='container'>
        <div class='row-fluid'>
         <div class='span3 well'>
-          <legend>Views  <button class='btn btn-mini btn-info new-file-button hide new-file-button-view' data-component=''>new</button></legend>
+          <legend>Views  <!-- button class='btn btn-mini btn-info new-file-button hide new-file-button-view' data-component=''>new</button --></legend>
          <ul class='nav nav-list' id='template-list'>
          </ul>        
         </div>
