@@ -38,6 +38,7 @@ class AdminModule extends abstractModule{
     position:absolute;
     border:1px solid black;
     right:-370px;
+    top:120px;
     opacity:0.9
     }
     .cheat-title{
