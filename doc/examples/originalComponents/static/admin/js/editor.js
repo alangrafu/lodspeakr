@@ -321,9 +321,9 @@ $(document).ready(function(){
            templateEditor.setValue(data);
            templateBuffer = data;
            $("#template-save-button").attr("data-url", fileUrl).addClass("disabled");
-           $('html, body').stop().animate({
+           /*$('html, body').stop().animate({
                       scrollTop: $('body').offset().top-100
-                    }, 500);
+                    }, 500);*/
        }
        });
    });
@@ -339,9 +339,9 @@ $(document).ready(function(){
            queryEditor.setValue(data);
            queryBuffer = data;
            $("#query-save-button").attr("data-url", fileUrl).addClass("disabled");
-           $('html, body').stop().animate({
+           /*$('html, body').stop().animate({
                       scrollTop: $('.bs-docs-query').offset().top-100
-                    }, 100);
+                    }, 100);*/
        }
        });
    });
