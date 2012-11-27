@@ -92,10 +92,10 @@ class Utils{
   	  	  	}else{
   	  	  	  $row[$k]['literal'] = 1;
   	  	  	  $row[$k]['curie'] = $v['value'];
-  	  	  	  if($v['datatype']){
+  	  	  	  if(isset($v['datatype'])){
   	  	  	    $row[$k]['type'] = $v['datatype'];
   	  	  	  }
-  	  	  	  if($v['xml:lang']){
+  	  	  	  if(isset($v['xml:lang'])){
   	  	  	    $row[$k]['lang'] = $v['xml:lang'];
   	  	  	  }
 
