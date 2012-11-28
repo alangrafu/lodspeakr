@@ -57,9 +57,10 @@ class Endpoint{
           echo("Error executing SPARQL query (".$this->sparqlUrl."): ".curl_error($c));
         }
       }
+      $http_status = intval(curl_getinfo($c, CURLINFO_HTTP_CODE));
       curl_close($c);
       $this->params['output'] = $auxoutput;
-      if(is_int($conf['cache']['global']) && $conf['cache']['global'] > 0){
+      if(is_int($conf['cache']['global']) && $conf['cache']['global'] > 0 && $http_status == 200){
         file_put_contents($cacheFile,($aux), LOCK_EX);
         if($conf['debug']){
           $msg = "Notice: Writing results in ".$cacheFile."\n";
