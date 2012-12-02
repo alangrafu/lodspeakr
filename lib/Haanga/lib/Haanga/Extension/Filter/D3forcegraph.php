@@ -40,6 +40,9 @@ class Haanga_Extension_Filter_D3ForceGraph{
   	$options['height'] = 500;
   	$options['color'] = '#aec7e8';
   	$options['radius'] = 10;
+  	$options['gravity'] = 0.05;
+  	$options['distance'] = 100;
+  	$options['charge'] = -100;
   	for($z=2; $z < count($names); $z++){
       $pair = explode("=", $names[$z]);
       $key = trim($pair[0], "\" '");
@@ -115,9 +118,9 @@ function redraw() {
   
   
   var force = d3.layout.force()
-  .gravity(.05)
-  .distance(100)
-  .charge(-100)
+  .gravity('.$options['gravity'].')
+  .distance('.$options['distance'].')
+  .charge('.$options['charge'].')
   .size([width, height]);
   
   force
