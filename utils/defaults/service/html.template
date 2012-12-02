@@ -1,11 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
- <head>
-  <meta charset="utf-8">
-  <title>My visualization</title>
-  <style>body{padding:0px;margin:0px;}</style>
- </head>
- <body>
-  {{models.main|GoogleVizTable:"s,p,o"}}
- </body>
+{%include "../../includes/header.inc"%}
+    <div class="container-fluid">
+    <h1>Classes available</h1>
+	<ul>
+    {% for row in models.main %}
+        <li><a href="{{lodspk.baseUrl}}instances/{{ row.resource.curie }}">{{row.resource.curie}}</a></li>
+    {% endfor %}
+      </ul>
+    </div>
+  </body>
 </html>
