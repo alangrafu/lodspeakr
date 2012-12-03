@@ -7,7 +7,7 @@ $conf['output']['describe'] = 'rdf';
 $conf['endpointParams']['config']['show_inline'] = 0;
 $conf['endpointParams']['config']['named_graph'] = '';
 //ALternative endpoints
-$conf['endpoint']['local'] = 'http://dbpedia.org/sparql';
+$conf['endpoint']['dbpedia'] = 'http://dbpedia.org/sparql';
 $conf['endpoint']['data_gov'] = 'http://services.data.gov/sparql';
 $conf['endpoint']['statistics_uk'] = 'http://services.data.gov.uk/statistics/sparql';
 $conf['endpoint']['education_uk'] = 'http://education.data.gov.uk/sparql/education/query';
