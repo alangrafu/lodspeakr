@@ -134,13 +134,15 @@ class Utils{
   	foreach($a as $v){
   	  foreach($conf['http_accept'] as $formatTypeArray){
   	  	if(strstr($v, ";")){
-  	  	  $aux = explode(";q=", $v);
+  	  	  $aux = explode(";", $v);
+  	  	  $aux[0] = trim($aux[0]);
   	  	  if(in_array($aux[0], $formatTypeArray)){
-  	  	  	$b[$aux[0]] = $aux[1];
+  	  	  	$b[$aux[0]] = floatval(trim(str_replace("q=","",$aux[1])));
   	  	  }
   	  	}else{
-  	  	  if(in_array($v, $formatTypeArray)){
-  	  	  	$b[$v] = 1;
+          $value = trim($v);
+  	  	  if(in_array($value, $formatTypeArray)){
+  	  	  	$b[$value] = 1.0;
   	  	  }
   	  	}
   	  }
