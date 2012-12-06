@@ -1,4 +1,4 @@
-SELECT ?s ?p  WHERE {
+SELECT DISTINCT ?s ?p  WHERE {
   {
     GRAPH ?g{
                 ?s ?p <{{uri}}> .
