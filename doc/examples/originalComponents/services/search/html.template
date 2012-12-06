@@ -1,0 +1,11 @@
+{%include "../../includes/header.inc"%}
+    <div class="container-fuild">
+      <h1>Results searching for "{{lodspk.args.arg0}}"</h1>
+        <ul>
+    {% for row in models.main %}
+        <li><a href="{{ row.resource.value }}">{{row.label.curie}}</a></li>
+    {% endfor %}
+    </ul>
+   </div>
+  </body>
+</html>

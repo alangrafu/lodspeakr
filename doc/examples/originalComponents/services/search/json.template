@@ -1,0 +1,5 @@
+[
+    {%for i in models.main%}{%if !forloop.first && models.main|length > 1%},{%endif%}
+      { "value": "{{i.label.value}}", "uri": "{{i.resource.value}}"}
+    {%endfor%}
+  ]

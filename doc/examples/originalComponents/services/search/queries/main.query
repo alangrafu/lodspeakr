@@ -1,0 +1,11 @@
+SELECT DISTINCT ?resource ?label WHERE {
+  {
+    GRAPH ?g {
+      ?resource rdfs:label ?label .
+    }
+  }UNION{
+    ?resource rdfs:label ?label .
+  }
+  FILTER(regex(str(?label), "{{lodspk.args.arg0}}", "i"))
+}
+LIMIT 10
