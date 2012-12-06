@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Visualbox Home</title>
+    <title>LODSPeaKr Basic Menu</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
@@ -49,11 +49,16 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </a>
-          <a class="brand" href="#">Visualbox</a>
+          <a class="brand" href="#">LODSPeaKr</a>
           <div class="nav-collapse">
             <ul class="nav">
-              <li class="active"><a href="admin">Admin Menu</a></li>
+              <li class="active"><a href="#">Home</a></li>
+              <li><a href="classes">Classes</a></li>
+              <li><a href="namedGraphs">Named Graphs</a></li>
             </ul>
+            <form class="navbar-search pull-left" action="">
+              <input type="text" data-provide="typeahead" class="typeahead search-query span2" placeholder="Search"/>
+            </form>
           </div><!--/.nav-collapse -->
         </div>
       </div>
@@ -61,56 +66,31 @@
 
     <div class="container">
       <img src="img/lodspeakr_logotype.png" style="opacity: 0.1; position: absolute; right:0px; top:60%"/>
-      <h1>Welcome to Visualbox!</h1>
+      <h1>LODSPeaKr is installed!</h1>
       <p></p>
-     <div class='row-fluid'>
       <div class="span5 well">
-      <h2>What is this?</h2>
-        <p>Visualbox allows you to create visualizations based on <a href='http://linkeddata.org'>Linked Open Data</a>. The goal of Visualbox is to facilitate the creation of visualization without the need to learn Javascript libraries. You <strong>do need</strong> to know a bit of <a href='http://www.w3.org/TR/rdf-sparql-query/'>SPARQL</a> and some notions of HTML though.</p>
-        <p> Visualbox is a simplified version of <a href='http://lodspeakr.org'>LODSPeaKr</a>, a framework to create Linked Data-based applications.</p>
+      <h2>Explore your data!</h2>
+        <p>Your data is already published as Linked Data. This includes <a href='http://en.wikipedia.org/wiki/Content_negotiation'>Content Negotiation</a>, which gives you the ability to serve your data in multiple formats for humans (HTML) and machines (Turtle, RDF/XML, N-Triples, RDF/JSON). You can start by looking at the <a href='classes'>classes</a> in your triple store or the <a href='namedGraphs'>named graphs</a> available.</p>
       </div>
       <div class="span5 well">
-      <h2>Configuring Visualbox</h2>
-        <p>Visualbox comes with several endpoints and namespaces configured by default but you can edit them or add more.</p>
+      <h2>Add static files</h2>
+        <p>You can also serve (and use) files that help you to present your content the way you want (JavaScript, CSS, images, etc). Just copy them on the <code>static</code> folder inside lodspeakr and you are ready to use them. For more information <a href='https://github.com/alangrafu/lodspeakr/wiki/Statics'>about static files in LODSPeaKR</a> and <a href='https://github.com/alangrafu/lodspeakr/wiki/Change-root-page'>how to change the landing page</a>, please check the wiki</a>.</p>
+      </div>
+      <div class="span5 well">
+      <h2>Understanding components</h2>
+        <p>In LODSPeaKr, components are entities (usually a set of templates and sparql queries) that are applied when a particular URI is being retrieved. The templates are based on <a href='http://haanga.org/'>Haanga</a>, and you can see <a href='https://github.com/alangrafu/lodspeakr/wiki/Examples-how-to-use-haanga-in-lodspeakr'>several examples of Haanga in LODSPeaKr in the wiki</a>.</p>
+        <p>Currently, LODSPeaKr supports 3 types of components. You can learn <a href='https://github.com/alangrafu/lodspeakr/wiki/Creating-components-in-LODSPeaKr'>how to create components</a> in the wiki.</p>
         <ul>
-          <li>You can <a href='admin/components'>create new visualizations</a></li>
-          <li>You can <a href='admin/endpoints'>edit endpoints or add your own</a></li>
-          <li>You can <a href='admin/namespaces'>edit namespaces or add your own</a></li>
-        </ul>
-        <a href='admin'><button class='btn btn-large btn-info'>Go to the admin menu</button></a>
+          <li><strong>Type components:</strong> Allow you to define how LODSPeaKr should expose data for instances of a certain class (for example all instances of <code>foaf:Person</code>).</li>
+          <li><strong>Service components:</strong> You can create web services and URIs that are not in the triple store to serve aggregated data, create APIs, etc. You can even <a href=''>pass parameters to these services</a>, making them very flexible.</li>
+          <li><strong>URI components:</strong> In some cases, you want to treat a particular URI different than others of the same type. To do that, you can create a URI component, to specify a particular set of SPARQL queries and template for it.</li>
+          </ul>
+       </p>
+      </div>
+      <div class="span5 well">
+      <h2>Use <code>lodspk.sh</code>, LODSPeaKr command-line tool</h2>
+      <p><code>lodspk.sh</code> is a tool that simplifies the creation and edit of components. It also simplifies the process of debugging and cleaning the cache. Check all the <a href='https://github.com/alangrafu/lodspeakr/wiki/Using-lodspk.sh'>options including with it</a>. Is it <strong>highly recommended</strong> to use it when creating, developing and debugging components.</p>
       </div>
     </div>
-    <div class='row-fluid'>
-     <div class="span5 well">
-      <h2>Examples available</h2>
-      <p>There are several examples available in the demo site (all of them use data from DBpedia). These examples are also included in this installation, you can look for them in the <a href='admin'>admin menu</a>.</p>
-      <ul>
-       <li><a href='http://visualbox.org/demo/nobel_laureates_by_country'>Total of Nobel laureates in Physics by country</a></li>
-       <li><a href='http://visualbox.org/demo/people_influenced_by_neruda'>Influence tree starting by Pablo Neruda</a></li>
-       <li><a href='http://visualbox.org/demo/places_in_rensselaer_county_by_area'>Places in Rensselaer county and their areas</a></li>
-       <li><a href='http://visualbox.org/demo/heinlein_and_bradbury'>People influenced by Robert Heinlein and Ray Bradbury</a></li>
-       <li><a href='http://visualbox.org/demo/lamborghini_cars'>Comparison of different characteristics of Lamborghini cars</a></li>
-       <li><a href='http://visualbox.org/demo/cities_by_area'>Largest cities (in sq. km) in the US</a></li>
-       <li><a href='http://visualbox.org/demo/triples_in_a_table'>20 triples in a Google Table</a></li>
-      </ul>
-     </div>
-     <div class="span5 well">
-      <h2>Create new visualizations</h2>
-      <p>The easiest way to create new visualizations is using the Component Editor.</p>
-      <ul>
-       <li>Look at the tutorial on <a href='https://github.com/alangrafu/visualbox/wiki/How-to-create-a-new-visualization'>how to create a new visualization</a></li>
-       <li>How to <a href='https://github.com/alangrafu/visualbox/wiki/Endpoints'>add new endpoints</a></li>
-      </ul>
-      <p>You can also use the command line tool (info from the LODSPeaKr wiki):</p>
-      <ul>
-       <li><a href='https://github.com/alangrafu/lodspeakr/wiki/Creating-components-in-LODSPeaKr'>Creating components</a></li>
-       <li><a href='https://github.com/alangrafu/lodspeakr/wiki/Filters-in-LODSPeaKr'>Filters available</a></li>
-       <li><a href='http://alangrafu.github.com/lodspeakr/applications.html'>Other apps created using LODSPeaKr</a></li>
-      </ul>
-     </div>
-    </div>
-   </div>
   </body>
 </html>
-
-
