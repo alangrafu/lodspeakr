@@ -1,5 +1,5 @@
 
-RewriteRule ^$ visualbox/index.php [L]
+RewriteRule ^$ lodspeakr/index.php [L]
 
 RewriteCond %{REQUEST_FILENAME} !-f 
 RewriteCond %{REQUEST_FILENAME} !-d

@@ -38,15 +38,14 @@ while [ "$everything_ok" != "y" ]; do
   basedir=$aux_basedir
 
   ns=$basedir
-##Visualbox doesn't need this
-#  echo    "(2/3) What local namespace you will use?"
-#  echo -n "(default '$ns'): "
-#  read -u 1 aux_ns
-#  echo ""
-#  if [ "$aux_ns" != "" ]; then
-#    aux_ns="`echo $aux_ns | sed 's/\/$//'`/" # remove any ending slash and append one.
-#    ns=$aux_ns
-#  fi
+  echo    "(2/3) What local namespace you will use?"
+  echo -n "(default '$ns'): "
+  read -u 1 aux_ns
+  echo ""
+  if [ "$aux_ns" != "" ]; then
+    aux_ns="`echo $aux_ns | sed 's/\/$//'`/" # remove any ending slash and append one.
+    ns=$aux_ns
+  fi
 
   external=""
   extra=""
@@ -71,7 +70,7 @@ while [ "$everything_ok" != "y" ]; do
   echo
   echo "Base URL is                        $basedir"
   echo "lodspeakr is installed at          $basedir$home"
-#  echo "The local namespace is             $ns"
+  echo "The local namespace is             $ns"
   echo "Your SPARQL endpoint is located at $endpoint"
 
   echo
@@ -129,7 +128,7 @@ wwwUser=`ps aux|egrep "apache|httpd|www" |egrep -v "grep|root"|awk '{print $1}'|
 echo
 echo "                                      *** ATTENTION ***"
 echo
-echo "Visualbox needs the web server to have write permissions for $home/cache/ $home/meta/ $home/components and $home/settings.inc.php."
+echo "LODSPeaKr needs the web server to have write permissions for $home/cache/ $home/meta/ $home/components and $home/settings.inc.php."
 echo
 echo
 echo "Common ways of doing this:"

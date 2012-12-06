@@ -3,8 +3,8 @@
 # https://github.com/alangrafu/lodspeakr/blob/master/utils/ldspk.sh
 USAGE="Usage:\n"
 USAGE=$USAGE"===COMPONENTS==\n"
-USAGE=$USAGE" Create component:\t\t\t\t\t$0 create uri|type|service foo [html|rdf|ttl|nt|json]\n"
-USAGE=$USAGE" Delete component:\t\t\t\t\t$0 delete uri|type|service foo [html|rdf|ttl|nt|json]\n"
+USAGE=$USAGE" Create component:\t\t\t\t\t$0 create uri|type|service foo [html|json]\n"
+USAGE=$USAGE" Delete component:\t\t\t\t\t$0 delete uri|type|service foo [html|json]\n"
 USAGE=$USAGE" List components:\t\t\t\t\t$0 list components\n"
 USAGE=$USAGE"\n===DEBUG==\n"
 USAGE=$USAGE" Turn debug:\t\t\t\t\t\t$0 debug on|off\n"

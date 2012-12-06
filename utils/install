@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
 #
-# Installation script for Visualbox (http://visualbox.org)
+# Installation script for LODSPeaKr (http://lodspeakr.org)
 # Author: Alvaro Graves (alvaro@graves.cl)
 # Modified by: Tim Lebo (lebot@rpi.edu)
 #
 # The URL:
-#    http://visualbox.org/install 
+#    http://lodspeakr.org/install 
 #       303 redirects to this script.
 
-lodspeakr_repository="git://github.com/alangrafu/visualbox.git"
+lodspeakr_repository="git://github.com/alangrafu/lodspeakr.git"
 home=`basename $lodspeakr_repository | sed 's/.git//'`
 
 source ~/.bashrc
