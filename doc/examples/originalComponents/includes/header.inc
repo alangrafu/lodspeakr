@@ -56,7 +56,7 @@
           <a class="brand" href="{{lodspk.home}}">{{lodspk.title}}</a>
           <div class="nav-collapse">
             <ul class="nav">
-              <li class="active"><a href="{{lodspk.home}}">Home</a></li>
+              <li><a href="{{lodspk.home}}">Home</a></li>
               <li><a href="{{lodspk.home}}classes">Classes</a></li>
               <li><a href="{{lodspk.home}}namedGraphs">Named Graphs</a></li>
             </ul>

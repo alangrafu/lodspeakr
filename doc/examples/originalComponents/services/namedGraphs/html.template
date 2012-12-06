@@ -1,4 +1,5 @@
-    <div class="container-fluid">
+{%include "../../includes/header.inc"%}
+  <div class="container-fluid">
       <h1>Named graphs available</h1>
   {%if first.main.g%}
       <ul>
