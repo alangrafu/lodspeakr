@@ -1,0 +1,16 @@
+    <div class="container-fluid">
+      <h1>Named graphs available</h1>
+  {%if first.main.g%}
+      <ul>
+    {% for row in models.main %}
+        <li>{{row.g.value}}</li>
+    {% endfor %}
+      </ul>
+  {%else%}
+    <div class="alert alert-info">
+      <p>No named graphs found</p>
+    </div>
+  {%endif%}
+    </div>
+  </body>
+</html>

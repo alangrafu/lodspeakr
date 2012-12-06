@@ -1,0 +1,10 @@
+    <div class="container-fuild">
+      <h1>Instances of class {{lodspk.args.arg0}}</h1>
+        <ul>
+    {% for row in models.main %}
+        <li><a href="{{ row.resource.value }}">{{row.resource.curie}}</a></li>
+    {% endfor %}
+    </ul>
+   </div>
+  </body>
+</html>
