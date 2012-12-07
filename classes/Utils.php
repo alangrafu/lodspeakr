@@ -445,10 +445,10 @@ class Utils{
   	  }
   	  $timeObj = new stdClass();
   	  $timeObj->query = new stdClass();
-  	  $timeObj->query->value = $modelFile;
+  	  $timeObj->query->value = $strippedModelFile;
   	  $timeObj->time = new stdClass();
   	  $timeObj->time->value = ($endTime - $initTime);
-  	  $lodspk['queryTimes'][$modelFile] = $timeObj;
+  	  $lodspk['queryTimes'][$strippedModelFile] = $timeObj;
   	  if($modelFile != $lodspk['type']){
   	  	if(!isset($rPointer[$strippedModelFile])){
   	  	  $rPointer[$strippedModelFile] = array();
