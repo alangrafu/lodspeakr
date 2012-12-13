@@ -7,7 +7,7 @@ class AdminModule extends abstractModule{
 <html lang='en'>
   <head>
     <meta charset='utf-8'>
-    <title>Visualbox Admin Menu</title>
+    <title>LODSPeaKr Admin Menu</title>
     <meta name='viewport' content='width=device-width, initial-scale=1.0'>
     <meta name='description' content=''>
     <meta name='author' content=''>
