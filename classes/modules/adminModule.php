@@ -140,7 +140,7 @@ class AdminModule extends abstractModule{
             <span class='icon-bar'></span>
             <span class='icon-bar'></span>
           </a>
-          <a class='brand' href='../admin'>Visualbox menu</a>
+          <a class='brand' href='../admin'>LODSPeaKr menu</a>
           <div class='nav-collapse'>
             <ul class='nav'>
               <!--li class='dropdown'>
