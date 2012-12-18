@@ -32,6 +32,8 @@ USAGE=$USAGE" Remove any variable:\t\t\t\t\t$0 remove variable\n"
 USAGE=$USAGE" If the variable is part of LODSPeaKr, it will return to its default value\n"
 USAGE=$USAGE" \n===ADMIN USER===\n"
 USAGE=$USAGE" Change password:\t\t\t\t\t$0 change password NEWPASSWORD\n"
+USAGE=$USAGE" \n===UPDATE===\n"
+USAGE=$USAGE" Update LODSPeaKr:\t\t\t\t\t$0 update\n"
 USAGE=$USAGE"\n===VERSION==\n"
 USAGE=$USAGE" Version:\t\t\t\t\t\t$0 version\n"
 USAGEDEBUG="Usage: $0 debug on|off"
@@ -41,7 +43,7 @@ if [[ $# -eq 0 || "$1" == "--help" ]]; then
 fi
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-operations=( create delete debug backup restore default cache version enable disable add remove list details change )
+operations=( create delete debug backup restore default cache version enable disable add remove list details change update )
 currentOperation=
 
 if [[ ${operations[@]} =~ $1 ]]; then
@@ -323,5 +325,11 @@ if [[ $currentOperation == "change" ]]; then
     exit 1
   fi
   php $DIR/modules/change-password.php $3
+  exit
+fi
+
+## Update
+if [[ $currentOperation == "update" ]]; then
+  $DIR/modules/update-lodspeakr.sh
   exit
 fi
