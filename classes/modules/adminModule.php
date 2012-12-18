@@ -559,7 +559,7 @@ class AdminModule extends abstractModule{
       $selected = "";
       if($k == "local")
         $selected = 'selected';
-      $endpointOptions .= "<option $selected value='$v'>$k ($v)</option>";
+      $endpointOptions .= "<option $selected value='$k'>$k ($v)</option>";
     }
     $namespaces = "var ns = ".json_encode($conf['ns']);
     $lastComponentType="";
@@ -688,12 +688,41 @@ class AdminModule extends abstractModule{
   	  }else{
   	    HTTPStatus::send404($params[1]);
   	  }
-  	  break;  	  
+  	  break; 
+  	case "query":
+  	  $this->queryEndpoint($_POST);
+  	  break;
   	default:
   	  HTTPStatus::send404($params[1]);
   	}
   }
 
+  protected function queryEndpoint($data){
+    global $endpoints;
+    global $conf;
+    $query = $data['query'];
+    $endpoint = $data['endpoint'];
+    if(isset($endpoint) && isset($conf['endpoint'][$endpoint])){
+      if(!isset($endpoints[$endpoint])){
+        $e = new Endpoint($conf['endpoint'][$endpoint], $conf['endpoint']['config']);  
+      }else{
+        $e = $endpoints[$endpoint];
+      }
+      $aux = $e->query($query, Utils::getResultsType($query));
+      header("Content-type: ".$data['format']);
+      $jaux = json_encode($aux);
+      if(isset($jaux)){
+        echo $jaux;
+      }else{
+        echo $aux;
+        HTTPStatus::send404($params[1]);
+      }
+    }else{
+     echo "no endpoint"; 
+      HTTPStatus::send404($params[1]);
+    }
+  }
+  
   protected function getComponentDetails($params){
     $componentType = $params[0];
     $componentName = $params[1];

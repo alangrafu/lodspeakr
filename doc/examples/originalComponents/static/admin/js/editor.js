@@ -247,37 +247,43 @@ $(document).ready(function(){
  
  function executeQuery(q, e){
    return $.ajax({
+       type: 'POST',
        data: {
          query: q,
+         endpoint: e,
          format: 'application/sparql-results+json'
        },
-       url: e,
+       url: 'components/query',
        success: function(d){
          var data = d;
-         if($.isXMLDoc(d)){
-           alert("XML");
-           console.log(d);
-           data = d.sparql;//$.parseXML();
-           console.log(data);
+         if(data == undefined){
+           $("#results-msg").html("An error occurred when sending a query to the endpoint").show().delay(2000).fadeOut("slow");
+         }else{
+           if($.isXMLDoc(d)){
+             alert("XML");
+             console.log(d);
+             data = d.sparql;//$.parseXML();
+             console.log(data);
+           }
+           var variables = new Array();
+           var header = $("<tr></tr>");
+           $(data.head.vars).each(function(i, item){
+               variables.push(item);
+               header.append("<td><strong>"+item+"</strong></td>");
+           });
+           $("#results").append(header);
+           $(data.results.bindings).each(function(i, item){
+               var row = $("<tr></tr>");
+               $.each(variables, function(j, jtem){
+                   var value = "";
+                   if(item[jtem] != undefined){
+                     value = item[jtem].value;
+                   }
+                   row.append("<td>"+value+"</td>");
+               });
+               $("#results").append(row);
+           });
          }
-         var variables = new Array();
-         var header = $("<tr></tr>");
-         $(data.head.vars).each(function(i, item){
-             variables.push(item);
-             header.append("<td><strong>"+item+"</strong></td>");
-         });
-         $("#results").append(header);
-         $(data.results.bindings).each(function(i, item){
-             var row = $("<tr></tr>");
-             $.each(variables, function(j, jtem){
-                 var value = "";
-                 if(item[jtem] != undefined){
-                   value = item[jtem].value;
-                 }
-                 row.append("<td>"+value+"</td>");
-             });
-             $("#results").append(row);
-         });
          $("#query-test-button").addClass('btn-success').html('Test this query against');
        },
        error: function(e){
