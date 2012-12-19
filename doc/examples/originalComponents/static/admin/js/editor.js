@@ -6,7 +6,7 @@ $(document).ready(function(){
     CodeMirror.defineMode('mustache', function(config, parserConfig) {
   var mustacheOverlay = {
     token: function(stream, state) {
-      var ch;
+      var ch;                                 
       if (stream.match('{{')) {
         while ((ch = stream.next()) != null)
           if (ch == '}' && stream.next() == '}') break;
@@ -68,6 +68,7 @@ $(document).ready(function(){
                     .on('mouseleave', function(){tip.animate({opacity: '0'}, 20)});
     //Create Template and Query Editor
     var templateEditor = CodeMirror.fromTextArea(document.getElementById('template-editor'), {mode: 'mustache',
+    lineNumbers: true,
     onChange:function(e){
      if(templateEditor.getValue() == templateBuffer){
        $('#template-save-button').addClass('disabled');
@@ -77,7 +78,8 @@ $(document).ready(function(){
      }
      });
      var queryEditor = CodeMirror.fromTextArea(document.getElementById('query-editor'), {mode: 'sparql',
-    onChange:function(e){
+     lineNumbers: true,
+     onChange:function(e){
      if(queryEditor.getValue() == queryBuffer){
        $('#query-save-button').addClass('disabled');
      }else{
