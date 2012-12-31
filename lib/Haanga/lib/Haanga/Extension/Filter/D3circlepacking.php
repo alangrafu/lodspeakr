@@ -35,7 +35,7 @@ class Haanga_Extension_Filter_D3CirclePacking{
   	//options
   	$options = array();
   	$options['width'] = 960;
-  	$options['height'] = 500;
+  	$options['height'] = 600;
   	$options['color'] = '#aec7e8';
   	$options['highlightedColor'] = '#00477f';
   	$options['radius'] = 10;
@@ -97,8 +97,8 @@ class Haanga_Extension_Filter_D3CirclePacking{
 <script>
 // Based on http://bost.ocks.org/mike/treemap/ 
 function initD3CirclePacking'.$randId.'(json){
-var width = 960,
-    height = 600,
+var width = '.$options['width'].',
+    height = '.$options['height'].',
     format = d3.format(",d");
 
 var pack = d3.layout.pack()
