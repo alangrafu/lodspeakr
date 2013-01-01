@@ -87,7 +87,7 @@ function D3WordCloud'.$randId.'(words, newcfg){
       .start();
 
   function draw(words) {
-    d3.select("body").append("svg")
+    d3.select("#wordcloud'.$randId.'").append("svg")
         .attr("width", cfg.width)
         .attr("height", cfg.height)
       .append("g")
