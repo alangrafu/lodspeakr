@@ -97,6 +97,7 @@ function D3WordCloud'.$randId.'(words, newcfg){
       .enter().append("text")
         .style("font-family", cfg.font)
         .style("font-size", function(d) { return d.size + "px"; })
+        .style("fill", cfg.color)
         .attr("text-anchor", "middle")
         .attr("transform", function(d) {
           return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
