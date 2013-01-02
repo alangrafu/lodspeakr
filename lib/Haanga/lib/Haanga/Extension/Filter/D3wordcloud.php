@@ -54,6 +54,7 @@ function D3WordCloud'.$randId.'(words, newcfg){
   var cfg = {width: 300,
              height: 300,
              font: "sans-serif",
+             size: 10,
              color: "black",
              stopwords: ["of", "the", "a", "or", "to", "and", "for", "at", "with", "without", "in", "from", "is", "are", "were", "was", "this", "that", "these", "those", "in", "on"]
   };
@@ -77,7 +78,7 @@ function D3WordCloud'.$randId.'(words, newcfg){
   }
   d3.layout.cloud().size([cfg.width, cfg.height])
       .words(totalWords.map(function(d) {
-              return {text: d.name, size: 10 + 10*(d.total-1)};
+              return {text: d.name, size: parseInt(cfg.size) + 10*(d.total-1)};
       }))
       .rotate(function() { return ~~(Math.random() * 2) * 90; })
       .padding(1)
