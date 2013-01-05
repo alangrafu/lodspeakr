@@ -29,21 +29,42 @@ class Haanga_Extension_Filter_D3WordCloud{
   	$options['height'] = 500;
   	$options['color'] = '#aec7e8';
   	$options['radius'] = 10;
-  	for($z=1; $z < count($names); $z++){
+  	$options['count'] = false;
+  	for($z=count($varList); $z < count($names); $z++){
       $pair = explode("=", $names[$z]);
       $key = trim($pair[0], "\" '");
       $value = trim($pair[1], "\" '");
       $options[$key] = $value;     
     }
 
-  	
-  	foreach($obj as $k){
-  	  foreach($varList as $var){
-  	    $name = $var['name'];
-  	    $val = $var['value'];
-  	    $words = array_merge($words, preg_split("/[\s,\.]+/", $k->$name->$val));
-   	  }
+  	if(count($varList) < 2){
+  	  foreach($obj as $k){
+  	    foreach($varList as $var){
+  	      $name = $var['name'];
+  	      $val = $var['value'];
+  	      $words = array_merge($words, preg_split("/[\s,\.]+/", $k->$name->$val));
+  	    }
+  	  }  	
+  	}else{
+  	  $options['count'] = true;
+  	  $wordValue  = $varList[0]['value'];
+  	  $wordVar    = $varList[0]['name'];
+	    $countValue = $varList[1]['value'];
+	    $countVar   = $varList[1]['name'];
+	    if(isset($varList[2])){
+	      $linkValue = $varList[2]['value'];
+	      $linkVar   = $varList[2]['name'];
+	    }
+  	  foreach($obj as $k){
+  	    $currentArray = array("name"=>$k->$wordVar->$wordValue, "total" => intval($k->$countVar->$countValue), );
+  	    if(isset($varList[2])){
+  	      $currentArray['link'] = $k->$linkVar->$linkValue;
+  	    }
+  	    $words[] = $currentArray;
+  	    
+  	  }
   	}  	
+  	    	
 
   	$pre = '<div id="wordcloud'.$randId.'"></div>
 <script src="http://d3js.org/d3.v2.min.js?2.9.3"></script>
@@ -54,7 +75,8 @@ function D3WordCloud'.$randId.'(words, newcfg){
   var cfg = {width: 300,
              height: 300,
              font: "sans-serif",
-             size: 10,
+             minsize: 10,
+             maxsize: 100,
              color: "black",
              stopwords: ["of", "the", "a", "or", "to", "and", "for", "at", "with", "without", "in", "from", "is", "are", "were", "was", "this", "that", "these", "those", "in", "on"]
   };
@@ -62,23 +84,33 @@ function D3WordCloud'.$randId.'(words, newcfg){
     cfg[i] = newcfg[i];
   }
   var countingWords = {};
-  for(i in words){
-    var d = words[i].replace(/[()\.]/gi, "");
-    if(cfg.stopwords.indexOf(d)<0){
-      if(countingWords[d] != undefined){ 
-        countingWords[d] += 1
-      }else{
-        countingWords[d] = 1
+  var totalWords = new Array();
+  
+  if(!cfg.count){
+    for(i in words){
+      var d = words[i].replace(/[()\.]/gi, "");
+      if(cfg.stopwords.indexOf(d)<0){
+        if(countingWords[d] != undefined){ 
+          countingWords[d] += 1
+        }else{
+          countingWords[d] = 1
+        }
       }
     }
+    for(i in countingWords){
+      totalWords.push({name: i, total: countingWords[i]});
+    }  
+  }else{
+      totalWords = words;
   }
-  var totalWords = new Array();
-  for(i in countingWords){
-    totalWords.push({name: i, total: countingWords[i]});
+  var maxValue = Math.max.apply(Math, totalWords.map(function(d){return d.total;}));
+  var wordLinks = new Array();
+  for(i in totalWords){
+    wordLinks[totalWords[i].name] = totalWords[i].link || undefined;
   }
   d3.layout.cloud().size([cfg.width, cfg.height])
       .words(totalWords.map(function(d) {
-              return {text: d.name, size: parseInt(cfg.size) + 10*(d.total-1)};
+              return {text: d.name, size: parseInt(cfg.minsize + (cfg.maxsize-cfg.minsize)*(d.total/maxValue))};
       }))
       .rotate(function() { return ~~(Math.random() * 2) * 90; })
       .padding(1)
@@ -88,14 +120,14 @@ function D3WordCloud'.$randId.'(words, newcfg){
       .start();
 
   function draw(words) {
-    d3.select("#wordcloud'.$randId.'").append("svg")
-        .attr("width", cfg.width)
-        .attr("height", cfg.height)
-      .append("g")
-        .attr("transform", "translate("+cfg.width/2+","+cfg.height/2+")")
-      .selectAll("text")
-        .data(words)
-      .enter().append("text")
+    var svg = d3.select("#wordcloud'.$randId.'").append("svg");
+    
+    var g = svg.attr("width", cfg.width)
+        .attr("height", cfg.height).append("g")
+        .attr("transform", "translate("+cfg.width/2+","+cfg.height/2+")");
+        
+        g.selectAll("text").data(words)
+      .enter().append("a").attr("xlink:href", function(d){console.log(d);return wordLinks[d.text]}).append("text")
         .style("font-family", cfg.font)
         .style("font-size", function(d) { return d.size + "px"; })
         .style("fill", cfg.color)
@@ -104,6 +136,7 @@ function D3WordCloud'.$randId.'(words, newcfg){
           return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
         })
         .text(function(d) { return d.text; });
+        
   }
 }
 var words'.$randId.' = '.json_encode($words).';
