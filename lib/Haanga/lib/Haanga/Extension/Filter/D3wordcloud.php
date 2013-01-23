@@ -77,6 +77,7 @@ function D3WordCloud'.$randId.'(words, newcfg){
              font: "sans-serif",
              minsize: 10,
              maxsize: 100,
+             wordOrientation: "random",
              color: "black",
              stopwords: ["of", "the", "a", "or", "to", "and", "for", "at", "with", "without", "in", "from", "is", "are", "were", "was", "this", "that", "these", "those", "in", "on"]
   };
@@ -112,7 +113,7 @@ function D3WordCloud'.$randId.'(words, newcfg){
       .words(totalWords.map(function(d) {
               return {text: d.name, size: parseInt(cfg.minsize + (cfg.maxsize-cfg.minsize)*(d.total/maxValue))};
       }))
-      .rotate(function() { return ~~(Math.random() * 2) * 90; })
+      .rotate(function() { var x=~~(Math.random() * 2) * 90; if(cfg.wordOrientation == "horizontal"){x = 0;}if(cfg.wordOrientation == "vertical"){x = 90;} return x; })
       .padding(1)
       .font("arial")
       .fontSize(function(d) { return d.size; })
@@ -127,7 +128,7 @@ function D3WordCloud'.$randId.'(words, newcfg){
         .attr("transform", "translate("+cfg.width/2+","+cfg.height/2+")");
         
         g.selectAll("text").data(words)
-      .enter().append("a").attr("xlink:href", function(d){console.log(d);return wordLinks[d.text]}).append("text")
+      .enter().append("a").attr("xlink:href", function(d){return wordLinks[d.text]}).append("text")
         .style("font-family", cfg.font)
         .style("font-size", function(d) { return d.size + "px"; })
         .style("fill", cfg.color)

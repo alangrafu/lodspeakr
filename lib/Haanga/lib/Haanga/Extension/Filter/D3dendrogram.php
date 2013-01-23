@@ -35,7 +35,7 @@ class Haanga_Extension_Filter_D3Dendrogram{
   	}
   	//options
   	$options = array();
-  	$options['width'] = 960;
+  	$options['width'] = 600;
   	$options['height'] = 500;
   	$options['color'] = '#aec7e8';
   	$options['highlightedColor'] = '#00477f';
@@ -88,8 +88,8 @@ class Haanga_Extension_Filter_D3Dendrogram{
 <script>
 // Based on http://bost.ocks.org/mike/treemap/ 
 function initD3TreeMaps'.$randId.'(json){
-var width = 600,
-    height = 500;
+var width = '.$options['width'].',
+    height = '.$options['height'].';
   
   var cluster = d3.layout.cluster()
       .size([height, width - 200]);
