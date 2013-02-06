@@ -15,45 +15,54 @@ class ServiceModule extends abstractModule{
   	  return FALSE;
   	}
 
-  	//Use .extension at the end of the service to force a particular content type
-  	if(strpos($qArr[0], '.')>0){
-  	  $aux = explode(".", $qArr[0]);
-  	  if(isset($aux[1])){
-  	    $contentTypes = $conf['http_accept'][$aux[1]];
-  	    if($contentTypes == null){
-  	      HTTPStatus::send406("Content type not acceptable\n");
-  	    }
-  	    $acceptContentType = $contentTypes[0];
-  	  }
-  	  $qArr[0] = $aux[0];
-  	}
 
   	$extension = Utils::getExtension($acceptContentType);
   	$viewFile  = null;
-  	$lodspk['model'] = $conf['model']['directory'].'/'.$conf['service']['prefix'].'/'.$qArr[0].'/';
-  	$lodspk['view'] = $conf['view']['directory'].'/'.$conf['service']['prefix'].'/'.$qArr[0].'/'.$extension.'.template';
-  	$lodspk['serviceName'] = $qArr[0];
-  	$lodspk['componentName'] = $qArr[0];
-  	$modelFile = $lodspk['model'].$extension.'.queries';
-  	if(file_exists($lodspk['model'].$extension.'.queries')){
-  	  if(!file_exists($lodspk['view'])){
-  	  	$viewFile = null;
-  	  }else{
-  	  	$viewFile = $lodspk['view'];
+  	$tokens = $qArr;
+  	while(sizeof($tokens) > 0){
+  	  $serviceName = join("%2F", $tokens);
+  	  //Use .extension at the end of the service to force a particular content type
+  	  $lastSegment = end($tokens);
+  	  if(strpos($lastSegment, '.')>0){
+  	    $aux = explode(".", $lastSegment);
+  	    if(sizeof($aux)>1){
+  	      $requestExtension = array_pop($aux);
+  	      $contentTypes = $conf['http_accept'][$requestExtension];
+  	      if($contentTypes != null){
+  	        $acceptContentType = $contentTypes[0];
+  	        $extension = $requestExtension;
+  	      }
+  	    }
+  	    $serviceName = join(".",$aux);
   	  }
-  	  return array($modelFile, $viewFile);
-  	}elseif(file_exists($lodspk['model'].'queries')){
- 	  $modelFile = $lodspk['model'].'queries';
-  	  if(!file_exists($lodspk['view'])){
-  	  	$lodspk['resultRdf'] = true;
-  	  	$viewFile = null;
-  	  }else{
-  	  	$viewFile = $lodspk['view'];
+  	  
+  	  
+  	  $lodspk['model'] = $conf['model']['directory'].'/'.$conf['service']['prefix'].'/'.$serviceName.'/';
+  	  $lodspk['view'] = $conf['view']['directory'].'/'.$conf['service']['prefix'].'/'.$serviceName.'/'.$extension.'.template';
+  	  $lodspk['serviceName'] = join("/", $tokens);
+  	  $lodspk['componentName'] = $lodspk['serviceName'];
+  	  $modelFile = $lodspk['model'].$extension.'.queries';
+  	  if(file_exists($lodspk['model'].$extension.'.queries')){
+  	    if(!file_exists($lodspk['view'])){
+  	      $viewFile = null;
+  	    }else{
+  	      $viewFile = $lodspk['view'];
+  	    }
+  	    return array($modelFile, $viewFile);
+  	  }elseif(file_exists($lodspk['model'].'queries')){
+  	    $modelFile = $lodspk['model'].'queries';
+  	    if(!file_exists($lodspk['view'])){
+  	      $lodspk['resultRdf'] = true;
+  	      $viewFile = null;
+  	    }else{
+  	      $viewFile = $lodspk['view'];
+  	    }
+  	    return array($modelFile, $viewFile);
+  	  }elseif(file_exists($lodspk['model'])){
+  	    HTTPStatus::send406($uri);
+  	    exit(0);
   	  }
-  	  return array($modelFile, $viewFile);
-  	}elseif(file_exists($lodspk['model'])){
-  	  HTTPStatus::send406($uri);
-  	  exit(0);
+  	  array_pop($tokens);
   	}
   	return FALSE;  
   }
@@ -69,7 +78,7 @@ class ServiceModule extends abstractModule{
   	$context = array();
   	$context['contentType'] = $acceptContentType;
   	$context['endpoints'] = $endpoints;
-  	$f = $this->getFunction($localUri);
+  	//$f = $this->getFunction($localUri);
   	$params = array();
   	$params = $this->getParams($localUri);
   	//$params[] = $context;
@@ -158,20 +167,22 @@ class ServiceModule extends abstractModule{
   }
   
   
-  protected function getFunction($uri){
+  /*protected function getFunction($uri){
   	global $conf;
   	$count = 1;
   	$prefixUri = $conf['basedir'];
   	$aux = str_replace($prefixUri, '', $uri, $count);
   	$functionAndParams = explode('/', $aux);
   	return $functionAndParams[0];
-  }
+  }*/
   
   protected function getParams($uri){
   	global $conf;
+  	global $lodspk;
   	$count = 1;
   	$prefixUri = $conf['basedir'];
-  	$functionAndParams = explode('/', str_replace($prefixUri, '', $uri, $count));
+//  	echo $prefixUri.$lodspk['serviceName'];exit(0);
+  	$functionAndParams = explode('/', str_replace($prefixUri.$lodspk['serviceName'], '', $uri, $count));
   	if(sizeof($functionAndParams) > 1){
   	  array_shift($functionAndParams);
   	  return $functionAndParams;

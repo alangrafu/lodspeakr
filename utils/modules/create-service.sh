@@ -4,12 +4,14 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 initToken='services'
 cd $DIR
+
+serviceName=${1/\//%2F}
 #Check models
-mainDir=$DIR/../../components/$initToken/$1/
+mainDir=$DIR/../../components/$initToken/$serviceName/
 
 if [ -e "$mainDir" ]
 then
-  echo "ERROR: This service $1 already exists." >&2
+  echo "ERROR: This service $serviceName already exists." >&2
   exit 1
 else
   mkdir -p $mainDir
@@ -17,4 +19,4 @@ fi
 
 cp -rf ../defaults/service/* $mainDir/
 
-echo $initToken.$1 created/modified successfully! >&2
+echo $initToken.$serviceName created/modified successfully! >&2
