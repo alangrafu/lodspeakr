@@ -43,7 +43,7 @@ if [[ $# -eq 0 || "$1" == "--help" ]]; then
 fi
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-operations=( create delete debug backup restore default cache version enable disable add remove list details change update )
+operations=( create delete debug backup restore default cache version enable disable add remove list details change update scaffold )
 currentOperation=
 
 if [[ ${operations[@]} =~ $1 ]]; then
@@ -333,3 +333,29 @@ if [[ $currentOperation == "update" ]]; then
   $DIR/modules/update-lodspeakr.sh
   exit
 fi
+
+
+## Scaffold
+if [[ $currentOperation == "scaffold" ]]; then
+  if [ "$#" != "3" ]; then
+    echo -e $USAGE
+    exit 1
+  fi
+  scaffoldOperation=( service )
+  if [[ ${scaffoldOperation[@]} =~ $2 && $2 != "" ]]
+  then
+    scaffoldOperation=$2
+  else
+    echo -e "Option '$2' for scaffolding not supported. Operation aborted\n" >&2
+    echo -e $USAGE
+    exit 1
+  fi
+  if [[ $3 == "" ]]; then
+    echo "Error: No new component name given"
+    echo -e $USAGE;
+    exit 1
+  fi
+  $DIR/modules/create-scaffold.sh $scaffoldOperation $3
+  exit
+fi
+
