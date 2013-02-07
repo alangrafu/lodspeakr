@@ -5,7 +5,7 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 initToken='services'
 cd $DIR
 
-serviceName=${1/\//%2F}
+serviceName=`echo $1 |sed 's/\//%2F/g'`
 #Check models
 mainDir=$DIR/../../components/$initToken/$serviceName/
 
