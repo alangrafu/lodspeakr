@@ -622,6 +622,19 @@ class Utils{
     return $newQuery;
   }
   
+  public static function filterTriples($triples, $pattern){
+    //Simples match/filter function possible
+    $result = array();
+    foreach($triples as $t){
+      if( (($pattern[0] != null && $pattern[0] == $t['s']) || $pattern[0] == null) &&
+          (($pattern[1] != null && $pattern[1] == $t['p']) || $pattern[1] == null) &&
+          (($pattern[2] != null && $pattern[2] == $t['o']) || $pattern[2] == null) ){
+        $result[] = array($t['s'], $t['p'], $t['o']);
+      } 
+    }
+    return $result;
+  }
+  
 }
 
 ?>

@@ -18,6 +18,18 @@ scaffold+="<> a lodspk:ScaffoldedService ;\n"
 
 finished_asking="y"
 confirmed_creation="n"
+echo "You are about to scaffold service $serviceName"
+echo "You can use regular expressions to match different arguments"
+echo
+echo "====EXAMPLE===="
+echo "^\d+\$"
+echo
+echo "will match if there is only ONE argument that are only digits such as http://server/$serviceName/123"
+echo "but NOT http://server/$serviceName/123asd or http://server/$serviceName/asd"
+echo
+echo
+echo "See http://0n.cl/7 for more details about regular expressions"
+echo
 while [ "$confirmed_creation" != "y" ]; do
   patternCounter=1
   regexes=()
@@ -66,9 +78,13 @@ done
 scaffold+="   dcterms:identifier \"$2\" .\n\n\n"
 
 patternCounter=0
+echo
 for var in "${regexes[@]}"
 do
   currentPattern=$(echo ${regexes[$patternCounter]} |sed -e 's|\\|\\\\\\|g')
+  echo "If pattern '${regexes[$patternCounter]}' matches the arguments, subComponent 'pattern"$(echo $patternCounter)"' will be used"
+  scaffold+="\n"
+  scaffold+="#If pattern '${regexes[$patternCounter]}' matches the arguments, subComponent 'pattern"$(echo $patternCounter)"' will be used\n"
   scaffold+="<#pattern$patternCounter> a lodspk:Pattern; \n"
   scaffold+="                          lodspk:uriPattern \""$currentPattern"\"; \n"
   scaffold+="                          dcterms:identifier \""$(echo $patternCounter)"\"; \n"
@@ -78,9 +94,9 @@ do
   cp -rf $DIR/../defaults/service/* $patternDir
   let patternCounter=$patternCounter+1
 done
-
+echo
 echo -e ${scaffold} > $mainDir/scaffold.ttl
-
 echo "Scaffold created"
+echo "You can always change the patterns or add more by editing $mainDir/scaffold.ttl"
 exit 0
 

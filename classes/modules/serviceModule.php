@@ -19,6 +19,7 @@ class ServiceModule extends abstractModule{
   	$extension = Utils::getExtension($acceptContentType);
   	$viewFile  = null;
   	$tokens = $qArr;
+  	$arguments = array();
   	while(sizeof($tokens) > 0){
   	  $serviceName = join("%2F", $tokens);
   	  //Use .extension at the end of the service to force a particular content type
@@ -36,9 +37,15 @@ class ServiceModule extends abstractModule{
   	    $serviceName = join(".",$aux);
   	  }
   	  
-  	  
-  	  $lodspk['model'] = $conf['model']['directory'].'/'.$conf['service']['prefix'].'/'.$serviceName.'/';
-  	  $lodspk['view'] = $conf['view']['directory'].'/'.$conf['service']['prefix'].'/'.$serviceName.'/'.$extension.'.template';
+  	  if(file_exists($conf['model']['directory'].'/'.$conf['service']['prefix'].'/'.$serviceName.'/scaffold.ttl')){
+  	    $subDir = $this->readScaffold($conf['model']['directory'].'/'.$conf['service']['prefix'].'/'.$serviceName.'/scaffold.ttl', join("/", $arguments));
+  	    $subDir.= '/';
+  	    $lodspk['model'] = $conf['model']['directory'].'/'.$conf['service']['prefix'].'/'.$serviceName.'/'.$subDir;
+  	    $lodspk['view'] = $conf['view']['directory'].'/'.$conf['service']['prefix'].'/'.$serviceName.'/'.$subDir.$extension.'.template';  	    
+  	  }else{  	    
+  	    $lodspk['model'] = $conf['model']['directory'].'/'.$conf['service']['prefix'].'/'.$serviceName.'/';
+  	    $lodspk['view'] = $conf['view']['directory'].'/'.$conf['service']['prefix'].'/'.$serviceName.'/'.$extension.'.template';
+  	  }
   	  $lodspk['serviceName'] = join("/", $tokens);
   	  $lodspk['componentName'] = $lodspk['serviceName'];
   	  $modelFile = $lodspk['model'].$extension.'.queries';
@@ -62,7 +69,7 @@ class ServiceModule extends abstractModule{
   	    HTTPStatus::send406($uri);
   	    exit(0);
   	  }
-  	  array_pop($tokens);
+  	  array_unshift($arguments, array_pop($tokens));
   	}
   	return FALSE;  
   }
@@ -167,21 +174,11 @@ class ServiceModule extends abstractModule{
   }
   
   
-  /*protected function getFunction($uri){
-  	global $conf;
-  	$count = 1;
-  	$prefixUri = $conf['basedir'];
-  	$aux = str_replace($prefixUri, '', $uri, $count);
-  	$functionAndParams = explode('/', $aux);
-  	return $functionAndParams[0];
-  }*/
-  
   protected function getParams($uri){
   	global $conf;
   	global $lodspk;
   	$count = 1;
   	$prefixUri = $conf['basedir'];
-//  	echo $prefixUri.$lodspk['serviceName'];exit(0);
   	$functionAndParams = explode('/', str_replace($prefixUri.$lodspk['serviceName'], '', $uri, $count));
   	if(sizeof($functionAndParams) > 1){
   	  array_shift($functionAndParams);
@@ -190,6 +187,27 @@ class ServiceModule extends abstractModule{
   	  return array(null);
   	}
   }
-  
+
+  protected function readScaffold($scaffold, $serviceArgs){
+    global $conf;
+    require_once($conf['home'].'lib/arc2/ARC2.php');
+    $parser = ARC2::getTurtleParser();
+    $parser->parse($scaffold);
+    $triples = $parser->getTriples();
+    $aux=Utils::filterTriples($triples, array(null, "http://www.w3.org/1999/02/22-rdf-syntax-ns#type", "http://lodspeakr.org/vocab/ScaffoldedService"));
+    $scaffoldUri = $aux[0][0];
+    $aux=Utils::filterTriples($triples, array($scaffoldUri, "http://lodspeakr.org/vocab/scaffold", null));
+    foreach($aux as $r){
+      $patterns = Utils::filterTriples($triples, array($r[2], "http://lodspeakr.org/vocab/uriPattern", null));
+      $pattern = stripcslashes($patterns[0][2]);
+      if(preg_match("|$pattern|", $serviceArgs) > 0){
+//        echo "match ! \n ".$pattern."\n";
+        $patternDir = Utils::filterTriples($triples, array($r[2], "http://lodspeakr.org/vocab/subComponent", null));
+        return $patternDir[0][2];
+      }
+    }
+//        exit(0);
+    return "";
+  }  
 }
 ?>
