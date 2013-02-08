@@ -13,7 +13,7 @@ fi
 scaffold="@prefix lodspk: <http://lodspeakr.org/vocab/> .\n"
 scaffold+="@prefix dcterms: <http://purl.org/dc/terms/> .\n"
 scaffold+="\n"
-scaffold+="<> a lodspk:ScaffoldedService ;\n"
+scaffold+="<#service> a lodspk:ScaffoldedService ;\n"
 
 
 finished_asking="y"
