@@ -1,13 +1,15 @@
 #!/usr/bin/env bash
 #
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
 root_htaccess="root.htaccess"
 parent_htaccess="../.htaccess"
 settings_file="settings.inc.php"
 
 metadb="db.sqlite"
-basedir="http://localhost/my/data"
+baseUrl="http://localhost/my/data"
 home=`basename \`pwd\`` # 'lodspeakr', the directory from git clone
-ns=$basedir
+ns=$baseUrl
 endpoint="http://localhost/sparql"
 everything_ok="n"
 
@@ -29,15 +31,21 @@ while [ "$everything_ok" != "y" ]; do
   echo
   echo "LODSPeaKr needs to know three (3) URIs to minimally configure itself:"
   echo 
-  echo    "(1/2) At what URL will `pwd |sed -e 's/lodspeakr$//'` be available? (e.g. http://localhost/$parent/)"
+  echo    "(1/3) At what URL will `pwd |sed -e 's/lodspeakr$//'` be available? (e.g. http://localhost/$parent/)"
   echo    "**Note** DO NOT include 'lodspeakr/' in the URL"
-  echo -n "(default '$basedir'): "
-  read -u 1 aux_basedir
+  echo -n "(default '$baseUrl'): "
+  read -u 1 aux_baseUrl
   echo 
-  aux_basedir="`echo $aux_basedir | sed 's/\/$//'`/" # remove any ending slash and append one.
-  basedir=$aux_basedir
-
-  ns=$basedir
+  if [ "$aux_baseUrl" != "" ]; then
+    baseUrl=$aux_baseUrl
+  fi
+  baseUrl="`echo $baseUrl | sed 's/\/$//'`/" # remove any ending slash and append one.
+  
+  #Suggest baseUrl+"/sparql" for default endpoint
+  if [ "$baseUrl" != "" ]; then
+    endpoint=$baseUrl"sparql"
+  fi
+  ns=$baseUrl
   echo    "(2/3) What local namespace you will use?"
   echo -n "(default '$ns'): "
   read -u 1 aux_ns
@@ -49,14 +57,14 @@ while [ "$everything_ok" != "y" ]; do
 
   external=""
   extra=""
-  if [[ "$basedir" =~ ^"$ns" ]]; then
+  if [[ "$baseUrl" =~ ^"$ns" ]]; then
     external="false"
   else
     external="\$conf['ns']['local']"
-    extra="\$conf['ns']['base']   = '$basedir';"
+    extra="\$conf['ns']['base']   = '$baseUrl';"
   fi
   
-  echo    "(2/2) What is the URL of your SPARQL endpoint?"
+  echo    "(3/3) What is the URL of your SPARQL endpoint?"
   echo -n "(default $endpoint): "
   read -u 1 aux_endpoint
   echo ""
@@ -68,10 +76,11 @@ while [ "$everything_ok" != "y" ]; do
   echo
   echo "Ok, so I have the following configuration:"
   echo
-  echo "Base URL is                        $basedir"
-  echo "lodspeakr is installed at          $basedir$home"
+  echo "Base URL is                        $baseUrl"
   echo "The local namespace is             $ns"
   echo "Your SPARQL endpoint is located at $endpoint"
+  echo
+  echo "lodspeakr is installed at          $DIR"
 
   echo
   echo -n "Complete installation? (y/n)? "
@@ -91,7 +100,7 @@ content="<?php
 
 \$conf['endpoint']['local'] = '$endpoint';
 \$conf['home'] = '$LODSPEAKR_HOME';
-\$conf['basedir'] = '$basedir';
+\$conf['basedir'] = '$baseUrl';
 \$conf['debug'] = false;
 
 \$conf['ns']['local']   = '$ns';
@@ -114,7 +123,7 @@ echo ""
 echo "<IfModule mod_rewrite.c>" > $parent_htaccess
 echo "RewriteEngine on" >> $parent_htaccess
 echo >> $parent_htaccess
-newBase=`echo $basedir|sed -e "s|https\{0,1\}://[^\/]*||g"`
+newBase=`echo $baseUrl|sed -e "s|https\{0,1\}://[^\/]*||g"`
 echo "RewriteBase $newBase" >> $parent_htaccess
 cat $root_htaccess >> $parent_htaccess
 echo "RewriteRule ^(.+)\$ $home/index.php?q=\$1 [L]" >> $parent_htaccess
@@ -149,6 +158,6 @@ echo
 echo "See https://github.com/alangrafu/lodspeakr/wiki/Installation for further information"
 echo
 echo "--------------------------------------------------------------------------------------------------------"
-echo "You can now visit ${bold}$basedir${normal} to navigate through your data."
+echo "You can now visit ${bold}$baseUrl${normal} to navigate through your data."
 echo "--------------------------------------------------------------------------------------------------------"
 echo
