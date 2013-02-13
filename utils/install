@@ -22,7 +22,7 @@ fi
 if [ ! -e "$home" ]; then
    $GIT clone $lodspeakr_repository
    cd $home
-   ./install.sh $home
+   ./install.sh $home $1 $2 $3
  else
    echo "There is already an existing directory called '$home'. Installation cancelled. Remove it first and try again."
 fi

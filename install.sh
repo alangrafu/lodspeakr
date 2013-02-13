@@ -17,13 +17,23 @@ if [ -e "$parent_htaccess" ]; then
   echo
   echo "`dirname \`pwd\``/.htaccess already exists."
   echo "Please remove it to continue the installation."
-  exit
+  exit 1
 fi
 
 back_one=`cd .. 2>/dev/null && pwd`
 parent=`basename $back_one`
 
 utils/create_db.sh $metadb
+
+if [ "$2" != "" ] && [ "$3" != "" ] && [ "$4" != "" ]; then
+  echo "Done! $2 $3 $4"
+  baseUrl="`echo $2 | sed 's/\/$//'`/"
+  ns=$3
+  endpoint=$4
+  everything_ok="y"
+fi
+
+
 
 while [ "$everything_ok" != "y" ]; do
   echo
@@ -54,15 +64,6 @@ while [ "$everything_ok" != "y" ]; do
     aux_ns="`echo $aux_ns | sed 's/\/$//'`/" # remove any ending slash and append one.
     ns=$aux_ns
   fi
-
-  external=""
-  extra=""
-  if [[ "$baseUrl" =~ ^"$ns" ]]; then
-    external="false"
-  else
-    external="\$conf['ns']['local']"
-    extra="\$conf['ns']['base']   = '$baseUrl';"
-  fi
   
   echo    "(3/3) What is the URL of your SPARQL endpoint?"
   echo -n "(default $endpoint): "
@@ -86,6 +87,15 @@ while [ "$everything_ok" != "y" ]; do
   echo -n "Complete installation? (y/n)? "
   read -u 1 everything_ok
 done
+
+external=""
+extra=""
+if [[ "$baseUrl" =~ ^"$ns" ]]; then
+  external="false"
+else
+  external="\$conf['ns']['local']"
+  extra="\$conf['ns']['base']   = '$baseUrl';"
+fi
 
 if [ -e "$settings_file" ]; then
   ts=`date +%s`
