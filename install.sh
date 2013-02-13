@@ -186,7 +186,7 @@ normal=`tput sgr0`
 wwwUser=`ps aux|egrep "apache|httpd|www" |egrep -v "grep|root"|awk '{print $1}'|uniq|tail -1`  
 
 if [ ! -z "$_chmod" ]; then
-  chmod -R $_chmod -R 777 $DIR/cache $DIR/meta $DIR/components $DIR/settings.inc.php 
+  chmod -R $_chmod  $DIR/cache $DIR/meta $DIR/components $DIR/settings.inc.php 
 elif [ ! -z "$_chown" ]; then
   chown -R $_chown $DIR/cache $DIR/meta $DIR/components $DIR/settings.inc.php
 else
