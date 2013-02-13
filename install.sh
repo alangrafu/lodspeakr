@@ -218,9 +218,10 @@ else
   echo "Please give the server write permissions. Otherwise, LODSPeaKr will NOT WORK."
   echo
   echo "See https://github.com/alangrafu/lodspeakr/wiki/Installation for further information"
+fi
   echo
   echo "--------------------------------------------------------------------------------------------------------"
   echo "You can now visit ${bold}$baseUrl${normal} to navigate through your data."
   echo "--------------------------------------------------------------------------------------------------------"
   echo
-fi
+
