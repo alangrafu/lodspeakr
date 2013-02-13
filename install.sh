@@ -186,8 +186,14 @@ normal=`tput sgr0`
 wwwUser=`ps aux|egrep "apache|httpd|www" |egrep -v "grep|root"|awk '{print $1}'|uniq|tail -1`  
 
 if [ ! -z "$_chmod" ]; then
+  echo
+  echo "WARNING: Automatically changing permissions of cache, meta, components and settings.inc.php to $_chmod"
+  echo
   chmod -R $_chmod  $DIR/cache $DIR/meta $DIR/components $DIR/settings.inc.php 
 elif [ ! -z "$_chown" ]; then
+  echo
+  echo "WARNING: Automatically changing ownership of cache, meta, components and settings.inc.php to $_chown"
+  echo
   chown -R $_chown $DIR/cache $DIR/meta $DIR/components $DIR/settings.inc.php
 else
   echo
