@@ -25,14 +25,54 @@ parent=`basename $back_one`
 
 utils/create_db.sh $metadb
 
-if [ "$2" != "" ] && [ "$3" != "" ] && [ "$4" != "" ]; then
-  echo "Done! $2 $3 $4"
-  baseUrl="`echo $2 | sed 's/\/$//'`/"
-  ns=$3
-  endpoint=$4
+
+
+_baseurl=
+_basens=
+_sparqlendpoint=
+_chown=
+_chmod=
+
+options=$@
+
+# An array with all the arguments
+arguments=($options)
+
+# Loop index
+index=0
+
+for argument in $options
+  do
+    # Incrementing index
+    index=`expr $index + 1`
+
+    # The conditions
+    case $argument in
+      base-url=*) val=${argument#*=};
+                  opt=${argument%=$val};
+                  _baseurl="${val}" ;;
+      base-namespace=*) val=${argument#*=};
+                  opt=${argument%=$val};
+                  _basens="${val}" ;;
+      sparql-endpoint=*) val=${argument#*=};
+                  opt=${argument%=$val};
+                  _sparqlendpoint="${val}" ;;
+      chown=*) val=${argument#*=};
+                  opt=${argument%=$val};
+                  _chown="${val}" ;;
+      chmod=*) val=${argument#*=};
+                  opt=${argument%=$val};
+                  _chmod="${val}" ;;
+    esac
+  done
+
+
+if [ ! -z "$_baseurl"  ] && [ ! -z "$_basens"  ] && [ ! -z "$_sparqlendpoint"  ]; then
+  baseUrl="`echo $_baseurl | sed 's/\/$//'`/"
+  ns=$_basens
+  endpoint=$_sparqlendpoint
   everything_ok="y"
 fi
-
 
 
 while [ "$everything_ok" != "y" ]; do
@@ -144,30 +184,37 @@ mkdir -p components/uris
 bold=`tput bold`
 normal=`tput sgr0`
 wwwUser=`ps aux|egrep "apache|httpd|www" |egrep -v "grep|root"|awk '{print $1}'|uniq|tail -1`  
-echo
-echo "                                      *** ATTENTION ***"
-echo
-echo "LODSPeaKr needs the web server to have write permissions for $home/cache/ $home/meta/ $home/components and $home/settings.inc.php."
-echo
-echo
-echo "Common ways of doing this:"
-if [ "$wwwUser" != "" ]; then
-  echo " ${bold}chmod -R g+w $home/cache $home/meta $home/settings.inc.php${normal}; sudo chgrp -R $wwwUser $home/cache $home/meta $home/settings.inc.php${normal} "
-  echo "OR"
-  echo " ${bold}chmod -R 777 $home/cache $home/meta $home/settings.inc.php${normal} (highly discouraged but useful to test when everything fails. It shouldn't be used in production sites)"
+
+if [ ! -z "$_chmod" ]; then
+  chmod -R $_chmod -R 777 $DIR/cache $DIR/meta $DIR/components $DIR/settings.inc.php 
+elif [ ! -z "$_chown" ]; then
+  chown -R $_chown $DIR/cache $DIR/meta $DIR/components $DIR/settings.inc.php
 else
-  echo " ${bold}chown -R www-data $home/cache $home/meta${normal} $home/components $home/settings.inc.php (find the name of the apache user in your system)"
-  echo " ${bold}chown -R www-apache $home/cache $home/meta${normal} $home/components $home/settings.inc.php (find the name of the apache user in your system)"
-  echo " ${bold}chown -R apache $home/cache $home/meta${normal} $home/components $home/settings.inc.php (find the name of the apache user in your system)"
-  echo " ${bold}chmod -R g+w $home/cache $home/meta${normal} $home/components $home/settings.inc.php (if you have a group in common with the apache user)"
-  echo " ${bold}chmod -R 777 $home/cache $home/meta${normal} $home/components $home/settings.inc.php (highly discouraged but useful to test when everything fails. It shouldn't be used in production sites)"
+  echo
+  echo "                                      *** ATTENTION ***"
+  echo
+  echo "LODSPeaKr needs the web server to have write permissions for $home/cache/ $home/meta/ $home/components and $home/settings.inc.php."
+  echo
+  echo
+  echo "Common ways of doing this:"
+  if [ "$wwwUser" != "" ]; then
+    echo " ${bold}chmod -R g+w $home/cache $home/meta $home/settings.inc.php${normal}; sudo chgrp -R $wwwUser $home/cache $home/meta $home/settings.inc.php${normal} "
+    echo "OR"
+    echo " ${bold}chmod -R 777 $home/cache $home/meta $home/settings.inc.php${normal} (highly discouraged but useful to test when everything fails. It shouldn't be used in production sites)"
+  else
+    echo " ${bold}chown -R www-data $home/cache $home/meta${normal} $home/components $home/settings.inc.php (find the name of the apache user in your system)"
+    echo " ${bold}chown -R www-apache $home/cache $home/meta${normal} $home/components $home/settings.inc.php (find the name of the apache user in your system)"
+    echo " ${bold}chown -R apache $home/cache $home/meta${normal} $home/components $home/settings.inc.php (find the name of the apache user in your system)"
+    echo " ${bold}chmod -R g+w $home/cache $home/meta${normal} $home/components $home/settings.inc.php (if you have a group in common with the apache user)"
+    echo " ${bold}chmod -R 777 $home/cache $home/meta${normal} $home/components $home/settings.inc.php (highly discouraged but useful to test when everything fails. It shouldn't be used in production sites)"
+  fi
+  echo
+  echo "Please give the server write permissions. Otherwise, LODSPeaKr will NOT WORK."
+  echo
+  echo "See https://github.com/alangrafu/lodspeakr/wiki/Installation for further information"
+  echo
+  echo "--------------------------------------------------------------------------------------------------------"
+  echo "You can now visit ${bold}$baseUrl${normal} to navigate through your data."
+  echo "--------------------------------------------------------------------------------------------------------"
+  echo
 fi
-echo
-echo "Please give the server write permissions. Otherwise, LODSPeaKr will NOT WORK."
-echo
-echo "See https://github.com/alangrafu/lodspeakr/wiki/Installation for further information"
-echo
-echo "--------------------------------------------------------------------------------------------------------"
-echo "You can now visit ${bold}$baseUrl${normal} to navigate through your data."
-echo "--------------------------------------------------------------------------------------------------------"
-echo

@@ -1,4 +1,3 @@
-#!/usr/bin/env bash
 #
 # Installation script for LODSPeaKr (http://lodspeakr.org)
 # Author: Alvaro Graves (alvaro@graves.cl)
@@ -19,10 +18,51 @@ if [ -z "$GIT" ]; then
   exit 1
 fi
 
+
+_baseurl=
+_basens=
+_sparqlendpoint=
+_chown=
+_chmod=
+
+options=$@
+
+# An array with all the arguments
+arguments=($options)
+
+# Loop index
+index=0
+
+for argument in $options
+  do
+    # Incrementing index
+    index=`expr $index + 1`
+
+    # The conditions
+    case $argument in
+      base-url=*) val=${argument#*=};
+                  opt=${argument%=$val};
+                  _baseurl="base-url=${val}" ;;
+      base-namespace=*) val=${argument#*=};
+                  opt=${argument%=$val};
+                  _basens="base-namespace=${val}" ;;
+      sparql-endpoint=*) val=${argument#*=};
+                  opt=${argument%=$val};
+                  _sparqlendpoint="sparql-endpoint=${val}" ;;
+      chown=*) val=${argument#*=};
+                  opt=${argument%=$val};
+                  _chown="chown=${val}" ;;
+      chmod=*) val=${argument#*=};
+                  opt=${argument%=$val};
+                  _chmod="chmod=${val}" ;;
+    esac
+  done
+
+
 if [ ! -e "$home" ]; then
    $GIT clone $lodspeakr_repository
    cd $home
-   ./install.sh $home $1 $2 $3
+   ./install.sh $home $_baseurl $_basens $_sparqlendpoint $_chown $_chmod
  else
    echo "There is already an existing directory called '$home'. Installation cancelled. Remove it first and try again."
 fi
