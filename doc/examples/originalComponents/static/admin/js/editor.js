@@ -20,13 +20,13 @@ $(document).ready(function(){
   return CodeMirror.overlayMode(CodeMirror.getMode(config, parserConfig.backdrop || 'text/html'), mustacheOverlay);
 });
     var tip = $('<div></div>');
-        tip.css("width", "400px")
-           .css("height", "220px")
+        tip.css("min-width", "400px")
+           .css("min-height", "220px")
            .css("font", "Monaco")
            .css("font-size", "13px")
            .css("text-wrap", "unrestricted")
            .css("position", "absolute")
-           .css("z-index", "100")
+           .css("z-index", "50")
            .css("background","white")
            .css("border", "1px solid black")
            .css("-moz-border-radius", "8px 8px")
@@ -36,18 +36,19 @@ $(document).ready(function(){
            .css("padding", "5px")
            .css("opacity", 0);
     $("body").append(tip);
-    var cheatSheet = $("body").append("<div id='cheat' class='cheat-sheet'></div>");
+    var cheatSheet = $("body").append("<div id='cheat' class='cheat-sheet'></div>").css("z-index", "110");
     $("#cheat").on('mouseenter', function(){$(this).animate({right: '+=200'}, 180)})
-               .on('mouseleave', function(){$(this).animate({right: '-=200'}, 180);tip.css("top", 1000).css("left", 0)}).html("<span class='cheat-title'>Visualization Filters</span>")
-               .on('mousemove', function(e){tip.css("top", e.pageY-100).css("left", e.pageX-430)});
+               .on('mouseleave', function(){$(this).animate({right: '-=200'}, 180);
+                                            tip.css("top", 1000).css("left", 200)}).html("<span class='cheat-title'>Visualization Filters</span>")
+               .on('mousemove', function(e){tip.css("top", e.pageY-100).css("left", e.pageX-630)});
     
     $("#cheat").append("<ul id='cheat-list' class='cheat-list'></ul>");
     
-    var visualizationsEnabled = [ {name: 'D3CirclePacking', params: "childNode,parentNode", img: "circlepacking.png"}, 
+    var visualizationsEnabled = [ {name: 'D3CirclePacking', params: ["childNode,parentNode,size", "childNode,parentNode,size,links"], img: "circlepacking.png"}, 
                                   {name: 'D3Dendrogram',  params: "childNode,parentNode", img: "dendrogram.png"},
                                   {name: 'D3ForceGraph',  params: "sourceNode,TargetNode", img: "graph.png"},
                                   {name: 'D3ParallelCoordinates',  params: "label,value1,value2,...,valueN", img: "parallelcoordinates.png"},
-                                  {name: 'D3WordCloud', params: "textVariable", img: "wordcloud.png"},
+                                  {name: 'D3WordCloud', params: ["variableWithFreeText", "phraseVariable,sizeOfPhrase", "phraseVariable,sizeOfPhrase,linkOnEachPhrase" ], img: "wordcloud.png"},
                                   {name: 'GoogleMaps',  params: "latitude,longitude,label", img: "maps.png"},
                                   {name: 'GoogleVizBarChart', params: "valuesInAxisX,valuesInAxisY", img: "barchart.png"},
                                   {name: 'GoogleVizColumnChart', params: "valuesInAxisX,valuesInAxisY", img: "columnchart.png"},
@@ -57,14 +58,31 @@ $(document).ready(function(){
                                   {name: 'GoogleVizTable', params: "column1,column2,...,columnN", img: "table.png"},
                                   {name: 'Timeknots', params: "date,label[,image]", img: "timeknots.png"}];
     $.each(visualizationsEnabled, function(index, value){
-      $("#cheat-list").append("<li><a href='#' class='cheat-link' data-params='"+value.params+"' data-img='"+value.img+"'>"+value.name+"</a></li>");
+        divContent = "<li><a href='#' class='cheat-link' data-params='"+value.params+"' data-img='"+value.img+"'>"+value.name+"</a></li>";
+        if(value.params instanceof Array){
+          divContent = "<li><a href='#' class='cheat-link' data-params='"+value.params[0]+"' data-img='"+value.img+"'>"+value.name+"</a></li>";        
+        }
+      $("#cheat-list").append(divContent);
     });
     
     $(".cheat-link").on('click', function(){
       var visualFilter = '{{models.main|'+$(this).html()+':"'+$(this).attr("data-params")+'"}}';
       templateEditor.replaceSelection(visualFilter);
     })
-                    .on('mouseenter', function(){var visualFilter = '<h3>'+$(this).html()+'</h3><p style="background:#ccc">{{models.main|'+$(this).html()+':"'+$(this).attr("data-params")+'"}}</p><img src="img/'+$(this).attr("data-img")+'"/>';tip.html(visualFilter).animate({opacity: .95}, 20)})
+                    .on('mouseenter', function(){
+                                                 var examples = '<p class="cheat-example">{{models.main|'+$(this).html()+':"'+$(this).attr("data-params")+'"}}</p>';
+                                                 for (i in visualizationsEnabled){
+                                                   if(visualizationsEnabled[i].name == $(this).html()){
+                                                     if(visualizationsEnabled[i].params instanceof Array){
+                                                       var x = visualizationsEnabled[i].params;
+                                                       examples='';
+                                                       for(var j in x){
+                                                         examples+='<p class="cheat-example">{{models.main|'+$(this).html()+':"'+x[j]+'"}}</p>';
+                                                       }
+                                                     }
+                                                   }
+                                                 }
+                                                 var visualFilter = '<h3>'+$(this).html()+'</h3>'+examples+'<img src="img/'+$(this).attr("data-img")+'"/>';tip.html(visualFilter).animate({opacity: .95}, 20)})
                     .on('mouseleave', function(){tip.animate({opacity: '0'}, 20)});
     //Create Template and Query Editor
     var templateEditor = CodeMirror.fromTextArea(document.getElementById('template-editor'), {mode: 'mustache',
@@ -120,7 +138,31 @@ $(document).ready(function(){
           height = $("#embed-height").val();
       var code = "&lt;iframe src='"+url+"' style='overflow-x: hidden;overflow-y: hidden;' frameborder='0' width='"+width+"' height='"+height+"'&gt;&lt;/iframe&gt;";
       $("#embed-body").html(code);
-      $("#embed-box").modal('show');
+      //Twitter
+      $("#tweet-span").empty();
+      var a = $("<a>Tweet</a>");
+      as="Check it out! "+url;
+      a.attr("href", "https://twitter.com/share").attr('class', 'twitter-share-button');
+      $("#tweet-span").append(a);
+      $(".twitter-share-button").attr('data-text', "Check this out! "+url ).attr('data-url', as);
+      //FB
+      $(".fb-like").attr("data-href", url);
+      (function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = '//connect.facebook.net/en_US/all.js#xfbml=1&appId=128636813885706';
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));
+      
+ $.getScript
+    (
+      "http://platform.twitter.com/widgets.js",
+      function () {
+    twttr.widgets.load();
+       }
+     ); 
+     $("#embed-box").modal('show');
     }   
     
  function executePost(url, data, message){
@@ -211,7 +253,7 @@ $(document).ready(function(){
      $(".lodspk-component").removeClass("strong");
      $(this).addClass("strong");
      var componentType = $(this).attr("data-component-type");
-     var componentName = $(this).attr("data-component-name");
+     var componentName = $(this).attr("data-component-name");     
      var dataParent = ".lodspk-component[data-component-type="+componentType+"][data-component-name="+componentName+"]";
      var url="components/details/"+componentType+"/"+componentName;
      templateBuffer = "";

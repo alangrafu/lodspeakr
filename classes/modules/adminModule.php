@@ -126,6 +126,14 @@ class AdminModule extends abstractModule{
 	  -moz-border-radius: 4px 0 4px 0;
 	  border-radius: 4px 0 4px 0;
 	  }
+	  .cheat-example{
+	  background:#ccc;
+	  font-family:monaco;
+	  font-size:11px;
+	  }
+	  .embed-code{
+	  font-family:Monaco;
+	  }
     </style>
     <link href='../css/bootstrap-responsive.min.css' rel='stylesheet' type='text/css' media='screen' />
     <script type='text/javascript' src='../js/jquery.js'></script>
@@ -180,9 +188,11 @@ class AdminModule extends abstractModule{
     </div>
     <div  class='modal-body'>
      <form class='form-inline'><fieldset><label>Width:</label> <input type='text' class='input-small embed-size' id='embed-width' value='600px'/>  <label>Height:</label> <input type='text' class='input-small embed-size' id='embed-height' value='400px'/></fieldset></form>
-     <div id='embed-body'>
+     <div id='embed-body' class='embed-code'>
      </div>
-    </div>
+     <hr/>
+<span id='tweet-span'></span>
+<div class='fb-like' data-href='http://google.com' data-send='true' data-layout='button_count' data-width='450' data-show-faces='true' data-action='recommend'></div><div id='fb-root'></div>
     <div class='modal-footer'>
     <a href='#' class='btn' data-dismiss='modal'>Close</a>
     </div>
@@ -613,7 +623,7 @@ class AdminModule extends abstractModule{
        <div class='row-fluid'>
         <div class='span3'>
          <p><a href='#' id='preview-button' class='hide'><button class='btn btn-success btn-large'>View component</button></a></p>
-         <p><button id='embed-button' class='btn btn-success btn-large hide'>Embed component</button></p>
+         <p><button id='embed-button' class='btn btn-success btn-large hide'>Share component</button></p>
         </div>
        </div>
       </div>
