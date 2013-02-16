@@ -52,21 +52,23 @@ class ServiceModule extends abstractModule{
   	  }else{
   	    if($lodspk['model'] == null && $lodspk['view'] == null){
   	      //checking other components
-  	      foreach($conf['components']['services'] as $service){
-  	        $serviceArray = explode("/", $service);
-  	        if($serviceName == end($serviceArray)){
-  	          array_pop($serviceArray);
-  	          $conf['service']['prefix'] = array_pop($serviceArray);
-  	          $conf['model']['directory'] = join("/", $serviceArray);
-  	          $conf['view']['directory'] = $conf['model']['directory'];
-  	          if(file_exists($conf['model']['directory'].'/'.$conf['service']['prefix'].'/'.$serviceName.'/scaffold.ttl')){
-  	            $subDir = $this->readScaffold($conf['model']['directory'].'/'.$conf['service']['prefix'].'/'.$serviceName.'/scaffold.ttl', join("/", $arguments));
-  	            $subDir.= '/';
-  	            $lodspk['model'] = $conf['model']['directory'].'/'.$conf['service']['prefix'].'/'.$serviceName.'/'.$subDir;
-  	            $lodspk['view'] = $conf['view']['directory'].'/'.$conf['service']['prefix'].'/'.$serviceName.'/'.$subDir.$extension.'.template';  	    
-  	          }elseif(file_exists($conf['model']['directory'].'/'.$conf['service']['prefix'].'/'.$serviceName)){ 
-  	            $lodspk['model'] = $conf['model']['directory'].'/'.$conf['service']['prefix'].'/'.$serviceName.'/';
-  	            $lodspk['view'] = $conf['view']['directory'].'/'.$conf['service']['prefix'].'/'.$serviceName.'/'.$extension.'.template';
+  	      if(sizeof($conf['components']['services'])>0){
+  	        foreach($conf['components']['services'] as $service){
+  	          $serviceArray = explode("/", $service);
+  	          if($serviceName == end($serviceArray)){
+  	            array_pop($serviceArray);
+  	            $conf['service']['prefix'] = array_pop($serviceArray);
+  	            $conf['model']['directory'] = join("/", $serviceArray);
+  	            $conf['view']['directory'] = $conf['model']['directory'];
+  	            if(file_exists($conf['model']['directory'].'/'.$conf['service']['prefix'].'/'.$serviceName.'/scaffold.ttl')){
+  	              $subDir = $this->readScaffold($conf['model']['directory'].'/'.$conf['service']['prefix'].'/'.$serviceName.'/scaffold.ttl', join("/", $arguments));
+  	              $subDir.= '/';
+  	              $lodspk['model'] = $conf['model']['directory'].'/'.$conf['service']['prefix'].'/'.$serviceName.'/'.$subDir;
+  	              $lodspk['view'] = $conf['view']['directory'].'/'.$conf['service']['prefix'].'/'.$serviceName.'/'.$subDir.$extension.'.template';  	    
+  	            }elseif(file_exists($conf['model']['directory'].'/'.$conf['service']['prefix'].'/'.$serviceName)){ 
+  	              $lodspk['model'] = $conf['model']['directory'].'/'.$conf['service']['prefix'].'/'.$serviceName.'/';
+  	              $lodspk['view'] = $conf['view']['directory'].'/'.$conf['service']['prefix'].'/'.$serviceName.'/'.$extension.'.template';
+  	            }
   	          }
   	        }
   	      }

@@ -159,20 +159,22 @@ class TypeModule extends abstractModule{
   	  	break;
   	  }else{
   	    $found = false;
-  	    foreach($conf['components']['types'] as $type){
-  	      $typeArray = explode("/", $type);
-  	      $typeName = end($typeArray);
-  	      if($v == $typeName && file_exists($type)){
-  	        array_pop($typeArray);
-  	        $conf['type']['prefix'] = array_pop($typeArray);
-  	        $conf['model']['directory'] = join("/", $typeArray);
-  	        $conf['view']['directory'] = $conf['model']['directory'];
-  	        $lodspk['model'] = $conf['model']['directory'].'/'.$conf['type']['prefix'].'/'.$typeName.'/queries';
-  	        $lodspk['view'] = $conf['view']['directory'].'/'.$conf['type']['prefix'].'/'.$typeName.'/'.$extension.'.template';
-  	        $objResult['viewFile'] = $lodspk['view'];
-  	        $objResult['modelFile'] = $lodspk['model'];
-  	        $found = true;
-  	        return $objResult;
+  	    if(sizeof($conf['components']['types'])>0){
+  	      foreach($conf['components']['types'] as $type){
+  	        $typeArray = explode("/", $type);
+  	        $typeName = end($typeArray);
+  	        if($v == $typeName && file_exists($type)){
+  	          array_pop($typeArray);
+  	          $conf['type']['prefix'] = array_pop($typeArray);
+  	          $conf['model']['directory'] = join("/", $typeArray);
+  	          $conf['view']['directory'] = $conf['model']['directory'];
+  	          $lodspk['model'] = $conf['model']['directory'].'/'.$conf['type']['prefix'].'/'.$typeName.'/queries';
+  	          $lodspk['view'] = $conf['view']['directory'].'/'.$conf['type']['prefix'].'/'.$typeName.'/'.$extension.'.template';
+  	          $objResult['viewFile'] = $lodspk['view'];
+  	          $objResult['modelFile'] = $lodspk['model'];
+  	          $found = true;
+  	          return $objResult;
+  	        }
   	      }
   	    }
   	    if($found){break;}
