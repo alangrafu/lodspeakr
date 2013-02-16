@@ -9,6 +9,9 @@ class ServiceModule extends abstractModule{
   	global $acceptContentType; 
     global $localUri;
     global $lodspk;
+    
+    $lodspk['model'] = null;
+    $lodspk['view'] = null;
   	$q = preg_replace('|^'.$conf['basedir'].'|', '', $localUri);
  	$qArr = explode('/', $q);
   	if(sizeof($qArr)==0){
@@ -36,16 +39,40 @@ class ServiceModule extends abstractModule{
   	    }
   	    $serviceName = join(".",$aux);
   	  }
-  	  
+
+      //checking default components  	  
   	  if(file_exists($conf['model']['directory'].'/'.$conf['service']['prefix'].'/'.$serviceName.'/scaffold.ttl')){
   	    $subDir = $this->readScaffold($conf['model']['directory'].'/'.$conf['service']['prefix'].'/'.$serviceName.'/scaffold.ttl', join("/", $arguments));
   	    $subDir.= '/';
-  	    $lodspk['model'] = $conf['model']['directory'].'/'.$conf['service']['prefix'].'/'.$serviceName.'/'.$subDir;
+  	    $lodspk['model'] = $conf['home'].$conf['model']['directory'].'/'.$conf['service']['prefix'].'/'.$serviceName.'/'.$subDir;
   	    $lodspk['view'] = $conf['view']['directory'].'/'.$conf['service']['prefix'].'/'.$serviceName.'/'.$subDir.$extension.'.template';  	    
-  	  }else{  	    
-  	    $lodspk['model'] = $conf['model']['directory'].'/'.$conf['service']['prefix'].'/'.$serviceName.'/';
-  	    $lodspk['view'] = $conf['view']['directory'].'/'.$conf['service']['prefix'].'/'.$serviceName.'/'.$extension.'.template';
+  	  }elseif(file_exists($conf['home'].$conf['model']['directory'].'/'.$conf['service']['prefix'].'/'.$serviceName)){  	    
+  	    $lodspk['model'] = $conf['home'].$conf['model']['directory'].'/'.$conf['service']['prefix'].'/'.$serviceName.'/';
+  	    $lodspk['view'] = $conf['home'].$conf['view']['directory'].'/'.$conf['service']['prefix'].'/'.$serviceName.'/'.$extension.'.template';
+  	  }else{
+  	    if($lodspk['model'] == null && $lodspk['view'] == null){
+  	      //checking other components
+  	      foreach($conf['components']['services'] as $service){
+  	        $serviceArray = explode("/", $service);
+  	        if($serviceName == end($serviceArray)){
+  	          array_pop($serviceArray);
+  	          $conf['service']['prefix'] = array_pop($serviceArray);
+  	          $conf['model']['directory'] = join("/", $serviceArray);
+  	          $conf['view']['directory'] = $conf['model']['directory'];
+  	          if(file_exists($conf['model']['directory'].'/'.$conf['service']['prefix'].'/'.$serviceName.'/scaffold.ttl')){
+  	            $subDir = $this->readScaffold($conf['model']['directory'].'/'.$conf['service']['prefix'].'/'.$serviceName.'/scaffold.ttl', join("/", $arguments));
+  	            $subDir.= '/';
+  	            $lodspk['model'] = $conf['model']['directory'].'/'.$conf['service']['prefix'].'/'.$serviceName.'/'.$subDir;
+  	            $lodspk['view'] = $conf['view']['directory'].'/'.$conf['service']['prefix'].'/'.$serviceName.'/'.$subDir.$extension.'.template';  	    
+  	          }elseif(file_exists($conf['model']['directory'].'/'.$conf['service']['prefix'].'/'.$serviceName)){ 
+  	            $lodspk['model'] = $conf['model']['directory'].'/'.$conf['service']['prefix'].'/'.$serviceName.'/';
+  	            $lodspk['view'] = $conf['view']['directory'].'/'.$conf['service']['prefix'].'/'.$serviceName.'/'.$extension.'.template';
+  	          }
+  	        }
+  	      }
+  	    }
   	  }
+  	  
   	  $lodspk['serviceName'] = join("/", $tokens);
   	  $lodspk['componentName'] = $lodspk['serviceName'];
   	  $modelFile = $lodspk['model'].$extension.'.queries';
@@ -144,7 +171,6 @@ class ServiceModule extends abstractModule{
   	  	$lodspk['transform_select_query'] = true;
   	  }
   	//  chdir($lodspk['model']);
-  	  
   	  Utils::queryFile($modelFile, $endpoints['local'], $results, $firstResults);
       if(!$lodspk['resultRdf']){
       	$results = Utils::internalize($results); 

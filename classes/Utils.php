@@ -551,9 +551,10 @@ class Utils{
   	require_once($conf['home'].'lib/Haanga/lib/Haanga.php');
   	$viewAux = explode("/",$view);
   	$viewFile = array_pop($viewAux);
+    //$viewFile = $view;
   	$viewPath = join("/", $viewAux);
   	Haanga::configure(array(
-  	  'template_dir' => $conf['home'].$viewPath,
+  	  'template_dir' => $viewPath,
   	  'cache_dir' => $conf['home'].'cache/',
   	  ));
   	$models = $data;
@@ -567,7 +568,7 @@ class Utils{
  	}
 	if(is_string($data)){
 	  echo($data);
-	}elseif(is_file($conf['home'].$view)){
+	}elseif(is_file($view)){
 	  try{
 	    Haanga::Load($viewFile, $vars);
 	  }catch(Exception $e){

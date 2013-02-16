@@ -119,7 +119,7 @@ class TypeModule extends abstractModule{
   	$curieType="";
  	//Get the firstResults type available
   	$typesAndValues = array('rdfs:Resource' => -1);
-  	if($conf['disableComponents'] != true){
+  	if(!isset($conf['disableComponents']) || $conf['disableComponents'] != true){
   	  foreach($t as $v){
   	  	$curie = Utils::uri2curie($v);
   	  	$typesAndValues[$curie] = 0;
@@ -135,8 +135,8 @@ class TypeModule extends abstractModule{
   	  $extensionModel = $extension.'.';
   	}
   	foreach($typesAndValues as $v => $w){
-  	  $auxViewFile  = $conf['view']['directory'].'/'.$conf['type']['prefix'].'/'.$v.'/'.$extension.'.template';
-  	  $auxModelFile = $conf['model']['directory'].'/'.$conf['type']['prefix'].'/'.$v.'/'.$extension.'.queries';
+      $auxViewFile  = $conf['home'].$conf['view']['directory'].'/'.$conf['type']['prefix'].'/'.$v.'/'.$extension.'.template';
+  	  $auxModelFile = $conf['home'].$conf['model']['directory'].'/'.$conf['type']['prefix'].'/'.$v.'/'.$extension.'.queries';
   	  if($v == null){continue;}
   	  $lodspk['componentName'] = $v;
   	  if(file_exists($auxModelFile)){
@@ -146,9 +146,9 @@ class TypeModule extends abstractModule{
   	  	}elseif($extension != 'html'){ //View doesn't exists (and is not HTML)
   	  	  $objResult['viewFile'] = null;
   	  	}
-  	  	return $objResult;
-  	  }elseif(file_exists($conf['model']['directory'].'/'.$conf['type']['prefix'].'/'.$v.'/queries')){
-  	  	$objResult['modelFile'] = $conf['model']['directory'].'/'.$conf['type']['prefix'].'/'.$v.'/queries';
+  	  	break;//return $objResult;
+  	  }elseif(file_exists($conf['home'].$conf['model']['directory'].'/'.$conf['type']['prefix'].'/'.$v.'/queries')){
+  	  	$objResult['modelFile'] = $conf['home'].$conf['model']['directory'].'/'.$conf['type']['prefix'].'/'.$v.'/queries';
   	  	if(file_exists($auxViewFile) ){
   	  	  $objResult['viewFile'] = $auxViewFile;
   	  	}else{
@@ -157,11 +157,30 @@ class TypeModule extends abstractModule{
   	  	}
   	  	trigger_error("LODSPeaKr can't find the proper query. Using HTML query instead.", E_USER_NOTICE);
   	  	break;
+  	  }else{
+  	    $found = false;
+  	    foreach($conf['components']['types'] as $type){
+  	      $typeArray = explode("/", $type);
+  	      $typeName = end($typeArray);
+  	      if($v == $typeName && file_exists($type)){
+  	        array_pop($typeArray);
+  	        $conf['type']['prefix'] = array_pop($typeArray);
+  	        $conf['model']['directory'] = join("/", $typeArray);
+  	        $conf['view']['directory'] = $conf['model']['directory'];
+  	        $lodspk['model'] = $conf['model']['directory'].'/'.$conf['type']['prefix'].'/'.$typeName.'/queries';
+  	        $lodspk['view'] = $conf['view']['directory'].'/'.$conf['type']['prefix'].'/'.$typeName.'/'.$extension.'.template';
+  	        $objResult['viewFile'] = $lodspk['view'];
+  	        $objResult['modelFile'] = $lodspk['model'];
+  	        $found = true;
+  	        return $objResult;
+  	      }
+  	    }
+  	    if($found){break;}
   	  }
-  	}
-  	/*if($objResult['viewFile'] == null && $extensionView == 'html'){
+  	  /*if($objResult['viewFile'] == null && $extensionView == 'html'){
   	  $objResult['viewFile'] = 'html.template';
-  	}*/
+  	  }*/
+  	}
   	return $objResult;
   }
   
