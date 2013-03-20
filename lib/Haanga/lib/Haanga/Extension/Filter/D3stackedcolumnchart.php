@@ -30,27 +30,59 @@ class Haanga_Extension_Filter_D3StackedColumnChart{
   	  array_push($varList, $variable);
   	}
 
+  	$columnsAsSeries = false;
   	$series = array();
-  	foreach($obj as $k){  	
-  	  $newItem = array();
-  	  foreach($varList as $v){
-  	    $name = $v['name'];
-  	    $val = $v['value'];
-
-  	  	if($j==0){
-  	  	  //$newItem[$j]['x'] = $value;
-  	  	}else{
-  	  	  $series[$name]['key'] = $name;
-  	  	  $series[$name]['values'][] = $k->$name->$val;
-  	  	}
-  	  	$j++;
-  	  } 
-  	  $i++;
-  	  $j=0;
-// 	  	array_push($data, $newItem);
-  	}
-    foreach($series as $v){
-      $data[] = $v;
+  	if($columnsAsSeries){
+  	  foreach($obj as $k){  	
+  	    $newItem = array();
+  	    foreach($varList as $v){
+  	      $name = $v['name'];
+  	      $val = $v['value'];
+  	      
+  	      if($j==0){
+  	        //$newItem[$j]['x'] = $value;
+  	      }else{
+  	        $series[$name]['key'] = $name;
+  	        $series[$name]['values'][] = $k->$name->$val;
+  	      }
+  	      $j++;
+  	    } 
+  	    $i++;
+  	    $j=0;
+  	    // 	  	array_push($data, $newItem);
+  	  }
+  	  foreach($series as $v){
+  	    $data[] = $v;
+  	  }
+    }else{
+  	  foreach($obj as $k){  	
+  	    $newItem = array();
+  	    foreach($varList as $v){
+  	      $name = $v['name'];
+  	      $val = $v['value'];
+  	      
+  	      if($j==0){
+  	        $newItem['key'] = $k->$name->$val;
+  	      }elseif($j == sizeof($varList)-1){
+  	        $newItem['uri'] =  $k->$name->$val;
+  	      }else{
+  	        $newItem['values'][] = floatval($k->$name->$val);
+  	      }
+  	      $j++;
+  	    }
+  	    $data[] = $newItem;
+  	    $i++;
+  	    $j=0;
+  	    // 	  	array_push($data, $newItem);
+  	  }
+  	 /* $data = array(
+  	                 array('key' => 'zxc', 'values' => array( 1)),
+  	                 array('key' => 'asd', 'values' => array(10)),
+  	                 array('key' => 'zxc1', 'values' => array( 11)),
+  	                 array('key' => 'asd1', 'values' => array(21)),
+  	                 array('key' => 'zxc2', 'values' => array( 23)),
+  	                 array('key' => 'asd3', 'values' => array(20)),
+  	               );*/
     }
   	
   	//Getting options
@@ -120,9 +152,9 @@ class Haanga_Extension_Filter_D3StackedColumnChart{
         .enter().append('text').text(function(d){return d.key})
         .style('font-size', '12px').style('font-family', 'sans-serif')
         .attr('class', 'xaxis')        
-        .attr('x', function(d, i){return (options_$divId.width / dataset_$divId.length - 4*options_$divId.padding)/2+options_$divId.barsProportion *i* (parseInt(options_$divId.width) / dataset_$divId.length) + 4*options_$divId.padding + options_$divId.legendSpace})
+        .attr('x', function(d, i){return options_$divId.barsProportion *i* (parseInt(options_$divId.width) / dataset_$divId.length) + options_$divId.padding + options_$divId.legendSpace})
         .attr('y', function(d, i){return maxHeight_$divId+30;})
-        .attr('transform', function(d){return 'translate(-'+this.getBBox().width/2+')'});
+        .attr('transform', function(d, i){return ' rotate(-45 '+(options_$divId.barsProportion *i* (parseInt(options_$divId.width) / dataset_$divId.length) + options_$divId.padding + options_$divId.legendSpace)+' '+(maxHeight_$divId+30)+') translate(-'+this.getBBox().width/2+',+10)'});
 
         
    var yaxis = svg.append('g');
@@ -141,7 +173,7 @@ key = dataset_".$divId."[k].key;
      .data(dataset_".$divId."[k].values).enter()
      .append('rect').attr('class', 'bar')
         .attr('x', function(d, i) {
-			   		return options_$divId.barsProportion *k* (parseInt(options_$divId.width) / dataset_$divId.length) + 4*options_$divId.padding + options_$divId.legendSpace;
+			   		return options_$divId.barsProportion *k* (parseInt(options_$divId.width) / dataset_$divId.length) + options_$divId.padding + options_$divId.legendSpace;
 			   })
 			   .attr('y', function(d, i){
 			   r = maxHeight_$divId*(1-parseInt(d)/maxValue_$divId) - (maxHeight_$divId-baseline[key]);			   
@@ -149,26 +181,26 @@ key = dataset_".$divId."[k].key;
 			   return r;
 
 			   })
-			   .attr('width', options_$divId.width / dataset_$divId.length - 4*options_$divId.padding)
+			   .attr('width', options_$divId.width / dataset_$divId.length - options_$divId.padding)
 			   .attr('height', function(d){ 
 			   return maxHeight_$divId*d/maxValue_$divId
 			   })
         .style('opacity', 0.8).style('fill', function(d, i){return color(i)})
         .append('svg:metadata')
         .append('vsr:vsr:depicts')
-        .attr('rdf:rdf:resource', function(d){return dataset_".$divId."[k].values;});
+        .attr('rdf:rdf:resource', function(d){return dataset_".$divId."[k].uri;});
 }
 
  
 //Tooltip
-tooltip_$divId = svg.append('text').style('opacity', 0).style('font-family', 'sans-serif').style('font-size', '12px').style('fill', 'white').style('stroke-width', '.5');
+tooltip_$divId = svg.append('text').style('opacity', 0).style('font-family', 'sans-serif').style('font-size', '12px').style('fill', 'black').style('stroke-width', '.5');
 
 //Events
 d3.selectAll('rect.bar')
         .on('mouseover', function(e){
-        newX =  parseFloat(d3.select(this).attr('x')) + .5*parseFloat(d3.select(this).attr('width'));
+        newX =  parseFloat(d3.select(this).attr('x')) + 0*parseFloat(d3.select(this).attr('width'));
         newY =  parseFloat(d3.select(this).attr('y'));
-        tooltip_$divId.style('opacity', 1).attr('y', newY+10).attr('x', newX).text(e);
+        tooltip_$divId.style('opacity', 1).attr('y', newY).attr('x', newX).text(e);
         d3.select(this).style('opacity', 1); 
         }).on('mouseout', function(){
         d3.select(this).style('opacity', 0.8); 
