@@ -56,32 +56,38 @@ class Haanga_Extension_Filter_D3StackedColumnChart{
   	  }
     }else{
   	  foreach($obj as $k){  	
+  	    $newSerie = array();
+  	    $currentSerie = null;
   	    $newItem = array();
   	    foreach($varList as $v){
   	      $name = $v['name'];
   	      $val = $v['value'];
   	      
   	      if($j==0){
+  	        $currentSerie = $k->$name->$val;
+  	        if(!isset($data[$currentSerie])){ $data[$currentSerie] = array();}  	        
+  	      }elseif($j == 1){
   	        $newItem['key'] = $k->$name->$val;
   	      }elseif($j == sizeof($varList)-1){
   	        $newItem['uri'] =  $k->$name->$val;
+  	        $data[$currentSerie][] = $newItem;
+  	        $newItem = array();
   	      }else{
-  	        $newItem['values'][] = floatval($k->$name->$val);
+  	        $newItem['values'] = floatval($k->$name->$val);
   	      }
   	      $j++;
   	    }
-  	    $data[] = $newItem;
   	    $i++;
   	    $j=0;
   	    // 	  	array_push($data, $newItem);
   	  }
-  	 /* $data = array(
-  	                 array('key' => 'zxc', 'values' => array( 1)),
-  	                 array('key' => 'asd', 'values' => array(10)),
-  	                 array('key' => 'zxc1', 'values' => array( 11)),
-  	                 array('key' => 'asd1', 'values' => array(21)),
-  	                 array('key' => 'zxc2', 'values' => array( 23)),
-  	                 array('key' => 'asd3', 'values' => array(20)),
+  	/*  $data = array(
+  	                 array('key' => 'zxc', 'values' => array( 1, 2)),
+  	                 array('key' => 'asd', 'values' => array(10, 2)),
+  	                 array('key' => 'zxc1', 'values' => array( 11, 2)),
+  	                 array('key' => 'asd1', 'values' => array(21, 2)),
+  	                 array('key' => 'zxc2', 'values' => array( 23, 2)),
+  	                 array('key' => 'asd3', 'values' => array(20, 2)),
   	               );*/
     }
   	
@@ -92,6 +98,7 @@ class Haanga_Extension_Filter_D3StackedColumnChart{
   	$options['barsProportion'] = 0.8;
   	$options['legendSpace'] = 15;
   	$options['intermediateLines'] = 4;
+  	$options['numberOfBars'] = 0;
     for($z=$fieldCounter; $z < count($names); $z++){
       $pair = explode("=", $names[$z]);
       $key = trim($pair[0], "\" '");
@@ -113,6 +120,9 @@ class Haanga_Extension_Filter_D3StackedColumnChart{
     var color = d3.scale.category10();
     
     var maxValue_$divId = getMax(dataset_$divId);
+    options_$divId.numberOfBars = getNumberOfBars(dataset_$divId);
+    labels_$divId = getLabels(dataset_$divId);
+    
     var svg = d3.selectAll('#".$divId."')
                 .append('svg')
                 .attr('width', options_$divId.width)
@@ -126,11 +136,11 @@ class Haanga_Extension_Filter_D3StackedColumnChart{
      maxValues = [];
      for(var i in d){
        e = d[i];
-       for(var j in e.values){
-         if(maxValues[e.key] == undefined){
-          maxValues[e.key] = 0;
+       for(var j in e){
+         if(maxValues[e[j].key] == undefined){
+          maxValues[e[j].key] = 0;
          }
-         maxValues[e.key] += parseInt(e.values[j]);
+         maxValues[e[j].key] += parseInt(e[j].values);
        }
      }
      r = 0;
@@ -141,20 +151,46 @@ class Haanga_Extension_Filter_D3StackedColumnChart{
        }
      }
      return r+1;
-   }    
+   }  
+   
+   function getNumberOfBars(d){
+     numberOfBars = 0;
+     for(var i in d){
+       e = d[i];
+       aux = 0;
+       for(var j in e){
+         aux++;
+       }
+       if(aux > numberOfBars){
+         numberOfBars = aux;
+       }
+     }
+     return numberOfBars;
+   }  
+   
+   function getLabels(d){
+     labels = [];
+     for(i in d){
+       e = d[i];
+       for(j in e){
+         labels.push(e[j].key);
+       }
+     return labels
+     }
+   }
    
 //Axis
   var xaxis = svg.append('g');
     xaxis.append('line').style('stroke', 'black').style('stroke-width', '2px').attr('x1',  1+options_$divId.legendSpace).attr('y1', maxHeight_$divId).attr('x2', options_$divId.width+options_$divId.padding+ options_$divId.legendSpace).attr('y2', maxHeight_$divId)
     xaxis.selectAll('line.stub')
     var labels_$divId = xaxis.selectAll('text.xaxis')
-        .data(dataset_$divId)
-        .enter().append('text').text(function(d){return d.key})
+        .data(labels_$divId)
+        .enter().append('text').text(function(d){return d})
         .style('font-size', '12px').style('font-family', 'sans-serif')
         .attr('class', 'xaxis')        
-        .attr('x', function(d, i){return options_$divId.barsProportion *i* (parseInt(options_$divId.width) / dataset_$divId.length) + options_$divId.padding + options_$divId.legendSpace})
+        .attr('x', function(d, i){return options_$divId.barsProportion *i* (parseInt(options_$divId.width) / options_$divId.numberOfBars) + 2*options_$divId.padding + options_$divId.legendSpace})
         .attr('y', function(d, i){return maxHeight_$divId+30;})
-        .attr('transform', function(d, i){return ' rotate(-45 '+(options_$divId.barsProportion *i* (parseInt(options_$divId.width) / dataset_$divId.length) + options_$divId.padding + options_$divId.legendSpace)+' '+(maxHeight_$divId+30)+') translate(-'+this.getBBox().width/2+',+10)'});
+        .attr('transform', function(d, i){return ' rotate(-45 '+(options_$divId.barsProportion *i* (parseInt(options_$divId.width) / options_$divId.numberOfBars) + options_$divId.padding + options_$divId.legendSpace)+' '+(maxHeight_$divId+30)+') translate(-'+this.getBBox().width/2+',0)'});
 
         
    var yaxis = svg.append('g');
@@ -166,29 +202,33 @@ class Haanga_Extension_Filter_D3StackedColumnChart{
    
 //Values
 baseline = [];
+var j=0, l=0;
 for(var k in dataset_$divId){
-key = dataset_".$divId."[k].key;
-  baseline[key] = maxHeight_$divId;
+j=0;
+console.log(baseline);
   svg.selectAll('d.series')
-     .data(dataset_".$divId."[k].values).enter()
+     .data(dataset_".$divId."[k]).enter()
      .append('rect').attr('class', 'bar')
         .attr('x', function(d, i) {
-			   		return options_$divId.barsProportion *k* (parseInt(options_$divId.width) / dataset_$divId.length) + options_$divId.padding + options_$divId.legendSpace;
+            j++;
+            return options_$divId.barsProportion *j* (parseInt(options_$divId.width) / options_$divId.numberOfBars) + options_$divId.padding + options_$divId.legendSpace;
 			   })
 			   .attr('y', function(d, i){
-			   r = maxHeight_$divId*(1-parseInt(d)/maxValue_$divId) - (maxHeight_$divId-baseline[key]);			   
-			   baseline[key] = r;
+			   if(baseline[d.key] == undefined){baseline[d.key]=maxHeight_$divId;}
+			   r = maxHeight_$divId*(1-parseInt(d.values)/maxValue_$divId) - (maxHeight_$divId - baseline[d.key]);
+			   baseline[d.key] = r
 			   return r;
 
 			   })
-			   .attr('width', options_$divId.width / dataset_$divId.length - options_$divId.padding)
+			   .attr('width', options_$divId.width / options_$divId.numberOfBars - options_$divId.padding)
 			   .attr('height', function(d){ 
-			   return maxHeight_$divId*d/maxValue_$divId
+			   return maxHeight_$divId*d.values/maxValue_$divId
 			   })
-        .style('opacity', 0.8).style('fill', function(d, i){return color(i)})
+        .style('opacity', 0.8).style('fill', function(d, i){return color(l)})
         .append('svg:metadata')
         .append('vsr:vsr:depicts')
-        .attr('rdf:rdf:resource', function(d){return dataset_".$divId."[k].uri;});
+        .attr('rdf:rdf:resource', function(d){return d.uri;});
+        l++;
 }
 
  
@@ -200,7 +240,7 @@ d3.selectAll('rect.bar')
         .on('mouseover', function(e){
         newX =  parseFloat(d3.select(this).attr('x')) + 0*parseFloat(d3.select(this).attr('width'));
         newY =  parseFloat(d3.select(this).attr('y'));
-        tooltip_$divId.style('opacity', 1).attr('y', newY).attr('x', newX).text(e);
+        tooltip_$divId.style('opacity', 1).attr('y', newY).attr('x', newX).text(e.values);
         d3.select(this).style('opacity', 1); 
         }).on('mouseout', function(){
         d3.select(this).style('opacity', 0.8); 
