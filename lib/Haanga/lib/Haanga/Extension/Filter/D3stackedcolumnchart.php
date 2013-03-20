@@ -72,12 +72,21 @@ class Haanga_Extension_Filter_D3StackedColumnChart{
   	</div>
   	<script src='http://d3js.org/d3.v2.min.js?2.9.3'></script>
     <script type='text/javascript'>
+    //Adding namespaces
+    d3.ns.prefix['vsr'] = 'http://purl.org/twc/vocab/vsr#'; 
+    d3.ns.prefix['rdf'] = 'http://www.w3.org/2000/01/rdf-schema#'; 
+
     var options_$divId = ".json_encode($options)."; 
     var dataset_$divId = ".json_encode($data).";
     var color = d3.scale.category10();
     
     var maxValue_$divId = getMax(dataset_$divId);
-    var svg = d3.selectAll('#".$divId."').append('svg').attr('width', options_$divId.width).attr('height', options_$divId.height);
+    var svg = d3.selectAll('#".$divId."')
+                .append('svg')
+                .attr('width', options_$divId.width)
+                .attr('height', options_$divId.height)
+                .attr('xmlns:xmlns:vsr','http://purl.org/twc/vocab/vsr#')
+                .attr('xmlns:xmlns:rdf','http://www.w3.org/2000/01/rdf-schema#');
     var maxHeight_$divId = options_$divId.barsProportion*options_$divId.height;
 
 
@@ -144,7 +153,10 @@ key = dataset_".$divId."[k].key;
 			   .attr('height', function(d){ 
 			   return maxHeight_$divId*d/maxValue_$divId
 			   })
-        .style('opacity', 0.8).style('fill', function(d, i){return color(i)});
+        .style('opacity', 0.8).style('fill', function(d, i){return color(i)})
+        .append('svg:metadata')
+        .append('vsr:vsr:depicts')
+        .attr('rdf:rdf:resource', function(d){return dataset_".$divId."[k].values;});
 }
 
  
