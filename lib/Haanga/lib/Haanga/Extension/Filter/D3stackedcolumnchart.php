@@ -107,7 +107,7 @@ class Haanga_Extension_Filter_D3StackedColumnChart{
     }
 
   	$divId = uniqid("columnchart_div");
-  	$pre = "<div id='".$divId."'>
+  	$pre = "<div id='".$divId."' xmlns:vsr='http://purl.org/twc/vocab/vsr#' xmlns:rdf='http://www.w3.org/2000/01/rdf-schema#' xmlns:grddl='http://www.w3.org/2003/g/data-view#'>
   	</div>
   	<script src='http://d3js.org/d3.v2.min.js?2.9.3'></script>
     <script type='text/javascript'>
@@ -135,7 +135,10 @@ class Haanga_Extension_Filter_D3StackedColumnChart{
                 .attr('xmlns:xmlns:grddl', 'http://www.w3.org/2003/g/data-view#')
                 .attr('xmlns:xmlns:rdf','http://www.w3.org/2000/01/rdf-schema#')
                 .attr('grddl:grddl:transformation', 'https://raw.github.com/timrdf/vsr/master/src/xsl/grddl/svg.xsl');
-    var maxHeight_$divId = options_$divId.barsProportion*options_$divId.height;
+
+        svg.append('svg:metadata').attr('grddl:grddl:transformation', 'https://raw.github.com/timrdf/vsr/master/src/xsl/grddl/svg.xsl');
+                
+        var maxHeight_$divId = options_$divId.barsProportion*options_$divId.height;
 
 
    function getMax(d){
@@ -213,7 +216,7 @@ for(var k in dataset_$divId){
 j=0;
   svg.selectAll('d.series')
      .data(dataset_".$divId."[k]).enter()
-     .append('rect').attr('class', 'bar')
+     .append('rect').attr('class', 'bar_$divId')
         .attr('x', function(d, i) {
             j++;
             return options_$divId.barsProportion *j* (parseInt(options_$divId.width) / options_$divId.numberOfBars) + options_$divId.padding + options_$divId.legendSpace;
@@ -238,21 +241,23 @@ j=0;
 
  
 //Tooltip
-tooltip_$divId = svg.append('text').style('opacity', 0).style('font-family', 'sans-serif').style('font-size', '11px').style('fill', 'black').style('stroke-width', '.5');
+tooltip_$divId = svg.append('text').style('opacity', 0).style('font-family', 'sans-serif').style('font-size', '11px').style('stroke-width', '.5');
 
 //Events
-d3.selectAll('rect.bar')
+d3.selectAll('rect.bar_$divId')
         .on('mouseover', function(e){
         console.log('asd');
+        tooltipColor = 'black';
+        newX =  parseFloat(d3.select(this).attr('x'));
         newY =  parseFloat(d3.select(this).attr('y'));
         if(newY > maxHeight_$divId){
           newY -=10;
         }
         if(newY < 10){
           newY +=11;
+          tooltipColor = 'white';
         }
-        console.log('asd');
-        tooltip_$divId.style('opacity', 1).attr('y', newY).attr('x', newX).text(e.values);
+        tooltip_$divId.style('opacity', 1).style('fill', tooltipColor).attr('y', newY).attr('x', newX).text(e.values);
         d3.select(this).style('opacity', 1); 
         }).on('mouseout', function(){
         d3.select(this).style('opacity', 0.8); 

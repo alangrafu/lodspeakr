@@ -131,8 +131,9 @@ class Haanga_Extension_Filter_D3LineChart{
                 .attr('height', options_$divId.height)
                 .attr('xmlns:xmlns:vsr','http://purl.org/twc/vocab/vsr#')
                 .attr('xmlns:xmlns:grddl', 'http://www.w3.org/2003/g/data-view#')
-                .attr('xmlns:xmlns:rdf','http://www.w3.org/2000/01/rdf-schema#')
-                .attr('grddl:grddl:transformation', 'https://raw.github.com/timrdf/vsr/master/src/xsl/grddl/svg.xsl');
+                .attr('xmlns:xmlns:rdf','http://www.w3.org/2000/01/rdf-schema#');
+                
+                svg.append('svg:metadata').attr('grddl:grddl:transformation', 'https://raw.github.com/timrdf/vsr/master/src/xsl/grddl/svg.xsl');
 
 ;
     var maxHeight_$divId = options_$divId.chartProportion*options_$divId.height;
