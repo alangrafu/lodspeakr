@@ -117,7 +117,10 @@ class Haanga_Extension_Filter_D3StackedColumnChart{
 
     var options_$divId = ".json_encode($options)."; 
     var dataset_$divId = ".json_encode($data).";
-    var color = d3.scale.category10();
+    var color = function(d){
+      s = ['steelblue', 'brown', 'gold', 'ForestGreen'];
+      return s[d%s.length];
+    };
     
     var maxValue_$divId = getMax(dataset_$divId);
     options_$divId.numberOfBars = getNumberOfBars(dataset_$divId);
