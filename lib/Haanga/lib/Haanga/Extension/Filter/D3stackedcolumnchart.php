@@ -188,9 +188,9 @@ class Haanga_Extension_Filter_D3StackedColumnChart{
         .enter().append('text').text(function(d){return d})
         .style('font-size', '12px').style('font-family', 'sans-serif')
         .attr('class', 'xaxis')        
-        .attr('x', function(d, i){return options_$divId.barsProportion *i* (parseInt(options_$divId.width) / options_$divId.numberOfBars) + 2*options_$divId.padding + options_$divId.legendSpace})
-        .attr('y', function(d, i){return maxHeight_$divId+30;})
-        .attr('transform', function(d, i){return ' rotate(-45 '+(options_$divId.barsProportion *i* (parseInt(options_$divId.width) / options_$divId.numberOfBars) + options_$divId.padding + options_$divId.legendSpace)+' '+(maxHeight_$divId+30)+') translate(-'+this.getBBox().width/2+',0)'});
+        .attr('x', function(d, i){return options_$divId.barsProportion * i* (parseInt(options_$divId.width) / options_$divId.numberOfBars) + 2*options_$divId.padding + options_$divId.legendSpace + this.getBBox().width})
+        .attr('y', function(d, i){return maxHeight_$divId+30;});
+//        .attr('transform', function(d, i){return ' rotate(-45 '+(options_$divId.barsProportion *i* (parseInt(options_$divId.width) / options_$divId.numberOfBars) + options_$divId.padding + options_$divId.legendSpace)+' '+(maxHeight_$divId+30)+') translate(-'+this.getBBox().width/2+',0)'});
 
         
    var yaxis = svg.append('g');
@@ -205,7 +205,6 @@ baseline = [];
 var j=0, l=0;
 for(var k in dataset_$divId){
 j=0;
-console.log(baseline);
   svg.selectAll('d.series')
      .data(dataset_".$divId."[k]).enter()
      .append('rect').attr('class', 'bar')
@@ -233,17 +232,24 @@ console.log(baseline);
 
  
 //Tooltip
-tooltip_$divId = svg.append('text').style('opacity', 0).style('font-family', 'sans-serif').style('font-size', '12px').style('fill', 'black').style('stroke-width', '.5');
+tooltip_$divId = svg.append('text').style('opacity', 0).style('font-family', 'sans-serif').style('font-size', '11px').style('fill', 'black').style('stroke-width', '.5');
 
 //Events
 d3.selectAll('rect.bar')
         .on('mouseover', function(e){
         newX =  parseFloat(d3.select(this).attr('x')) + 0*parseFloat(d3.select(this).attr('width'));
         newY =  parseFloat(d3.select(this).attr('y'));
+        if(newY > maxHeight_$divId){
+          newY -=10;
+        }
+        if(newY < 10){
+          newY +=11;
+        }
         tooltip_$divId.style('opacity', 1).attr('y', newY).attr('x', newX).text(e.values);
         d3.select(this).style('opacity', 1); 
         }).on('mouseout', function(){
         d3.select(this).style('opacity', 0.8); 
+        tooltip_$divId.style('opacity', 0);
         });
         
    for(i=0; i<options_$divId.intermediateLines; i++){
