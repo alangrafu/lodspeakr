@@ -244,9 +244,8 @@ j=0;
 tooltip_$divId = svg.append('text').style('opacity', 0).style('font-family', 'sans-serif').style('font-size', '11px').style('stroke-width', '.5');
 
 //Events
-d3.selectAll('rect.bar_$divId')
+svg.selectAll('rect.bar_$divId')
         .on('mouseover', function(e){
-        console.log('asd');
         tooltipColor = 'black';
         newX =  parseFloat(d3.select(this).attr('x'));
         newY =  parseFloat(d3.select(this).attr('y'));

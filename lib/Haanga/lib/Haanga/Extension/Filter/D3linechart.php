@@ -135,8 +135,10 @@ class Haanga_Extension_Filter_D3LineChart{
                 
                 svg.append('svg:metadata').attr('grddl:grddl:transformation', 'https://raw.github.com/timrdf/vsr/master/src/xsl/grddl/svg.xsl');
 
-;
-    var maxHeight_$divId = options_$divId.chartProportion*options_$divId.height;
+//Tooltip
+tooltip_$divId = svg.append('text').style('opacity', 0).style('font-family', 'sans-serif').style('font-size', '11px').style('stroke-width', '.5');
+
+var maxHeight_$divId = options_$divId.chartProportion*options_$divId.height;
     var labels_$divId = getLabels(dataset_$divId);
     options_$divId.numberOfBars = getNumberOfBars(dataset_$divId);
 
@@ -206,7 +208,7 @@ var line = d3.svg.line()
 
 var j=0;
 for(var k in dataset_".$divId."){
-  svg.append('path').attr('class', 'line')
+  svg.append('path').attr('class', 'line_$divId')
         .datum(dataset_".$divId."[k])
         .attr('d', line)
         .style('opacity', 0.8)
@@ -216,7 +218,15 @@ for(var k in dataset_".$divId."){
         .style('fill', 'none')        .append('svg:metadata')
         .append('vsr:vsr:depicts')
         .attr('rdf:rdf:resource', function(d){target = ''; for(var x in d){target += d[x].uri+' ';} return target;});
-;
+
+  svg.selectAll('circle.points_$divId_'+j).data(dataset_".$divId."[k]).enter()
+     .append('circle').attr('class', 'points_$divId_'+j)
+     .attr('r', 4)
+     .attr('cx', function(d, i){return options_$divId.chartProportion*i*(parseInt(options_$divId.width) / options_$divId.numberOfBars) + 4*options_$divId.padding + options_$divId.legendSpace})
+     .attr('cy', function(d, i) {return (1-d.values/maxValue_$divId)*maxHeight_$divId; })
+     .style('fill', function(d, i){return color(k)}).append('svg:metadata')
+     .append('vsr:vsr:depicts')
+     .attr('rdf:rdf:resource', function(d){ return d.uri});
   j++
 }
 
@@ -236,6 +246,25 @@ for(var k in dataset_".$divId."){
          .text(maxValue_$divId*(1-i/options_$divId.intermediateLines))
          .attr('transform', 'translate(0,10)');
    } 
+
+//Events
+svg.selectAll('circle').on('mouseover', function(e){
+        tooltipColor = 'black';
+        newX =  parseFloat(d3.select(this).attr('cx')) - 10;
+        newY =  parseFloat(d3.select(this).attr('cy')) - 5;
+        if(newY > maxHeight_$divId){
+          newY -=10;
+        }
+        if(newY < 10){
+          newY +=21;
+        }
+
+        tooltip_$divId.style('opacity', 1).style('fill', tooltipColor).attr('y', newY).attr('x', newX).text(e.values);
+        d3.select(this).style('opacity', 1); 
+        }).on('mouseout', function(){
+        d3.select(this).style('opacity', 0.8); 
+        tooltip_$divId.style('opacity', 0);
+        });
     </script>
     ";
     
