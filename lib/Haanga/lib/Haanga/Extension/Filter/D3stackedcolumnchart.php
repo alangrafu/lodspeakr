@@ -240,7 +240,7 @@ tooltip_$divId = svg.append('text').style('opacity', 0).style('font-family', 'sa
 //Events
 d3.selectAll('rect.bar')
         .on('mouseover', function(e){
-        newX =  parseFloat(d3.select(this).attr('x')) + 0*parseFloat(d3.select(this).attr('width'));
+        console.log('asd');
         newY =  parseFloat(d3.select(this).attr('y'));
         if(newY > maxHeight_$divId){
           newY -=10;
@@ -248,6 +248,7 @@ d3.selectAll('rect.bar')
         if(newY < 10){
           newY +=11;
         }
+        console.log('asd');
         tooltip_$divId.style('opacity', 1).attr('y', newY).attr('x', newX).text(e.values);
         d3.select(this).style('opacity', 1); 
         }).on('mouseout', function(){

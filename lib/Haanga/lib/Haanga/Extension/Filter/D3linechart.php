@@ -111,6 +111,10 @@ class Haanga_Extension_Filter_D3LineChart{
   	$pre = "<div id='".$divId."'></div>
   	<script src='http://d3js.org/d3.v2.min.js?2.9.3'></script>
     <script type='text/javascript'>
+    //Adding namespaces
+    d3.ns.prefix['vsr'] = 'http://purl.org/twc/vocab/vsr#'; 
+    d3.ns.prefix['rdf'] = 'http://www.w3.org/2000/01/rdf-schema#'; 
+
     var options_$divId = ".json_encode($options)."; 
     var dataset_$divId = ".json_encode($data).";
     var color = d3.scale.category10();
