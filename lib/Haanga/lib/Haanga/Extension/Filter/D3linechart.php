@@ -10,8 +10,8 @@ class Haanga_Extension_Filter_D3LineChart{
   	$firstColumn = true;
   	$names = explode(",", $varname);
   	$j = 0;
-  	$data['series']=array();
-  	$data['dict']=array();
+
+  	
   	
   	$fieldCounter=0;
   	$varList = array();
@@ -26,38 +26,80 @@ class Haanga_Extension_Filter_D3LineChart{
   	    $variable['name'] = $aux[0];
   	    $variable['value'] = $aux[1];
   	  }
-  	  if($fieldCounter > 0){array_push($data['dict'], $variable['name']);}
   	  $fieldCounter++;
   	  array_push($varList, $variable);
   	}
 
+  	$columnsAsSeries = false;
   	$series = array();
-  	foreach($obj as $k){  	
-  	  $series = array();
-  	  foreach($varList as $v){
-  	    $name = $v['name'];
-  	    $val = $v['value'];
-
-  	  	if($j==0){
-  	  	  $series['key'] = $k->$name->$val;
-  	  	  //$newItem[$j]['x'] = $value;
-  	  	}else{
-  	  	  $series['values'][] = $k->$name->$val;
-  	  	}
-  	  	$j++;
-  	  } 
-  	  $i++;
-  	  $j=0;
- 	  	array_push($data['series'], $series);
-  	}
+  	if($columnsAsSeries){
+  	  foreach($obj as $k){  	
+  	    $newItem = array();
+  	    foreach($varList as $v){
+  	      $name = $v['name'];
+  	      $val = $v['value'];
+  	      
+  	      if($j==0){
+  	        //$newItem[$j]['x'] = $value;
+  	      }else{
+  	        $series[$name]['key'] = $name;
+  	        $series[$name]['values'][] = $k->$name->$val;
+  	      }
+  	      $j++;
+  	    } 
+  	    $i++;
+  	    $j=0;
+  	    // 	  	array_push($data, $newItem);
+  	  }
+  	  foreach($series as $v){
+  	    $data[] = $v;
+  	  }
+    }else{
+  	  foreach($obj as $k){  	
+  	    $newSerie = array();
+  	    $currentSerie = null;
+  	    $newItem = array();
+  	    foreach($varList as $v){
+  	      $name = $v['name'];
+  	      $val = $v['value'];
+  	      
+  	      if($j==0){
+  	        $currentSerie = $k->$name->$val;
+  	        if(!isset($data[$currentSerie])){ $data[$currentSerie] = array();}  	        
+  	      }elseif($j == 1){
+  	        $newItem['key'] = $k->$name->$val;
+  	      }elseif($j == sizeof($varList)-1){
+  	        $newItem['uri'] =  $k->$name->$val;
+  	        $data[$currentSerie][] = $newItem;
+  	        $newItem = array();
+  	      }else{
+  	        $newItem['values'] = floatval($k->$name->$val);
+  	      }
+  	      $j++;
+  	    }
+  	    $i++;
+  	    $j=0;
+  	    // 	  	array_push($data, $newItem);
+  	  }
+  	/*  $data = array(
+  	                 array('key' => 'zxc', 'values' => array( 1, 2)),
+  	                 array('key' => 'asd', 'values' => array(10, 2)),
+  	                 array('key' => 'zxc1', 'values' => array( 11, 2)),
+  	                 array('key' => 'asd1', 'values' => array(21, 2)),
+  	                 array('key' => 'zxc2', 'values' => array( 23, 2)),
+  	                 array('key' => 'asd3', 'values' => array(20, 2)),
+  	               );*/
+    }
   	
   	//Getting options
-  	$options['height'] = 500;
+  	$options['height'] = 300;
   	$options['width'] = 1000;
   	$options['padding'] = 20;
-  	$options['chartProportion'] = 0.8;
+  	$options['barsProportion'] = 0.8;
   	$options['legendSpace'] = 15;
   	$options['intermediateLines'] = 4;
+  	$options['numberOfBars'] = 0;
+  	$options['chartProportion'] = .8;
     for($z=$fieldCounter; $z < count($names); $z++){
       $pair = explode("=", $names[$z]);
       $key = trim($pair[0], "\" '");
@@ -77,34 +119,60 @@ class Haanga_Extension_Filter_D3LineChart{
       return s[d%s.length];
     }
     
-    var maxValue_$divId = getMax(dataset_".$divId."['series']);
+    var maxValue_$divId = getMax(dataset_".$divId.");
     var svg = d3.selectAll('#".$divId."').append('svg').attr('width', options_$divId.width).attr('height', options_$divId.height);
     var maxHeight_$divId = options_$divId.chartProportion*options_$divId.height;
-
+    var labels_$divId = getLabels(dataset_$divId);
+    options_$divId.numberOfBars = getNumberOfBars(dataset_$divId);
 
     function getMax(d){
-      maxValue = 0;
-      for(var i in d){
-        e = d[i];
-        for(var j in e.values){
-          aux = parseInt(e.values[j]);
-         if(maxValue < aux){
-           maxValue = aux;
+     maxValue = 0;
+     for(var i in d){
+       e = d[i];
+       for(var j in e){
+         if(maxValue < parseInt(e[j].values)){
+           maxValue = parseInt(e[j].values);
          }
        }
      }
      return maxValue+1;
-   }    
-//Axis
+   }  
+   
+   function getNumberOfBars(d){
+     numberOfBars = 0;
+     for(var i in d){
+       e = d[i];
+       aux = 0;
+       for(var j in e){
+         aux++;
+       }
+       if(aux > numberOfBars){
+         numberOfBars = aux;
+       }
+     }
+     return numberOfBars;
+   } 
+
+   function getLabels(d){
+     labels = [];
+     for(i in d){
+       e = d[i];
+       for(j in e){
+         labels.push(e[j].key);
+       }
+     return labels
+     }
+   }
+ //Axis
   var xaxis = svg.append('g');
     xaxis.append('line').style('stroke', 'black').style('stroke-width', '2px').attr('x1',  1+options_$divId.legendSpace).attr('y1', maxHeight_$divId).attr('x2', options_$divId.width+options_$divId.padding+ options_$divId.legendSpace).attr('y2', maxHeight_$divId)
     xaxis.selectAll('line.stub')
     var labels_$divId = xaxis.selectAll('text.xaxis')
-        .data(dataset_".$divId."['dict'])
+        .data(labels_".$divId.")
         .enter().append('text').text(function(d){return d})
         .style('font-size', '12px').style('font-family', 'sans-serif')
         .attr('class', 'xaxis')        
-        .attr('x', function(d, i){return options_$divId.chartProportion*i*(parseInt(options_$divId.width)/ dataset_".$divId."['series'].length) + 4*options_$divId.padding + options_$divId.legendSpace})
+        .attr('x', function(d, i){return options_$divId.chartProportion*i*(parseInt(options_$divId.width)/ options_$divId.numberOfBars) + 4*options_$divId.padding + options_$divId.legendSpace})
         .attr('y', function(d, i){return maxHeight_$divId+30;})
         .attr('transform', function(d){return 'translate(-'+(this.getBBox().width/2)+')'});
 
@@ -118,18 +186,23 @@ class Haanga_Extension_Filter_D3LineChart{
     
 //Values
 var line = d3.svg.line()
-    .x(function(d, i){return options_$divId.chartProportion*i*(parseInt(options_$divId.width) / dataset_".$divId."['series'].length) + 4*options_$divId.padding + options_$divId.legendSpace})
-    .y(function(d, i) { return (1-d/maxValue_$divId)*maxHeight_$divId; });
+    .x(function(d, i){return options_$divId.chartProportion*i*(parseInt(options_$divId.width) / options_$divId.numberOfBars) + 4*options_$divId.padding + options_$divId.legendSpace})
+    .y(function(d, i) {return (1-d.values/maxValue_$divId)*maxHeight_$divId; });
 
-for(var k in dataset_".$divId."['series']){
+var j=0;
+for(var k in dataset_".$divId."){
   svg.append('path').attr('class', 'line')
-        .datum(dataset_".$divId."['series'][k].values)
+        .datum(dataset_".$divId."[k])
         .attr('d', line)
         .style('opacity', 0.8)
         .style('stroke', function(d, i){return color(k)})
         .style('stroke-width', '2px')
-        .style('stroke-dasharray', stroke(k))
-        .style('fill', 'none');
+        .style('stroke-dasharray', stroke(j))
+        .style('fill', 'none')        .append('svg:metadata')
+        .append('vsr:vsr:depicts')
+        .attr('rdf:rdf:resource', function(d){target = ''; for(var x in d){target += d[x].uri+' ';} return target;});
+;
+  j++
 }
 
         d3.selectAll('rect.bar')
