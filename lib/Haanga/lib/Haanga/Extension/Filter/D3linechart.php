@@ -124,7 +124,13 @@ class Haanga_Extension_Filter_D3LineChart{
     }
     
     var maxValue_$divId = getMax(dataset_".$divId.");
-    var svg = d3.selectAll('#".$divId."').append('svg').attr('width', options_$divId.width).attr('height', options_$divId.height);
+    var svg = d3.selectAll('#".$divId."')
+                .append('svg')
+                .attr('width', options_$divId.width)
+                .attr('height', options_$divId.height)
+                .attr('xmlns:xmlns:vsr','http://purl.org/twc/vocab/vsr#')
+                .attr('xmlns:xmlns:rdf','http://www.w3.org/2000/01/rdf-schema#');
+;
     var maxHeight_$divId = options_$divId.chartProportion*options_$divId.height;
     var labels_$divId = getLabels(dataset_$divId);
     options_$divId.numberOfBars = getNumberOfBars(dataset_$divId);
