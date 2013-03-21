@@ -118,7 +118,7 @@ class Haanga_Extension_Filter_D3StackedColumnChart{
     var options_$divId = ".json_encode($options)."; 
     var dataset_$divId = ".json_encode($data).";
     var color = function(d){
-      s = ['steelblue', 'brown', 'gold', 'ForestGreen'];
+      s = ['#5078a9', 'brown', 'gold', 'ForestGreen'];
       return s[d%s.length];
     };
     
