@@ -114,6 +114,7 @@ class Haanga_Extension_Filter_D3StackedColumnChart{
     //Adding namespaces
     d3.ns.prefix['vsr'] = 'http://purl.org/twc/vocab/vsr#'; 
     d3.ns.prefix['rdf'] = 'http://www.w3.org/2000/01/rdf-schema#'; 
+    d3.ns.prefix['grddl'] = 'http://www.w3.org/2003/g/data-view#';
 
     var options_$divId = ".json_encode($options)."; 
     var dataset_$divId = ".json_encode($data).";
@@ -131,7 +132,9 @@ class Haanga_Extension_Filter_D3StackedColumnChart{
                 .attr('width', options_$divId.width)
                 .attr('height', options_$divId.height)
                 .attr('xmlns:xmlns:vsr','http://purl.org/twc/vocab/vsr#')
-                .attr('xmlns:xmlns:rdf','http://www.w3.org/2000/01/rdf-schema#');
+                .attr('xmlns:xmlns:grddl', 'http://www.w3.org/2003/g/data-view#')
+                .attr('xmlns:xmlns:rdf','http://www.w3.org/2000/01/rdf-schema#')
+                .attr('grddl:grddl:transformation', 'https://raw.github.com/timrdf/vsr/master/src/xsl/grddl/svg.xsl');
     var maxHeight_$divId = options_$divId.barsProportion*options_$divId.height;
 
 
