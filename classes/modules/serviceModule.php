@@ -111,6 +111,7 @@ class ServiceModule extends abstractModule{
   	global $endpoints;
   	global $lodspk;
   	global $firstResults;
+  	global $results;
   	$context = array();
   	$context['contentType'] = $acceptContentType;
   	$context['endpoints'] = $endpoints;
