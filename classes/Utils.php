@@ -500,6 +500,7 @@ class Utils{
   	  	if(isset($value['uri']) && $value['uri'] == 1){
   	  	  //If there is no mirroring, it wouldn't hurt to have available this value (e.g., using templates from a mirrored instance to a non-mirrored one)
   	  	  $value['mirroredUri'] = $value['value'];
+  	  	  $value['mirroredCurie'] = Utils::uri2curie($value['value']);
   	  	  if(isset($conf['mirror_external_uris']) && $conf['mirror_external_uris'] != false){  	  	  	
   	  	  	if(is_bool($conf['mirror_external_uris'])){
   	  	  	  $value['value'] = preg_replace("|^".$conf['ns']['local']."|", $conf['basedir'], $value['value']);
@@ -510,7 +511,7 @@ class Utils{
   	  	  	  exit(1);
   	  	  	}
   	  	  }
-  	  	  $value['curie'] = Utils::uri2curie($value['value']);
+  	  	  $value['curie'] = $value['mirroredCurie'];
   	  	  $array[$key] = $value;
   	  	}  	  	  	  	
   	  } 
