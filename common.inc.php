@@ -43,6 +43,7 @@ $conf['http_accept']['nt']   = array('text/plain');
 
 
 $conf['service']['prefix']      = 'services';
+$conf['form']['prefix']      = 'forms';
 $conf['type']['prefix']         = 'types';
 $conf['uri']['prefix']          = 'uris';
 $conf['redirect']['prefix']     = 'redirect';
