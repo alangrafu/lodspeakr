@@ -23,7 +23,7 @@
       }
     </style>
     <link href="{{lodspk.home}}css/bootstrap-responsive.min.css" rel="stylesheet" type="text/css" media="screen" />
-    <script type="text/javascript" src="{{lodspk.home}}js/jquery.js"></script>
+    <script type="text/javascript" src="{{lodspk.home}}js/jquery.min.js"></script>
     <script type="text/javascript" src="{{lodspk.home}}js/bootstrap.min.js"></script>
     <script type="text/javascript" src="{{lodspk.home}}js/bootstrap-typeahead.js"></script>
     <script type="text/javascript">
