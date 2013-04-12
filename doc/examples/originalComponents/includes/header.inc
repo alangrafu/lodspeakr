@@ -25,20 +25,26 @@
     <link href="{{lodspk.home}}css/bootstrap-responsive.min.css" rel="stylesheet" type="text/css" media="screen" />
     <script type="text/javascript" src="{{lodspk.home}}js/jquery.min.js"></script>
     <script type="text/javascript" src="{{lodspk.home}}js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="{{lodspk.home}}js/bootstrap-typeahead.js"></script>
     <script type="text/javascript">
     $(document).ready(function(){
         $('.typeahead').typeahead({
-            source: function (typeahead, query) {
+            source: function (query, process) {
               $('.typeahead').addClass('wait');[]
               return $.get('{{lodspk.home}}search/'+encodeURIComponent(query), { }, function (data) {
-                  $('.typeahead').removeClass('wait');[]
-                  return typeahead.process(data);
+                  $('.typeahead').removeClass('wait');
+              var map = [];
+              var objects= [];
+              $.each(data, function(i, object) {
+                  map[object.value] = object;
+                  objects.push(object.value);
+               });
+               return process(objects);
+
               }, 'json');
             },
-            onselect: function (obj) {
+            updater: function (obj) {
               $('.typeahead').attr('disabled', true);
-              window.location = obj.uri;
+              window.location = map[obj].uri;
             }
         });
     });
