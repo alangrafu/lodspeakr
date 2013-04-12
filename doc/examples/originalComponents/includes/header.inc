@@ -27,24 +27,24 @@
     <script type="text/javascript" src="{{lodspk.home}}js/bootstrap.min.js"></script>
     <script type="text/javascript">
     $(document).ready(function(){
+        var typeaheadMap = [], typeaheadObjects = [];
         $('.typeahead').typeahead({
             source: function (query, process) {
               $('.typeahead').addClass('wait');[]
               return $.get('{{lodspk.home}}search/'+encodeURIComponent(query), { }, function (data) {
+                  typeaheadMap = [], typeaheadObjects = [];
                   $('.typeahead').removeClass('wait');
-              var map = [];
-              var objects= [];
               $.each(data, function(i, object) {
-                  map[object.value] = object;
-                  objects.push(object.value);
+                  typeaheadMap[object.value] = object;
+                  typeaheadObjects.push(object.value);
                });
-               return process(objects);
+               return process(typeaheadObjects);
 
               }, 'json');
             },
             updater: function (obj) {
               $('.typeahead').attr('disabled', true);
-              window.location = map[obj].uri;
+              window.location = typeaheadMap[obj].uri;
             }
         });
     });
