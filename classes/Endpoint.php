@@ -2,11 +2,17 @@
 
 class Endpoint{
   private $sparqlUrl;
+  private $sparqlUpdateUrl;
   private $params; 
   
   public function __construct($sparqlUrl, $params){
   	$this->sparqlUrl = $sparqlUrl;
   	$this->params = $params;
+  	$this->sparqlUpdateUrl=null;
+  }
+  
+  public function setSparqlUpdateUrl($url){
+    $this->sparqlUpdateUrl = $url;
   }
   
   public function query($q, $output = 'json'){
@@ -94,16 +100,18 @@ class Endpoint{
   }
   
   public function queryPost($q){
-  	$params =  $this->params;
-  	$params['query'] = $q;
+  	$params =  array();//$this->params;
+  	$params['update'] = $q;
   	$ch = curl_init();
-  	curl_setopt($ch,CURLOPT_URL,$this->sparqlUrl);
+  	curl_setopt($ch,CURLOPT_URL,$this->sparqlUpdateUrl);
   	curl_setopt($ch,CURLOPT_POST,count($params));
   	curl_setopt($ch,CURLOPT_POSTFIELDS,http_build_query($params));
   	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
   	//execute post
   	$result = curl_exec($ch);
-  	return $result;
+    $http_status = intval(curl_getinfo($ch, CURLINFO_HTTP_CODE));
+    curl_close($ch);
+    return ($http_status >= 200 && $http_status < 300)?true:false;
   }
   
   public function getSparqlURL(){

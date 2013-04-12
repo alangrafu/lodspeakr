@@ -24,6 +24,9 @@ class FormModule extends abstractModule{
   	$viewFile  = null;
   	$tokens = $qArr;
   	$arguments = array();
+  	$matchData = array();
+  	
+  	$matchData['post'] = (strtoupper($_SERVER['REQUEST_METHOD']) == "POST");
   	while(sizeof($tokens) > 0){
   	  $formName = join("%2F", $tokens);
   	  //Use .extension at the end of the form to force a particular content type
@@ -41,12 +44,7 @@ class FormModule extends abstractModule{
   	    $formName = join(".",$aux);
   	  }
       //checking default components  	  
-  	  if(file_exists($conf['home'].$conf['model']['directory'].'/'.$conf['form']['prefix'].'/'.$formName.'/scaffold.ttl')){
-  	    $subDir = $this->readScaffold($conf['model']['directory'].'/'.$conf['form']['prefix'].'/'.$formName.'/scaffold.ttl', join("/", $arguments));
-  	    $subDir.= '/';
-  	    $lodspk['model'] = $conf['home'].$conf['model']['directory'].'/'.$conf['form']['prefix'].'/'.$formName.'/'.$subDir;
-  	    $lodspk['view'] = $conf['view']['directory'].'/'.$conf['form']['prefix'].'/'.$formName.'/'.$subDir.$extension.'.template';  	    
-  	  }elseif(file_exists($conf['home'].$conf['model']['directory'].'/'.$conf['form']['prefix'].'/'.$formName)){  	    
+      if(file_exists($conf['home'].$conf['model']['directory'].'/'.$conf['form']['prefix'].'/'.$formName)){  	    
   	    $lodspk['model'] = $conf['home'].$conf['model']['directory'].'/'.$conf['form']['prefix'].'/'.$formName.'/';
   	    $lodspk['view'] = $conf['home'].$conf['view']['directory'].'/'.$conf['form']['prefix'].'/'.$formName.'/'.$extension.'.template';
   	  }else{
@@ -83,7 +81,9 @@ class FormModule extends abstractModule{
   	    }else{
   	      $viewFile = $lodspk['view'];
   	    }
-  	    return array($modelFile, $viewFile);
+  	    $matchData['model'] = $modelFile;
+  	    $matchData['view'] = $viewFile;
+  	    return $matchData;
   	  }elseif(file_exists($lodspk['model'].'queries')){
   	    $modelFile = $lodspk['model'].'queries';
   	    if(!file_exists($lodspk['view'])){
@@ -92,7 +92,9 @@ class FormModule extends abstractModule{
   	    }else{
   	      $viewFile = $lodspk['view'];
   	    }
-  	    return array($modelFile, $viewFile);
+  	    $matchData['model'] = $modelFile;
+  	    $matchData['view'] = $viewFile;
+  	    return $matchData;
   	  }elseif(file_exists($lodspk['model'])){
   	    HTTPStatus::send406($uri);
   	    exit(0);
@@ -121,84 +123,114 @@ class FormModule extends abstractModule{
   	//$acceptContentType = Utils::getBestContentType($_SERVER['HTTP_ACCEPT']);
   	$extension = Utils::getExtension($acceptContentType); 
   	$args = array();
-  	list($modelFile, $viewFile) = $form;
-  	try{
-  	  $prefixHeader = array();
+  	$modelFile = $form['model'];
+  	$viewFile = $form['view'];
+  	
+  	if($form['post']){
   	  
-  	  for($i=0;$i<sizeof($params);$i++){
-  	  	if($conf['mirror_external_uris'] != false){
-  	  	  $altUri = Utils::curie2uri($params[$i]);
-  	  	  $altUri = preg_replace("|^".$conf['basedir']."|", $conf['ns']['local'], $altUri);
-  	  	  $params[$i] = Utils::uri2curie($altUri);
-  	  	}
+  	  $myUri = $_POST['uri'];
+  	  $props = $_POST['properties'];
+  	  $query = " DELETE { <$myUri> ?p ?o}WHERE{<$myUri> ?p ?o} INSERT DATA{<$myUri> ";
+  	  $firstTriple = true;
+  	  foreach($props as $v){
+  	   if(!$firstTriple){
+  	     $query .= ";\n";
+  	   }
+  	   $firstTriple = false;
+  	   if($v['isUri'] ==  true){
+  	     $query .= $v['predicate'].' '.$v['object'].' ';  	   
+  	   }else{
+  	     $query .= $v['predicate'].' """'.$v['object'].'"""';  	   
+  	   }
   	  }
+  	  $query .= " . }";
+  	  $query = Utils::addPrefixes($query);
+  	  $response = array('success' => false);
   	  
-  	  $segmentConnector = "";
-  	  for($i=0;$i<sizeof($params);$i++){  
-  	  	Utils::curie2uri($params[$i]);
-  	  	//echo $params[$i]." ".Utils::curie2uri($params[$i]);exit(0);
-  	  	$auxPrefix = Utils::getPrefix($params[$i]);
-  	  	if($auxPrefix['ns'] != NULL){
-  	  	  $prefixHeader[] = $auxPrefix;
-  	  	}
-  	  	$args["arg".$i]=$params[$i];
-  	  	$args["all"] .= $segmentConnector.$params[$i];
-  	  	if($segmentConnector == ""){
-  	  	  $segmentConnector = "/";
-  	  	}
+  	  if(isset($conf['update']['local'])){
+  	    $endpoints['local']->setSparqlUpdateUrl($conf['update']['local']);
+  	    $response['success'] = $endpoints['local']->queryPost($query);
   	  }
-  	  $results['params'] = $params;
-  	  
-  	  
-  	  $lodspk['home'] = $conf['basedir'];
-  	  $lodspk['baseUrl'] = $conf['basedir'];
-  	  $lodspk['module'] = 'form';
-  	  $lodspk['root'] = $conf['root'];
-  	  $lodspk['contentType'] = $acceptContentType;
-  	  $lodspk['ns'] = $conf['ns'];  	  	
-  	  $lodspk['this']['value'] = $uri;
-  	  $lodspk['this']['curie'] = Utils::uri2curie($uri);
-  	  $lodspk['local']['value'] = $localUri;
-  	  $lodspk['local']['curie'] = Utils::uri2curie($localUri);
-  	  $lodspk['contentType'] = $acceptContentType;
-  	  $lodspk['endpoint'] = $conf['endpoint'];
-  	  
-  	  $lodspk['type'] = $modelFile;
-  	  $lodspk['header'] = $prefixHeader;
-  	  $lodspk['args'] = $args;
-  	  $lodspk['add_mirrored_uris'] = false;
-  	  $lodspk['baseUrl'] = $conf['basedir'];
-  	  $lodspk['this']['value'] = $uri;
-  	  if($viewFile == null){
-  	  	$lodspk['transform_select_query'] = true;
+  	  echo json_encode($response);exit(0);
+  	}else{
+  	  try{
+  	    $prefixHeader = array();
+  	    
+  	    for($i=0;$i<sizeof($params);$i++){
+  	      if($conf['mirror_external_uris'] != false){
+  	        $altUri = Utils::curie2uri($params[$i]);
+  	        $altUri = preg_replace("|^".$conf['basedir']."|", $conf['ns']['local'], $altUri);
+  	        $params[$i] = Utils::uri2curie($altUri);
+  	      }
+  	    }
+  	    
+  	    $segmentConnector = "";
+  	    for($i=0;$i<sizeof($params);$i++){  
+  	      Utils::curie2uri($params[$i]);
+  	      //echo $params[$i]." ".Utils::curie2uri($params[$i]);exit(0);
+  	      $auxPrefix = Utils::getPrefix($params[$i]);
+  	      if($auxPrefix['ns'] != NULL){
+  	        $prefixHeader[] = $auxPrefix;
+  	      }
+  	      $args["arg".$i]=$params[$i];
+  	      $args["all"] .= $segmentConnector.$params[$i];
+  	      if($segmentConnector == ""){
+  	        $segmentConnector = "/";
+  	      }
+  	    }
+  	    $results['params'] = $params;
+  	    
+  	    
+  	    $lodspk['home'] = $conf['basedir'];
+  	    $lodspk['baseUrl'] = $conf['basedir'];
+  	    $lodspk['module'] = 'form';
+  	    $lodspk['root'] = $conf['root'];
+  	    $lodspk['contentType'] = $acceptContentType;
+  	    $lodspk['ns'] = $conf['ns'];  	  	
+  	    $lodspk['this']['value'] = $uri;
+  	    $lodspk['this']['curie'] = Utils::uri2curie($uri);
+  	    $lodspk['local']['value'] = $localUri;
+  	    $lodspk['local']['curie'] = Utils::uri2curie($localUri);
+  	    $lodspk['contentType'] = $acceptContentType;
+  	    $lodspk['endpoint'] = $conf['endpoint'];
+  	    
+  	    $lodspk['type'] = $modelFile;
+  	    $lodspk['header'] = $prefixHeader;
+  	    $lodspk['args'] = $args;
+  	    $lodspk['add_mirrored_uris'] = false;
+  	    $lodspk['baseUrl'] = $conf['basedir'];
+  	    $lodspk['this']['value'] = $uri;
+  	    if($viewFile == null){
+  	      $lodspk['transform_select_query'] = true;
+  	    }
+  	    //  chdir($lodspk['model']);
+  	    Utils::queryFile($modelFile, $endpoints['local'], $results, $firstResults);
+  	    if(!$lodspk['resultRdf']){
+  	      $results = Utils::internalize($results); 
+  	      $firstAux = Utils::getfirstResults($results);
+  	      
+  	      //  	chdir($conf['home']);
+  	      if(is_array($results)){
+  	        $resultsObj = Convert::array_to_object($results);
+  	        $results = $resultsObj;
+  	      }else{
+  	        $resultsObj = $results;
+  	      }
+  	      $lodspk['firstResults'] = Convert::array_to_object($firstAux);
+  	    }else{
+  	      $resultsObj = $results;
+  	    }  	  
+  	    //Need to redefine viewFile as 'local' i.e., inside form.foo/ so I can load files with the relative path correctly
+  	    //$viewFile = $extension.".template";
+  	    //chdir($conf['home']); 
+  	    Utils::processDocument($viewFile, $lodspk, $results);    	  
+  	  }catch (Exception $ex){
+  	    echo $ex->getMessage();
+  	    trigger_error($ex->getMessage(), E_ERROR);
+  	    HTTPStatus::send500($uri);
   	  }
-  	//  chdir($lodspk['model']);
-  	  Utils::queryFile($modelFile, $endpoints['local'], $results, $firstResults);
-      if(!$lodspk['resultRdf']){
-      	$results = Utils::internalize($results); 
-      	$firstAux = Utils::getfirstResults($results);
-      	
-    //  	chdir($conf['home']);
-      	if(is_array($results)){
-      	  $resultsObj = Convert::array_to_object($results);
-      	  $results = $resultsObj;
-      	}else{
-      	  $resultsObj = $results;
-      	}
-      	$lodspk['firstResults'] = Convert::array_to_object($firstAux);
-      }else{
-      	$resultsObj = $results;
-      }  	  
-  	  //Need to redefine viewFile as 'local' i.e., inside form.foo/ so I can load files with the relative path correctly
-  	  //$viewFile = $extension.".template";
-  	  //chdir($conf['home']); 
-  	  Utils::processDocument($viewFile, $lodspk, $results);    	  
-  	}catch (Exception $ex){
-  	  echo $ex->getMessage();
-  	  trigger_error($ex->getMessage(), E_ERROR);
-  	  HTTPStatus::send500($uri);
+  	  exit(0);	
   	}
-  	exit(0);	
   }
   
   
@@ -215,27 +247,5 @@ class FormModule extends abstractModule{
   	  return array(null);
   	}
   }
-
-  protected function readScaffold($scaffold, $formArgs){
-    global $conf;
-    require_once($conf['home'].'lib/arc2/ARC2.php');
-    $parser = ARC2::getTurtleParser();
-    $parser->parse($scaffold);
-    $triples = $parser->getTriples();
-    $aux=Utils::filterTriples($triples, array(null, "http://www.w3.org/1999/02/22-rdf-syntax-ns#type", "http://lodspeakr.org/vocab/ScaffoldedForm"));
-    $scaffoldUri = $aux[0][0];
-    $aux=Utils::filterTriples($triples, array($scaffoldUri, "http://lodspeakr.org/vocab/scaffold", null));
-    foreach($aux as $r){
-      $patterns = Utils::filterTriples($triples, array($r[2], "http://lodspeakr.org/vocab/uriPattern", null));
-      $pattern = stripcslashes($patterns[0][2]);
-      if(preg_match("|$pattern|", $formArgs) > 0){
-//        echo "match ! \n ".$pattern."\n";
-        $patternDir = Utils::filterTriples($triples, array($r[2], "http://lodspeakr.org/vocab/subComponent", null));
-        return $patternDir[0][2];
-      }
-    }
-//        exit(0);
-    return "";
-  }  
 }
 ?>

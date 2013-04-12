@@ -1,0 +1,4 @@
+select distinct ?p (max(?pl) as ?pLabel) where{
+?p rdfs:domain {{lodspk.args.arg0}}  .
+OPTIONAL{ ?p rdfs:label ?pl}
+}group by ?p

@@ -1,0 +1,9 @@
+{%include "../../includes/header.inc"%}
+{% LodspkForm  %}
+<table>
+{%for i in models.main%}
+<tr><td>{%if i.pLabel.value%}{{i.pLabel.value}}{%else%}{{i.p.curie}}{%endif%}</td><td>  {{i.p.curie|LodspkTextInput}} </td></tr>  {%endfor%}
+</table>
+{%endLodspkForm%}
+</body>
+</html>
