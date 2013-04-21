@@ -184,7 +184,7 @@ echo "RewriteRule ^(.+)\$ $home/index.php?q=\$1 [L]" >> $parent_htaccess
 echo "</IfModule>" >> $parent_htaccess
 mkdir -p cache
 
-if [ ! -z "$_components" ]; then
+if [ -z "$_components" ]; then
   cp -r doc/examples/originalComponents components
   mkdir -p components/uris
 else
