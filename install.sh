@@ -64,6 +64,9 @@ for argument in $options
       chmod=*) val=${argument#*=};
                   opt=${argument%=$val};
                   _chmod="${val}" ;;
+      components=*) val=${argument#*=};
+                  opt=${argument%=$val};
+                  _components="${val}" ;;
     esac
   done
 
