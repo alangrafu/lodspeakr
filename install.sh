@@ -185,7 +185,7 @@ if [ ! -z "$_components" ]; then
   cp -r doc/examples/originalComponents components
   mkdir -p components/uris
 else
-  ln -s "$_components"
+  ln -s "$_components" components
 fi
 
 bold=`tput bold`
