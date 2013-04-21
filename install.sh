@@ -32,6 +32,7 @@ _basens=
 _sparqlendpoint=
 _chown=
 _chmod=
+_component=
 
 options=$@
 
@@ -179,8 +180,14 @@ cat $root_htaccess >> $parent_htaccess
 echo "RewriteRule ^(.+)\$ $home/index.php?q=\$1 [L]" >> $parent_htaccess
 echo "</IfModule>" >> $parent_htaccess
 mkdir -p cache
-cp -r doc/examples/originalComponents components
-mkdir -p components/uris
+
+if [ ! -z "$_components" ]; then
+  cp -r doc/examples/originalComponents components
+  mkdir -p components/uris
+else
+  ln -s "$_components"
+done
+
 bold=`tput bold`
 normal=`tput sgr0`
 wwwUser=`ps aux|egrep "apache|httpd|www" |egrep -v "grep|root"|awk '{print $1}'|uniq|tail -1`  

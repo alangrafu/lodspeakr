@@ -24,6 +24,7 @@ _basens=
 _sparqlendpoint=
 _chown=
 _chmod=
+_components=
 
 options=$@
 
@@ -55,6 +56,9 @@ for argument in $options
       chmod=*) val=${argument#*=};
                   opt=${argument%=$val};
                   _chmod="chmod=${val}" ;;
+      components=*) val=${argument#*=};
+                  opt=${argument%=$val};
+                  _components="components=${val}" ;;
     esac
   done
 
