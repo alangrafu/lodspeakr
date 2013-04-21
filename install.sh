@@ -186,7 +186,7 @@ if [ ! -z "$_components" ]; then
   mkdir -p components/uris
 else
   ln -s "$_components"
-done
+fi
 
 bold=`tput bold`
 normal=`tput sgr0`
