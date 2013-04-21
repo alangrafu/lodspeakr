@@ -189,7 +189,7 @@ if [ -z "$_components" ]; then
   mkdir -p components/uris
 else
   echo ""
-  echo "WARNING: Using components from $_cmponents"
+  echo "WARNING: Using components from $_components"
   echo ""
   ln -s "$_components" components
 fi
