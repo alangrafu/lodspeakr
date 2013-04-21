@@ -185,6 +185,7 @@ if [ ! -z "$_components" ]; then
   cp -r doc/examples/originalComponents components
   mkdir -p components/uris
 else
+  echo Using components from $_Components
   ln -s "$_components" components
 fi
 
