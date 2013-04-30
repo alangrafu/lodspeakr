@@ -173,6 +173,10 @@ class TypeModule extends abstractModule{
   	          $objResult['viewFile'] = $lodspk['view'];
   	          $objResult['modelFile'] = $lodspk['model'];
   	          $found = true;
+  	          if(!file_exists($objResult['viewFile']) ){
+  	            $lodspk['transform_select_query'] = true;
+  	            $objResult['viewFile'] = null;
+  	          }
   	          return $objResult;
   	        }
   	      }
