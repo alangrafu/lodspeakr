@@ -37,7 +37,7 @@ class Haanga_Extension_Filter_GoogleVizLineChart{
   	  foreach($varList as $v){
   	    $name = $v['name'];
   	    $val = $v['value'];
-  	    $value = ($j==0)?"'".str_replace("'", "\'",$k->$name->$val)."'":$k->$name->$val;
+  	    $value = ($j==0)?"'".str_replace("'", "\'",$k->$name->$val)."'":floatval($k->$name->$val);
   	  	$data .="        data.setCell($i, $j, ".$value.");\n";
   	  	$j++;
   	  } 

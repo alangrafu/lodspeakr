@@ -24,6 +24,7 @@ _basens=
 _sparqlendpoint=
 _chown=
 _chmod=
+_components=
 
 options=$@
 
@@ -55,6 +56,9 @@ for argument in $options
       chmod=*) val=${argument#*=};
                   opt=${argument%=$val};
                   _chmod="chmod=${val}" ;;
+      components=*) val=${argument#*=};
+                  opt=${argument%=$val};
+                  _components="components=${val}" ;;
     esac
   done
 
@@ -62,7 +66,7 @@ for argument in $options
 if [ ! -e "$home" ]; then
    $GIT clone $lodspeakr_repository
    cd $home
-   ./install.sh $home $_baseurl $_basens $_sparqlendpoint $_chown $_chmod
+   ./install.sh $home $_baseurl $_basens $_sparqlendpoint $_chown $_chmod $_components
  else
    echo "There is already an existing directory called '$home'. Installation cancelled. Remove it first and try again."
 fi

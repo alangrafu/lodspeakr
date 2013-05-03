@@ -32,6 +32,7 @@ _basens=
 _sparqlendpoint=
 _chown=
 _chmod=
+_component=
 
 options=$@
 
@@ -63,6 +64,9 @@ for argument in $options
       chmod=*) val=${argument#*=};
                   opt=${argument%=$val};
                   _chmod="${val}" ;;
+      components=*) val=${argument#*=};
+                  opt=${argument%=$val};
+                  _components="${val}" ;;
     esac
   done
 
@@ -158,9 +162,11 @@ $extra
 
 \$conf['mirror_external_uris'] = $external;
 
-//Variables in $lodspk can be used to store user info.
-//For examples, 'title' will be used in the header
-//(you can forget about all conventions and use your own as well)
+// Cherry-picked components (see https://github.com/alangrafu/lodspeakr/wiki/Reuse-cherry-picked-components-from-other-repositories)
+
+// Variables in $lodspk can be used to store user info.
+// For examples, 'title' will be used in the header.
+// (You can forget about all conventions and use your own as well)
 \$lodspk['title'] = 'LODSPeaKr';
 ?>" 
 echo "$content" > $settings_file
@@ -179,8 +185,17 @@ cat $root_htaccess >> $parent_htaccess
 echo "RewriteRule ^(.+)\$ $home/index.php?q=\$1 [L]" >> $parent_htaccess
 echo "</IfModule>" >> $parent_htaccess
 mkdir -p cache
-cp -r doc/examples/originalComponents components
-mkdir -p components/uris
+
+if [ -z "$_components" ]; then
+  cp -r doc/examples/originalComponents components
+  mkdir -p components/uris
+else
+  echo ""
+  echo "WARNING: Using components from $_components"
+  echo ""
+  ln -s "$_components" components
+fi
+
 bold=`tput bold`
 normal=`tput sgr0`
 wwwUser=`ps aux|egrep "apache|httpd|www" |egrep -v "grep|root"|awk '{print $1}'|uniq|tail -1`  

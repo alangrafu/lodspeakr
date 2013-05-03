@@ -12,7 +12,6 @@ class Haanga_Extension_Filter_D3LineChart{
   	$j = 0;
 
   	
-  	
   	$fieldCounter=0;
   	$varList = array();
   	foreach($names as $v){
