@@ -471,8 +471,9 @@ class Utils{
   	  }
   	}else{
   	  if(strpos('endpoint.', $modelFile) == 0){
-  	  	
-  	  	Logging::log("$modelFile is a directory, will process it later", E_USER_NOTICE);
+  	  	if($conf['debug']){
+    	  	Logging::log("$modelFile is a directory, will process it later", E_USER_NOTICE);
+    	  }
   	  	if($modelFile != $lodspk['type']){
   	  	  if(!isset($rPointer[$strippedModelFile])){
   	  	  	$rPointer[$strippedModelFile] = array();
