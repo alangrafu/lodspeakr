@@ -280,8 +280,10 @@ class Utils{
   	  if($modelFile != "." && $modelFile != ".." && strpos($modelFile, ".") !== 0){
   	  	if(is_dir($modelFile)){
   	  	  if(strpos('endpoint.', $modelFile) == 0){
-  	  	  	Logging::log("Save $modelFile for later, after all the queries in the current directory has been resolved", E_USER_NOTICE);
-  	  	  	$subDirs[]=$modelFile;
+  	  	    if($conf['debug']){
+  	  	      Logging::log("Save $modelFile for later, after all the queries in the current directory has been resolved", E_USER_NOTICE);
+  	  	    }
+  	  	    $subDirs[]=$modelFile;
   	  	  }
   	  	}else{
   	  	  if(preg_match('/\.query$/', $modelFile)){

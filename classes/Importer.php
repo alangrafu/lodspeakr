@@ -127,7 +127,9 @@ class Importer{
  	  }elseif($compType == LS."LodspeakrVisualComponent"){
  	  	$this->createViews($inputs);
  	  }else{
- 	  	Logging::log("Component '$component' (of type $compType) not supported", E_USER_WARNING);
+ 	    if($conf['debug']){
+ 	      Logging::log("Component '$component' (of type $compType) not supported", E_USER_WARNING);
+ 	    }
  	  }
  	}
  	$content .= "?>\n";

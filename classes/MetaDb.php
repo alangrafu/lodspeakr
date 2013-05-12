@@ -35,7 +35,9 @@ class MetaDb{
 			$db = NULL;
 		}catch(Exception $e){
 				echo "Can't write in SQLite database. Please check you have granted write permissions to <tt>meta/</tt> and <tt>meta/db.sqlite</tt>.<br/>Also you can check a list of <a href='https://github.com/alangrafu/lodspeakr/wiki/CommonErrors'>common errors</a> and how to <a href='https://github.com/alangrafu/lodspeakr/wiki/Wipe-out-the-database'>wipe out the database</a>'";
-		  		Logging::log('Exception exec: '.$e->getMessage(), E_USER_ERROR);
+				if($conf['debug']){
+				  Logging::log('Exception exec: '.$e->getMessage(), E_USER_ERROR);
+				}
 				exit(1);
 		}
         return $results;
