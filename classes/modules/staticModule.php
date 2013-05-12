@@ -30,7 +30,7 @@ class StaticModule extends abstractModule{
   	header("Content-type: ".$ct);
   	$uri = $localUri;
   	if($conf['debug']){
-  	  Utils::log("In ".$conf['static']['directory']." static file $file");
+  	  Logging::log("In ".$conf['static']['directory']." static file $file");
 	  }
 	  $htmlExtension = 'html';
 	  if($conf['static']['haanga'] && substr_compare($file, $htmlExtension, -strlen($htmlExtension), strlen($htmlExtension)) === 0){

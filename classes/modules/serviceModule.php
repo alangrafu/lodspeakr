@@ -96,7 +96,7 @@ class ServiceModule extends abstractModule{
   	    return array($modelFile, $viewFile);
   	  }elseif(file_exists($lodspk['model'])){
   	    HTTPStatus::send406($uri);
-  	    exit(0);
+        return null;
   	  }
   	  array_unshift($arguments, array_pop($tokens));
   	}
@@ -196,10 +196,9 @@ class ServiceModule extends abstractModule{
   	  Utils::processDocument($viewFile, $lodspk, $results);    	  
   	}catch (Exception $ex){
   	  echo $ex->getMessage();
-  	  Utils::log($ex->getMessage(), E_ERROR);
+  	  Logging::log($ex->getMessage(), E_ERROR);
   	  HTTPStatus::send500($uri);
   	}
-  	exit(0);	
   }
   
   

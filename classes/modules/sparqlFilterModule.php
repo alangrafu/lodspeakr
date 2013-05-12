@@ -185,7 +185,7 @@ public function execute($pair){
   	  	  $lodspk['transform_select_query'] = true;
   	  	  $objResult['viewFile'] = null;
   	  	}
-  	  	Utils::log("LODSPeaKr can't find the proper query. Using HTML query instead.", E_USER_NOTICE);
+  	  	Logging::log("LODSPeaKr can't find the proper query. Using HTML query instead.", E_USER_NOTICE);
   	  	break;
   	  }
   	}

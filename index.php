@@ -19,8 +19,23 @@ include_once('common.inc.php');
 
 $conf['logfile'] = null;
 if($conf['debug']){
-  $conf['logfile'] = fopen("cache/log_".time().rand().".log", "w");
-  //error_reporting(E_ALL);
+  include_once('classes/Logging.php');
+  if(isset($_GET['q']) && $_GET['q'] == 'logs'){
+    Logging::init();
+    exit(0);
+  }else{
+    $oldtokens = array( ".", "/");
+    $newtokens = array("_", "_");
+    $filename = str_replace($oldtokens, $newtokens, $_GET['q']);
+    $conf['logfile'] = fopen("cache/".$filename."_".time().rand().".log", "w");
+    if($conf['logfile'] === FALSE){
+      die("Can't create log file. Check permissions in <tt>cache/</tt> directory.");
+    }
+    $initialmsg = array('timestamp' => time(), 'message' => "Log for ".$_GET['q']);
+ 	  fwrite($conf['logfile'], "{ \"logs\": [".json_encode($initialmsg));
+
+    //error_reporting(E_ALL);
+  }
 }else{
   error_reporting(E_ERROR);
 }
@@ -93,6 +108,7 @@ foreach($conf['modules']['available'] as $i){
   if($matching != FALSE){
   	$module->execute($matching);
   	if($conf['logfile'] != null){
+  	  fwrite($conf['logfile'], "]}");
   	  fclose($conf['logfile']);
   	}
   	exit(0);

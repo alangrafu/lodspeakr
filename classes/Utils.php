@@ -270,7 +270,7 @@ class Utils{
   	$lodspk['model'] = $modelDir;
   	$originalDir = getcwd();
   	$subDirs= array();
-  	Utils::log("Entering $strippedModelDir from ".getcwd(), E_USER_NOTICE);
+  	Logging::log("Entering $strippedModelDir from ".getcwd(), E_USER_NOTICE);
   	chdir($modelDir);
   	$handle = opendir('.');
   	
@@ -278,16 +278,16 @@ class Utils{
   	  if($modelFile != "." && $modelFile != ".." && strpos($modelFile, ".") !== 0){
   	  	if(is_dir($modelFile)){
   	  	  if(strpos('endpoint.', $modelFile) == 0){
-  	  	  	Utils::log("Save $modelFile for later, after all the queries in the current directory has been resolved", E_USER_NOTICE);
+  	  	  	Logging::log("Save $modelFile for later, after all the queries in the current directory has been resolved", E_USER_NOTICE);
   	  	  	$subDirs[]=$modelFile;
   	  	  }
   	  	}else{
   	  	  if(preg_match('/\.query$/', $modelFile)){
   	  	    $e = null;
   	  	    if(!isset($endpoints[$strippedModelDir])){
-  	  	      Utils::log("Creating endpoint for $strippedModelDir", E_USER_NOTICE);
+  	  	      Logging::log("Creating endpoint for $strippedModelDir", E_USER_NOTICE);
   	  	      if(!isset($conf['endpoint'][$strippedModelDir])){
-  	  	        Utils::log("Couldn't find $strippedModelDir as a list of available endpoints. Will continue using local", E_USER_WARNING);
+  	  	        Logging::log("Couldn't find $strippedModelDir as a list of available endpoints. Will continue using local", E_USER_WARNING);
   	  	        $e = $endpoints['local'];
   	  	      }else{  
   	  	        $endpoints[$strippedModelDir] = new Endpoint($conf['endpoint'][$strippedModelDir], $conf['endpoint']['config']);
@@ -432,15 +432,15 @@ class Utils{
 	  	}
 	  }
   	  if($conf['debug']){
-  	    Utils::log($modelFile." against ".$e->getSparqlUrl());
-  	  	Utils::log($query);
-    	  Utils::log("Running query from ".$modelFile." on endpoint ".$e->getSparqlURL(), E_USER_NOTICE);
+  	    Logging::log($modelFile." against ".$e->getSparqlUrl());
+  	  	Logging::log($query);
+    	  Logging::log("Running query from ".$modelFile." on endpoint ".$e->getSparqlURL(), E_USER_NOTICE);
   	  }
   	  $initTime = microtime(true);
   	  $aux = $e->query($query, Utils::getResultsType($query));
   	  $endTime = microtime(true);
   	  if($conf['debug']){
-  	    Utils::log("Execution time: ".($endTime - $initTime)." seconds");
+  	    Logging::log("Execution time: ".($endTime - $initTime)." seconds");
   	  }
   	  $timeObj = new stdClass();
   	  $timeObj->query = new stdClass();
@@ -472,7 +472,7 @@ class Utils{
   	}else{
   	  if(strpos('endpoint.', $modelFile) == 0){
   	  	
-  	  	Utils::log("$modelFile is a directory, will process it later", E_USER_NOTICE);
+  	  	Logging::log("$modelFile is a directory, will process it later", E_USER_NOTICE);
   	  	if($modelFile != $lodspk['type']){
   	  	  if(!isset($rPointer[$strippedModelFile])){
   	  	  	$rPointer[$strippedModelFile] = array();
@@ -564,7 +564,7 @@ class Utils{
   	//unset($lodspk);
   	$vars = compact('uri','lodspk', 'conf',  'models', 'first');
  	if($conf['debug']){
- 	  //Utils::log(var_export($vars, true)); 	
+ 	  //Logging::log(var_export($vars, true)); 	
  	}
 	if(is_string($data)){
 	  echo($data);
@@ -636,12 +636,6 @@ class Utils{
     return $result;
   }
   
-  public static function log($msg){
-    global $conf;
-    if($conf['logfile'] != null){
-      fwrite($conf['logfile'], time()."\t".$msg."\n");
-    }
-  }
 }
 
 ?>
