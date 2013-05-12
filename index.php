@@ -1,7 +1,7 @@
 <?php
 
 //Import
-if($_GET['q'] == 'import'){
+if(isset($_GET['q']) && $_GET['q'] == 'import'){
   include_once('classes/Importer.php');
   $imp = new Importer();
   $imp->run();
@@ -15,10 +15,12 @@ if(!file_exists('settings.inc.php')){
 }
 
 include_once('common.inc.php');
-
 //Debug output
+
+$conf['logfile'] = null;
 if($conf['debug']){
-  error_reporting(E_ALL);
+  $conf['logfile'] = fopen("cache/log_".time().rand().".log", "w");
+  //error_reporting(E_ALL);
 }else{
   error_reporting(E_ERROR);
 }
@@ -90,6 +92,9 @@ foreach($conf['modules']['available'] as $i){
   $matching = $module->match($uri);
   if($matching != FALSE){
   	$module->execute($matching);
+  	if($conf['logfile'] != null){
+  	  fclose($conf['logfile']);
+  	}
   	exit(0);
   }
 }

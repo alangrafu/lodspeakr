@@ -34,7 +34,7 @@ class Endpoint{
     if(is_int($conf['cache']['global']) && $conf['cache']['global'] > 0 && $modified + $conf['cache']['global'] > $now){
      if($conf['debug']){
        $msg = "Taking data from cache ($cacheFile). Renewal in ".($modified + $conf['cache']['global'] - $now)." seconds\n";
-       trigger_error($msg);
+       Utils::log($msg);
        echo $msg;
      }
        $aux = (file_get_contents($cacheFile));
@@ -53,7 +53,7 @@ class Endpoint{
       $aux = curl_exec($c); // execute the curl command 
       if($conf['debug']){
         if($aux == false){
-          trigger_error("Error executing SPARQL query (".$this->sparqlUrl."): ".curl_error($c), E_USER_ERROR);
+          Utils::log("Error executing SPARQL query (".$this->sparqlUrl."): ".curl_error($c), E_USER_ERROR);
           echo("Error executing SPARQL query (".$this->sparqlUrl."): ".curl_error($c));
         }
       }
@@ -64,7 +64,7 @@ class Endpoint{
         file_put_contents($cacheFile,($aux), LOCK_EX);
         if($conf['debug']){
           $msg = "Notice: Writing results in ".$cacheFile."\n";
-          trigger_error($msg, E_USER_NOTICE);
+          Utils::log($msg, E_USER_NOTICE);
           echo($msg);
         }
       }
@@ -73,7 +73,7 @@ class Endpoint{
       $r = json_decode($aux, true);
       if($conf['debug']){
         if($r == false){
-          trigger_error("Warning: Results from a SELECT sparql query couldn't get parsed", E_USER_WARNING);
+          Utils::log("Warning: Results from a SELECT sparql query couldn't get parsed", E_USER_WARNING);
           echo("Warning: Results from a SELECT sparql query couldn't get parsed");
         }
       }
