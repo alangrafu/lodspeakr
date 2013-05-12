@@ -196,7 +196,9 @@ class ServiceModule extends abstractModule{
   	  Utils::processDocument($viewFile, $lodspk, $results);    	  
   	}catch (Exception $ex){
   	  echo $ex->getMessage();
-  	  Logging::log($ex->getMessage(), E_ERROR);
+  	  if($conf['debug']){
+  	    Logging::log($ex->getMessage(), E_ERROR);
+  	  }
   	  HTTPStatus::send500($uri);
   	}
   }

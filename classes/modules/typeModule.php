@@ -155,7 +155,9 @@ class TypeModule extends abstractModule{
   	  	  $lodspk['transform_select_query'] = true;
   	  	  $objResult['viewFile'] = null;
   	  	}
-  	  	Logging::log("LODSPeaKr can't find the proper query. Using HTML query instead.", E_USER_NOTICE);
+  	  	if($conf['debug']){
+  	  	  Logging::log("LODSPeaKr can't find the proper query. Using HTML query instead.", E_USER_NOTICE);
+  	  	}
   	  	break;
   	  }else{
   	    $found = false;

@@ -120,8 +120,7 @@ class UriModule extends abstractModule{
   	}
   	//chdir($conf['home']);
   	if($conf['debug']){
-  	  Logging::log("Using template ".$viewFile, E_USER_NOTICE);
-  	  echo("TEMPLATE: ".$viewFile."\n\n");
+  	  Logging::log("Using template ".$viewFile);
   	}
   	Utils::processDocument($viewFile, $lodspk, $resultsObj);
   	
