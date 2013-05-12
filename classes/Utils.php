@@ -270,7 +270,9 @@ class Utils{
   	$lodspk['model'] = $modelDir;
   	$originalDir = getcwd();
   	$subDirs= array();
-  	Logging::log("Entering $strippedModelDir from ".getcwd(), E_USER_NOTICE);
+  	if($conf['debug']){
+    	Logging::log("Entering $strippedModelDir from ".getcwd(), E_USER_NOTICE);
+  	}
   	chdir($modelDir);
   	$handle = opendir('.');
   	
@@ -285,9 +287,13 @@ class Utils{
   	  	  if(preg_match('/\.query$/', $modelFile)){
   	  	    $e = null;
   	  	    if(!isset($endpoints[$strippedModelDir])){
-  	  	      Logging::log("Creating endpoint for $strippedModelDir", E_USER_NOTICE);
+  	  	      if($conf['debug']){
+  	  	        Logging::log("Creating endpoint for $strippedModelDir", E_USER_NOTICE);
+  	  	      }
   	  	      if(!isset($conf['endpoint'][$strippedModelDir])){
-  	  	        Logging::log("Couldn't find $strippedModelDir as a list of available endpoints. Will continue using local", E_USER_WARNING);
+  	  	        if($conf['debug']){
+  	  	          Logging::log("Couldn't find $strippedModelDir as a list of available endpoints. Will continue using 'local'", E_USER_WARNING);
+  	  	        }
   	  	        $e = $endpoints['local'];
   	  	      }else{  
   	  	        $endpoints[$strippedModelDir] = new Endpoint($conf['endpoint'][$strippedModelDir], $conf['endpoint']['config']);
