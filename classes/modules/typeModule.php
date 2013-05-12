@@ -23,6 +23,9 @@ class TypeModule extends abstractModule{
   	  	if($page == NULL){
   	  	  HTTPStatus::send500("Can't write sqlite database.");
   	  	}
+  	  	if($conf['debug']){
+  	  	  Logging::log("URI found, redirecting to ".$page);
+  	  	}
   	  	HTTPStatus::send303($page, $acceptContentType);
   	  	exit(0);
   	  }else{
