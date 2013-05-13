@@ -24,16 +24,7 @@ if($conf['debug']){
     Logging::init();
     exit(0);
   }else{
-    $oldtokens = array( ".", "/");
-    $newtokens = array("_", "_");
-    $filename = str_replace($oldtokens, $newtokens, $_GET['q']);
-    $conf['logfile'] = fopen("cache/".$filename."_".time().rand().".log", "w");
-    if($conf['logfile'] === FALSE){
-      die("Can't create log file. Check permissions in <tt>cache/</tt> directory.");
-    }
-    $initialmsg = array('timestamp' => time(), 'message' => "Log for ".$_GET['q']);
- 	  fwrite($conf['logfile'], "{ \"logs\": [".json_encode($initialmsg));
-
+    $conf['logfile'] = Logging::createLogFile($_GET['q']);
     //error_reporting(E_ALL);
   }
 }else{
