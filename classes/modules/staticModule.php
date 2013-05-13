@@ -73,10 +73,12 @@ class StaticModule extends abstractModule{
                           );
     
    //Add new/override existing mime types defined by user
-   foreach($conf['static']['mimetypes'] as $k => $v){
-     $contentTypes[$k] = $v;
+   if(isset($conf['static']['mimetypes'])){
+     foreach($conf['static']['mimetypes'] as $k => $v){
+       $contentTypes[$k] = $v;
+     }
    }
-   
+
    if(isset($contentTypes[$e])){
      return $contentTypes[$e];
    }
