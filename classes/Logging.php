@@ -75,7 +75,7 @@ class Logging{
     </div>
    </div>
    <div class='row'>
-    <div class='span4 well'>
+    <div class='span4 well' style='word-wrap:break-word;'>
      <h3>Logs</h3>
      <!--div>
       <select id='level'>
