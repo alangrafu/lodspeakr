@@ -71,7 +71,7 @@ final class Convert {
   }
   
   
-  static public function getPaths ($r, $path, $results) {
+  static public function getPaths ($r, $path) {
     global $lodspk;
     global $conf;
     $arr = array();
