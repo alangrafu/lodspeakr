@@ -110,7 +110,7 @@ class Logging{
                                  date.getHours()+':'+
                                  date.getMinutes()+':'+
                                  date.getSeconds();
-             pres += '<h4>On '+dateFormatted+'</h4><pre>'+item.message.replace('>', '&gt;').replace('<', '&lt;')+'</pre>';
+             pres += '<h4>On '+dateFormatted+'</h4><pre>'+item.message.replace(/>/g, '&gt;').replace(/</g, '&lt;')+'</pre>';
            });
            $('#log').html(pres);
          }
