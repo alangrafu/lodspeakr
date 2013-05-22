@@ -23,6 +23,9 @@ class TypeModule extends abstractModule{
   	  	if($page == NULL){
   	  	  HTTPStatus::send500("Can't write sqlite database.");
   	  	}
+  	  	if($conf['debug']){
+  	  	  Logging::log("URI found, redirecting to ".$page);
+  	  	}
   	  	HTTPStatus::send303($page, $acceptContentType);
   	  	exit(0);
   	  }else{
@@ -155,7 +158,9 @@ class TypeModule extends abstractModule{
   	  	  $lodspk['transform_select_query'] = true;
   	  	  $objResult['viewFile'] = null;
   	  	}
-  	  	trigger_error("LODSPeaKr can't find the proper query. Using HTML query instead.", E_USER_NOTICE);
+  	  	if($conf['debug']){
+  	  	  Logging::log("LODSPeaKr can't find the proper query. Using HTML query instead.", E_USER_NOTICE);
+  	  	}
   	  	break;
   	  }else{
   	    $found = false;

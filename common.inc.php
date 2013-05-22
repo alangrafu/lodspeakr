@@ -1,6 +1,6 @@
 <?php
 
-$conf['version'] = '20130215';
+$conf['version'] = '20130513';
 $conf['output']['select'] = 'json';
 $conf['output']['ask'] = 'json';
 $conf['output']['describe'] = 'rdf';

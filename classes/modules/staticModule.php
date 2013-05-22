@@ -30,8 +30,7 @@ class StaticModule extends abstractModule{
   	header("Content-type: ".$ct);
   	$uri = $localUri;
   	if($conf['debug']){
-  	  echo "\n-------------------------------------------------\nIn ".$conf['static']['directory']."\n";
-  	  echo "Static file $file\n-------------------------------------------------\n\n";
+  	  Logging::log("In ".$conf['static']['directory']." static file $file");
 	  }
 	  $htmlExtension = 'html';
 	  if($conf['static']['haanga'] && substr_compare($file, $htmlExtension, -strlen($htmlExtension), strlen($htmlExtension)) === 0){
@@ -74,10 +73,12 @@ class StaticModule extends abstractModule{
                           );
     
    //Add new/override existing mime types defined by user
-   foreach($conf['static']['mimetypes'] as $k => $v){
-     $contentTypes[$k] = $v;
+   if(isset($conf['static']['mimetypes'])){
+     foreach($conf['static']['mimetypes'] as $k => $v){
+       $contentTypes[$k] = $v;
+     }
    }
-   
+
    if(isset($contentTypes[$e])){
      return $contentTypes[$e];
    }

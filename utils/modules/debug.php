@@ -11,6 +11,10 @@ if(file_put_contents($s, $newC) === FALSE){
   echo "An error ocurred";
   exit(1);
 }else{
+  include_once($s);
   echo "Debug mode turned ".$option."\n";
+  if($option == 'true'){
+    echo "Visit ".$conf['basedir']."logs to see logs of the different requests\n";
+  }
 }
 ?>
