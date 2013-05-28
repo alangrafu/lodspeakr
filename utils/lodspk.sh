@@ -8,7 +8,7 @@ USAGE=$USAGE" Delete component:\t\t\t\t\t$0 delete uri|type|service foo [html|js
 USAGE=$USAGE" List components:\t\t\t\t\t$0 list components\n"
 USAGE=$USAGE"\n===DEBUG==\n"
 USAGE=$USAGE" Turn debug:\t\t\t\t\t\t$0 debug on|off\n"
-USAGE=$USAGE" Switch to standard view/models temporaly:\t\t$0 disable on|off\n"
+USAGE=$USAGE" Switch to standard view/models temporarily:\t\t$0 disable on|off\n"
 USAGE=$USAGE" Clear cache:\t\t\t\t\t\t$0 cache clear\n"
 USAGE=$USAGE"\n===BACKUP==\n"
 USAGE=$USAGE" Backup current installation:\t\t\t\t$0 backup\n"
