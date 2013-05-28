@@ -28,7 +28,7 @@ class Logging{
       $list[$y][] = array("name" => implode("_", $x), "url" => $v);
       //$alogs .= "<p><a href='#lodspeakr/cache/$v'>$label</a></p>";
     }
-    ksort($list);
+    krsort($list);
     foreach($list as $k => $v){
       $alogs .= "<li>".date("H:i:s", $k)."<ul>\n";
       foreach($v as $w){
