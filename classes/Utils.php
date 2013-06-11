@@ -705,10 +705,11 @@ class Utils{
   	  'template_dir' => $viewPath,
   	  'cache_dir' => $conf['home'].'cache/',
   	  ));
-  	$rdf = new stdClass();
-  	if(isset($data['rdf'])){
-  	  $rdf = $data['rdf'];
+	  $rdf = null;
+  	if(array_key_exists('rdf', $data)){
+     	$rdf = $data['rdf'];
   	  unset($data['rdf']);
+  	}else{
   	}
   	$models = $data;
   	Convert::getPaths($models, "");
