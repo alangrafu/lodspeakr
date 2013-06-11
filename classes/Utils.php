@@ -219,15 +219,18 @@ class Utils{
   	case 'rdf':
   	  $ser = ARC2::getRDFXMLSerializer();
   	  break;
+  	case 'html':
+  	  return array("content" => $triples, "serialized" => false);
+  	  break;
   	default:
   	  $ser = null;
   	}
   	if($ser != null){
-  	$doc = $ser->getSerializedTriples($triples);
+  	  $doc = $ser->getSerializedTriples($triples);
   	}else{
-  	$doc = var_export($data, true);
+  	  $doc = var_export($data, true);
   	}
-  	return $doc;
+  	return array("content" => $doc, "serialized" => true);
   }
   
   public static function processDocument($viewFile, $lodspk, $data){
@@ -238,7 +241,141 @@ class Utils{
   	
   	header('Content-Type: '.$contentType);
   	if(isset($lodspk['resultRdf']) && $lodspk['resultRdf'] == true){
-  	  echo Utils::serializeRdf($data, $extension);
+  	  $rdfData = Utils::serializeRdf($data, $extension);
+  	  if($rdfData["serialized"]){
+  	    echo $rdfData["content"];
+  	  }else{
+  	    $data['rdf'] = new stdClass();
+
+  	    $subjectCounter = 0;
+  	    $sIndex = array();
+  	    $sCounter = array();
+  	    $spCounter = array();
+  	    foreach($rdfData["content"] as $t){
+  	      //SUBJECT
+  	      if($t['s_type'] == 'uri'){
+  	        $subject = $t['s'];
+  	        $subjectCurie = Utils::uri2curie($subject);
+  	        $subjectMethod = str_replace(":", "__", $subjectCurie);
+  	      }else{
+  	        if(isset($sIndex[$t['s']])){
+  	          $subject = $sIndex[$t['s']];
+  	          $subjectCurie = $sIndex[$t['s']];
+  	          $subjectMethod = $sIndex[$t['s']];
+  	        }else{
+  	          $subject = "_bnode".$subjectCounter;
+  	          $subjectCurie = "_bnode".$subjectCounter;
+  	          $subjectMethod = "_bnode".$subjectCounter;
+  	          $sIndex[$t['s']] = "_bnode".$subjectCounter++;
+  	        }
+  	      }
+  	      if(!isset($data['rdf']->subjects)){
+  	        $data['rdf']->subjects = new stdClass();
+  	      }
+  	      
+  	      if(!isset($data['rdf']->$subjectMethod)){
+  	        $data['rdf']->$subjectMethod = new stdClass();
+  	        $data['rdf']->$subjectMethod->predicates = new stdClass();
+  	      }
+  	      $data['rdf']->$subjectMethod->mirroredUri = $subject;
+  	      $data['rdf']->$subjectMethod->mirroredCurie = $subjectCurie;
+  	      if(isset($conf['mirror_external_uris']) && $conf['mirror_external_uris'] != false){  	  	  	
+  	        if(is_bool($conf['mirror_external_uris'])){
+  	          $data['rdf']->$subjectMethod->value = preg_replace("|^".$conf['ns']['local']."|", $conf['basedir'], $subject);
+  	          $data['rdf']->$subjectMethod->curie = Utils::uri2curie(preg_replace("|^".$conf['ns']['local']."|", $conf['basedir'], $subject));
+  	        }elseif(is_string($conf['mirror_external_uris'])){
+  	          $data['rdf']->$subjectMethod->value = preg_replace("|^".$conf['mirror_external_uris']."|", $conf['basedir'], $subject);
+  	          $data['rdf']->$subjectMethod->curie = Utils::uri2curie(preg_replace("|^".$conf['mirror_external_uris']."|", $conf['basedir'], $subject));
+  	        }else{
+  	          HTTPStatus::send500("Error in mirroring configuration");
+  	          exit(1);
+  	        }
+  	      }
+  	        	      
+  	      if(!isset($data['rdf']->subjects->$subjectMethod)){
+  	        $data['rdf']->subjects->$subjectMethod = $data['rdf']->$subjectMethod;
+  	      }
+  	      
+  	      
+  	      
+  	      
+  	      //PREDICATE
+	        $predicate = $t['p'];	        
+	        $predicateCurie = Utils::uri2curie($predicate);
+ 	        $predicateMethod = str_replace(":", "__", $predicateCurie);
+  	      if(!isset($data['rdf']->$subjectMethod->$predicateMethod)){
+  	        $data['rdf']->$subjectMethod->$predicateMethod = new stdClass();
+  	      }
+  	      
+  	      
+  	      $data['rdf']->$subjectMethod->$predicateMethod->mirroredUri = $predicate;
+  	      $data['rdf']->$subjectMethod->$predicateMethod->mirroredCurie = $predicateCurie;
+  	      if(isset($conf['mirror_external_uris']) && $conf['mirror_external_uris'] != false){  	  	  	
+  	        if(is_bool($conf['mirror_external_uris'])){
+  	          $data['rdf']->$subjectMethod->$predicateMethod->value = preg_replace("|^".$conf['ns']['local']."|", $conf['basedir'], $predicate);
+  	          $data['rdf']->$subjectMethod->$predicateMethod->curie = Utils::uri2curie(preg_replace("|^".$conf['ns']['local']."|", $conf['basedir'], $predicate));
+  	        }elseif(is_string($conf['mirror_external_uris'])){
+  	          $data['rdf']->$subjectMethod->$predicateMethod->value = preg_replace("|^".$conf['mirror_external_uris']."|", $conf['basedir'], $predicate);
+  	          $data['rdf']->$subjectMethod->$predicateMethod->curie = Utils::uri2curie(preg_replace("|^".$conf['mirror_external_uris']."|", $conf['basedir'], $predicate));
+  	        }else{
+  	          HTTPStatus::send500("Error in mirroring configuration");
+  	          exit(1);
+  	        }
+  	      }
+  	        	      
+  	      if(!isset($data['rdf']->$subjectMethod->predicates)){
+  	        $data['rdf']->$subjectMethod->predicates = new stdClass();
+  	      }
+  	      if(!isset($sCounter[$subjectMethod])){
+  	        $sCounter[$subjectMethod] = 0;
+  	      }
+  	      $sCount = $sCounter[$subjectMethod]++;
+  	      $data['rdf']->$subjectMethod->predicates->$sCount = $data['rdf']->$subjectMethod->$predicateMethod;  	     
+  	      
+  	      
+  	      //OBJECT
+  	      if($t['o_type'] == 'uri'){
+  	        $object = $t['o'];
+  	        $objectCurie = Utils::uri2curie($object);
+  	      }elseif($t['o_type'] == 'literal'){
+  	        $object = $t['o'];
+  	        $objectCurie = $object;
+  	      }else{
+  	        if(isset($sIndex[$t['o']])){
+  	          $object = $sIndex[$t['o']];
+  	          $objectCurie = $sIndex[$t['o']];
+  	        }else{
+  	          $object = "_bnode".$objectCounter;
+  	          $objectCurie = "_bnode".$objectCounter;
+  	          $sIndex[$t['s']] = "_bnode".$objectCounter++;
+  	        }
+  	      }  	      
+  	      
+  	      
+  	      $obj = new stdClass();
+  	      $obj->mirroredUri = $object;
+  	      $obj->mirroredCurie = $objectCurie;
+  	      if(isset($conf['mirror_external_uris']) && $conf['mirror_external_uris'] != false){  	  	  	
+  	        if(is_bool($conf['mirror_external_uris'])){
+  	          $obj->value = preg_replace("|^".$conf['ns']['local']."|", $conf['basedir'], $object);
+  	          $obj->curie = Utils::uri2curie(preg_replace("|^".$conf['ns']['local']."|", $conf['basedir'], $object));
+  	        }elseif(is_string($conf['mirror_external_uris'])){
+  	          $obj->value = preg_replace("|^".$conf['mirror_external_uris']."|", $conf['basedir'], $object);
+  	          $obj->curie = Utils::uri2curie(preg_replace("|^".$conf['mirror_external_uris']."|", $conf['basedir'], $object));
+  	        }else{
+  	          HTTPStatus::send500("Error in mirroring configuration");
+  	          exit(1);
+  	        }
+  	      }
+  	        	      
+  	      if(!isset($spCounter[$subjectMethod." ".$predicateMethod])){
+  	        $spCounter[$subjectMethod." ".$predicateMethod] = 0;
+  	      }
+  	      $sCount = $spCounter[$subjectMethod." ".$predicateMethod]++;
+  	      $data['rdf']->$subjectMethod->$predicateMethod->objects->$sCount = $obj;  	       	      
+  	    }
+    	  Utils::showView($lodspk, $data, $viewFile);  	
+  	  }
   	}else{
   	  Utils::showView($lodspk, $data, $viewFile);  	
   	}
@@ -429,7 +566,9 @@ class Utils{
 	  	  	  //For now, assuming variables are in the GRAPH ?g
 	  	  	  $query = "CONSTRUCT {?g ?x ?y} WHERE{GRAPH ?g{?g ?x ?y}}";
 	  	  	}else{
-	  	  	  HTTPStatus::send500();
+	  	  	  if(!preg_match('/construct/i', $query)){	  	  	  
+	  	  	    HTTPStatus::send500();
+	  	  	  }
 	  	  	}
 	  	  }else{
 	  	  	$query = preg_replace('/select\s*[^{]*\s*(where)?\s*{/i', 'CONSTRUCT {'.$construct.'} WHERE{', $query);
@@ -566,12 +705,18 @@ class Utils{
   	  'template_dir' => $viewPath,
   	  'cache_dir' => $conf['home'].'cache/',
   	  ));
+	  $rdf = null;
+  	if(array_key_exists('rdf', $data)){
+     	$rdf = $data['rdf'];
+  	  unset($data['rdf']);
+  	}else{
+  	}
   	$models = $data;
   	Convert::getPaths($models, "");
   	$first = $lodspk['firstResults'];
   	unset($lodspk['firstResults']);
   	//unset($lodspk);
-  	$vars = compact('uri','lodspk', 'conf',  'models', 'first');
+  	$vars = compact('uri','lodspk', 'conf',  'models', 'rdf', 'first');
  	if($conf['debug']){
  	  //Logging::log(var_export($vars, true)); 	
  	}
