@@ -761,9 +761,9 @@ class Utils{
     $uri = $localUri;
     if(isset($conf['mirror_external_uris']) && $conf['mirror_external_uris'] != false){      
       if(is_bool($conf['mirror_external_uris'])){
-        $uri = preg_replace("|^".$conf['ns']['local']."|", $conf['ns']['base'], $localUri);
+        $uri = preg_replace("|^".$conf['basedir']."|", $conf['ns']['base'], $localUri);
       }elseif(is_string($conf['mirror_external_uris'])){
-        $uri = preg_replace("|^".$conf['ns']['local']."|", $conf['mirror_external_uris'], $localUri);
+        $uri = preg_replace("|^".$conf['basedir']."|", $conf['mirror_external_uris'], $localUri);
       }elseif(is_array($conf['mirror_external_uris'])){
         $defaultKey = ""; //Default namespace is empty string ""
         $namespaceFragment = array_shift(split("/", str_replace($conf['basedir'], "", $localUri)));
