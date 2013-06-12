@@ -3,7 +3,7 @@ LODSPeaKr
 
 author: Alvaro Graves (alvaro@graves.cl)
 
-version: 20130611
+version: 20130612
 
 
 [LODSPeaKr](http://lodspeakr.org) is a framework for creating Linked Data applications in a simple and easy way. You can see [several applications](http://alangrafu.github.com/lodspeakr/applications.html) created using LODSPeaKr.

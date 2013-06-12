@@ -279,19 +279,10 @@ class Utils{
   	      }
   	      $data['rdf']->$subjectMethod->mirroredUri = $subject;
   	      $data['rdf']->$subjectMethod->mirroredCurie = $subjectCurie;
-  	      if(isset($conf['mirror_external_uris']) && $conf['mirror_external_uris'] != false){  	  	  	
-  	        if(is_bool($conf['mirror_external_uris'])){
-  	          $data['rdf']->$subjectMethod->value = preg_replace("|^".$conf['ns']['local']."|", $conf['basedir'], $subject);
-  	          $data['rdf']->$subjectMethod->curie = Utils::uri2curie(preg_replace("|^".$conf['ns']['local']."|", $conf['basedir'], $subject));
-  	        }elseif(is_string($conf['mirror_external_uris'])){
-  	          $data['rdf']->$subjectMethod->value = preg_replace("|^".$conf['mirror_external_uris']."|", $conf['basedir'], $subject);
-  	          $data['rdf']->$subjectMethod->curie = Utils::uri2curie(preg_replace("|^".$conf['mirror_external_uris']."|", $conf['basedir'], $subject));
-  	        }else{
-  	          HTTPStatus::send500("Error in mirroring configuration");
-  	          exit(1);
-  	        }
-  	      }
-  	        	      
+  	      
+  	      $data['rdf']->$subjectMethod->value = Utils::getUnMirroredUri($subject);
+  	      $data['rdf']->$subjectMethod->curie = Utils::uri2curie( $data['rdf']->$subjectMethod->value);
+  	        	        	      
   	      if(!isset($data['rdf']->subjects->$subjectMethod)){
   	        $data['rdf']->subjects->$subjectMethod = $data['rdf']->$subjectMethod;
   	      }
@@ -310,18 +301,9 @@ class Utils{
   	      
   	      $data['rdf']->$subjectMethod->$predicateMethod->mirroredUri = $predicate;
   	      $data['rdf']->$subjectMethod->$predicateMethod->mirroredCurie = $predicateCurie;
-  	      if(isset($conf['mirror_external_uris']) && $conf['mirror_external_uris'] != false){  	  	  	
-  	        if(is_bool($conf['mirror_external_uris'])){
-  	          $data['rdf']->$subjectMethod->$predicateMethod->value = preg_replace("|^".$conf['ns']['local']."|", $conf['basedir'], $predicate);
-  	          $data['rdf']->$subjectMethod->$predicateMethod->curie = Utils::uri2curie(preg_replace("|^".$conf['ns']['local']."|", $conf['basedir'], $predicate));
-  	        }elseif(is_string($conf['mirror_external_uris'])){
-  	          $data['rdf']->$subjectMethod->$predicateMethod->value = preg_replace("|^".$conf['mirror_external_uris']."|", $conf['basedir'], $predicate);
-  	          $data['rdf']->$subjectMethod->$predicateMethod->curie = Utils::uri2curie(preg_replace("|^".$conf['mirror_external_uris']."|", $conf['basedir'], $predicate));
-  	        }else{
-  	          HTTPStatus::send500("Error in mirroring configuration");
-  	          exit(1);
-  	        }
-  	      }
+  	      $data['rdf']->$subjectMethod->$predicateMethod->value = Utils::getUnMirroredUri($predicate);
+  	      $data['rdf']->$subjectMethod->$predicateMethod->curie = Utils::uri2curie( $data['rdf']->$subjectMethod->$predicateMethod->value);
+
   	        	      
   	      if(!isset($data['rdf']->$subjectMethod->predicates)){
   	        $data['rdf']->$subjectMethod->predicates = new stdClass();
@@ -355,18 +337,9 @@ class Utils{
   	      $obj = new stdClass();
   	      $obj->mirroredUri = $object;
   	      $obj->mirroredCurie = $objectCurie;
-  	      if(isset($conf['mirror_external_uris']) && $conf['mirror_external_uris'] != false){  	  	  	
-  	        if(is_bool($conf['mirror_external_uris'])){
-  	          $obj->value = preg_replace("|^".$conf['ns']['local']."|", $conf['basedir'], $object);
-  	          $obj->curie = Utils::uri2curie(preg_replace("|^".$conf['ns']['local']."|", $conf['basedir'], $object));
-  	        }elseif(is_string($conf['mirror_external_uris'])){
-  	          $obj->value = preg_replace("|^".$conf['mirror_external_uris']."|", $conf['basedir'], $object);
-  	          $obj->curie = Utils::uri2curie(preg_replace("|^".$conf['mirror_external_uris']."|", $conf['basedir'], $object));
-  	        }else{
-  	          HTTPStatus::send500("Error in mirroring configuration");
-  	          exit(1);
-  	        }
-  	      }
+  	      $obj->value = Utils::getUnMirroredUri($object);
+  	      $obj->curie = Utils::uri2curie($obj->value);
+
   	        	      
   	      if(!isset($spCounter[$subjectMethod." ".$predicateMethod])){
   	        $spCounter[$subjectMethod." ".$predicateMethod] = 0;
@@ -649,16 +622,9 @@ class Utils{
   	  	  $value['mirroredUri'] = $value['value'];
   	  	  $value['mirroredCurie'] = Utils::uri2curie($value['value']);
   	  	  if(isset($conf['mirror_external_uris']) && $conf['mirror_external_uris'] != false){  	  	  	
-  	  	  	if(is_bool($conf['mirror_external_uris'])){
-  	  	  	  $value['value'] = preg_replace("|^".$conf['ns']['local']."|", $conf['basedir'], $value['value']);
-  	  	  	}elseif(is_string($conf['mirror_external_uris'])){
-  	  	  	  $value['value'] = preg_replace("|^".$conf['mirror_external_uris']."|", $conf['basedir'], $value['value']);
-  	  	  	}else{
-  	  	  	  HTTPStatus::send500("Error in mirroring configuration");
-  	  	  	  exit(1);
-  	  	  	}
+  	  	  	$value['value'] = Utils::getUnMirroredUri($value['value']);
   	  	  }
-  	  	  $value['curie'] = $value['mirroredCurie'];
+  	  	  $value['curie'] = Utils::uri2curie($value['value']);
   	  	  $array[$key] = $value;
   	  	}  	  	  	  	
   	  } 
@@ -790,6 +756,54 @@ class Utils{
     return $result;
   }
   
+  public static function getMirroredUri($localUri){
+    global $conf;
+    $uri = $localUri;
+    if(isset($conf['mirror_external_uris']) && $conf['mirror_external_uris'] != false){      
+      if(is_bool($conf['mirror_external_uris'])){
+        $uri = preg_replace("|^".$conf['ns']['local']."|", $conf['ns']['base'], $localUri);
+      }elseif(is_string($conf['mirror_external_uris'])){
+        $uri = preg_replace("|^".$conf['ns']['local']."|", $conf['mirror_external_uris'], $localUri);
+      }elseif(is_array($conf['mirror_external_uris'])){
+        $defaultKey = ""; //Default namespace is empty string ""
+        $namespaceFragment = array_shift(split("/", str_replace($conf['basedir'], "", $localUri)));
+        $uri = preg_replace("|^".$conf['basedir']."|",$conf['mirror_external_uris'][$defaultKey], $localUri);
+        foreach($conf['mirror_external_uris'] as $k => $v){
+          if($namespaceFragment == $k){
+            $uri = preg_replace("|^".$conf['basedir'].$k."/"."|",$conf['mirror_external_uris'][$k], $localUri);
+            break;    
+          }
+        }
+      }else{
+        HTTPStatus::send500("Error in mirroring configuration");
+        exit(1);
+      }      
+    }
+    return $uri;
+  }
+  
+  public static function getUnMirroredUri($uri){
+    global $conf;
+    $localUri = $uri;
+    if(is_bool($conf['mirror_external_uris'])){
+      $localUri = preg_replace("|^".$conf['ns']['local']."|", $conf['basedir'], $uri);
+    }elseif(is_string($conf['mirror_external_uris'])){
+      $localUri = preg_replace("|^".$conf['mirror_external_uris']."|", $conf['basedir'], $uri);
+    }elseif(is_array($conf['mirror_external_uris'])){
+      //Instead of doing expensive regex, jsut use str_replace
+      foreach($conf['mirror_external_uris'] as $k => $v){
+        if(strlen(str_replace($v, "", $uri)) != strlen($uri)){
+          $fragment = ($k == "")?$k: $k."/";
+          $localUri = preg_replace("|^".$v."|",$conf['basedir'].$fragment, $uri);
+          break;    
+        }
+      }
+    }else{
+      HTTPStatus::send500("Error in mirroring configuration");
+      exit(1);
+    }
+    return $localUri;
+  }
 }
 
 ?>
