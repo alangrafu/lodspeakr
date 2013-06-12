@@ -126,8 +126,10 @@ class TypeModule extends abstractModule{
   	  foreach($t as $v){
   	  	$curie = Utils::uri2curie($v);
   	  	$typesAndValues[$curie] = 0;
+  	  	$typesAndValues[str_replace(":", "__", $curie)] = 0;
   	  	if(isset($conf['type']['priority'][$curie]) && $conf['type']['priority'][$curie] >= 0){
   	  	  $typesAndValues[$curie] = $conf['type']['priority'][$curie];
+  	  	  $typesAndValues[str_replace(":", "__", $curie)] = $conf['type']['priority'][$curie];
   	  	}
   	  }
   	}
