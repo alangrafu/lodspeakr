@@ -122,6 +122,7 @@ class TypeModule extends abstractModule{
   	$curieType="";
  	//Get the firstResults type available
   	$typesAndValues = array('rdfs:Resource' => -1);
+  	$typesAndValues = array('rdfs__Resource' => -1);
   	if(!isset($conf['disableComponents']) || $conf['disableComponents'] != true){
   	  foreach($t as $v){
   	  	$curie = Utils::uri2curie($v);
