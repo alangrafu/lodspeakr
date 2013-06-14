@@ -3,6 +3,7 @@
 class Haanga_Extension_Filter_D3WordCloud{
   public $is_safe = TRUE;
   static function main($obj, $varname){
+    global $conf;
   	$names = explode(",", $varname);
   	$varList = array();
   	$randId = uniqid("_ID_");
@@ -68,7 +69,7 @@ class Haanga_Extension_Filter_D3WordCloud{
 
   	$pre = '<div id="wordcloud'.$randId.'"></div>
 <script src="http://d3js.org/d3.v2.min.js?2.9.3"></script>
-<script src="https://raw.github.com/jasondavies/d3-cloud/master/d3.layout.cloud.js"></script>
+<script src="'.$conf['basedir'].'js/d3.layout.cloud.js"></script>
 <script>
 // Based on http://www.jasondavies.com/wordcloud 
 function D3WordCloud'.$randId.'(words, newcfg){
