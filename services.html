@@ -11,7 +11,9 @@
     <!--[if lt IE 9]>
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-    <style>
+<style type="text/css">
+  div.application { min-height:250px;margin-bottom:20px }
+  td.words{width:50%; min-width:50%;text-align: justify; vertical-align:top}
   .button_example{
     border:1px solid #df0909;
     -webkit-border-radius: 5px;
@@ -46,12 +48,11 @@
   <body>
     <div class="wrapper">
       <header>
-        <!-- h1>Lodspeakr</h1 -->
         <p><a href='http://lodspeakr.org'><img alt='LODSPeaKr' src='images/lodspeakr.png'/></a></p>
         <p>Linked Open Data Simple Publishing Kit</p>
         <ul>
           <li><a href="applications.html">See <strong>Demos</strong></a></li>
-          <li><a href="https://groups.google.com/forum/#!forum/lodspeakr">Join the <strong>Mailing List</strong></a></li>
+          <li><a href="https://groups.google.com/forum/#!forum/lodspeakr">Join the <strong>Mailing List</strong></a></li-->
           <li><a href="https://github.com/alangrafu/lodspeakr">Fork On <strong>GitHub</strong></a></li>
         </ul>
 
@@ -63,52 +64,27 @@
 ">
 <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
 <img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
+
 </form>
 <a href='services.html'><button class="button_example">Customized Solutions</button></a>
+
       </header>
       <section>
-        <h3>What is LODSPeaKr?</h3>
 
-<p>LODSPeaKr is a framework to create Linked Data applications and publish RDF data in a fast way and without much effort.</p>
-
-<h3>Why another system for publishing LOD?</h3>
-<ul>
-<li>Fast and simple to install.</li>
-<li>Flexible on what to show for each type of resource.</li>
-<li>Creation of services based on Linked Data.</li>
-<li>LODSPeaKr provides the possibility of creating your own workflow of execution of SPARQL queries in multiple SPARQL endpoints.</li>
-<li>Customizable interface for humans as well as for machines.</li>
-<li>Provides content in multiple serializations (RDFa, RDF/XML, Turtle, N-Triples, RDFJSON) by default.</li>
-</ul><h3>How do I install LODSPeaKr?</h3>
-
-<p>In order to use LODSPeaKr, you only need Apache + PHP5 + Git (optional but highly recommended). It also makes use of <a href="https://github.com/semsol/arc2">ARC2</a> and <a href="https://github.com/crodas/Haanga">Haanga</a> (included in LODSPeaKr). There are several ways to install LODSPeaKr. Probably the easiest is to open a terminal and run</p>
-
-<pre><code>bash &lt; &lt;(curl -sL <a href="http://lodspeakr.org/install">http://lodspeakr.org/install</a>)
-</code></pre>
-
-<p>and follow the instructions. For more information, please go to the installation page and check the requirements if you don't get your system working after completing the installation process.</p>
-
-<h3>What can I do with LODSPeaKr?</h3>
-
-<p>Check some  <a href="applications.html">Demos and applications</a> created using LODSPeaKr.</p>
-
-
-<h3>Ok, what's next?</h3>
-
-<p>You can check the <a href="https://github.com/alangrafu/lodspeakr/wiki/Installation">Requirements needed</a> to make LODSPeaKr work, as well as some information about <a href="https://github.com/alangrafu/lodspeakr/wiki/Installation">other ways to install it</a>. Once everything is working, you can take a look at the <a href="https://github.com/alangrafu/lodspeakr/wiki">wiki</a> in general or go directly to the most basic pages:</p>
-
-<ul>
-<li>How to <a href="https://github.com/alangrafu/lodspeakr/wiki/Creating-components-in-LODSPeaKr">create components</a>
-</li>
-<li>Understanding <a href="https://github.com/alangrafu/lodspeakr/wiki/Models">models</a> and <a href="https://github.com/alangrafu/lodspeakr/wiki/Views">views</a>
-</li>
-<li>How to <a href="https://github.com/alangrafu/lodspeakr/wiki/How-to-use-results">use results</a>
-</li>
-<li>How to <a href="https://github.com/alangrafu/lodspeakr/wiki/Filters-in-LODSPeaKr">use filters</a>
-</li>
-</ul>
-<h3>I have a question, where can I find help?</h3>
-<p>You may consider <a href="https://groups.google.com/forum/#!forum/lodspeakr">joining the mailing list</a>, where you can ask questions and share experience with LODSPeaKr.</p>
+<h2>Customized Solutions</h2>
+<div class="application">
+  <p>We offer customized LODSPeaKr-based solutions that will fit your requirements. These solutions include:
+    <ul>
+      <li>Installation of LODSPeaKr in client's server and connection to client's SPARQL endpoint.</li>
+      <li>Creation of LODSPeaKr components in git/svn/mercurial a repository as well as the deployment of such components in a client's server.</li>
+      <li>Customization of visualization filters.</li>
+      <li>Training in the use, configuration and optimization of LODSPeaKr to your employees.</li>
+    </ul>
+  </p>
+  <p>
+    If you are interested in buying a customized LODSPeaKr instance, send us an email to <a href='mailto:info@lodspeakr.org?subject=Customization+quote'>info@lodspeakr.org</a>.
+  </p>
+</div>      
       </section>
       <footer>
         <p>This project is maintained by <a href="https://github.com/alangrafu">alangrafu</a></p>
