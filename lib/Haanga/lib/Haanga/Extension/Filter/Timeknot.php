@@ -34,6 +34,9 @@ class Haanga_Extension_Filter_Timeknot{
   	    case 2:
   	      $variable['key'] = 'img';
   	      break;
+  	    case 3:
+  	      $variable['key'] = 'series';
+  	      break;
   	  }
   	  $fieldCounter++;
   	  array_push($varList, $variable);
