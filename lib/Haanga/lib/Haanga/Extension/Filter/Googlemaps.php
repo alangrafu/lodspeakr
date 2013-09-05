@@ -22,7 +22,9 @@ class Haanga_Extension_Filter_Googlemaps{
     }
   	$w = $options['width'];
   	$h = $options['height'];
-  	$z = intval($options['zoom']);
+        if(isset($options['zoom'])){
+  	  $options['zoom'] = intval($options['zoom']);
+        }
 
   	$points = array();
   	foreach($obj as $k){
