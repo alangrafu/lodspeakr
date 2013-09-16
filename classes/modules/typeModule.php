@@ -90,7 +90,6 @@ class TypeModule extends abstractModule{
   	$lodspk['local']['curie'] = Utils::uri2curie($localUri);
    	$lodspk['this']['extension'] = $extension;
   	//chdir($conf['home'].$conf['model']['directory']);
-  	
   	Utils::queryFile($modelFile, $endpoints['local'], $results, $firstResults);
     if(!$lodspk['resultRdf']){
   	  $results = Utils::internalize($results); 
@@ -121,8 +120,7 @@ class TypeModule extends abstractModule{
   	//Defining default views and models
   	$curieType="";
  	//Get the firstResults type available
-  	$typesAndValues = array('rdfs:Resource' => -1);
-  	$typesAndValues = array('rdfs__Resource' => -1);
+  	$typesAndValues = array('rdfs:Resource' => -1, 'rdfs__Resource' => -1);
   	if(!isset($conf['disableComponents']) || $conf['disableComponents'] != true){
   	  foreach($t as $v){
   	  	$curie = Utils::uri2curie($v);

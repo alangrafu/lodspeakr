@@ -473,7 +473,7 @@ class Utils{
  	  $vars = compact('uri', 'lodspk', 'conf', 'models', 'first');
  	  $q = file_get_contents($modelFile);
  	  if($q == false){
- 	  	HTTPStatus::send500("I can't load ".$modelFile." in ".getcwd());
+ 	  	HTTPStatus::send500("<br/>I can't load ".$modelFile." in ".getcwd());
  	  }
  	  $fnc = Haanga::compile($q);
   	  $query = $fnc($vars, TRUE);

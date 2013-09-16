@@ -40,14 +40,14 @@ class HTTPStatus{
   private static function _getContent($n, $alt){
     global $conf;
     global $lodspk;
-    $lodspk['root'] = $conf['root'];
+    /*$lodspk['root'] = $conf['root'];
   	$lodspk['home'] = $conf['basedir'];
   	$lodspk['baseUrl'] = $conf['basedir'];
   	$lodspk['ns'] = $conf['ns'];
   	$lodspk['this']['value'] = $uri;
   	$lodspk['this']['curie'] = Utils::uri2curie($uri);
   	$lodspk['this']['local'] = $localUri;
-  	
+  	*/
     $file = $conf['httpStatus']['directory']."/".$n.".template";
    
     if(file_exists($conf['home'].$file)){
