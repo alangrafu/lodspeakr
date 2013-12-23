@@ -1,0 +1,72 @@
+#
+# Installation script for LODSPeaKr (http://lodspeakr.org)
+# Author: Alvaro Graves (alvaro@graves.cl)
+# Modified by: Tim Lebo (lebot@rpi.edu)
+#
+# The URL:
+#    http://lodspeakr.org/install 
+#       303 redirects to this script.
+
+lodspeakr_repository="https://github.com/alangrafu/lodspeakr.git"
+home=`basename $lodspeakr_repository | sed 's/.git//'`
+
+source ~/.bashrc
+GIT=`which git`
+
+if [ -z "$GIT" ]; then
+  echo "git is required to continue installation. Please add git to your \$PATH."
+  exit 1
+fi
+
+
+_baseurl=
+_basens=
+_sparqlendpoint=
+_chown=
+_chmod=
+_components=
+
+options=$@
+
+# An array with all the arguments
+arguments=($options)
+
+# Loop index
+index=0
+
+for argument in $options
+  do
+    # Incrementing index
+    index=`expr $index + 1`
+
+    # The conditions
+    case $argument in
+      base-url=*) val=${argument#*=};
+                  opt=${argument%=$val};
+                  _baseurl="base-url=${val}" ;;
+      base-namespace=*) val=${argument#*=};
+                  opt=${argument%=$val};
+                  _basens="base-namespace=${val}" ;;
+      sparql-endpoint=*) val=${argument#*=};
+                  opt=${argument%=$val};
+                  _sparqlendpoint="sparql-endpoint=${val}" ;;
+      chown=*) val=${argument#*=};
+                  opt=${argument%=$val};
+                  _chown="chown=${val}" ;;
+      chmod=*) val=${argument#*=};
+                  opt=${argument%=$val};
+                  _chmod="chmod=${val}" ;;
+      components=*) val=${argument#*=};
+                  opt=${argument%=$val};
+                  _components="components=${val}" ;;
+    esac
+  done
+
+
+if [ ! -e "$home" ]; then
+   $GIT clone $lodspeakr_repository
+   cd $home
+   ./install.sh $home $_baseurl $_basens $_sparqlendpoint $_chown $_chmod $_components
+ else
+   echo "There is already an existing directory called '$home'. Installation cancelled. Remove it first and try again."
+fi
